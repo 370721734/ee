@@ -97,7 +97,7 @@
 
             <TextView
                 android:id="@+id/tv_ma"
-                android:layout_width="70dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
@@ -115,6 +115,7 @@
                 android:layout_toRightOf="@id/ivpass"
                 android:background="@null"
                 android:text=""
+                android:inputType="number"
                 android:hint="请输入验证码"
                 android:textColorHint="#ffd4cdbc"
                 android:textColor="#ffd4cdbc"
@@ -130,7 +131,7 @@
 
 
         <TextView
-            android:id="@+id/s"
+            android:id="@+id/submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="99dp"

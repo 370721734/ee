@@ -2,8 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="#191925"
-    android:layout_height="60dp">
+    android:background="#000000"
+    android:layout_height="80dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/tou_image"

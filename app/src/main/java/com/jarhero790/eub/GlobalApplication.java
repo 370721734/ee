@@ -9,7 +9,10 @@ import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
 import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.bean.Userbean;
+import com.jarhero790.eub.message.net.RetrofitManager;
 import com.tencent.ugc.TXUGCBase;
 import com.jarhero790.eub.activity.LoginActivity;
 import com.jarhero790.eub.aop.logincore.ILoginFilter;
@@ -27,6 +30,10 @@ public class GlobalApplication extends Application {
     String ugcLicenceUrl = "http://license.vod2.myqcloud.com/license/v1/37cad01a3224fd473ab7591458a616bc/TXUgcSDK.licence"; //您从控制台申请的 licence url
     String ugcKey = "d511730b581038234dae207be1d4b3e2";
 
+    private UserBean userbean;
+
+    public  String TOKEN;
+
     public static synchronized GlobalApplication getInstance() {
         return mApp;
     }
@@ -37,6 +44,7 @@ public class GlobalApplication extends Application {
         context = getApplicationContext();
         handler = new Handler();
         mainThreadId = android.os.Process.myTid();
+        RetrofitManager.getInstance().init(context);
         LoginManger.getInstance().init(this,iLoginFilter);
         IjkPlayerFactory ijkPlayerFactory=IjkPlayerFactory.create(this);
         VideoViewManager.setConfig(VideoViewConfig.newBuilder()
@@ -120,5 +128,15 @@ public class GlobalApplication extends Application {
             SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, applicationContext);
         }
     };
+
+
+    public UserBean getUserbean() {
+        return userbean;
+    }
+
+    public void setUserbean(UserBean userbean) {
+        this.userbean = userbean;
+    }
+
 
 }
