@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/framelayout_container"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="#111111"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:id="@+id/attentionsUserIcon"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/logo"
+            android:layout_gravity="center"/>
+
+        <TextView
+            android:id="@+id/attentionsUserName"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:src="@mipmap/logo"
+            android:text="钻视TV"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+        <Button
+            android:id="@+id/attentionsButton"
+            android:layout_width="70dp"
+            android:layout_height="30dp"
+            android:background="@drawable/shape1"
+            android:text="已关注"
+            android:layout_gravity="center"/>
+
+    </LinearLayout>
+
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    <com.dueeeke.videoplayer.player.VideoView
+        android:id="@+id/video_player"
+        android:layout_width="match_parent"
+        android:background="#222222"
+        android:layout_height="200dp" />
+
+        <TextView
+            android:layout_width="100dp"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:text="这个视频很尬很好"/>
+    </FrameLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/date"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:text="7-18"
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:orientation="horizontal"
+            android:gravity="right"
+            >
+
+        <ImageView
+            android:id="@+id/share"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/icon_video_share"
+            android:layout_marginRight="10dp"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+
+        <ImageView
+            android:id="@+id/pinglun"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/videos_pinglun"
+            android:gravity="center"
+            android:layout_gravity="center"/>
+
+        <ImageView
+            android:id="@+id/videolike"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/icon_video_heart"
+            android:gravity="center"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center"/>
+        </LinearLayout>
+    </LinearLayout>
+
+
+
+
+    <LinearLayout
+        android:layout_width="360dp"
+        android:layout_height="100dp"
+        android:orientation="vertical"
+        android:background="#333333"
+        >
+
+        <TextView
+            android:id="@+id/zanshu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10000人赞过"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="30dp"
+            />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#ffffff"/>
+
+        <TextView
+            android:id="@+id/pingluncontent1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="路人甲: 你这个视频不好呀！"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            android:layout_marginLeft="30dp"
+            />
+
+        <TextView
+            android:id="@+id/pingluncontent2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="路人乙: 你这个APP的确一般呀！"
+            android:textColor="#ffffff"
+            android:textSize="18dp"
+            android:layout_marginLeft="30dp"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查看全部1000条评论"
+            android:textColor="#ffffff"
+            android:layout_marginLeft="30dp"
+            />
+
+
+
+
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="查看全部1000条评论"
+            android:textColor="#ffffff"
+            />
+
+    </LinearLayout>
+
+
+
+
+
+</LinearLayout>

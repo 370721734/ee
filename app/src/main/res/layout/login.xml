@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/login_register_bg">
+
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="50dp"
+        android:orientation="vertical">
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:src="@mipmap/logo"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:text="钻视TV"
+        android:textColor="#ff6633"
+        android:gravity="center"
+        />
+
+
+
+    <Button
+        android:id="@+id/phoneLogin"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_shape2"
+        android:text="手机号登录"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="center"
+        />
+
+    <Button
+        android:id="@+id/zhanghaomimaLogin"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_shape2"
+        android:text="账号密码登录"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="center"
+        />
+
+
+    <TextView
+        android:id="@+id/registerGo"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:text="没有账号 去注册"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="center"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:layout_marginTop="30dp"
+        >
+
+
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/qq"
+            android:layout_marginRight="20dp"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/weixin"
+            />
+        <ImageView
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/zhifubao"
+            android:layout_marginLeft="20dp"
+            />
+
+    </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

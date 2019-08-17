@@ -1,0 +1,38 @@
+<resources>
+
+    <!-- Base application theme. -->
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="ConfirmDialogStyle" parent="Base.Theme.AppCompat.Light.Dialog">
+        <item name="windowMinWidthMinor">90%</item>
+        <item name="android:textColorPrimary">#000000</item>
+        <item name="colorAccent">#0accac</item>
+    </style>
+
+
+    <!-- 自定义loading dialog -->
+    <style name="loading_dialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+    </style>
+    <!--底部弹框动画-->
+    <style name="bottomDialog">
+        <item name="android:windowEnterAnimation">@anim/souye_pinglun_dialogfragment_in</item>
+        <item name="android:windowExitAnimation">@anim/souye_pinglun_dialogfragment_out</item>
+    </style>
+
+
+    <!--底部弹框动画-->
+    <style name="bottomPopupwindow">
+        <item name="android:windowEnterAnimation">@anim/souye_pinglun_dialogfragment_in</item>
+        <item name="android:windowExitAnimation">@anim/souye_pinglun_dialogfragment_out</item>
+    </style>
+</resources>

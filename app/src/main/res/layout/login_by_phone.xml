@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/login_register_bg">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="80dp"
+            android:src="@mipmap/logo"
+            android:gravity="center"
+            />
+
+        <TextView
+            android:layout_width="200dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="10dp"
+            android:text="钻视TV"
+            android:textColor="#ff6633"
+            android:gravity="center"
+            />
+
+
+        <EditText
+            android:id="@+id/editTextPhone"
+            android:layout_width="250dp"
+            android:layout_height="40dp"
+            android:background="@drawable/shape"
+            android:hint="请输入手机号"
+            android:textColorHint="#ffffff"
+            android:inputType="number"
+            android:gravity="center"
+            />
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal"
+            >
+        <EditText
+            android:id="@+id/editTextYanZhengCode"
+            android:layout_width="130dp"
+            android:layout_height="40dp"
+            android:background="@drawable/shape"
+            android:hint="验证码"
+            android:textColorHint="#ffffff"
+            android:gravity="center"
+            />
+
+        <Button
+            android:id="@+id/buttonGetRegisterCode"
+            android:layout_width="100dp"
+            android:layout_height="40dp"
+            android:layout_marginLeft="20dp"
+            android:background="@drawable/button_shape2"
+            android:text="获取验证码"
+            android:textColor="#ffffff"
+            android:textSize="15sp"
+            android:gravity="center"
+            />
+        </LinearLayout>
+
+
+
+        <Button
+            android:id="@+id/buttonLogin"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button_shape2"
+            android:text="登 录"
+            android:textColor="#ffffff"
+            android:textSize="16sp"
+            android:gravity="center"
+            />
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

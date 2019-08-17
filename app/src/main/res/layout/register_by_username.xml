@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+    android:orientation="vertical"
+    android:background="@mipmap/login_register_bg">
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        >
+    <ImageView
+        android:layout_width="200dp"
+        android:layout_height="80dp"
+        android:src="@mipmap/logo"
+        android:gravity="center"
+        />
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:text="钻视TV"
+        android:textColor="#ff6633"
+        android:gravity="center"
+        />
+
+
+    <EditText
+        android:id="@+id/editTextUseranme"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:background="@drawable/shape"
+        android:hint="请输入用户名"
+        android:textColorHint="#ffffff"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="center"
+        />
+
+    <EditText
+        android:id="@+id/editTextNickName"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape"
+        android:hint="请输入昵称"
+        android:textSize="15sp"
+        android:textColorHint="#ffffff"
+        android:textColor="#ffffff"
+        android:gravity="center"
+        />
+
+
+    <EditText
+        android:id="@+id/editTextPassword"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/shape"
+        android:hint="请输入密码"
+        android:textSize="15sp"
+        android:textColor="#ffffff"
+        android:textColorHint="#ffffff"
+        android:gravity="center"
+        />
+
+
+
+    <Button
+        android:id="@+id/buttonRegister"
+        android:layout_width="150dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/button_shape2"
+        android:text="注 册"
+        android:textColor="#ffffff"
+        android:textSize="15sp"
+        android:gravity="center"
+        />
+
+
+</LinearLayout>
+
+
+
+</LinearLayout>

@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/login_register_bg">
+
+
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/back"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="10dp"
+        android:gravity="left"
+        android:visibility="invisible"
+        />
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:layout_marginTop="113dp"
+        android:orientation="vertical">
+        <ImageView
+            android:layout_width="65dp"
+            android:layout_height="90dp"
+            android:src="@mipmap/logo"
+            android:gravity="center"
+            />
+
+
+        <TextView
+            android:layout_width="65dp"
+            android:layout_height="wrap_content"
+            android:text="钻视TV"
+            android:textColor="#ffffedbe"
+            android:textSize="20sp"
+            android:layout_marginTop="13dp"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="58dp"
+            android:layout_marginTop="@dimen/rc_dimen_size_7"
+            android:layout_height="wrap_content"
+            android:text="Drilling TV"
+            android:textColor="#ffffedbf"
+            android:textSize="11sp"
+            />
+
+
+        <Button
+            android:id="@+id/phoneLogin"
+            android:layout_width="230dp"
+            android:layout_height="40dp"
+            android:layout_marginTop="196dp"
+            android:background="@drawable/button_shape4"
+            android:text="手机号码登录"
+            android:textColor="#ffffff"
+            android:textSize="18sp"
+            android:gravity="center"
+            />
+
+
+
+
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:layout_marginTop="67dp"
+            >
+
+
+            <ImageView
+                android:id="@+id/qq_login"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@mipmap/qq"
+                android:layout_marginRight="27dp"
+                />
+            <ImageView
+                android:id="@+id/weixin_login"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="27dp"
+                android:layout_marginRight="28dp"
+                android:src="@mipmap/weixin"
+                />
+            <ImageView
+                android:id="@+id/zhifubao_login"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@mipmap/zhifubao"
+                android:layout_marginLeft="28dp"
+                />
+
+        </LinearLayout>
+
+    </LinearLayout>
+</LinearLayout>

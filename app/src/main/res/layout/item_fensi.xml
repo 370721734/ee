@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:background="#191925"
+    android:layout_height="60dp">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tou_image"
+        android:layout_width="51dp"
+        android:layout_height="51dp"
+        android:src="@mipmap/tou_deault"
+        android:layout_marginLeft="15dp"
+        android:layout_centerVertical="true"
+        />
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="张清河"
+        android:textColor="#ffffffff"
+        android:textSize="16sp"
+        android:layout_toRightOf="@id/tou_image"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_alignTop="@id/tou_image"
+        android:layout_marginTop="@dimen/rc_dimen_size_5"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="关注了你"
+        android:layout_toRightOf="@id/tou_image"
+        android:layout_below="@id/tv_name"
+        android:textColor="#ffa5a4a4"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginTop="7dp"
+        android:textSize="14sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2019-7-10"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_10"
+        android:textColor="#ffa5a4a4"
+        android:layout_alignTop="@id/tv_name"
+        android:layout_marginTop="2dp"
+        android:textSize="12sp"
+        />
+
+    <TextView
+        android:id="@+id/tv_guanzu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="+关注"
+        android:layout_marginTop="@dimen/rc_dimen_size_6"
+        android:background="@drawable/guanzu_bg"
+        android:textColor="#ffffffff"
+        android:gravity="center"
+        android:layout_alignParentRight="true"
+        android:textSize="12sp"
+        android:layout_below="@id/tv_time"
+        android:layout_marginRight="@dimen/dp_10"
+        />
+</RelativeLayout>
