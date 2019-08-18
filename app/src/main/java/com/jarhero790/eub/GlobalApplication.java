@@ -45,6 +45,7 @@ public class GlobalApplication extends Application {
         handler = new Handler();
         mainThreadId = android.os.Process.myTid();
         RetrofitManager.getInstance().init(context);
+
         LoginManger.getInstance().init(this,iLoginFilter);
         IjkPlayerFactory ijkPlayerFactory=IjkPlayerFactory.create(this);
         VideoViewManager.setConfig(VideoViewConfig.newBuilder()

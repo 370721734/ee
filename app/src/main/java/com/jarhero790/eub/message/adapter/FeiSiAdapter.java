@@ -51,12 +51,12 @@ public class FeiSiAdapter extends RecyclerView.Adapter<FeiSiAdapter.MyHolder> {
         Glide.with(context).load(Api.HOST + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
         myHolder.tvName.setText(bean.getNickname());
 
-        if (bean.getAddtime().length()>9){
+        if (bean.getAddtime().length()>10){
             myHolder.tvTime.setText(bean.getAddtime().substring(0,10));
         }
 
 
-        myHolder.tvGuanzu.setText(bean.getIs_likeEach()==1?"已关注":"+关注");
+        myHolder.tvGuanzu.setText(bean.getIs_likeEach()==1?"已互关":"+关注");
 
         myHolder.tvGuanzu.setTag(position);
         myHolder.tvGuanzu.setOnClickListener(myclick);

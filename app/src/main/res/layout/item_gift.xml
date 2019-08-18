@@ -27,9 +27,10 @@
         />
 
     <TextView
+        android:id="@+id/tv_gift_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="关注了你"
+        android:text="给你送了一个火箭！"
         android:layout_toRightOf="@id/tou_image"
         android:layout_below="@id/tv_name"
         android:textColor="#ffa5a4a4"
@@ -51,18 +52,5 @@
         android:textSize="12sp"
         />
 
-    <TextView
-        android:id="@+id/tv_guanzu"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="+关注"
-        android:layout_marginTop="@dimen/rc_dimen_size_6"
-        android:background="@drawable/guanzu_bg"
-        android:textColor="#ffffffff"
-        android:gravity="center"
-        android:layout_alignParentRight="true"
-        android:textSize="12sp"
-        android:layout_below="@id/tv_time"
-        android:layout_marginRight="@dimen/dp_10"
-        />
+
 </RelativeLayout>

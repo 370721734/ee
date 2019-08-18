@@ -117,8 +117,10 @@ dependencies {
     implementation 'cn.rongcloud.sdk:im_lib:2.9.18'
     implementation 'com.alibaba:fastjson:1.1.71.android'
 
-//
+    //
     implementation 'com.uber.autodispose:autodispose-android-archcomponents:0.8.0'
+    implementation 'com.scwang.smartrefresh:SmartRefreshLayout:1.0.5.1'
+    //
 }
 
 

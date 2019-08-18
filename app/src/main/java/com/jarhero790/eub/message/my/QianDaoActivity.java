@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -13,6 +14,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
+import com.jarhero790.eub.message.adapter.CalendarAdapter;
 import com.jarhero790.eub.message.adapter.QianDaoAdapter;
 import com.jarhero790.eub.message.bean.PinLenBean;
 import com.jarhero790.eub.message.contract.QianDaoContract;
@@ -24,6 +26,9 @@ import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -46,7 +51,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
     @BindView(R.id.tv_qiandao)
     TextView tvQiandao;
     @BindView(R.id.time)
-    View time;
+    GridView gv;
     @BindView(R.id.iv_one)
     ImageView ivOne;
     @BindView(R.id.iv_two)
@@ -122,6 +127,12 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
     @BindView(R.id.tv_lin4)
     TextView tvLin4;
 
+
+    List<Integer> list=new ArrayList<>();
+    Calendar calendar;
+    CalendarAdapter calendarAdapter;
+    int year, month, day;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,6 +149,44 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 //        QianPr pr=new QianPr(this);
 //        pr.getpinlen();
 
+        //获取当前的年月日后，再判断当前的天数？
+        initDate();
+
+    }
+
+    private void initDate() {
+        calendar=Calendar.getInstance();
+        year=calendar.get(Calendar.YEAR);
+
+        month=calendar.get(Calendar.MONTH);
+
+        day=calendar.get(Calendar.DAY_OF_MONTH);
+
+        int currentMonthLastDay = getCurrentMonthLastDay();
+        Log.e("----------m",""+currentMonthLastDay);
+
+        for (int i=0;i<9-(currentMonthLastDay-27);i++){
+            list.add(0);
+        }
+        for (int i = 0; i < currentMonthLastDay; i++) {
+            list.add(i+1);
+        }
+
+
+        calendarAdapter=new CalendarAdapter(this,list);
+        gv.setAdapter(calendarAdapter);
+    }
+
+    /**
+     * 取得当月天数
+     * */
+    public  int getCurrentMonthLastDay()
+    {
+        Calendar a = Calendar.getInstance();
+        a.set(Calendar.DATE, 1);//把日期设置为当月第一天
+        a.roll(Calendar.DATE, -1);//日期回滚一天，也就是最后一天
+        int maxDate = a.get(Calendar.DATE);
+        return maxDate;
     }
 
 
@@ -169,8 +218,23 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                 if (code==200){
                                     tvJin.setText("我的金币:"+data);
                                     tvQiandao.setText("已签到");//如何保存状态
+
+
+
+
+
+                                    //set image
+                                    calendarAdapter.setNumber(day);
+                                    Log.e("-----------1",""+day);
+                                    calendarAdapter.notifyDataSetChanged();
                                 }else {
                                     tvQiandao.setText("已签到");
+                                    tvJin.setText("我的金币:"+data);
+
+                                    //set image
+                                    calendarAdapter.setNumber(day);
+                                    Log.e("-----------1",""+day);
+                                    calendarAdapter.notifyDataSetChanged();
                                     Toast.makeText(QianDaoActivity.this,msg,Toast.LENGTH_SHORT).show();
                                 }
                             } catch (Exception e) {

@@ -6,7 +6,11 @@ import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.bean.VideoBean;
 import com.jarhero790.eub.message.bean.FenSiTBean;
+import com.jarhero790.eub.message.bean.GiftBean;
+import com.jarhero790.eub.message.bean.JiangLiBean;
+import com.jarhero790.eub.message.bean.MyPL;
 import com.jarhero790.eub.message.bean.PinLenBean;
+import com.jarhero790.eub.message.bean.ZanBean;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -151,4 +155,33 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/signIn")
     Call<ResponseBody> qiandao(@Field("token") String token);
+
+
+    //我的评论
+    @FormUrlEncoded
+    @POST("web/index/mycomment")
+    Call<MyPL> mypinlen(@Field("token") String token);
+
+
+
+    //我的礼物列表
+    @FormUrlEncoded
+    @POST("web/index/index")
+    Call<GiftBean> mygift(@Field("token") String token);
+
+    //我的点赞
+    @FormUrlEncoded
+    @POST("web/index/myzan")
+    Call<ZanBean> myzan(@Field("token") String token);
+
+    //我的奖励
+    @FormUrlEncoded
+    @POST("web/index/myreward")
+    Call<JiangLiBean> myreward(@Field("token") String token);
+
+
+    //获取评论
+    @FormUrlEncoded
+    @POST("web/index/getComment")
+    Call<ResponseBody> getpinlen(@Field("page") Integer page,@Field("vid") String v, @Field("token") String token);
 }

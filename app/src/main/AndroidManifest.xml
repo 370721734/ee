@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.jarhero790.eub">
 
     <uses-permission android:name="android.permission.INTERNET" />
@@ -24,12 +25,29 @@
         android:resizeableActivity="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".message.my.QianDaoActivity"></activity>
-        <!-- android 全面屏 -->
+        android:theme="@style/AppTheme"
+        tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".message.my.SettingActivity"></activity>
+        <activity android:name=".message.message.JiangLiActivity" />
+        <activity android:name=".message.message.GiftActivity" />
+        <activity android:name=".message.message.PinLenActivity" />
+        <activity android:name=".message.message.ZanActivity" />
+        <activity android:name=".message.my.QianDaoActivity" /> <!-- android 全面屏 -->
         <meta-data
             android:name="android.max_aspect"
-            android:value="2.1" />
+            android:value="2.1" /> <!-- 融 -->
+        <!-- <meta-data -->
+        <!-- android:name="RONG_CLOUD_APP_KEY" -->
+        <!-- android:value="sfci50a7s3rsi" /> -->
+        <provider
+            android:name="android.support.v4.content.FileProvider"
+            android:authorities="com.jarhero790.eub.FileProvider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/rc_file_path" />
+        </provider>
 
         <activity
             android:name=".MainActivity"

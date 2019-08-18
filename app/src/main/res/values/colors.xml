@@ -5,6 +5,8 @@
     <color name="colorAccent">#FF4081</color>
     <color name="transparent_gray_light">#89000000</color>
 
+    <color name="backgroudcolor">#191925</color>
+
 
     <color name="tencent_tls_ui_white">#FFFFFF</color>
     <color name="tencent_tls_ui_gray">#444444</color>

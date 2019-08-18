@@ -25,16 +25,16 @@
             android:padding="@dimen/dp_10"
             android:src="@mipmap/back"/>
 
-     <TextView
-         android:layout_width="0dp"
-         android:layout_weight="8"
-         android:layout_height="wrap_content"
-         android:textColor="#ffffff"
-         android:textSize="20sp"
-         android:layout_gravity="center"
-         android:gravity="center"
-         android:layout_marginRight="30dp"
-         android:text="粉丝"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="8"
+            android:layout_height="wrap_content"
+            android:textColor="#ffffff"
+            android:textSize="20sp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_marginRight="30dp"
+            android:text="赞"/>
 
     </LinearLayout>
 
@@ -50,8 +50,25 @@
 
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewFensi"
+        android:id="@+id/recyclerViewZan"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_width="match_parent"
+        android:visibility="visible"
         android:layout_height="match_parent"/>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/nodingdan"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"
+            android:text="没有信息"
+            />
+    </RelativeLayout>
 </LinearLayout>

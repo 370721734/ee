@@ -178,5 +178,13 @@
         android:id="@+id/recyclerViewMessage"
         android:layout_width="match_parent"
         android:background="#000000"
+        android:visibility="visible"
         android:layout_height="match_parent"/>
+    <fragment
+        android:id="@+id/conversationlist"
+        android:name="io.rong.imkit.fragment.ConversationListFragment"
+        android:tag="ConversationListFragment"
+        android:layout_width="match_parent"
+        android:layout_height="0px"
+        android:layout_weight="1" />
 </LinearLayout>
