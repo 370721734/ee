@@ -32,7 +32,6 @@ import com.jarhero790.eub.bean.User;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.contract.mine.MineMainContract;
 import com.jarhero790.eub.eventbus.MessageEventUser;
-import com.jarhero790.eub.message.LoginPhoneActivity;
 import com.jarhero790.eub.message.bean.UserCen;
 import com.jarhero790.eub.message.my.QianDaoActivity;
 import com.jarhero790.eub.presenter.mine.MineMainPresenter;
@@ -88,6 +87,12 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     TextView fensi;
     @BindView(R.id.tv_huozai)
     TextView tvHuozai;
+    @BindView(R.id.tv_memo)
+    TextView tvMemo;
+
+    private String money;//签到金币
+    private String signtime;//最后签到时间
+
 
     public static MineFragment newInstance() {
         Bundle args = new Bundle();
@@ -121,6 +126,10 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         textViewNickName.setText(user.getNickname());
         tvTvhao.setText("钻视TV号:" + user.getId());
         Glide.with(getActivity()).load(Api.HOST + user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+
+        tvMemo.setText(user.getSign());
+        money=user.getMoney();
+        signtime=user.getSigntime();
     }
 
     @Override
@@ -242,7 +251,14 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
             JSONObject js = JSONObject.parseObject(data);
             UserCen userInfo = JSON.toJavaObject(js, UserCen.class);
-            Log.e("qawe", userInfo.getData().getUser().getHeadimgurl());
+            Log.e("qawe", userInfo.getData().getUser().getHeadimgurl());//有了
+
+            if (userInfo.getCode()==200){
+                tvMemo.setText(userInfo.getData().getUser().getSign());
+                money=userInfo.getData().getUser().getMoney()+"";
+                signtime=userInfo.getData().getUser().getSigntime();
+            }
+
 
             String code = object.getString("code");
 
@@ -326,7 +342,11 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             case R.id.dingwei:
                 break;
             case R.id.tv_qiandao:
-                startActivity(new Intent(getActivity(), QianDaoActivity.class));
+                //签到
+                Intent intent=new Intent(getActivity(), QianDaoActivity.class);
+                intent.putExtra("money",money);
+                intent.putExtra("signtime",signtime);
+                startActivity(intent);
                 break;
         }
     }

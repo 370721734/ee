@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.my;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -139,6 +140,17 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
         setContentView(R.layout.activity_qian_dao);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+        Intent intent=getIntent();
+        tvJin.setText("我的金币:"+intent.getStringExtra("money"));
+        String signtime=intent.getStringExtra("signtime");
+        if (signtime==null || signtime.length()==0 || signtime.equals("null")){
+            tvQiandao.setText("签到");
+        }else {
+            tvQiandao.setText("已签到");//如何保存状态
+        }
+
+        //刷新
+        initUi();
         pinlen();
 //        QianPr pr = QianPr.newInstance();
 //        pr.getpinle();
@@ -151,6 +163,10 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 
         //获取当前的年月日后，再判断当前的天数？
         initDate();
+
+    }
+
+    private void initUi() {
 
     }
 
@@ -216,7 +232,10 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                 String msg=object.optString("msg");
                                 String data=object.optString("data");
                                 if (code==200){
-                                    tvJin.setText("我的金币:"+data);
+                                    if (!data.equals("null") && data.length()>0){
+                                        tvJin.setText("我的金币:"+data);
+                                    }
+
                                     tvQiandao.setText("已签到");//如何保存状态
 
 
@@ -258,7 +277,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 //        Log.e("-----00",bean.getCode()+" "+bean.getData().getTask_type().get(0).getId());
 //    }
 
-
+//个人签到页
     public void pinlen() {
         //通过RequestBody.create 创建requestBody对象
         RequestBody requestBody = new MultipartBody.Builder()
@@ -287,6 +306,9 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 
                     if (bean.getCode() == 200) {
 //                        qianDaoAdapter = new QianDaoAdapter(QianDaoActivity.this, bean.getData().getTask_type(), myclick);
+
+
+
 
 
                         if (bean.getData().getTask_type().size()==4){
