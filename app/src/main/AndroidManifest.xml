@@ -27,7 +27,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".message.my.SettingActivity"></activity>
+        <activity android:name=".message.message.AboutActivity"></activity>
+        <activity android:name=".message.my.SettingActivity" />
         <activity android:name=".message.message.JiangLiActivity" />
         <activity android:name=".message.message.GiftActivity" />
         <activity android:name=".message.message.PinLenActivity" />
