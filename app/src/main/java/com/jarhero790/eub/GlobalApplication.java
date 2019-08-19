@@ -11,6 +11,7 @@ import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.bean.UserCen;
 import com.jarhero790.eub.message.bean.Userbean;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.tencent.ugc.TXUGCBase;
@@ -31,6 +32,8 @@ public class GlobalApplication extends Application {
     String ugcKey = "d511730b581038234dae207be1d4b3e2";
 
     private UserBean userbean;
+
+    private UserCen userCen;
 
     public  String TOKEN;
 
@@ -140,4 +143,11 @@ public class GlobalApplication extends Application {
     }
 
 
+    public UserCen getUserCen() {
+        return userCen;
+    }
+
+    public void setUserCen(UserCen userCen) {
+        this.userCen = userCen;
+    }
 }

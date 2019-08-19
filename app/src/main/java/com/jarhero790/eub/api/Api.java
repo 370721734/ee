@@ -8,6 +8,8 @@ import com.jarhero790.eub.bean.VideoBean;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GiftBean;
 import com.jarhero790.eub.message.bean.JiangLiBean;
+import com.jarhero790.eub.message.bean.LikeBean;
+import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.MyPL;
 import com.jarhero790.eub.message.bean.PinLenBean;
 import com.jarhero790.eub.message.bean.ZanBean;
@@ -178,6 +180,29 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/myreward")
     Call<JiangLiBean> myreward(@Field("token") String token);
+
+
+    //签到页面领取奖励
+    @FormUrlEncoded
+    @POST("web/index/reward")
+    Call<ResponseBody> getreward(@Field("token") String token,@Field("type_id") Integer type_id);
+
+
+    //个人中心我的视频
+    @FormUrlEncoded
+    @POST("web/index/myfabu")
+    Call<MyFaBuBean> myfabu(@Field("token") String token);
+
+
+    //个人中心点赞的视频
+    @FormUrlEncoded
+    @POST("web/index/zanvideo")
+    Call<LikeBean> zanvideo(@Field("token") String token);
+
+
+
+
+
 
 
     //获取评论

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.jarhero790.eub.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -24,9 +25,16 @@ public class CalendarAdapter extends ListItemAdapter<Integer> {
 //    LinearLayout.LayoutParams params;
 
     private int number=-1;
+
     public void setNumber(int number){
         this.number=number;
     }
+
+    List<Integer> lists=new ArrayList<>();
+    public void setNubetwo( List<Integer> lists){
+        this.lists=lists;
+    }
+
     public CalendarAdapter(Context context, List<Integer> list) {
         super(context, list);
         int width=(context.getResources().getDisplayMetrics().widthPixels-10)/9;
@@ -53,7 +61,11 @@ public class CalendarAdapter extends ListItemAdapter<Integer> {
             holder.tvText.setVisibility(View.GONE);
             holder.ivIcon.setVisibility(View.VISIBLE);
         }
-        holder.bindView(list.get(i));
+
+
+
+
+        holder.bindView(list.get(i),i);
         return view;
     }
 
@@ -67,7 +79,7 @@ public class CalendarAdapter extends ListItemAdapter<Integer> {
             ButterKnife.bind(this, view);
         }
 
-        private void bindView(int b){
+        private void bindView(int b,int po){
 //            tvText.setLayoutParams(params);
 //            tvText.setGravity(Gravity.CENTER);
 
@@ -76,6 +88,18 @@ public class CalendarAdapter extends ListItemAdapter<Integer> {
             }else {
                 tvText.setText(""+b);
                 Log.e("-----------3",""+b);
+
+                for (int j = 0; j < lists.size(); j++) {
+                    if (lists.get(j)==b){
+                        Log.e("-------------333",lists.get(j)+"");
+                        tvText.setVisibility(View.GONE);
+                        ivIcon.setVisibility(View.VISIBLE);
+                    }
+                }
+
+
+
+
 //                if (number==getItem(po)){
 //                    tvText.setVisibility(View.GONE);
 //                    ivIcon.setVisibility(View.VISIBLE);

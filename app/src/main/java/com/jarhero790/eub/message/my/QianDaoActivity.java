@@ -28,6 +28,7 @@ import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -129,10 +130,17 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
     TextView tvLin4;
 
 
-    List<Integer> list=new ArrayList<>();
+    List<Integer> list=new ArrayList<>();//当前月的数
     Calendar calendar;
     CalendarAdapter calendarAdapter;
     int year, month, day;
+
+    List<Integer> signdatelist=new ArrayList<>();//已签到日期
+
+    private int type_id1;//
+    private int type_id2;//
+    private int type_id3;//
+    private int type_id4;//
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +214,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
     }
 
 
-    @OnClick({R.id.ivback, R.id.tv_qiandao})
+    @OnClick({R.id.ivback, R.id.tv_qiandao,R.id.tv_lin,R.id.tv_lin2,R.id.tv_lin3,R.id.tv_lin4})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ivback:
@@ -214,9 +222,70 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                 break;
             case R.id.tv_qiandao:
                 qiandao();
-
                 break;
+            case R.id.tv_lin:
+                linindex(type_id1);
+                break;
+            case R.id.tv_lin2:
+                linindex(type_id2);
+                break;
+            case R.id.tv_lin3:
+                linindex(type_id3);
+                break;
+            case R.id.tv_lin4:
+                linindex(type_id4);
+                break;
+
+
+
         }
+    }
+
+    private void linindex(int type_id) {
+        RetrofitManager.getInstance().getDataServer().getreward(SharePreferenceUtil.getToken(AppUtils.getContext()),type_id)
+                .enqueue(new retrofit2.Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                        if (response.isSuccessful()){
+                            try {
+                                String json=response.body().string();
+                                org.json.JSONObject obj=new org.json.JSONObject(json);
+                                int code=obj.optInt("code");
+                                String msg=obj.optString("msg");
+                                String data=obj.optString("data");
+                                if (code==200){
+                                    Log.e("---------data=>",data);
+                                    if (type_id==type_id1){
+                                        tvLin.setText("已领取");
+                                    }
+                                    if (type_id==type_id2){
+                                        tvLin2.setText("已领取");
+                                    }
+                                    if (type_id==type_id3){
+                                        tvLin3.setText("已领取");
+                                    }
+                                    if (type_id==type_id4){
+                                        tvLin4.setText("已领取");
+                                    }
+
+                                    Toast.makeText(QianDaoActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                }else {
+                                    Toast.makeText(QianDaoActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                }
+
+
+
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
     }
 
     private void qiandao() {
@@ -232,7 +301,13 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                 String msg=object.optString("msg");
                                 String data=object.optString("data");
                                 if (code==200){
-                                    if (!data.equals("null") && data.length()>0){
+//                                    if (!data.equals("null") && data.length()==0){
+//
+//                                    }
+                                    if (data==null || data.length()==0 || data.equals("") || data.equals("null")){
+                                        Log.e("-----------","kou");
+                                    }else {
+                                        Log.e("-----------","yes");
                                         tvJin.setText("我的金币:"+data);
                                     }
 
@@ -248,7 +323,12 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                     calendarAdapter.notifyDataSetChanged();
                                 }else {
                                     tvQiandao.setText("已签到");
-                                    tvJin.setText("我的金币:"+data);
+                                    if (data==null || data.length()==0 || data.equals("") || data.equals("null")){
+                                        Log.e("-----------","kou");
+                                    }else {
+                                        Log.e("-----------","yes");
+                                        tvJin.setText("我的金币:"+data);
+                                    }
 
                                     //set image
                                     calendarAdapter.setNumber(day);
@@ -276,6 +356,8 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 //
 //        Log.e("-----00",bean.getCode()+" "+bean.getData().getTask_type().get(0).getId());
 //    }
+
+
 
 //个人签到页
     public void pinlen() {
@@ -308,6 +390,86 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 //                        qianDaoAdapter = new QianDaoAdapter(QianDaoActivity.this, bean.getData().getTask_type(), myclick);
 
 
+                        //设置日历
+                        //签到的日期
+                        List<String> signlist = bean.getData().getSign();
+                        for (int i = 0; i < signlist.size(); i++) {
+//                            Log.e("----------si", signlist.get(i)+"  "+signlist.get(i).substring(8,10));
+                            if (signlist.get(i).length()>9){
+                                signdatelist.add(Integer.parseInt(signlist.get(i).substring(8,10)));
+                            }
+
+
+                        }
+
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if (signdatelist.size()>0){
+                                    Log.e("---------1",signdatelist.get(0)+"");
+                                    calendarAdapter.setNubetwo(signdatelist);
+                                    calendarAdapter.notifyDataSetChanged();
+                                }
+                            }
+                        });
+
+
+//                        else {
+//                            Log.e("---------2",signdatelist.size()+"");
+//                        }
+
+                        //连续签到
+//                        PinLenBean.DataBean.ContinuitySignBean continuity_sign = bean.getData().getContinuity_sign();
+//                        String te1 = continuity_sign.get_$1t();
+//                        String te2 = continuity_sign.get_$2t();
+//                        String te3 = continuity_sign.get_$3t();
+//                        String te4 = continuity_sign.get_$4t();
+//                        String te5 = continuity_sign.get_$5t();
+//                        String te6 = continuity_sign.get_$6t();
+//                        String te7 = continuity_sign.get_$7t();此方法没用
+//                        Log.e("---------t:",te1+" "+te2+" "+te3+" "+te4+" "+te5+" "+te6+" "+te7);//"continuity_sign":{"1t":"2019-08-19 13:25:41"}}
+//
+                        org.json.JSONObject obj=new org.json.JSONObject(result);
+                        int code=obj.optInt("code");
+                        if (code==200){
+                            org.json.JSONObject data= obj.optJSONObject("data");
+                            org.json.JSONObject contin=data.optJSONObject("continuity_sign");
+                            String h1=contin.optString("1t");
+                            String h2=contin.optString("2t");
+                            String h3=contin.optString("3t");
+                            String h4=contin.optString("4t");
+                            String h5=contin.optString("5t");
+                            String h6=contin.optString("6t");
+                            String h7=contin.optString("7t");
+                            Log.e("---------h:",h1+" "+h2+" "+h3+" "+h4+" "+h5+" "+h6+" "+h7);// "continuity_sign":{"1t":"2019-08-19 13:25:41","2t":null,"3t":null,"4t":null,"5t":null,"6t":null,"7t":null}
+                            //有了
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if (h7!=null && h7.length()>10){
+                                        ivServen.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                    }else if (h6!=null && h6.length()>10){
+                                        ivSix.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                    }else if (h5!=null && h5.length()>10){
+                                        ivFive.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                    }else if (h4!=null && h4.length()>10){
+                                        ivFour.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                    }else if (h3!=null && h3.length()>10){
+                                        ivThree.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                    }else if (h2!=null && h2.length()>10){
+                                        ivTwo.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                    }else if (h1!=null && h1.length()>10){
+                                        ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                    }
+                                }
+                            });
+
+
+
+
+
+                        }
+
 
 
 
@@ -316,7 +478,13 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                             String t2=""+bean.getData().getTask_type().get(1).getMoney()+"";
                             String t3=""+bean.getData().getTask_type().get(2).getMoney()+"";
                             String t4=""+bean.getData().getTask_type().get(3).getMoney()+"";
-                            Log.e("---------",t1+t2+t3+t4);
+
+                             type_id1 = bean.getData().getTask_type().get(0).getType_id();
+                             type_id2 = bean.getData().getTask_type().get(1).getType_id();
+                             type_id3 = bean.getData().getTask_type().get(2).getType_id();
+                             type_id4 = bean.getData().getTask_type().get(3).getType_id();
+                            Log.e("--------ty-",type_id1+"  "+type_id4);
+
 
                             runOnUiThread(new Runnable() {
                                 @Override

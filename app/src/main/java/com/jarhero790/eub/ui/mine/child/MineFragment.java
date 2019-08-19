@@ -34,6 +34,7 @@ import com.jarhero790.eub.contract.mine.MineMainContract;
 import com.jarhero790.eub.eventbus.MessageEventUser;
 import com.jarhero790.eub.message.bean.UserCen;
 import com.jarhero790.eub.message.my.QianDaoActivity;
+import com.jarhero790.eub.message.my.SettingActivity;
 import com.jarhero790.eub.presenter.mine.MineMainPresenter;
 import com.jarhero790.eub.ui.mine.FragmentLike;
 import com.jarhero790.eub.ui.mine.FragmentZuoping;
@@ -181,7 +182,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         tabLayout.post(new Runnable() {
             @Override
             public void run() {
-                setIndicator(tabLayout, 50, 50);
+                setIndicator(tabLayout, 80, 80);
             }
         });
 
@@ -251,6 +252,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
             JSONObject js = JSONObject.parseObject(data);
             UserCen userInfo = JSON.toJavaObject(js, UserCen.class);
+            app.setUserCen(userInfo);
             Log.e("qawe", userInfo.getData().getUser().getHeadimgurl());//有了
 
             if (userInfo.getCode()==200){
@@ -336,7 +338,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         return rootView;
     }
 
-    @OnClick({R.id.dingwei, R.id.tv_qiandao})
+    @OnClick({R.id.dingwei, R.id.tv_qiandao,R.id.iv_edit})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.dingwei:
@@ -347,6 +349,13 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 intent.putExtra("money",money);
                 intent.putExtra("signtime",signtime);
                 startActivity(intent);
+                break;
+            case R.id.iv_edit:
+                Intent intent1=new Intent(getActivity(), SettingActivity.class);
+                  intent1.putExtra("name",app.getUserCen().getData().getUser().getNickname());
+                  intent1.putExtra("sign",app.getUserCen().getData().getUser().getSign());
+                  intent1.putExtra("sex",app.getUserCen().getData().getUser().getSex());
+                startActivity(intent1);
                 break;
         }
     }

@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator_layout"
-    android:background="#000000"
+    android:background="@color/backgroudcolor"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -27,14 +27,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <TextView
-                    android:id="@+id/textViewNickName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="#ffffff"
-                    android:layout_marginTop="30dp"
-                    android:layout_gravity="center"
-                    android:text=""/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/textViewNickName"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="#ffffff"
+                        android:layout_marginTop="30dp"
+                        android:layout_centerHorizontal="true"
+                        android:text="ddddddd"/>
+                    <ImageView
+                        android:id="@+id/iv_edit"
+                        android:layout_width="19dp"
+                        android:layout_height="16dp"
+                        android:layout_marginTop="30dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/dp_10"
+                        android:src="@mipmap/edit_icon"/>
+                </RelativeLayout>
+
                 <TextView
                     android:id="@+id/tv_tvhao"
                     android:layout_width="wrap_content"
@@ -174,13 +189,14 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/rc_dimen_size_18"
-                    android:text="添加个人描述，可让大家更好的认识你"
+                    android:text=""
                     android:textColor="#fffefefe"
                     android:textSize="14sp"
                     />
 
                 <View
                     android:layout_width="match_parent"
+                    android:visibility="visible"
                     android:layout_height="@dimen/rc_dimen_size_18" />
 
             </LinearLayout>
@@ -191,11 +207,12 @@
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="#000000"
+            android:background="@color/backgroudcolor"
             app:tabGravity="fill"
             app:tabMode="fixed"
-            app:tabSelectedTextColor="#ffffff"
-            app:tabTextColor="#ffffff" />
+            app:tabIndicatorColor="#353BFD"
+            app:tabSelectedTextColor="#EFEDED"
+            app:tabTextColor="#EFEDED" />
 
         <FrameLayout
             android:id="@+id/container"
