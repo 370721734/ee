@@ -2,6 +2,7 @@ package com.jarhero790.eub.message.my;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -26,10 +27,24 @@ public class XieYiActivity extends AppCompatActivity {
         setContentView(R.layout.activity_xie_yi);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+          webView.getSettings().setJavaScriptEnabled(true);
+//        WebSettings settings = webView.getSettings();
+//        settings.setJavaScriptEnabled(true);
+//        settings.setJavaScriptCanOpenWindowsAutomatically(true);
+//        settings.setAppCacheEnabled(true);
+//        settings.setCacheMode(settings.LOAD_CACHE_ELSE_NETWORK);
+//        settings.setSupportZoom(true);
+//        settings.setUseWideViewPort(true);
+//        settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.SINGLE_COLUMN);
+//        settings.setDisplayZoomControls(true);
+//        settings.setDefaultFontSize(12);
+//
+//        settings.setAllowFileAccess(true);
+//        settings.setLoadWithOverviewMode(true);
+//        settings.setLoadsImagesAutomatically(true);
+//        settings.setDomStorageEnabled(true);
+//        settings.setDefaultTextEncodingName("utf-8");
         webView.setWebViewClient(new WebViewClient());
-
-        webView.getSettings().setJavaScriptEnabled(true);
-
 
         webView.loadUrl("http://120.79.222.191/zstv/public/index.php/user/index/index.html");
 

@@ -28,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentZuoping extends SupportFragment {
-    @BindView(R.id.rlv)
+
     RecyclerView rlv;
     Unbinder unbinder;
     private View view;
@@ -52,6 +52,7 @@ public class FragmentZuoping extends SupportFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_zuoping, container, false);
+        rlv=view.findViewById(R.id.rlv);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
