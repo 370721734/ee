@@ -214,7 +214,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
 //                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
                                 finish();
                             } else {
-                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
+                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
 

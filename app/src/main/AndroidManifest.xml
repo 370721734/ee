@@ -27,7 +27,12 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".message.message.SysMessageActivity"></activity>
+        <activity android:name=".message.my.GuangZuActivity"></activity>
+        <activity android:name=".message.message.PrivateJiuBaoActivity" />
+        <activity android:name=".message.message.JiuBaoActivity" />
+        <activity android:name=".message.message.MoreActivity" />
+        <activity android:name=".message.message.GeRenInfoActivity" />
+        <activity android:name=".message.message.SysMessageActivity" />
         <activity android:name=".message.my.XieYiActivity" />
         <activity android:name=".message.message.AboutActivity" />
         <activity android:name=".message.my.SettingActivity" />

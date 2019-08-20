@@ -1,6 +1,7 @@
 package com.jarhero790.eub.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -17,6 +18,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.adapter.FeiSiAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
+import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
@@ -57,14 +59,14 @@ public class FensiActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        EventBus.getDefault().unregister(this);
+//        EventBus.getDefault().unregister(this);
     }
 
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void onMessage(String value) {
-
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void onMessage(String value) {
+//
+//    }
 
 
     @Override
@@ -72,7 +74,7 @@ public class FensiActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_fensi);
         ButterKnife.bind(this);
-        EventBus.getDefault().register(this);
+//        EventBus.getDefault().register(this);
         recyclerViewFensi = findViewById(R.id.recyclerViewFensi);
         CommonUtil.setStatusBarTransparent(this);
 //        getfensi();
@@ -118,7 +120,7 @@ public class FensiActivity extends Activity {
                             recyclerViewFensi.setLayoutManager(manager);
                             LinearItemDecoration itemDecoration = new LinearItemDecoration();
                             recyclerViewFensi.addItemDecoration(itemDecoration);
-                            feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick);
+                            feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick);
                             recyclerViewFensi.setAdapter(feiSiAdapter);
                         } else {
                             nodingdan.setVisibility(View.VISIBLE);
@@ -181,7 +183,7 @@ public class FensiActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick);
+                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick);
                                 recyclerViewFensi.setAdapter(feiSiAdapter);
                             }
                         });
@@ -204,8 +206,17 @@ public class FensiActivity extends Activity {
     FeiSiAdapter.Myclick myclick = new FeiSiAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-            Log.e("--------", "" + position + "  " + arrayList.get(position).getUser_id());
+            Log.e("--------1", "" + position + "  " + arrayList.get(position).getUser_id());
             guanzu(arrayList.get(position).getUser_id() + "");
+        }
+    };
+    FeiSiAdapter.Myclick touclick = new FeiSiAdapter.Myclick() {
+        @Override
+        public void myClick(int position, View view) {
+            Log.e("--------2", "" + position + "  " + arrayList.get(position).getUser_id());
+            Intent intent=new Intent(FensiActivity.this, GeRenInfoActivity.class);
+            startActivity(intent);
+
         }
     };
 

@@ -52,13 +52,25 @@
     android:layout_width="match_parent"
     android:layout_marginTop="20dp"
     android:layout_height="95dp">
-    <ImageView
+
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_userimage"
         android:layout_width="95dp"
         android:layout_height="95dp"
-        android:scaleType="center"
+        android:layout_alignTop="@+id/iv_pho"
         android:layout_centerHorizontal="true"
-        android:src="@mipmap/edit_tou_icon"/>
+        android:layout_marginTop="-31dp"
+        android:src="@mipmap/edit_tou_icon" />
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iv_userimagetwo"
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:layout_alignTop="@+id/iv_pho"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-31dp"
+        android:visibility="gone"
+        android:src="@mipmap/edit_tou_icon" />
+
     <ImageView
         android:id="@+id/iv_pho"
         android:layout_width="35dp"

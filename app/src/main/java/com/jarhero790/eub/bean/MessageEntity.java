@@ -40,6 +40,7 @@ public class MessageEntity implements MultiItemEntity {
     //这里怎么判断是什么布局
     @Override
     public int getItemType() {
+
         if (messageSystem!=null && messageSystem.getViewType()!=null){
             if(messageSystem.getViewType().equals("1")){
                 return TYPE_SYSTEM;

@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
 import com.jarhero790.eub.base.BasePresenter;
@@ -33,6 +34,8 @@ import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.contract.mine.MineMainContract;
 import com.jarhero790.eub.eventbus.MessageEventUser;
 import com.jarhero790.eub.message.bean.UserCen;
+import com.jarhero790.eub.message.message.ZanActivity;
+import com.jarhero790.eub.message.my.GuangZuActivity;
 import com.jarhero790.eub.message.my.QianDaoActivity;
 import com.jarhero790.eub.message.my.SettingActivity;
 import com.jarhero790.eub.presenter.mine.MineMainPresenter;
@@ -93,6 +96,9 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
     private String money;//签到金币
     private String signtime;//最后签到时间
+
+
+
 
 
     public static MineFragment newInstance() {
@@ -278,7 +284,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             if (code.equals("200")) {
                 textViewNickName.setText(userInfo.getData().getUser().getNickname());
                 tvTvhao.setText("钻视TV号:" + userInfo.getData().getUser().getId());
-                Glide.with(getActivity()).load(Api.HOST + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+                Glide.with(getActivity()).load(Api.TU + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
 
 
                 tvHuozai.setText(zan);
@@ -329,6 +335,12 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        mPresenter.getuserinfo();
+        Log.e("---","onResume");
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -338,7 +350,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         return rootView;
     }
 
-    @OnClick({R.id.dingwei, R.id.tv_qiandao,R.id.iv_edit})
+    @OnClick({R.id.dingwei, R.id.tv_qiandao,R.id.iv_edit,R.id.myguanzu,R.id.myfensi,R.id.myzan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.dingwei:
@@ -355,7 +367,20 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                   intent1.putExtra("name",app.getUserCen().getData().getUser().getNickname());
                   intent1.putExtra("sign",app.getUserCen().getData().getUser().getSign());
                   intent1.putExtra("sex",app.getUserCen().getData().getUser().getSex());
+                  intent1.putExtra("heading",app.getUserCen().getData().getUser().getHeadimgurl());
+                  intent1.putExtra("city",app.getUserCen().getData().getUser().getCity());
+
                 startActivity(intent1);
+                break;
+
+            case R.id.myguanzu:
+                startActivity(new Intent(getActivity(), GuangZuActivity.class));
+                break;
+            case R.id.myfensi:
+                startActivity(new Intent(getActivity(), FensiActivity.class));
+                break;
+            case R.id.myzan:
+                startActivity(new Intent(getActivity(), ZanActivity.class));
                 break;
         }
     }

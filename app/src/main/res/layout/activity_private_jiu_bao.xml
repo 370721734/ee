@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroudcolor"
+    android:orientation="vertical"
+    >
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="25dp"
+        >
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="32dp"
+            android:layout_height="41dp"
+            android:layout_gravity="center"
+            android:padding="@dimen/dp_10"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/rc_dimen_size_5"
+            android:src="@mipmap/back"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#EFEDED"
+            android:textSize="18sp"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:layout_marginRight="30dp"
+            android:text="私信举报"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="提交"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="15dp"
+            android:textColor="#ffe92e70"
+            android:textSize="15sp"
+            />
+
+    </RelativeLayout>
+
+
+
+    <View
+        android:layout_marginTop="15dp"
+        android:layout_width="match_parent"
+        android:layout_height="0.1dp"
+        android:background="#ffffff"
+        />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="@dimen/dp_10"
+        android:layout_height="50dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="举报理由"
+            android:layout_gravity="center_vertical"
+            android:textColor="#ff74787e"
+            android:textSize="15sp"
+            />
+        <EditText
+            android:id="@+id/et_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="15dp"
+            android:hint="发布不适当内容对我造成困扰"
+            android:layout_marginRight="15dp"
+            android:singleLine="true"
+            android:textColorHint="#9B9EA5"
+            android:textSize="15dp"
+            android:textColor="#9B9EA5"
+            android:background="@null"/>
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="举报描述（选填）"
+        android:textColor="#ff9b9ea5"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="14sp"
+        />
+
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="20dp"
+        android:hint="详细描述举报理由..."
+        android:gravity="top"
+        android:padding="@dimen/dp_10"
+        android:background="@drawable/moretext_bg"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="聊天记录截图证据（必填）"
+        android:textColor="#ff9b9ea5"
+        android:textSize="14sp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="35dp"
+        />
+
+
+    <LinearLayout
+        android:layout_width="95dp"
+        android:layout_height="95dp"
+        android:background="@drawable/moretext_bg"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:orientation="vertical">
+        
+        <ImageView
+            android:layout_width="46dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="15dp"
+            android:layout_gravity="center_horizontal"
+            android:src="@mipmap/jiubaoup_icon"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="0/4"
+            android:textColor="#ff60646c"
+            android:textSize="14sp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="8dp"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginRight="15dp"
+        android:layout_marginTop="17dp"
+        android:text="您的举报将在12小时内受理，若举报成功会在第一时间
+告知处理结果。请耐心等待，感谢您的配合。"
+        android:textColor="#ff74787e"
+        android:textSize="14sp"
+        />
+</LinearLayout>

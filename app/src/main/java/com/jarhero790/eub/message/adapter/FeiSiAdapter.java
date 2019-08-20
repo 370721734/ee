@@ -5,19 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
-import com.jarhero790.eub.bean.FenSiBean;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,11 +27,13 @@ public class FeiSiAdapter extends RecyclerView.Adapter<FeiSiAdapter.MyHolder> {
     private Context context;
     private List<FenSiTBean.DataBean> list;
     private Myclick myclick;
+    private Myclick touclick;
 
-    public FeiSiAdapter(Context context, List<FenSiTBean.DataBean> list, Myclick myclick) {
+    public FeiSiAdapter(Context context, List<FenSiTBean.DataBean> list, Myclick myclick, Myclick touclick) {
         this.context = context;
         this.list = list;
         this.myclick = myclick;
+        this.touclick = touclick;
     }
 
     @NonNull
@@ -48,26 +46,27 @@ public class FeiSiAdapter extends RecyclerView.Adapter<FeiSiAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         FenSiTBean.DataBean bean = list.get(position);
-        Glide.with(context).load(Api.HOST + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+        Glide.with(context).load(Api.TU + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
         myHolder.tvName.setText(bean.getNickname());
 
-        if (bean.getAddtime().length()>10){
-            myHolder.tvTime.setText(bean.getAddtime().substring(0,10));
+        if (bean.getAddtime().length() > 10) {
+            myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));
         }
 
 
-        myHolder.tvGuanzu.setText(bean.getIs_likeEach()==1?"已互关":"+关注");
+        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "+关注");
 
         myHolder.tvGuanzu.setTag(position);
         myHolder.tvGuanzu.setOnClickListener(myclick);
+
+        myHolder.rlAll.setTag(position);
+        myHolder.rlAll.setOnClickListener(touclick);
 
 //
 //        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
 //
 //        long stamp=Long.valueOf(bean.getAddtime());
 //          Date date=new Date(stamp*1000);
-
-
 
 
 //        myHolder.tvPinglunText.setText(bean.getName());
@@ -149,6 +148,8 @@ public class FeiSiAdapter extends RecyclerView.Adapter<FeiSiAdapter.MyHolder> {
         TextView tvTime;
         @BindView(R.id.tv_guanzu)
         TextView tvGuanzu;
+        @BindView(R.id.rl_all)
+        RelativeLayout rlAll;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);

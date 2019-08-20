@@ -1,11 +1,19 @@
 package com.jarhero790.eub.message.my;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -17,32 +25,51 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.JsonBean;
+import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.GetJsonDataUtil;
+import com.jarhero790.eub.utils.ImageCutUtils;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class SettingActivity extends AppCompatActivity {
 
+    private static final int CUT_REQUEST = 4;
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.save)
     TextView save;
     @BindView(R.id.iv_userimage)
-    ImageView ivUserimage;
+    CircleImageView ivUserimage;
     @BindView(R.id.iv_pho)
     ImageView ivPho;
     @BindView(R.id.tv_name)
@@ -69,6 +96,15 @@ public class SettingActivity extends AppCompatActivity {
     RadioButton woman;
     @BindView(R.id.rgroup)
     RadioGroup rgroup;
+    @BindView(R.id.iv_userimagetwo)
+    CircleImageView ivUserimagetwo;
+
+    private String signs;
+    private String nicknames;
+    private String sexs;
+    private String citys;
+    private String headimgurls;
+
 
     private List<JsonBean> options1Items = new ArrayList<>();
 
@@ -77,6 +113,15 @@ public class SettingActivity extends AppCompatActivity {
     private ArrayList<ArrayList<ArrayList<String>>> options3Items = new ArrayList<>();
 
     private Thread thread;
+
+    private static final int REQUEST_IMAGE = 3;
+    private static final int RESULT_REQUEST_CODE = 3;
+    public static final String DIR = Environment.getExternalStorageDirectory().getAbsolutePath() + "/tmp/";
+    File outputFile;
+
+    static {
+        new File(DIR).mkdirs();
+    }
 
     private static final int MSG_LOAD_DATA = 0x0001;
 
@@ -99,8 +144,7 @@ public class SettingActivity extends AppCompatActivity {
                     if (thread == null) {//如果已创建就不再重新创建子线程了
 
 
-
-                        Toast.makeText(SettingActivity.this, "Begin Parse Data", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SettingActivity.this, "Begin Parse Data", Toast.LENGTH_SHORT).show();
 
                         thread = new Thread(new Runnable() {
 
@@ -123,20 +167,18 @@ public class SettingActivity extends AppCompatActivity {
                     break;
 
 
-
                 case MSG_LOAD_SUCCESS:
 
-                    Toast.makeText(SettingActivity.this, "Parse Succeed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SettingActivity.this, "Parse Succeed", Toast.LENGTH_SHORT).show();
 
                     isLoaded = true;
 
                     break;
 
 
-
                 case MSG_LOAD_FAILED:
 
-                    Toast.makeText(SettingActivity.this, "Parse Failed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(SettingActivity.this, "Parse Failed", Toast.LENGTH_SHORT).show();
 
                     break;
 
@@ -159,6 +201,18 @@ public class SettingActivity extends AppCompatActivity {
         String name = intent.getStringExtra("name");
         String sign = intent.getStringExtra("sign");
         String sex = intent.getStringExtra("sex");
+        String headim = intent.getStringExtra("heading");
+        String addres = intent.getStringExtra("city");
+
+        if (headim != null){
+            ivUserimage.setVisibility(View.VISIBLE);
+            ivUserimagetwo.setVisibility(View.GONE);
+            Glide.with(this).load(Api.TU + headim).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(ivUserimage);
+        }
+
+        if (addres != null)
+            tvAddress.setText(addres);
+
         Log.e("--------", name + sign + sex);
 
         if (name != null)
@@ -171,30 +225,55 @@ public class SettingActivity extends AppCompatActivity {
         if (sex != null) {
             if (sex.equals("1")) {
                 rgroup.check(R.id.man);
+                sexs = "1";
             } else if (sex.equals("2")) {
                 rgroup.check(R.id.woman);
+                sexs = "2";
             } else {
                 rgroup.check(R.id.man);
+                sexs = "1";
             }
         }
 
     }
 
-    @OnClick({R.id.back, R.id.save, R.id.iv_pho, R.id.iv_edit_name, R.id.iv_edit_sign, R.id.iv_edit_address, R.id.tv_exit, R.id.tv_xieyi})
+    @OnClick({R.id.back, R.id.save, R.id.iv_pho, R.id.iv_edit_name, R.id.iv_edit_sign, R.id.iv_edit_address, R.id.tv_exit, R.id.tv_xieyi, R.id.tv_address, R.id.man, R.id.woman})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.save:
+                nicknames = tvName.getText().toString();
+                signs = tvSign.getText().toString();
+                citys = tvAddress.getText().toString();
+                Log.e("-------------img:", headimgurls);
+                String newhead = "data:image/png;base64," + headimgurls;
+                editinfo(signs, nicknames, sexs, citys, newhead);
+
+
                 break;
             case R.id.iv_pho:
+//                Intent intent=new Intent();
+                outputFile = new File(DIR, System.currentTimeMillis() + ".jpg");
+//                intent.setAction(Intent.ACTION_PICK);//
+//                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI,"image/*");
+//                intent.putExtra("output", Uri.fromFile(outputFile));
+//                startActivityForResult(intent,REQUEST_IMAGE);
+                Intent intent = new Intent();
+                intent.setAction(Intent.ACTION_GET_CONTENT);// 打开图库获取图片
+                intent.setAction(Intent.ACTION_PICK);// 打开图库获取图片
+                intent.setType("image/*");// 这个参数是确定要选择的内容为图片
+                intent.putExtra("return-data", true);// 是否要返回，如果设置false取到的值就是空值
+                intent.putExtra("output", Uri.fromFile(outputFile));
+                startActivityForResult(intent, REQUEST_IMAGE);
                 break;
             case R.id.iv_edit_name:
                 break;
             case R.id.iv_edit_sign:
                 break;
             case R.id.iv_edit_address:
+            case R.id.tv_address:
 
                 showPickerView();
 
@@ -204,6 +283,13 @@ public class SettingActivity extends AppCompatActivity {
             case R.id.tv_xieyi:
                 startActivity(new Intent(SettingActivity.this, XieYiActivity.class));
                 break;
+            case R.id.man:
+                sexs = "1";
+                break;
+            case R.id.woman:
+                sexs = "2";
+                break;
+
         }
     }
 
@@ -235,9 +321,11 @@ public class SettingActivity extends AppCompatActivity {
                         options3Items.get(options1).get(options2).get(options3) : "";
 
 
-                String tx = opt1tx + opt2tx + opt3tx;
+//                String tx = opt1tx + opt2tx + opt3tx;
 
-                Toast.makeText(SettingActivity.this, tx, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(SettingActivity.this, tx, Toast.LENGTH_SHORT).show();
+
+                tvAddress.setText(city(opt1tx, opt2tx) + opt3tx);
             }
         })
 
@@ -248,16 +336,17 @@ public class SettingActivity extends AppCompatActivity {
 //                Toast.makeText(SettingActivity.this, str, Toast.LENGTH_SHORT).show();
 //            }
 //        })
+                .setBgColor(Color.WHITE)
                 .setSubmitText("确定")
                 .setCancelText("取消")//取消按钮文字
-                .setTitleText("城市选择")//标题
+//                .setTitleText("城市选择")//标题
                 .setSubCalSize(18)//确定和取消文字大小
                 .setTitleSize(20)//标题文字大小
-                .setTitleColor(Color.BLACK)//标题文字颜色
-                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
-                .setCancelColor(Color.BLUE)//取消按钮文字颜色
-                .setTitleBgColor(0xFF333333)//标题背景颜色 Night mode
-                .setBgColor(0xFF000000)//滚轮背景颜色 Night mode
+//                .setTitleColor(Color.BLACK)//标题文字颜色
+                .setSubmitColor(Color.BLACK)//确定按钮文字颜色
+                .setCancelColor(Color.BLACK)//取消按钮文字颜色
+//                .setTitleBgColor(0xFF333333)//标题背景颜色 Night mode
+//                .setBgColor(0xFF000000)//滚轮背景颜色 Night mode
                 .setContentTextSize(18)//滚轮文字大小
 //                        .setLinkage(false)//设置是否联动，默认true
 //                .setLabels("省", "市", "区")//设置选择的三级单位
@@ -269,51 +358,225 @@ public class SettingActivity extends AppCompatActivity {
 //                .isRestoreItem(true)//切换时是否还原，设置默认选中第一项。
                 .build();
 
-//         if (options1Items.size()>0 && options2Items.size()>0 && options3Items.size()>0){
-//
-//         }
-        pvOptions.setPicker(options1Items, options2Items, options3Items);
-        pvOptions.show();
+        if (options1Items.size() > 0 && options2Items.size() > 0 && options3Items.size() > 0) {
+            pvOptions.setPicker(options1Items, options2Items, options3Items);
+            pvOptions.show();
+        }
+
     }
 
+    private Uri imageUri;
+    private String photoPath;
+    Bitmap bitmaptu;
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
+            imageUri = data.getData();
+
+            Log.e("---------1", imageUri + "");
+//            ivUserimage.setImageURI(imageUri);
+
+            if (imageUri != null) {
+                try {
+                    bitmaptu = getBitmapFormUri(this, imageUri);
+                    ivUserimage.setVisibility(View.GONE);
+                    ivUserimagetwo.setVisibility(View.VISIBLE);
+                    ivUserimagetwo.setImageBitmap(bitmaptu);
+                    headimgurls = CommonUtil.convertIconToString(bitmaptu);
+                    Log.e("-------------img2:", headimgurls);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+//            ImageCutUtils.cropImage(SettingActivity.this,imageUri);
+            ContentResolver contentResolver = this.getContentResolver();
+            try {
+//                Bitmap bitmaptu = BitmapFactory.decodeStream(contentResolver.openInputStream(ImageCutUtils.cropImageUri));
+//
+//                ivUserimagetwo.setImageBitmap(bitmaptu);
+//                String path = Environment.getExternalStorageDirectory().getAbsolutePath();//手机设置的存储位置
+//                File file = new File(path);
+//                File imageFile = new File(file, System.currentTimeMillis() + ".png");
+//
+//
+//                if (!file.exists()) {
+//                    file.mkdirs();
+//                }
+//                imageFile.createNewFile();
+//                FileOutputStream outputStream = new FileOutputStream(imageFile);
+//                bitmaptu.compress(Bitmap.CompressFormat.PNG, 90, outputStream);
+//                headimgurls=CommonUtil.convertIconToString(bitmaptu);
+//                outputStream.flush();
+//                outputStream.close();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+//            String[] filePathColumn={MediaStore.Audio.Media.DATA};
+//            Cursor cursor=getContentResolver().query(imageUri,filePathColumn,null,null,null);
+//            cursor.moveToFirst();
+//            photoPath=cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
+//            cursor.close();
+//            crop(imageUri);
+//            ivImg.setImageURI(imageUri);
+//            Log.e("-------imageuri",imageUri+"");
+        } else if (requestCode == RESULT_REQUEST_CODE) {
+            imageUri = data.getData();
+            Log.e("---------2", imageUri + "");
+
+//            setImageBitmap();
+//            ivImg.setImageBitmap(bitmap);
+//            bitmapToString = bitmapToString(bitmap);
+        } else if (requestCode == CUT_REQUEST) {
+//            imageUri=data.getData();
+            Log.e("---------3", imageUri + "");
+            //-3: null????
+//            ivUserimage.setImageBitmap(bitmaptu);
+        } else if (requestCode == ImageCutUtils.CROP_IMAGE) {
+            if (ImageCutUtils.cropImageUri != null) {
+//                ivUserimage.setImageBitmap(bitmaptu);
+                try {
+                    String fileName = getRealPathFromURI(ImageCutUtils.cropImageUri);
+//                    String status = Environment.getExternalStorageState();
+                    String status = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+//                    ContentResolver contentResolver=this.getContentResolver();
+                    try {
+//                        Bitmap bitmap= BitmapFactory.decodeStream(contentResolver.openInputStream(ImageCutUtils.cropImageUri));
+//                        ivUserimage.setImageBitmap(bitmap);
+
+
+//                        Bitmap bit=BitmapFactory.decodeFile(status+fileName);
+//                        Log.e("---------",status+fileName);
+//                        ivUserimage.setImageBitmap(bit);
+
+//                        ivUserimage.setImageURI(ImageCutUtils.cropImageUri);
+//                        Log.e("----------",""+ImageCutUtils.cropImageUri);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                    // upLoadFile(fileName);
+//                    List<ImageItem> itemList = new ArrayList<ImageItem>();
+//                    ImageItem imageItem = new ImageItem();
+//                    imageItem.setImagePath(fileName);
+//                    itemList.add(imageItem);
+//                    AsyncHttpClient client = new AsyncHttpClient();
+//                    RequestParams map = new RequestParams();
+//                    map = CommonUtils.compressionImage("1", null, itemList);
+//                    client.post(NewInterface.UPLOAD_PHOTOS, map, upload);//图片的上传方法
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    public String getRealPathFromURI(Uri contentUri) {
+        String[] proj = {MediaStore.Images.Media.DATA};
+        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        return cursor.getString(column_index);
+    }
+
+//    private void setImageBitmap() {
+//        //获取imageview的宽和高
+//        int targetWidth = ivImg.getWidth();
+//        int targetHeight = ivImg.getHeight();
+//
+//        //根据图片路径，获取bitmap的宽和高
+//        BitmapFactory.Options options = new BitmapFactory.Options();
+//        options.inJustDecodeBounds = true;
+//        BitmapFactory.decodeFile(photoPath, options);
+//        int photoWidth = options.outWidth;
+//        int photoHeight = options.outHeight;
+//
+//        //获取缩放比例
+//        int inSampleSize = 1;
+//        if (photoWidth > targetWidth || photoHeight > targetHeight) {
+//            int widthRatio = Math.round((float) photoWidth / targetWidth);
+//            int heightRatio = Math.round((float) photoHeight / targetHeight);
+//            inSampleSize = Math.min(widthRatio, heightRatio);
+//        }
+//
+//        //使用现在的options获取Bitmap
+//        options.inSampleSize = inSampleSize;
+//        options.inJustDecodeBounds = false;
+//        bitmap = BitmapFactory.decodeFile(photoPath, options);
+//        ivImg.setImageBitmap(bitmap);
+//    }
+
+    /**
+     * 剪切图片
+     */
+    private void crop(Uri uri) {
+        // 裁剪图片意图
+
+//        Intent intent=new Intent(Intent.ACTION_PICK,uri);
+//        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+
+
+        Intent intent = new Intent("com.android.camera.action.CROP", uri);
+//        intent.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
+        intent.setDataAndType(uri, "image/*");
+
+
+        intent.putExtra("crop", "true");
+        // 裁剪框的比例，1：1
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        // 裁剪后输出图片的尺寸大小
+        intent.putExtra("outputX", 60);//250
+        intent.putExtra("outputY", 60);
+        // 图片格式
+        intent.putExtra("outputFormat", "PNG");
+        intent.putExtra("noFaceDetection", true);// 取消人脸识别
+        intent.putExtra("return-data", true);// true:不返回uri，false：返回uri
+        intent.putExtra("output", Uri.fromFile(outputFile));
+
+        startActivityForResult(intent, CUT_REQUEST);
+//        startActivityForResult(intent, RESULT_REQUEST_CODE);//同样的在onActivityResult中处理剪裁好的图片
+    }
+
+    private String city(String s1, String s2) {
+        if (s1.equals(s2)) {
+            return s2;
+        } else {
+            return s1 + s2;
+        }
+    }
 
     private void initJsonData() {//解析数据
 
 
-
         /**
-
          * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
-
          * 关键逻辑在于循环体
-
          *
-
          * */
 
         String JsonData = new GetJsonDataUtil().getJson(this, "province.json");//获取assets目录下的json文件数据
 
 
-
         ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
 
 
-
         /**
-
          * 添加省份数据
-
          *
-
          * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
-
          * PickerView会通过getPickerViewText方法获取字符串显示出来。
 
          */
 
         options1Items = jsonBean;
-
 
 
         for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
@@ -323,7 +586,6 @@ public class SettingActivity extends AppCompatActivity {
             ArrayList<ArrayList<String>> province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
 
 
-
             for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
 
                 String cityName = jsonBean.get(i).getCityList().get(c).getName();
@@ -331,7 +593,6 @@ public class SettingActivity extends AppCompatActivity {
                 cityList.add(cityName);//添加城市
 
                 ArrayList<String> city_AreaList = new ArrayList<>();//该城市的所有地区列表
-
 
 
                 //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
@@ -355,9 +616,7 @@ public class SettingActivity extends AppCompatActivity {
             }
 
 
-
             /**
-
              * 添加城市数据
 
              */
@@ -365,9 +624,7 @@ public class SettingActivity extends AppCompatActivity {
             options2Items.add(cityList);
 
 
-
             /**
-
              * 添加地区数据
 
              */
@@ -377,15 +634,42 @@ public class SettingActivity extends AppCompatActivity {
         }
 
 
-
         mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
-
 
 
     }
 
+    private void editinfo(String sign, String nickname, String sex, String city, String headimg) {
+        RetrofitManager.getInstance().getDataServer().editinfo(SharePreferenceUtil.getToken(AppUtils.getContext()), sign, nickname, sex, city, headimg)
+                .enqueue(new Callback<ResponseBody>() {
+                    @Override
+                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                        if (response.isSuccessful()) {
+                            try {
+                                String json = response.body().string();
+                                Log.e("--------a=>", json);
+//                                {"code":200,"data":null,"msg":"\u6210\u529f"}
+                                JSONObject object = new JSONObject(json);
+                                int code = object.optInt("code");
+                                String msg = object.optString("msg");
+                                if (code == 200) {
+                                    Toast.makeText(SettingActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(SettingActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                }
 
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
 
+                    @Override
+                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                    }
+                });
+    }
 
 
     public ArrayList<JsonBean> parseData(String result) {//Gson 解析
@@ -419,9 +703,6 @@ public class SettingActivity extends AppCompatActivity {
     }
 
 
-
-
-
     @Override
 
     protected void onDestroy() {
@@ -434,5 +715,68 @@ public class SettingActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    /**
+     * 通过uri获取图片并进行压缩
+     *
+     * @param uri
+     */
+    public static Bitmap getBitmapFormUri(Activity ac, Uri uri) throws FileNotFoundException, IOException {
+        InputStream input = ac.getContentResolver().openInputStream(uri);
+        BitmapFactory.Options onlyBoundsOptions = new BitmapFactory.Options();
+        onlyBoundsOptions.inJustDecodeBounds = true;
+        onlyBoundsOptions.inDither = true;//optional
+        onlyBoundsOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;//optional
+        BitmapFactory.decodeStream(input, null, onlyBoundsOptions);
+        input.close();
+        int originalWidth = onlyBoundsOptions.outWidth;
+        int originalHeight = onlyBoundsOptions.outHeight;
+        if ((originalWidth == -1) || (originalHeight == -1))
+            return null;
+        //图片分辨率以480x800为标准
+        float hh = 200f;//这里设置高度为800f
+        float ww = 200f;//这里设置宽度为480f
+        //缩放比。由于是固定比例缩放，只用高或者宽其中一个数据进行计算即可
+        int be = 1;//be=1表示不缩放
+        if (originalWidth > originalHeight && originalWidth > ww) {//如果宽度大的话根据宽度固定大小缩放
+            be = (int) (originalWidth / ww);
+        } else if (originalWidth < originalHeight && originalHeight > hh) {//如果高度高的话根据宽度固定大小缩放
+            be = (int) (originalHeight / hh);
+        }
+        if (be <= 0)
+            be = 1;
+        //比例压缩
+        BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
+        bitmapOptions.inSampleSize = be;//设置缩放比例
+        bitmapOptions.inDither = true;//optional
+        bitmapOptions.inPreferredConfig = Bitmap.Config.ARGB_8888;//optional
+        input = ac.getContentResolver().openInputStream(uri);
+        Bitmap bitmap = BitmapFactory.decodeStream(input, null, bitmapOptions);
+        input.close();
+
+        return compressImage(bitmap);//再进行质量压缩
+    }
+
+    /**
+     * 质量压缩方法
+     *
+     * @param image
+     * @return
+     */
+    public static Bitmap compressImage(Bitmap image) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
+        int options = 100;
+        while (baos.toByteArray().length / 1024 > 200) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
+            baos.reset();//重置baos即清空baos
+            //第一个参数 ：图片格式 ，第二个参数： 图片质量，100为最高，0为最差  ，第三个参数：保存压缩后的数据的流
+            image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
+            options -= 10;//每次都减少10
+        }
+        ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
+        Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
+        return bitmap;
     }
 }

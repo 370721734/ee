@@ -8,6 +8,7 @@ import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.bean.VideoBean;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GiftBean;
+import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.bean.JiangLiBean;
 import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
@@ -29,6 +30,8 @@ import retrofit2.http.Query;
 public interface Api {
 //    public final static String HOST = "http://49.234.23.127/";
     public final static String HOST = "http://120.79.222.191/zstv/public/index.php/";
+    public final static String TU = "http://120.79.222.191/zstv/public";
+
 
 
     /**
@@ -91,7 +94,7 @@ public interface Api {
      */
     @POST("web/index/messages")
     @FormUrlEncoded
-    Call<MessagesBean> getSysMessages(@Field("token") String tokenValue);
+    Call<SysMessageBean> getSysMessages(@Field("token") String tokenValue);
 
 
     /**
@@ -207,6 +210,17 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/zanvideo")
     Call<LikeBean> zanvideo(@Field("token") String token);
+
+    //我的关注
+    @FormUrlEncoded
+    @POST("web/index/mylike")
+    Call<GuangZuBean> mylike(@Field("token") String token);
+
+
+    //修改个人信息
+    @FormUrlEncoded
+    @POST("web/index/editinfo")
+    Call<ResponseBody> editinfo(@Field("token") String token,@Field("sign") String sign,@Field("nickname") String nickname,@Field("sex") String sex,@Field("city") String city,@Field("headimgurl") String headimgurl);
 
 
 

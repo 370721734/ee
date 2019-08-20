@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
     android:id="@+id/coordinator_layout"
+    android:background="@color/backgroudcolor"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/backgroudcolor">
+    android:layout_height="match_parent">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -15,172 +16,159 @@
         <!--app:layout_scrollFlags="scroll|enterAlways"-->
         <LinearLayout
             android:id="@+id/rel"
-            android:layout_width="match_parent"
-            android:layout_height="310dp"
+            app:layout_scrollFlags="scroll"
             android:orientation="vertical"
-            app:layout_scrollFlags="scroll">
-
+            android:layout_width="match_parent"
+            android:layout_height="310dp">
             <LinearLayout
-                android:id="@+id/vp_shuffling"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
                 android:background="@mipmap/mine_bg"
-                android:orientation="vertical">
+                android:id="@+id/vp_shuffling"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
 
                 <RelativeLayout
                     android:layout_width="match_parent"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="30dp">
+                    android:layout_marginTop="20dp"
+                    android:layout_height="41dp">
 
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="32dp"
+                        android:layout_height="41dp"
+                        android:layout_gravity="center"
+                        android:padding="@dimen/dp_10"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/back"/>
                     <TextView
                         android:id="@+id/textViewNickName"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_centerHorizontal="true"
-                        android:text="ddddddd"
                         android:textColor="#FEFEFE"
-                        android:textSize="18sp" />
+                        android:layout_centerInParent="true"
+                        android:textSize="18sp"
+                        android:text="ddddddd"/>
 
-                    <ImageView
-                        android:id="@+id/iv_edit"
-                        android:layout_width="39dp"
-                        android:layout_height="36dp"
-                        android:layout_alignParentRight="true"
-                        android:padding="@dimen/dp_10"
-                        android:layout_centerVertical="true"
-                        android:layout_marginRight="@dimen/dp_10"
-                        android:src="@mipmap/edit_icon" />
                 </RelativeLayout>
 
                 <TextView
                     android:id="@+id/tv_tvhao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textColor="#FEFEFE"
                     android:layout_gravity="center"
                     android:layout_marginTop="3dp"
-                    android:text="钻视TV号:"
-                    android:textColor="#EFEDED"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:text="钻视TV号:"/>
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/iv_userimage"
+                    android:layout_marginTop="10dp"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
                     android:layout_gravity="center"
-                    android:layout_marginTop="10dp"
-                    android:src="@mipmap/music" />
+                    android:src="@mipmap/music"/>
 
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_marginTop="10dp"
-                    android:orientation="horizontal">
-
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
                     <LinearLayout
-                        android:id="@+id/myguanzu"
+                        android:orientation="vertical"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:orientation="vertical">
-
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/tv_guanzhu"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="#ffffff" />
-
+                            android:textColor="#ffffff"
+                            android:text=""/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="关注"
-                            android:textColor="#ffffff" />
+                            android:textColor="#ffffff"
+                            android:text="关注"/>
                     </LinearLayout>
 
 
+
                     <LinearLayout
-                        android:id="@+id/myfensi"
+                        android:orientation="vertical"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:orientation="vertical">
-
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/fensi"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="#ffffff" />
-
+                            android:textColor="#ffffff"
+                            android:text=""/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="粉丝"
-                            android:textColor="#ffffff" />
+                            android:textColor="#ffffff"
+                            android:text="粉丝"/>
                     </LinearLayout>
 
 
                     <LinearLayout
-                        android:id="@+id/myzan"
+                        android:orientation="vertical"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
                         android:layout_weight="1"
                         android:gravity="center"
-                        android:orientation="vertical">
-
+                        android:layout_gravity="center"
+                        android:layout_height="wrap_content">
                         <TextView
                             android:id="@+id/tv_huozai"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
-                            android:textColor="#ffffff" />
-
+                            android:textColor="#ffffff"
+                            android:text=""/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="2dp"
-                            android:text="获赞"
-                            android:textColor="#ffffff" />
+                            android:textColor="#ffffff"
+                            android:text="获赞"/>
                     </LinearLayout>
 
                 </LinearLayout>
 
 
                 <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:orientation="horizontal"
                     android:gravity="center"
-                    android:orientation="horizontal">
+                    android:layout_marginTop="10dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
 
                     <LinearLayout
-                        android:id="@+id/dingwei"
+                        android:orientation="horizontal"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
+                        android:id="@+id/dingwei"
+                        android:layout_height="wrap_content">
 
                         <ImageView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/location" />
-
+                            android:src="@mipmap/location"/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:text="深圳"
                             android:layout_marginLeft="5dp"
                             android:layout_marginTop="3dp"
-                            android:text="深圳"
-                            android:textColor="#ffffff" />
+                            android:textColor="#ffffff"/>
                     </LinearLayout>
 
 
@@ -188,11 +176,12 @@
                         android:id="@+id/tv_qiandao"
                         android:layout_width="50dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
                         android:background="@drawable/button_shape1"
-                        android:gravity="center"
                         android:text="签到"
-                        android:textColor="#000000" />
+                        android:gravity="center"
+                        android:layout_marginLeft="10dp"
+                        android:textColor="#000000"/>
+
 
 
                 </LinearLayout>
@@ -205,22 +194,26 @@
                     android:layout_marginTop="@dimen/rc_dimen_size_18"
                     android:text=""
                     android:textColor="#fffefefe"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:visibility="visible"
+                    android:layout_height="@dimen/rc_dimen_size_18" />
 
             </LinearLayout>
 
 
         </LinearLayout>
-
         <android.support.design.widget.TabLayout
             android:id="@+id/tabLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/backgroudcolor"
             app:tabGravity="fill"
-            app:tabIndicatorColor="#353BFD"
             app:tabMode="fixed"
+            app:tabIndicatorColor="#353BFD"
             app:tabSelectedTextColor="#EFEDED"
             app:tabTextColor="#EFEDED" />
 
