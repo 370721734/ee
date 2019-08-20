@@ -7,6 +7,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSON;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import okhttp3.Call;
@@ -44,6 +46,8 @@ import okhttp3.ResponseBody;
 
 public class FensiActivity extends Activity {
 
+    @BindView(R.id.nodingdan)
+    RelativeLayout nodingdan;
     private RecyclerView recyclerViewFensi;
 
     FeiSiAdapter feiSiAdapter;
@@ -106,13 +110,21 @@ public class FensiActivity extends Activity {
                     arrayList.clear();
                     if (code == 200) {
                         arrayList = response.body().getData();
-                        Log.e("---------200", arrayList.get(0).getAddtime() + "");
-                        GridLayoutManager manager = new GridLayoutManager(FensiActivity.this, 1);
-                        recyclerViewFensi.setLayoutManager(manager);
-                        LinearItemDecoration itemDecoration = new LinearItemDecoration();
-                        recyclerViewFensi.addItemDecoration(itemDecoration);
-                        feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick);
-                        recyclerViewFensi.setAdapter(feiSiAdapter);
+//                        Log.e("---------200", arrayList.get(0).getAddtime() + "");
+                        if (arrayList.size() > 0) {
+                            nodingdan.setVisibility(View.GONE);
+                            recyclerViewFensi.setVisibility(View.VISIBLE);
+                            GridLayoutManager manager = new GridLayoutManager(FensiActivity.this, 1);
+                            recyclerViewFensi.setLayoutManager(manager);
+                            LinearItemDecoration itemDecoration = new LinearItemDecoration();
+                            recyclerViewFensi.addItemDecoration(itemDecoration);
+                            feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick);
+                            recyclerViewFensi.setAdapter(feiSiAdapter);
+                        } else {
+                            nodingdan.setVisibility(View.VISIBLE);
+                            recyclerViewFensi.setVisibility(View.GONE);
+                        }
+
                     }
                 }
             }

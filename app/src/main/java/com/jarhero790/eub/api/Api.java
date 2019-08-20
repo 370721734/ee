@@ -2,6 +2,7 @@ package com.jarhero790.eub.api;
 
 import com.jarhero790.eub.bean.AttentionBean;
 import com.jarhero790.eub.bean.AttentionUserAndVideoBen;
+import com.jarhero790.eub.bean.MessagesBean;
 import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.bean.VideoBean;
@@ -12,6 +13,7 @@ import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.MyPL;
 import com.jarhero790.eub.message.bean.PinLenBean;
+import com.jarhero790.eub.message.bean.SysMessageBean;
 import com.jarhero790.eub.message.bean.ZanBean;
 
 import io.reactivex.Observable;
@@ -83,6 +85,13 @@ public interface Api {
     @POST("web/index/messages")
     @FormUrlEncoded
     Observable<ResponseBody> getMessages(@Field("token") String tokenValue);
+
+    /**
+     * 消息
+     */
+    @POST("web/index/messages")
+    @FormUrlEncoded
+    Call<MessagesBean> getSysMessages(@Field("token") String tokenValue);
 
 
     /**

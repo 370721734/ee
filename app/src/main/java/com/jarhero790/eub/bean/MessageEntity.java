@@ -36,15 +36,23 @@ public class MessageEntity implements MultiItemEntity {
                 '}';
     }
 
+
+    //这里怎么判断是什么布局
     @Override
     public int getItemType() {
-        if(messageSystem.getViewType().equals("1")){
-            return TYPE_SYSTEM;
+        if (messageSystem!=null && messageSystem.getViewType()!=null){
+            if(messageSystem.getViewType().equals("1")){
+                return TYPE_SYSTEM;
+            }
         }
 
-        if(!messageLike.getNickname().equals("")){
-            return TYPE_LIKE;
+        if (messageLike!=null && messageLike.getNickname()!=null){
+            if(!messageLike.getNickname().equals("")){
+                return TYPE_LIKE;
+            }
         }
+
+
 
         return 0;
     }

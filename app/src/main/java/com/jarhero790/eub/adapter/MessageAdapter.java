@@ -25,24 +25,24 @@ public class MessageAdapter extends BaseMultiItemQuickAdapter<MessageEntity, Bas
         switch (messageEntity.getItemType()) {
             case MessageEntity.TYPE_SYSTEM:
                 MessageSystem messageSystem = messageEntity.getMessageSystem();
-                helper.setText(R.id.system_name, messageSystem.getAdmin());
-                helper.setText(R.id.system_content, messageSystem.getContent());
-                Glide.with(mContext).load(messageSystem.getImg()).into((ImageView) helper.getView(R.id.system_userIcon));
+//                helper.setText(R.id.system_name, messageSystem.getAdmin());
+//                helper.setText(R.id.system_content, messageSystem.getContent());
+//                Glide.with(mContext).load(messageSystem.getImg()).into((ImageView) helper.getView(R.id.system_userIcon));
 
             case MessageEntity.TYPE_LIKE:
                 MessageLike messageLike = messageEntity.getMessageLike();
-                if(messageLike==null){
-                    Toast.makeText(AppUtils.getContext(),"哈哈哈",Toast.LENGTH_LONG).show();
-                    return;
-                }
-                Toast.makeText(AppUtils.getContext(),"哈哈哈11111122222222",Toast.LENGTH_LONG).show();
-
-                Toast.makeText(AppUtils.getContext(),"哈哈哈11111122222222"+messageLike.getNickname(),Toast.LENGTH_LONG).show();
-                 helper.setText(R.id.like_name, messageLike.getNickname());
-                if(messageLike.getIs_likeEach().equals("1")){
-                    helper.setText(R.id.like_content, "他也关注了你，快和他畅聊吧！");
-                }
-                Glide.with(mContext).load(messageLike.getHeadimgurl()).into((ImageView) helper.getView(R.id.like_icon));
+//                if(messageLike==null){
+//                    Toast.makeText(AppUtils.getContext(),"哈哈哈",Toast.LENGTH_LONG).show();
+//                    return;
+//                }
+//                Toast.makeText(AppUtils.getContext(),"哈哈哈11111122222222",Toast.LENGTH_LONG).show();
+//
+//                Toast.makeText(AppUtils.getContext(),"哈哈哈11111122222222"+messageLike.getNickname(),Toast.LENGTH_LONG).show();
+//                 helper.setText(R.id.like_name, messageLike.getNickname());
+//                if(messageLike.getIs_likeEach().equals("1")){
+//                    helper.setText(R.id.like_content, "他也关注了你，快和他畅聊吧！");
+//                }
+//                Glide.with(mContext).load(messageLike.getHeadimgurl()).into((ImageView) helper.getView(R.id.like_icon));
 
         }
     }

@@ -33,6 +33,7 @@ import com.jarhero790.eub.contract.message.MessageContract;
 import com.jarhero790.eub.message.message.GiftActivity;
 import com.jarhero790.eub.message.message.JiangLiActivity;
 import com.jarhero790.eub.message.message.PinLenActivity;
+import com.jarhero790.eub.message.message.SysMessageActivity;
 import com.jarhero790.eub.message.message.ZanActivity;
 import com.jarhero790.eub.presenter.message.MessagePresenter;
 import com.jarhero790.eub.utils.AppUtils;
@@ -90,109 +91,120 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
 
     @Override
     public void updateUI(ResponseBody response) {
-        try {
-            List<MessageEntity> arrayList = new ArrayList<>();
-            String data = response.string();
-            Log.e("123456", data);
-            JSONObject js = JSONObject.parseObject(data);
-            MessagesBean messagesBeans = JSON.toJavaObject(js, MessagesBean.class);
-            Log.e("qawe", messagesBeans.toString());
-            // Toast.makeText(AppUtils.getContext(),data,Toast.LENGTH_LONG).show();
-            JSONObject jsonObject = JSONObject.parseObject(data);
-            String code = String.valueOf(jsonObject.get("code"));
-            String msg = (String) jsonObject.get("msg");
-            ArrayList<MessageSystem> arrayListMessageSystem = new ArrayList<>();
-            ArrayList<MessageLike> arrayListMessageLike = new ArrayList<>();
-            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
-            JSONArray systemJsonArray = (JSONArray) jsonObject1.get("system");
-            JSONArray likeJsonArray = (JSONArray) jsonObject1.get("like");
-            int systemMessageLength = systemJsonArray.size();
-            int likeMessageLength = likeJsonArray.size();
-            MessageEntity messageEntity = new MessageEntity();
 
-            for (int i = 0; i < systemMessageLength; i++) {
-                JSONObject systemMessageObject = (JSONObject) systemJsonArray.get(i);
-                systemMessageObject.put("viewType", "1");
-                JSONObject jsonobject = JSONObject.parseObject(systemMessageObject.toString());
-                MessageSystem messageSystem = JSON.toJavaObject(jsonobject, MessageSystem.class);
-                //arrayListMessageSystem.add(messageSystem);
-                messageEntity.setMessageSystem(messageSystem);
-                arrayList.add(messageEntity);
-            }
-
-            for (int j = 0; j < likeMessageLength; j++) {
-                JSONObject likeMessageObject = (JSONObject) likeJsonArray.get(j);
-                /**
-                 *  { "id":117,"uid":5036,"buid":5035,
-                 *    "addtime":"2019-07-30 18:07:42",
-                 *    "is_likeEach":1,"is_cancle":1,
-                 *    "status":1,"nickname":"java",
-                 *    "headimgurl":"\/static\/images\/usertouxiang.png",
-                 *    "user_id":5035
-                 *  }
-                 */
-                Log.e("0000", likeMessageObject.toString());
-
-                likeMessageObject.put("viewType", "2");
-                Log.e("0001", likeMessageObject.toString());
-                /**
-                 {
-                 "id":117,
-                 "uid":5036,
-                 "buid":5035,
-                 "addtime":"2019-07-30 18:07:42",
-                 "is_likeEach":1,
-                 "is_cancle":1,
-                 "status":1,
-                 "nickname":"java",
-                 "headimgurl":"\/static\/images\/usertouxiang.png",
-                 "user_id":5035,
-                 "viewType":"2"
-                 }
-                 */
-
-
-                JSONObject jsonobject = JSONObject.parseObject(likeMessageObject.toString());
-                MessageLike messageLike = JSON.toJavaObject(jsonobject, MessageLike.class);
-
-                /**
-                 *  MessageLike{id='117', uid='5036',
-                 *  buid='5035', addtime='2019-07-30 18:07:42',
-                 *  is_likeEach='1',
-                 *  is_cancle='1',
-                 *  status='1',
-                 *  nickname='java',
-                 *  headimgurl='/static/images/usertouxiang.png',
-                 *  user_id='5035'}
-                 *
-                 */
-                Log.e("hahhahhhha", messageLike.toString());
-                // arrayListMessageLike.add(messageLike);
-                messageEntity.setMessageLike(messageLike);
-                arrayList.add(messageEntity);
-            }
-
-
-            Message message = new Message();
-            message.setLike(arrayListMessageLike);
-            message.setSystem(arrayListMessageSystem);
-            MessagesBean messagesBean = new MessagesBean();
-            messagesBean.setCode(code);
-            messagesBean.setMsg(msg);
-            messagesBean.setData(message);
-
-            if (code.equals("200")) {
-                recyclerView.setLayoutManager(layoutManager);
-                Log.e("hahhha", arrayList.toString());
-                recyclerView.setAdapter(new MessageAdapter(arrayList));
-            }
-
-
-        } catch (IOException e1) {
-
-        } catch (JSONException e2) {
-
-        }
+//        try {
+//            List<MessageEntity> arrayList = new ArrayList<>();
+//            String data = response.string();
+//            Log.e("--123456", data);
+//            //--123456: {"code":200,"data":{"system":[{"id":1,"admin":"\u94bb\u89c6TV","content":"\u5728\u7f8e\u56fd\u7684\u653f\u6cbb\u4f53\u5236\u4e2d\uff0c\u653f\u6cbb\u662f\u5e38\u6001\uff0c\u6218\u4e89\u662f\u4f8b\u5916\uff0c\u800c\u4e2d\u56fd\u6070\u6070\u76f8\u53cd\u201d\uff0c\u8fd9\u4e00\u89c2\u70b9\u8352\u5510\u5f97\u4ee4\u4eba\u55b7\u996d","status":1,"img":"http:\/\/aoyouhudongkeji-1259346675.cos.ap-guangzhou.myqcloud.com\/06e160f141261abb8c6a8b7ae9009be14910.png","addtime":"2019-07-27 13:55:17"}]},"msg":"\u6210\u529f"}
+//            JSONObject js = JSONObject.parseObject(data);
+//            MessagesBean messagesBeans = JSON.toJavaObject(js, MessagesBean.class);
+//            Log.e("qawe", messagesBeans.toString());
+//            //qawe: MessagesBean{  code='200', msg='成功', data=Message{system=[MessageSystem{viewType=null, id='1', admin='钻视TV', content='在美国的政治体制中，政治是常态，战争是例外，而中国恰恰相反”，这一观点荒唐得令人喷饭', status='1', img='http://aoyouhudongkeji-1259346675.cos.ap-guangzhou.myqcloud.com/06e160f141261abb8c6a8b7ae9009be14910.png', addtime='2019-07-27 13:55:17'}], like=null}}
+//            // Toast.makeText(AppUtils.getContext(),data,Toast.LENGTH_LONG).show();
+//            JSONObject jsonObject = JSONObject.parseObject(data);
+//            String code = messagesBeans.getCode();
+//            String msg = messagesBeans.getMsg();
+//            ArrayList<MessageSystem> arrayListMessageSystem = new ArrayList<>();
+//            ArrayList<MessageLike> arrayListMessageLike = new ArrayList<>();
+//            arrayListMessageSystem=messagesBeans.getData().getSystem();
+//            arrayListMessageLike=messagesBeans.getData().getLike();
+//
+//
+////
+//            JSONObject jsonObject1 = jsonObject.getJSONObject("data");
+//            JSONArray systemJsonArray = (JSONArray) jsonObject1.get("system");
+//            JSONArray likeJsonArray = (JSONArray) jsonObject1.get("like");
+////            int systemMessageLength = systemJsonArray.size();
+////            int likeMessageLength = likeJsonArray.size();
+//
+//            int systemMessageLength=arrayListMessageSystem.size();
+//            int likeMessageLength=arrayListMessageLike.size();
+//            MessageEntity messageEntity = new MessageEntity();
+//
+//            for (int i = 0; i < systemMessageLength; i++) {
+//                JSONObject systemMessageObject = (JSONObject) systemJsonArray.get(i);
+//                systemMessageObject.put("viewType", "1");
+//                JSONObject jsonobject = JSONObject.parseObject(systemMessageObject.toString());
+//                MessageSystem messageSystem = JSON.toJavaObject(jsonobject, MessageSystem.class);
+//                //arrayListMessageSystem.add(messageSystem);
+//                messageEntity.setMessageSystem(messageSystem);
+//                arrayList.add(messageEntity);
+//            }
+//
+//            for (int j = 0; j < likeMessageLength; j++) {
+//                JSONObject likeMessageObject = (JSONObject) likeJsonArray.get(j);
+//                /**
+//                 *  { "id":117,"uid":5036,"buid":5035,
+//                 *    "addtime":"2019-07-30 18:07:42",
+//                 *    "is_likeEach":1,"is_cancle":1,
+//                 *    "status":1,"nickname":"java",
+//                 *    "headimgurl":"\/static\/images\/usertouxiang.png",
+//                 *    "user_id":5035
+//                 *  }
+//                 */
+//                Log.e("0000", likeMessageObject.toString());
+//
+//                likeMessageObject.put("viewType", "2");
+//                Log.e("0001", likeMessageObject.toString());
+//                /**
+//                 {
+//                 "id":117,
+//                 "uid":5036,
+//                 "buid":5035,
+//                 "addtime":"2019-07-30 18:07:42",
+//                 "is_likeEach":1,
+//                 "is_cancle":1,
+//                 "status":1,
+//                 "nickname":"java",
+//                 "headimgurl":"\/static\/images\/usertouxiang.png",
+//                 "user_id":5035,
+//                 "viewType":"2"
+//                 }
+//                 */
+//
+//
+//                JSONObject jsonobject = JSONObject.parseObject(likeMessageObject.toString());
+//                MessageLike messageLike = JSON.toJavaObject(jsonobject, MessageLike.class);
+//
+//                /**
+//                 *  MessageLike{id='117', uid='5036',
+//                 *  buid='5035', addtime='2019-07-30 18:07:42',
+//                 *  is_likeEach='1',
+//                 *  is_cancle='1',
+//                 *  status='1',
+//                 *  nickname='java',
+//                 *  headimgurl='/static/images/usertouxiang.png',
+//                 *  user_id='5035'}
+//                 *
+//                 */
+//                Log.e("hahhahhhha", messageLike.toString());
+//                // arrayListMessageLike.add(messageLike);
+//                messageEntity.setMessageLike(messageLike);
+//                arrayList.add(messageEntity);
+//            }
+//
+//
+//            Message message = new Message();
+//            message.setLike(arrayListMessageLike);
+//            message.setSystem(arrayListMessageSystem);
+//            MessagesBean messagesBean = new MessagesBean();
+//            messagesBean.setCode(code);
+//            messagesBean.setMsg(msg);
+//            messagesBean.setData(message);
+//
+//            if (code.equals("200")) {
+//                recyclerView.setLayoutManager(layoutManager);
+//                Log.e("hahhha", arrayList.toString());
+//                recyclerView.setAdapter(new MessageAdapter(arrayList));
+//            }
+//
+//
+//        } catch (IOException e1) {
+//
+//        } catch (JSONException e2) {
+//
+//        }
 
 
     }
@@ -202,7 +214,7 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
         //请求数据
-        mPresenter.requestMessages();
+//        mPresenter.requestMessages();
 
 
     }
@@ -289,7 +301,7 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
         unbinder.unbind();
     }
 
-    @OnClick({R.id.fensi, R.id.zan, R.id.gift, R.id.pinglun, R.id.jiangli})
+    @OnClick({R.id.fensi, R.id.zan, R.id.gift, R.id.pinglun, R.id.jiangli,R.id.message})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.fensi:
@@ -311,6 +323,10 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
             case R.id.jiangli:
                 Intent intentj = new Intent(AppUtils.getContext(), JiangLiActivity.class);
                 startActivity(intentj);
+                break;
+            case R.id.message:
+                Intent intentm = new Intent(AppUtils.getContext(), SysMessageActivity.class);
+                startActivity(intentm);
                 break;
         }
     }

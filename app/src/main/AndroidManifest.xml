@@ -27,7 +27,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".message.my.XieYiActivity"></activity>
+        <activity android:name=".message.message.SysMessageActivity"></activity>
+        <activity android:name=".message.my.XieYiActivity" />
         <activity android:name=".message.message.AboutActivity" />
         <activity android:name=".message.my.SettingActivity" />
         <activity android:name=".message.message.JiangLiActivity" />
