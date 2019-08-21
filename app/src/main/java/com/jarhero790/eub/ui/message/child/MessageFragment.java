@@ -40,7 +40,9 @@ import com.jarhero790.eub.utils.AppUtils;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -76,7 +78,7 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
     }
 
 
-    String rong_token = "6a34mMUkLbpLqCOH7kzHD2e7NDDI6gS2aE/afdMaQWwiF5mo1RSLHd4a3r3cubMOxTrpQ2lZSbdx0tHHFX6Z9w==";
+//    String rong_token = "6a34mMUkLbpLqCOH7kzHD2e7NDDI6gS2aE/afdMaQWwiF5mo1RSLHd4a3r3cubMOxTrpQ2lZSbdx0tHHFX6Z9w==";
 
     @Override
     public void onAttach(Context context) {
@@ -89,8 +91,12 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
     }
 
 
+
     @Override
     public void updateUI(ResponseBody response) {
+
+
+
 
 //        try {
 //            List<MessageEntity> arrayList = new ArrayList<>();
@@ -224,42 +230,58 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
         super.onActivityCreated(savedInstanceState);
         //融
 //        rongyun();
-    }
 
-    private void rongyun() {
-        RongIM.connect(rong_token, new RongIMClient.ConnectCallback() {
-            @Override
-            public void onTokenIncorrect() {
-                Log.d(TAG, "onTokenIncorrect");
-            }
-
-            @Override
-            public void onSuccess(String userId) {
-                Log.d(TAG, "ConnectCallback connect onSuccess=" + userId);
-            }
-
-            @Override
-            public void onError(RongIMClient.ErrorCode errorCode) {
-                Log.d(TAG, "ConnectCallback connect onError-ErrorCode=" + errorCode);
-            }
-        });
         initConversationList();
+
+
     }
+
+//    private void rongyun() {
+//        RongIM.connect(rong_token, new RongIMClient.ConnectCallback() {
+//            @Override
+//            public void onTokenIncorrect() {
+//                Log.d(TAG, "onTokenIncorrect");
+//            }
+//
+//            @Override
+//            public void onSuccess(String userId) {
+//                Log.d(TAG, "ConnectCallback connect onSuccess=" + userId);
+//            }
+//
+//            @Override
+//            public void onError(RongIMClient.ErrorCode errorCode) {
+//                Log.d(TAG, "ConnectCallback connect onError-ErrorCode=" + errorCode);
+//            }
+//        });
+//        initConversationList();
+//    }
 
 
     private void initConversationList() {
-//        FragmentManager supportFragmentManager = getSupportFragmentManager();
-        FragmentManager supportFragmentManager = getFragmentManager();
-        ConversationListFragment conversationlistFragment = (ConversationListFragment) supportFragmentManager.findFragmentById(R.id.conversationlist);
-//        conversationlistFragment.getActivity();
+        FragmentManager fragmentManage = getChildFragmentManager();
+        ConversationListFragment fragement = (ConversationListFragment) fragmentManage.findFragmentById(R.id.conversationlist);
         Uri uri = Uri.parse("rong://" + getActivity().getApplicationInfo().packageName).buildUpon()
                 .appendPath("conversationlist")
-                .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false") //设置私聊会话非聚合显示
-                .appendQueryParameter(Conversation.ConversationType.GROUP.getName(), "true")//设置群组会话聚合显示
-                .appendQueryParameter(Conversation.ConversationType.DISCUSSION.getName(), "false")//设置讨论组会话非聚合显示
-                .appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(), "true")//设置系统会话非聚合显示
+                .appendQueryParameter(Conversation.ConversationType.PRIVATE.getName(), "false")
+                .appendQueryParameter(Conversation.ConversationType.GROUP.getName(), "false")
+                .appendQueryParameter(Conversation.ConversationType.PUBLIC_SERVICE.getName(), "false")
+                .appendQueryParameter(Conversation.ConversationType.APP_PUBLIC_SERVICE.getName(), "false")
+                .appendQueryParameter(Conversation.ConversationType.SYSTEM.getName(), "true")
                 .build();
-        conversationlistFragment.setUri(uri);
+        fragement.setUri(uri);
+
+
+
+//        Map<String, Boolean> supportedConversation=new HashMap<>();
+//        supportedConversation.put(Conversation.ConversationType.PRIVATE.getName(),false);
+//        supportedConversation.put(Conversation.ConversationType.GROUP.getName(),false);
+//        supportedConversation.put(Conversation.ConversationType.PUBLIC_SERVICE.getName(),false);
+//        supportedConversation.put(Conversation.ConversationType.APP_PUBLIC_SERVICE.getName(),false);
+//        supportedConversation.put(Conversation.ConversationType.SYSTEM.getName(),true);
+
+
+
+//        RongIM.getInstance().startConversationList(getActivity(),supportedConversation);
     }
 
     @Override

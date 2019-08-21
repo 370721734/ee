@@ -18,6 +18,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.adapter.FeiSiAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
+import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
@@ -36,6 +37,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imkit.RongIM;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -120,7 +122,7 @@ public class FensiActivity extends Activity {
                             recyclerViewFensi.setLayoutManager(manager);
                             LinearItemDecoration itemDecoration = new LinearItemDecoration();
                             recyclerViewFensi.addItemDecoration(itemDecoration);
-                            feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick);
+                            feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick,speak);
                             recyclerViewFensi.setAdapter(feiSiAdapter);
                         } else {
                             nodingdan.setVisibility(View.VISIBLE);
@@ -183,7 +185,7 @@ public class FensiActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick);
+                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick,speak);
                                 recyclerViewFensi.setAdapter(feiSiAdapter);
                             }
                         });
@@ -216,6 +218,24 @@ public class FensiActivity extends Activity {
             Log.e("--------2", "" + position + "  " + arrayList.get(position).getUser_id());
             Intent intent=new Intent(FensiActivity.this, GeRenInfoActivity.class);
             startActivity(intent);
+
+        }
+    };
+    FeiSiAdapter.Myclick speak = new FeiSiAdapter.Myclick() {
+        @Override
+        public void myClick(int position, View view) {
+            Log.e("--------3", "" + position + "  " + arrayList.get(position).getUser_id()+"  "+arrayList.get(position).getNickname());
+//            --------3: 0  5032  5032
+            if (RongIM.getInstance()!=null){
+                RongIM.getInstance().startPrivateChat(FensiActivity.this,arrayList.get(position).getRong_id()+"",arrayList.get(position).getNickname());
+
+
+//                EventBus.getDefault().post(new Conver(arrayList.get(position).getNickname()));
+                if (nameContract!=null){
+                    nameContract.getNickName(arrayList.get(position).getNickname());
+
+                }
+            }
 
         }
     };
@@ -259,5 +279,11 @@ public class FensiActivity extends Activity {
     @OnClick(R.id.back)
     public void onClick() {
         finish();
+    }
+
+    private NameContract nameContract;
+
+    public void setNameContract(NameContract nameContract) {
+        this.nameContract = nameContract;
     }
 }

@@ -5,12 +5,15 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.READ_LOGS" />
+    <uses-permission
+        android:name="android.permission.READ_LOGS"
+        tools:ignore="ProtectedPermissions" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
     <uses-permission android:name="android.permission.CAMERA" />
 
@@ -27,7 +30,29 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".message.my.GuangZuActivity"></activity>
+        <activity android:name=".message.message.ConversationListActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="com.jarhero790.eub"
+                    android:pathPrefix="/conversationlist"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".message.message.ConversationActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data
+                    android:host="com.jarhero790.eub"
+                    android:pathPrefix="/conversation/"
+                    android:scheme="rong" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".message.my.GuangZuActivity" />
         <activity android:name=".message.message.PrivateJiuBaoActivity" />
         <activity android:name=".message.message.JiuBaoActivity" />
         <activity android:name=".message.message.MoreActivity" />
@@ -44,9 +69,11 @@
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" /> <!-- 融 -->
-        <!-- <meta-data -->
-        <!-- android:name="RONG_CLOUD_APP_KEY" -->
-        <!-- android:value="sfci50a7s3rsi" /> -->
+        <meta-data
+            android:name="RONG_CLOUD_APP_KEY"
+            android:value="82hegw5u8d8dx"
+            tools:replace="android:value" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.jarhero790.eub.FileProvider"

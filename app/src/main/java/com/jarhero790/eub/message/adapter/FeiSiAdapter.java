@@ -28,12 +28,14 @@ public class FeiSiAdapter extends RecyclerView.Adapter<FeiSiAdapter.MyHolder> {
     private List<FenSiTBean.DataBean> list;
     private Myclick myclick;
     private Myclick touclick;
+    private Myclick speak;
 
-    public FeiSiAdapter(Context context, List<FenSiTBean.DataBean> list, Myclick myclick, Myclick touclick) {
+    public FeiSiAdapter(Context context, List<FenSiTBean.DataBean> list, Myclick myclick, Myclick touclick,Myclick speak) {
         this.context = context;
         this.list = list;
         this.myclick = myclick;
         this.touclick = touclick;
+        this.speak=speak;
     }
 
     @NonNull
@@ -61,6 +63,9 @@ public class FeiSiAdapter extends RecyclerView.Adapter<FeiSiAdapter.MyHolder> {
 
         myHolder.rlAll.setTag(position);
         myHolder.rlAll.setOnClickListener(touclick);
+
+        myHolder.speak.setTag(position);
+        myHolder.speak.setOnClickListener(speak);
 
 //
 //        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
@@ -150,6 +155,8 @@ public class FeiSiAdapter extends RecyclerView.Adapter<FeiSiAdapter.MyHolder> {
         TextView tvGuanzu;
         @BindView(R.id.rl_all)
         RelativeLayout rlAll;
+        @BindView(R.id.speak)
+        RelativeLayout speak;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);

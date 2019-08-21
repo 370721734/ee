@@ -153,8 +153,10 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
         String signtime=intent.getStringExtra("signtime");
         if (signtime==null || signtime.length()==0 || signtime.equals("null")){
             tvQiandao.setText("签到");
+            Log.e("----------11",signtime);
         }else {
             tvQiandao.setText("已签到");//如何保存状态
+            Log.e("----------22",signtime);
         }
 
         //刷新
@@ -448,16 +450,37 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                 public void run() {
                                     if (h7!=null && h7.length()>10){
                                         ivServen.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivSix.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivFive.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivFour.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivThree.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivTwo.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
                                     }else if (h6!=null && h6.length()>10){
                                         ivSix.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivFive.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivFour.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivThree.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivTwo.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
                                     }else if (h5!=null && h5.length()>10){
                                         ivFive.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivFour.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivThree.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivTwo.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
                                     }else if (h4!=null && h4.length()>10){
                                         ivFour.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivThree.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivTwo.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
                                     }else if (h3!=null && h3.length()>10){
                                         ivThree.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivTwo.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
                                     }else if (h2!=null && h2.length()>10){
                                         ivTwo.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
+                                        ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
                                     }else if (h1!=null && h1.length()>10){
                                         ivOne.setImageDrawable(getResources().getDrawable(R.mipmap.ok_icon));
                                     }

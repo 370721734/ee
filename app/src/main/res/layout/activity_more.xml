@@ -51,6 +51,7 @@
         />
 
     <RelativeLayout
+        android:id="@+id/userinfo"
         android:layout_width="match_parent"
         android:background="@color/backgroudcolor"
         android:layout_marginTop="@dimen/dp_10"
@@ -78,9 +79,10 @@
             />
 
         <TextView
+            android:id="@+id/tv_zhuanhao"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="钻视tv号：1234567"
+            android:text="钻视tv号："
             android:layout_toRightOf="@id/tou_image"
             android:layout_below="@id/tv_name"
             android:textColor="#D8D5D5"
@@ -110,6 +112,7 @@
 
 
     <RelativeLayout
+        android:id="@+id/jiubao"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_height="38dp">
@@ -132,6 +135,7 @@
             android:src="@mipmap/next_icon"/>
     </RelativeLayout>
     <RelativeLayout
+        android:id="@+id/lahei"
         android:layout_width="match_parent"
         android:layout_marginTop="20dp"
         android:layout_height="38dp">

@@ -216,6 +216,17 @@ public interface Api {
     @POST("web/index/mylike")
     Call<GuangZuBean> mylike(@Field("token") String token);
 
+    //用户拉黑
+    @FormUrlEncoded
+    @POST("web/index/blacklist")
+    Call<ResponseBody> blacklist(@Field("token") String token,@Field("uid") String uid,@Field("type") String type);
+
+
+    //用户举报
+    @FormUrlEncoded
+    @POST("web/index/report")
+    Call<ResponseBody> report(@Field("token") String token,@Field("buid") String buid,@Field("type") String type,@Field("content") String content,@Field("report_img") String report_img,@Field("report_img1") String report_img1,@Field("report_img2") String report_img2,@Field("report_img3") String report_img3);
+
 
     //修改个人信息
     @FormUrlEncoded
