@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
+import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -75,6 +76,10 @@ public class FragmentZuoping extends SupportFragment {
                             list = response.body().getData();
                             GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
                             rlv.setLayoutManager(manager);
+                            LinearItemDecoration linearItemDecoration=new LinearItemDecoration();
+                            linearItemDecoration.setSpanSpace(10);
+                            linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+                            rlv.addItemDecoration(linearItemDecoration);
                             adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
                             rlv.setAdapter(adapter);
 

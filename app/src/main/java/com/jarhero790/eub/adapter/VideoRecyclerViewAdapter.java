@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videocontroller.StandardVideoController;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
@@ -43,7 +44,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         ImageView thumb = holder.controller.getThumb();
         Glide.with(thumb.getContext())
                 .load(videoBean.getThumb())
-                .placeholder(android.R.color.white)
+                .apply(new RequestOptions().placeholder(android.R.color.white))
                 .into(thumb);
         holder.mVideoView.setUrl(videoBean.getUrl());
         holder.controller.setTitle(videoBean.getTitle());

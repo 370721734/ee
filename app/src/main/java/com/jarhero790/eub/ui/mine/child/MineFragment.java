@@ -27,6 +27,9 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.activity.FensiActivity;
+import com.jarhero790.eub.aop.logincore.ILoginFilter;
+import com.jarhero790.eub.aop.logincore.LoginAssistant;
+import com.jarhero790.eub.aop.logincore.LoginFilterAspect;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
 import com.jarhero790.eub.base.BasePresenter;
@@ -34,6 +37,7 @@ import com.jarhero790.eub.bean.User;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.contract.mine.MineMainContract;
 import com.jarhero790.eub.eventbus.MessageEventUser;
+import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.bean.UserCen;
 import com.jarhero790.eub.message.message.ZanActivity;
 import com.jarhero790.eub.message.my.GuangZuActivity;
@@ -51,7 +55,9 @@ import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -102,7 +108,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     private String signtime;//最后签到时间
 
 
-
+    List<UserInfo> userInfoList = new ArrayList<>();
 
 
     public static MineFragment newInstance() {
@@ -139,8 +145,10 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         Glide.with(getActivity()).load(Api.HOST + user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
 
         tvMemo.setText(user.getSign());
-        money=user.getMoney();
-        signtime=user.getSigntime();
+        money = user.getMoney();
+        signtime = user.getSigntime();
+
+
     }
 
     @Override
@@ -174,7 +182,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         app = (GlobalApplication) getActivity().getApplication();
-        qiandao();
+//        qiandao();
 
 
         UserBean userBean = app.getUserbean();
@@ -251,7 +259,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
     @Override
     public void showuserinfo(ResponseBody response) {
-        Log.e("---------", "0");
+//        Log.e("---------", "0");
 //        Log.e("-------",response.toString());
         try {
             String data = response.string();
@@ -260,23 +268,62 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             JSONObject object = JSONObject.parseObject(data);
             Log.e("---------dss", "" + object);
 
+
+            int code = object.getInteger("code");
+            String msg = object.getString("msg");
+            if (code == 400) {
+//                Log.e("---------555", "" + code);
+                //注意 登录成功之后  一定要写上这句代码
+                SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, AppUtils.getContext());
+//                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+
+//                ILoginFilter iLoginFilter = LoginAssistant.getInstance().getILoginFilter();
+//                if (iLoginFilter == null){
+//                    throw new RuntimeException("LoginManger没有初始化");
+//                }
+//                iLoginFilter.login(mContext,0);
+
+
+            }
+
+
             JSONObject js = JSONObject.parseObject(data);
             UserCen userInfo = JSON.toJavaObject(js, UserCen.class);
             app.setUserCen(userInfo);
             Log.e("qawe", userInfo.getData().getUser().getHeadimgurl());//有了
-
-            if (userInfo.getCode()==200){
+            if (code == 200) {
+                JSONObject jsonObject1 = object.getJSONObject("data");
+                String zan = jsonObject1.getString("zan");
+                String like = jsonObject1.getString("like");
+                String fens = jsonObject1.getString("fensi");
+                textViewNickName.setText(userInfo.getData().getUser().getNickname());
+                tvTvhao.setText("钻视TV号:" + userInfo.getData().getUser().getId());
+                Glide.with(getActivity()).load(Api.TU + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+                tvHuozai.setText(zan);
+                tvGuanzhu.setText(like);
+                fensi.setText(fens);
+                //先添加自己的
+                userInfoList.add(new UserInfo(userInfo.getData().getUser().getRong_id() + "", userInfo.getData().getUser().getNickname(), Uri.parse(Api.TU + userInfo.getData().getUser().getHeadimgurl())));//"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"
+            }
+            if (userInfo.getCode() == 200) {
                 tvMemo.setText(userInfo.getData().getUser().getSign());
-                money=userInfo.getData().getUser().getMoney()+"";
-                signtime=userInfo.getData().getUser().getSigntime();
+                money = userInfo.getData().getUser().getMoney() + "";
+                signtime = userInfo.getData().getUser().getSigntime();
 
-                Log.e("----------token",userInfo.getData().getUser().getRong_token());
+                Log.e("----------token", userInfo.getData().getUser().getRong_token());
+
                 //连接融
-                 connect(userInfo.getData().getUser().getRong_token(),getActivity());
-                 RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
-                     @Override
-                     public UserInfo getUserInfo(String userid) {
-                         Log.e("--------who2:",userid);
+                connect(userInfo.getData().getUser().getRong_token(), getActivity());
+                RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
+                    @Override
+                    public UserInfo getUserInfo(String userid) {
+                        Log.e("--------who2:", userid);
+                        //用户信息,应该从粉丝一列表中获取
+//                        initUserInfo(userid);
+//                         UserInfo userInfo1=new UserInfo(userid,"名字不一样",Uri.parse("不一样的地址"));
+//                         UserInfo userInfo1=new UserInfo(userid+"",userInfo.getData().getUser().getUsername(), Uri.parse("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"));
+//
+//                         userInfoList.add(userInfo1);
 //                         E/--------who2:: 5040
 //                         2019-08-21 19:39:14.438 23314-23314/com.jarhero790.eub E/--------who2:: 5040
 //                         2019-08-21 19:39:14.439 23314-23314/com.jarhero790.eub E/--------who2:: 5040
@@ -288,13 +335,22 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                         2019-08-21 19:40:03.622 23314-23314/com.jarhero790.eub E/--------who2:: 5044
 //                         2019-08-21 19:40:03.635 23314-23314/com.jarhero790.eub E/--------who2:: 5040
 //                         RongIM.getInstance().setCurrentUserInfo(new UserInfo(userid,userInfo.getData().getUser().getUsername(),Uri.parse(Api.TU+userInfo.getData().getUser().getHeadimgurl())));
-                         return new UserInfo(userInfo.getData().getUser().getId()+"",userInfo.getData().getUser().getUsername(), Uri.parse("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"));//Api.TU+userInfo.getData().getUser().getHeadimgurl()
-                     }
-                 },false);
+//                         return new UserInfo(userInfo.getData().getUser().getId()+"",userInfo.getData().getUser().getUsername(), Uri.parse("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"));//Api.TU+userInfo.getData().getUser().getHeadimgurl()
+
+                        if (userInfoList!=null && userInfoList.size()>0){
+                            for (UserInfo info : userInfoList) {
+                                if (info.getUserId().equals(userid)) {
+                                    return new UserInfo(info.getUserId(), info.getName(), info.getPortraitUri());
+                                }
+                            }
+                        }
 
 
+                        return null;
 
 
+                    }
+                }, false);
 
 
 //                RongIM.connect(userInfo.getData().getUser().getRong_token(), new RongIMClient.ConnectCallback() {
@@ -317,41 +373,36 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                });
             }
 
-
-            String code = object.getString("code");
-
-            Log.e("---------111", "" + code);
-
-            String msg = object.getString("msg");
-
-            JSONObject jsonObject1 = object.getJSONObject("data");
-            String zan = jsonObject1.getString("zan");
-            String like = jsonObject1.getString("like");
-            String fens = jsonObject1.getString("fensi");
-            Log.e("---------2222", "" + zan + "  " + like + "  " + fens);
-
-
-            if (code.equals("200")) {
-                textViewNickName.setText(userInfo.getData().getUser().getNickname());
-                tvTvhao.setText("钻视TV号:" + userInfo.getData().getUser().getId());
-                Glide.with(getActivity()).load(Api.TU + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
-
-
-                tvHuozai.setText(zan);
-                tvGuanzhu.setText(like);
-                fensi.setText(fens);
-
-            } else {
-                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-            }
-
-
-            Log.e("123456", data);
-//            Log.e("-------22-",response.string());
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
+
+
+    List<GuangZuBean.DataBean> dataBeanList = new ArrayList<>();
+
+    @Override
+    public void showguangzu(GuangZuBean bean) {
+        dataBeanList.addAll(bean.getData());
+        //关注用户的信息
+        if (dataBeanList != null && dataBeanList.size() > 0) {
+            for (int i = 0; i < dataBeanList.size(); i++) {
+                userInfoList.add(new UserInfo(dataBeanList.get(i).getRong_id() + "", dataBeanList.get(i).getNickname(), Uri.parse(dataBeanList.get(i).getHeadimgurl())));
+            }
+        }
+    }
+
+//    //关注用户的信息
+//    private void initUserInfo(String userid) {
+//        if (dataBeanList!=null && dataBeanList.size()>0){
+//            for (int i = 0; i < dataBeanList.size(); i++) {
+//                if ((dataBeanList.get(i).getRong_id()+"").equals(userid)){
+//                    userInfoList.add(new UserInfo(dataBeanList.get(i).getRong_id()+"",dataBeanList.get(i).getNickname(),Uri.parse(dataBeanList.get(i).getHeadimgurl())));
+//                }
+//            }
+//        }
+//
+//    }
 
 
     public static void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
@@ -359,14 +410,18 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         Field tabStrip = null;
         try {
             tabStrip = tabLayout.getDeclaredField("mTabStrip");
+            tabStrip.setAccessible(true);
         } catch (NoSuchFieldException e) {
             e.printStackTrace();
         }
 
-        tabStrip.setAccessible(true);
+
         LinearLayout llTab = null;
         try {
-            llTab = (LinearLayout) tabStrip.get(tabs);
+            if (tabStrip != null) {
+                llTab = (LinearLayout) tabStrip.get(tabs);
+            }
+
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
@@ -374,51 +429,53 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         int left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, leftDip, Resources.getSystem().getDisplayMetrics());
         int right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rightDip, Resources.getSystem().getDisplayMetrics());
 
-        for (int i = 0; i < llTab.getChildCount(); i++) {
-            View child = llTab.getChildAt(i);
-            child.setPadding(0, 0, 0, 0);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-            params.leftMargin = left;
-            params.rightMargin = right;
-            child.setLayoutParams(params);
-            child.invalidate();
+        if (llTab != null) {
+            for (int i = 0; i < llTab.getChildCount(); i++) {
+                View child = llTab.getChildAt(i);
+                child.setPadding(0, 0, 0, 0);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                params.leftMargin = left;
+                params.rightMargin = right;
+                child.setLayoutParams(params);
+                child.invalidate();
+            }
         }
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mPresenter.getuserinfo();
-        Log.e("---","onResume");
+        Log.e("---", "onResume");
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        // TODO: inflate a fragment view
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
 
-    @OnClick({R.id.dingwei, R.id.tv_qiandao,R.id.iv_edit,R.id.myguanzu,R.id.myfensi,R.id.myzan})
+    @OnClick({R.id.dingwei, R.id.tv_qiandao, R.id.iv_edit, R.id.myguanzu, R.id.myfensi, R.id.myzan})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.dingwei:
                 break;
             case R.id.tv_qiandao:
                 //签到
-                Intent intent=new Intent(getActivity(), QianDaoActivity.class);
-                intent.putExtra("money",money);
-                intent.putExtra("signtime",signtime);
+                Intent intent = new Intent(getActivity(), QianDaoActivity.class);
+                intent.putExtra("money", money);
+                intent.putExtra("signtime", signtime);
                 startActivity(intent);
                 break;
             case R.id.iv_edit:
-                Intent intent1=new Intent(getActivity(), SettingActivity.class);
-                  intent1.putExtra("name",app.getUserCen().getData().getUser().getNickname());
-                  intent1.putExtra("sign",app.getUserCen().getData().getUser().getSign());
-                  intent1.putExtra("sex",app.getUserCen().getData().getUser().getSex());
-                  intent1.putExtra("heading",app.getUserCen().getData().getUser().getHeadimgurl());
-                  intent1.putExtra("city",app.getUserCen().getData().getUser().getCity());
+                Intent intent1 = new Intent(getActivity(), SettingActivity.class);
+                intent1.putExtra("name", app.getUserCen().getData().getUser().getNickname());
+                intent1.putExtra("sign", app.getUserCen().getData().getUser().getSign());
+                intent1.putExtra("sex", app.getUserCen().getData().getUser().getSex());
+                intent1.putExtra("heading", app.getUserCen().getData().getUser().getHeadimgurl());
+                intent1.putExtra("city", app.getUserCen().getData().getUser().getCity());
 
                 startActivity(intent1);
                 break;
@@ -483,12 +540,6 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     }
 
 
-
-
-
-
-
-
     /**
      * <p>连接服务器，在整个应用程序全局，只需要调用一次，需在 {@link #init(Context)} 之后调用。</p>
      * <p>如果调用此接口遇到连接失败，SDK 会自动启动重连机制进行最多10次重连，分别是1, 2, 4, 8, 16, 32, 64, 128, 256, 512秒后。
@@ -542,8 +593,8 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
      *
      * @param token
      */
-    public  void connect(String token,Context context){
-        if (context.getApplicationInfo().packageName.equals(GlobalApplication.getCurProcessName(context.getApplicationContext()))){
+    public void connect(String token, Context context) {
+        if (context.getApplicationInfo().packageName.equals(GlobalApplication.getCurProcessName(context.getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */
@@ -590,7 +641,6 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             });
         }
     }
-
 
 
 }

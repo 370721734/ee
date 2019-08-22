@@ -15,6 +15,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -32,13 +34,20 @@ import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
+import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.JsonBean;
+import com.jarhero790.eub.message.message.PrivateJiuBaoActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.GetJsonDataUtil;
 import com.jarhero790.eub.utils.ImageCutUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
+import com.luck.picture.lib.PictureSelector;
+import com.luck.picture.lib.config.PictureConfig;
+import com.luck.picture.lib.config.PictureMimeType;
+import com.luck.picture.lib.entity.LocalMedia;
+import com.luck.picture.lib.tools.PictureFileUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -98,6 +107,14 @@ public class SettingActivity extends AppCompatActivity {
     RadioGroup rgroup;
     @BindView(R.id.iv_userimagetwo)
     CircleImageView ivUserimagetwo;
+    @BindView(R.id.rlv)
+    RecyclerView recyclerView;
+    @BindView(R.id.t3)
+    TextView t3;
+    @BindView(R.id.t1)
+    TextView t1;
+    @BindView(R.id.t2)
+    TextView t2;
 
     private String signs;
     private String nicknames;
@@ -128,6 +145,12 @@ public class SettingActivity extends AppCompatActivity {
     private static final int MSG_LOAD_SUCCESS = 0x0002;
 
     private static final int MSG_LOAD_FAILED = 0x0003;
+
+
+    GridSingImageAdapter adapter;
+    private List<LocalMedia> selectList = new ArrayList<>();
+    private int maxSelectNum = 1;
+    private int themeId = R.style.picture_default_style;
 
 
     private static boolean isLoaded = false;
@@ -204,7 +227,7 @@ public class SettingActivity extends AppCompatActivity {
         String headim = intent.getStringExtra("heading");
         String addres = intent.getStringExtra("city");
 
-        if (headim != null){
+        if (headim != null) {
             ivUserimage.setVisibility(View.VISIBLE);
             ivUserimagetwo.setVisibility(View.GONE);
             Glide.with(this).load(Api.TU + headim).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(ivUserimage);
@@ -235,6 +258,51 @@ public class SettingActivity extends AppCompatActivity {
             }
         }
 
+
+        FullyGridLayoutManager manager = new FullyGridLayoutManager(SettingActivity.this, 1, GridLayoutManager.VERTICAL, false);
+        recyclerView.setLayoutManager(manager);
+        adapter = new GridSingImageAdapter(SettingActivity.this, onAddPicClickListener);
+        adapter.setList(selectList);
+        adapter.setSelectMax(maxSelectNum);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnItemClickListener(new GridSingImageAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                if (selectList.size() > 0) {
+//                    Log.e("---------","3333333333333");
+
+                    PictureSelector.create(SettingActivity.this)
+                            .openGallery(PictureMimeType.ofImage())
+                            .theme(R.style.picture_default_style)
+                            .imageSpanCount(4)
+                            .selectionMode(PictureConfig.SINGLE)
+                            .previewImage(true)
+                            .isCamera(false)
+                            .enableCrop(true)
+                            .compress(true)
+                            .circleDimmedLayer(true)
+                            .minimumCompressSize(100)
+                            .forResult(PictureConfig.CHOOSE_REQUEST);
+
+
+
+
+
+
+//                    LocalMedia media = selectList.get(position);
+//                    String pictureType = media.getPictureType();
+//                    int mediaType = PictureMimeType.pictureToVideo(pictureType);
+//                    switch (mediaType) {
+//                        case 1:
+//                            // 预览图片 可自定长按保存路径
+//                            //PictureSelector.create(MainActivity.this).themeStyle(themeId).externalPicturePreview(position, "/custom_file", selectList);
+//                            PictureSelector.create(SettingActivity.this).themeStyle(themeId).openExternalPreview(position, selectList);
+//                            break;
+//                    }
+                }
+            }
+        });
+
     }
 
     @OnClick({R.id.back, R.id.save, R.id.iv_pho, R.id.iv_edit_name, R.id.iv_edit_sign, R.id.iv_edit_address, R.id.tv_exit, R.id.tv_xieyi, R.id.tv_address, R.id.man, R.id.woman})
@@ -254,19 +322,37 @@ public class SettingActivity extends AppCompatActivity {
 
                 break;
             case R.id.iv_pho:
-//                Intent intent=new Intent();
-                outputFile = new File(DIR, System.currentTimeMillis() + ".jpg");
-//                intent.setAction(Intent.ACTION_PICK);//
-//                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI,"image/*");
-//                intent.putExtra("output", Uri.fromFile(outputFile));
-//                startActivityForResult(intent,REQUEST_IMAGE);
-                Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_GET_CONTENT);// 打开图库获取图片
-                intent.setAction(Intent.ACTION_PICK);// 打开图库获取图片
-                intent.setType("image/*");// 这个参数是确定要选择的内容为图片
-                intent.putExtra("return-data", true);// 是否要返回，如果设置false取到的值就是空值
-                intent.putExtra("output", Uri.fromFile(outputFile));
-                startActivityForResult(intent, REQUEST_IMAGE);
+                /**
+                 //                Intent intent=new Intent();
+                 outputFile = new File(DIR, System.currentTimeMillis() + ".jpg");
+                 //                intent.setAction(Intent.ACTION_PICK);//
+                 //                intent.setDataAndType(MediaStore.Images.Media.INTERNAL_CONTENT_URI,"image/*");
+                 //                intent.putExtra("output", Uri.fromFile(outputFile));
+                 //                startActivityForResult(intent,REQUEST_IMAGE);
+                 Intent intent = new Intent();
+                 intent.setAction(Intent.ACTION_GET_CONTENT);// 打开图库获取图片
+                 intent.setAction(Intent.ACTION_PICK);// 打开图库获取图片
+                 intent.setType("image/*");// 这个参数是确定要选择的内容为图片
+                 intent.putExtra("return-data", true);// 是否要返回，如果设置false取到的值就是空值
+                 intent.putExtra("output", Uri.fromFile(outputFile));
+                 startActivityForResult(intent, REQUEST_IMAGE);
+                 */
+
+
+                PictureSelector.create(SettingActivity.this)
+                        .openGallery(PictureMimeType.ofImage())
+                        .theme(R.style.picture_default_style)
+                        .imageSpanCount(4)
+                        .selectionMode(PictureConfig.SINGLE)
+                        .previewImage(true)
+                        .isCamera(false)
+                        .enableCrop(true)
+                        .compress(true)
+                        .circleDimmedLayer(true)
+                        .minimumCompressSize(100)
+                        .forResult(PictureConfig.CHOOSE_REQUEST);
+
+
                 break;
             case R.id.iv_edit_name:
                 break;
@@ -279,6 +365,11 @@ public class SettingActivity extends AppCompatActivity {
 
                 break;
             case R.id.tv_exit:
+                SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, this);
+                SharePreferenceUtil.setToken("", this);
+                SharePreferenceUtil.clearToken(this);
+                SharePreferenceUtil.clearSharePref(SharePreferenceUtil.IS_LOGIN, this);
+                startActivity(new Intent(this, LoginNewActivity.class));
                 break;
             case R.id.tv_xieyi:
                 startActivity(new Intent(SettingActivity.this, XieYiActivity.class));
@@ -292,6 +383,7 @@ public class SettingActivity extends AppCompatActivity {
 
         }
     }
+
 
     private void showPickerView() {
 
@@ -373,26 +465,26 @@ public class SettingActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == REQUEST_IMAGE && resultCode == RESULT_OK) {
-            imageUri = data.getData();
+//            imageUri = data.getData();
 
-            Log.e("---------1", imageUri + "");
+//            Log.e("---------1", imageUri + "");
 //            ivUserimage.setImageURI(imageUri);
 
-            if (imageUri != null) {
-                try {
-                    bitmaptu = getBitmapFormUri(this, imageUri);
-                    ivUserimage.setVisibility(View.GONE);
-                    ivUserimagetwo.setVisibility(View.VISIBLE);
-                    ivUserimagetwo.setImageBitmap(bitmaptu);
-                    headimgurls = CommonUtil.convertIconToString(bitmaptu);
-                    Log.e("-------------img2:", headimgurls);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (imageUri != null) {
+//                try {
+//                    bitmaptu = getBitmapFormUri(this, imageUri);
+//                    ivUserimage.setVisibility(View.GONE);
+//                    ivUserimagetwo.setVisibility(View.VISIBLE);
+//                    ivUserimagetwo.setImageBitmap(bitmaptu);
+//                    headimgurls = CommonUtil.convertIconToString(bitmaptu);
+////                    Log.e("-------------img2:", headimgurls);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
 //            ImageCutUtils.cropImage(SettingActivity.this,imageUri);
-            ContentResolver contentResolver = this.getContentResolver();
+//            ContentResolver contentResolver = this.getContentResolver();
             try {
 //                Bitmap bitmaptu = BitmapFactory.decodeStream(contentResolver.openInputStream(ImageCutUtils.cropImageUri));
 //
@@ -426,24 +518,24 @@ public class SettingActivity extends AppCompatActivity {
 //            ivImg.setImageURI(imageUri);
 //            Log.e("-------imageuri",imageUri+"");
         } else if (requestCode == RESULT_REQUEST_CODE) {
-            imageUri = data.getData();
-            Log.e("---------2", imageUri + "");
+//            imageUri = data.getData();
+//            Log.e("---------2", imageUri + "");
 
 //            setImageBitmap();
 //            ivImg.setImageBitmap(bitmap);
 //            bitmapToString = bitmapToString(bitmap);
         } else if (requestCode == CUT_REQUEST) {
 //            imageUri=data.getData();
-            Log.e("---------3", imageUri + "");
+//            Log.e("---------3", imageUri + "");
             //-3: null????
 //            ivUserimage.setImageBitmap(bitmaptu);
         } else if (requestCode == ImageCutUtils.CROP_IMAGE) {
             if (ImageCutUtils.cropImageUri != null) {
 //                ivUserimage.setImageBitmap(bitmaptu);
                 try {
-                    String fileName = getRealPathFromURI(ImageCutUtils.cropImageUri);
+//                    String fileName = getRealPathFromURI(ImageCutUtils.cropImageUri);
 //                    String status = Environment.getExternalStorageState();
-                    String status = Environment.getExternalStorageDirectory().getAbsolutePath();
+//                    String status = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 //                    ContentResolver contentResolver=this.getContentResolver();
                     try {
@@ -473,6 +565,21 @@ public class SettingActivity extends AppCompatActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+            }
+        } else if (requestCode == PictureConfig.CHOOSE_REQUEST && resultCode == RESULT_OK) {
+//            List<LocalMedia> localMedia = PictureSelector.obtainMultipleResult(data);
+            // 图片选择结果回调
+            selectList = PictureSelector.obtainMultipleResult(data);
+            if (selectList.size() > 0) {
+                for (int i = 0; i < selectList.size(); i++) {
+                    Log.e("----compresspath12:--", selectList.get(i).getCompressPath());
+                }
+
+                Bitmap bitmap=BitmapFactory.decodeFile(selectList.get(0).getCompressPath());
+                headimgurls = CommonUtil.convertIconToString(bitmap);
+
+                adapter.setList(selectList);
+                adapter.notifyDataSetChanged();
             }
         }
     }
@@ -715,6 +822,8 @@ public class SettingActivity extends AppCompatActivity {
 
         }
 
+        PictureFileUtils.deleteCacheDirFile(this);
+
     }
 
     /**
@@ -779,4 +888,25 @@ public class SettingActivity extends AppCompatActivity {
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
         return bitmap;
     }
+
+
+
+
+    private GridSingImageAdapter.onAddPicClickListener onAddPicClickListener = new GridSingImageAdapter.onAddPicClickListener() {
+        @Override
+        public void onAddPicClick() {
+            PictureSelector.create(SettingActivity.this)
+                    .openGallery(PictureMimeType.ofImage())
+                    .theme(R.style.picture_default_style)
+                    .imageSpanCount(4)
+                    .selectionMode(PictureConfig.SINGLE)
+                    .previewImage(true)
+                    .isCamera(false)
+                    .enableCrop(true)
+                    .compress(true)
+                    .circleDimmedLayer(true)
+                    .minimumCompressSize(100)
+                    .forResult(PictureConfig.CHOOSE_REQUEST);
+        }
+    };
 }

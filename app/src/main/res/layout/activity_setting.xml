@@ -51,6 +51,7 @@
 <RelativeLayout
     android:layout_width="match_parent"
     android:layout_marginTop="20dp"
+    android:visibility="gone"
     android:layout_height="95dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -78,6 +79,23 @@
         android:src="@mipmap/phonepic_icon"
         android:layout_centerInParent="true"/>
 </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center"
+        android:layout_height="wrap_content">
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rlv"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content">
+        </android.support.v7.widget.RecyclerView>
+    </LinearLayout>
+
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

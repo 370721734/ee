@@ -33,12 +33,16 @@ public class JiuBaoActivity extends AppCompatActivity {
     @BindView(R.id.rl7)
     RelativeLayout rl7;
 
+    private String userid;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_jiu_bao);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+        Intent intent = getIntent();
+        userid = intent.getStringExtra("userid");
     }
 
     @OnClick({R.id.back, R.id.rl1, R.id.rl2, R.id.rl3, R.id.rl4, R.id.rl5, R.id.rl6, R.id.rl7})
@@ -48,25 +52,27 @@ public class JiuBaoActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.rl1:
-                startActivity(new Intent(this,PrivateJiuBaoActivity.class).putExtra("type","发布不适当内容对我造成骚扰"));
+                startActivity(new Intent(this, PrivateJiuBaoActivity.class)
+                        .putExtra("type", "发布不适当内容对我造成骚扰")
+                        .putExtra("userid", userid));
                 break;
             case R.id.rl2:
-                startActivity(new Intent(this,PrivateJiuBaoActivity.class).putExtra("type","垃圾广告，售卖假货等"));
+                startActivity(new Intent(this, PrivateJiuBaoActivity.class).putExtra("type", "垃圾广告，售卖假货等").putExtra("userid", userid));
                 break;
             case R.id.rl3:
-                startActivity(new Intent(this,PrivateJiuBaoActivity.class).putExtra("type","色情低俗"));
+                startActivity(new Intent(this, PrivateJiuBaoActivity.class).putExtra("type", "色情低俗").putExtra("userid", userid));
                 break;
             case R.id.rl4:
-                startActivity(new Intent(this,PrivateJiuBaoActivity.class).putExtra("type","违法犯罪"));
+                startActivity(new Intent(this, PrivateJiuBaoActivity.class).putExtra("type", "违法犯罪").putExtra("userid", userid));
                 break;
             case R.id.rl5:
-                startActivity(new Intent(this,PrivateJiuBaoActivity.class).putExtra("type","政治敏感"));
+                startActivity(new Intent(this, PrivateJiuBaoActivity.class).putExtra("type", "政治敏感").putExtra("userid", userid));
                 break;
             case R.id.rl6:
-                startActivity(new Intent(this,PrivateJiuBaoActivity.class).putExtra("type","造谣传谣，涉嫌欺诈"));
+                startActivity(new Intent(this, PrivateJiuBaoActivity.class).putExtra("type", "造谣传谣，涉嫌欺诈").putExtra("userid", userid));
                 break;
             case R.id.rl7:
-                startActivity(new Intent(this,PrivateJiuBaoActivity.class).putExtra("type","此账号可能被盗用了"));
+                startActivity(new Intent(this, PrivateJiuBaoActivity.class).putExtra("type", "此账号可能被盗用了").putExtra("userid", userid));
                 break;
         }
     }

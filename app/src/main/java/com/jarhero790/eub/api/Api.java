@@ -197,7 +197,7 @@ public interface Api {
     //签到页面领取奖励
     @FormUrlEncoded
     @POST("web/index/reward")
-    Call<ResponseBody> getreward(@Field("token") String token,@Field("type_id") Integer type_id);
+    Call<ResponseBody> getreward(@Field("token") String token, @Field("type_id") Integer type_id);
 
 
     //个人中心我的视频
@@ -215,23 +215,27 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/mylike")
     Call<GuangZuBean> mylike(@Field("token") String token);
+    //我的关注
+    @FormUrlEncoded
+    @POST("web/index/mylike")
+    Observable<GuangZuBean> myguangzu(@Field("token") String token);
 
     //用户拉黑
     @FormUrlEncoded
     @POST("web/index/blacklist")
-    Call<ResponseBody> blacklist(@Field("token") String token,@Field("uid") String uid,@Field("type") String type);
+    Call<ResponseBody> blacklist(@Field("token") String token, @Field("uid") String uid, @Field("type") String type);
 
 
     //用户举报
     @FormUrlEncoded
     @POST("web/index/report")
-    Call<ResponseBody> report(@Field("token") String token,@Field("buid") String buid,@Field("type") String type,@Field("content") String content,@Field("report_img") String report_img,@Field("report_img1") String report_img1,@Field("report_img2") String report_img2,@Field("report_img3") String report_img3);
+    Call<ResponseBody> report(@Field("token") String token, @Field("buid") String buid, @Field("type") String type, @Field("content") String content, @Field("report_img") String report_img, @Field("report_img1") String report_img1, @Field("report_img2") String report_img2, @Field("report_img3") String report_img3);
 
 
     //修改个人信息
     @FormUrlEncoded
     @POST("web/index/editinfo")
-    Call<ResponseBody> editinfo(@Field("token") String token,@Field("sign") String sign,@Field("nickname") String nickname,@Field("sex") String sex,@Field("city") String city,@Field("headimgurl") String headimgurl);
+    Call<ResponseBody> editinfo(@Field("token") String token, @Field("sign") String sign, @Field("nickname") String nickname, @Field("sex") String sex, @Field("city") String city, @Field("headimgurl") String headimgurl);
 
 
 
@@ -242,5 +246,5 @@ public interface Api {
     //获取评论
     @FormUrlEncoded
     @POST("web/index/getComment")
-    Call<ResponseBody> getpinlen(@Field("page") Integer page,@Field("vid") String v, @Field("token") String token);
+    Call<ResponseBody> getpinlen(@Field("page") Integer page, @Field("vid") String v, @Field("token") String token);
 }

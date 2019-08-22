@@ -8,6 +8,7 @@ import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.contract.mine.MineMainContract;
+import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.model.mine.MineMainModel;
 import com.jarhero790.eub.rxjava.RxHelper;
 import com.jarhero790.eub.utils.AppUtils;
@@ -51,9 +52,9 @@ public class MineMainPresenter extends MineMainContract.MineMainPresenter {
                         return;
                     }
                     mIView.showuserinfo(bean);
-                    Log.e("-------33-",bean.string());
+//                    Log.e("-------33-",bean.string());
 
-                } catch (IOException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -61,10 +62,30 @@ public class MineMainPresenter extends MineMainContract.MineMainPresenter {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Toast.makeText(getContext(),throwable.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(),"请求异常",Toast.LENGTH_LONG).show();
             }
         }));
 
+    }
+
+    @Override
+    public void getmyguangzu() {
+        if (mIModel==null)
+            return;
+        mRxManager.register(mIModel.getmyguangzu(SharePreferenceUtil.getToken(AppUtils.getContext())).subscribe(new Consumer<GuangZuBean>() {
+            @Override
+            public void accept(GuangZuBean bean) throws Exception {
+                if (mIView==null)
+                    return;
+                mIView.showguangzu(bean);
+
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Toast.makeText(getContext(),"请求异常",Toast.LENGTH_LONG).show();
+            }
+        }));
     }
 
     @Override

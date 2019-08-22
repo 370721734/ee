@@ -7,6 +7,7 @@ import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.base.BaseModel;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.contract.mine.MineMainContract;
+import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.rxjava.RxHelper;
 import com.jarhero790.eub.utils.RetrofitCreateHelper;
 
@@ -28,6 +29,12 @@ public class MineMainModel extends BaseModel implements MineMainContract.IMineMa
     @Override
     public Observable<ResponseBody> getuserinfo(String token) {
         return RetrofitCreateHelper.createApi(Api.class,Api.HOST).getuserinfo(token)
+                .compose(RxHelper.rxSchedulerHelper());
+    }
+
+    @Override
+    public Observable<GuangZuBean> getmyguangzu(String token) {
+        return RetrofitCreateHelper.createApi(Api.class,Api.HOST).myguangzu(token)
                 .compose(RxHelper.rxSchedulerHelper());
     }
 

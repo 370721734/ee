@@ -61,8 +61,8 @@ public class MoreActivity extends AppCompatActivity {
         CommonUtil.setStatusBarTransparent(this);
         Intent intent = getIntent();
         userid = intent.getStringExtra("userid");
-        if (userid!=null)
-            tvZhuanhao.setText("钻视tv号："+userid);
+        if (userid != null)
+            tvZhuanhao.setText("钻视tv号：" + userid);
         username = intent.getStringExtra("username");
         if (username != null)
             tvName.setText(username);
@@ -80,10 +80,10 @@ public class MoreActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.userinfo:
-                startActivity(new Intent(this, GeRenInfoActivity.class));
+                startActivity(new Intent(this, GeRenInfoActivity.class).putExtra("userid", userid));
                 break;
             case R.id.jiubao:
-                startActivity(new Intent(this, JiuBaoActivity.class));
+                startActivity(new Intent(this, JiuBaoActivity.class).putExtra("userid", userid));
                 break;
             case R.id.lahei:
                 AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.loading_dialog);
@@ -122,7 +122,6 @@ public class MoreActivity extends AppCompatActivity {
                             if (response.isSuccessful()) {
                                 try {
                                     String json = response.body().string();
-
                                     Log.e("----------la-", json);
                                     JSONObject object = new JSONObject(json);
                                     int code = object.optInt("code");

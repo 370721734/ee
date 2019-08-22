@@ -52,7 +52,7 @@ public class ZanAdapter extends RecyclerView.Adapter<ZanAdapter.MyHolder> {
             myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));
         }
 
-        Glide.with(context).load(Api.HOST + bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.ivIcon);
+        Glide.with(context).load(Api.TU + bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.zan_icon).error(R.mipmap.zan_icon)).into(myHolder.ivIcon);
 //
 //
 //        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "+关注");

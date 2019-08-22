@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.Video;
 import java.util.List;
@@ -134,7 +135,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         /**Glide方式*/
         Glide.with(context).load(video.getVideo_img())
-                .placeholder(android.R.color.white)
+                .apply(new RequestOptions().placeholder(android.R.color.white))
                 .into(holder.video_thumb);
 
         holder.iv_like.setImageResource(R.drawable.iv_like_unselected);

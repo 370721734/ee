@@ -29,12 +29,14 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
     private List<GuangZuBean.DataBean> list;
     private Myclick myclick;
     private Myclick touclick;
+    private Myclick speak;
 
-    public GuangZuAdapter(Context context, List<GuangZuBean.DataBean> list, Myclick myclick, Myclick touclick) {
+    public GuangZuAdapter(Context context, List<GuangZuBean.DataBean> list, Myclick myclick, Myclick touclick, Myclick speak) {
         this.context = context;
         this.list = list;
         this.myclick = myclick;
         this.touclick = touclick;
+        this.speak = speak;
     }
 
     @NonNull
@@ -63,63 +65,11 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
         myHolder.rlAll.setTag(position);
         myHolder.rlAll.setOnClickListener(touclick);
 
-//
-//        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-//
-//        long stamp=Long.valueOf(bean.getAddtime());
-//          Date date=new Date(stamp*1000);
+
+        myHolder.speak.setTag(position);
+        myHolder.speak.setOnClickListener(speak);
 
 
-//        myHolder.tvPinglunText.setText(bean.getName());
-//        myHolder.tvZhanli.setText(bean.getMoney()+"");
-
-//        PinLenBean.DataBean dataBean=
-
-
-//        myHolder.tvTgContext.setText(bean.getTitle());
-//        myHolder.tvTgContextText.setText(bean.getContext());
-//
-//        myHolder.tvTgTime.setText(bean.getCreateTime());
-//        myHolder.tvTgShape.setText("已分享" + bean.getCount() + "次");
-//
-//
-//        if (bean.getImgs().equals("-1")){
-//            myHolder.ivTgContextTu.setVisibility(View.GONE);
-//            myHolder.llTgTu.setVisibility(View.GONE);
-//        }
-//
-//
-//
-//        if (bean.getImgs().length() > 0 && bean.getImgs().contains("|")) {
-//            myHolder.ivTgContextTu.setVisibility(View.GONE);
-//            myHolder.llTgTu.setVisibility(View.VISIBLE);
-//            String[] str = bean.getImgs().split("\\|");
-//            if (str.length==3){
-//                myHolder.ivTgContextTuone.setVisibility(View.VISIBLE);
-//                myHolder.ivTgContextTutwo.setVisibility(View.VISIBLE);
-//                myHolder.ivTgContextTuthree.setVisibility(View.VISIBLE);
-//
-//                Glide.with(context).load(str[0]).into(myHolder.ivTgContextTuone);//图片
-//                Glide.with(context).load(str[1]).into(myHolder.ivTgContextTutwo);//图片
-//                Glide.with(context).load(str[2]).into(myHolder.ivTgContextTuthree);//图片
-//            }else if (str.length==2){
-//                myHolder.ivTgContextTuone.setVisibility(View.VISIBLE);
-//                myHolder.ivTgContextTutwo.setVisibility(View.VISIBLE);
-//
-//                Glide.with(context).load(str[0]).into(myHolder.ivTgContextTuone);//图片
-//                Glide.with(context).load(str[1]).into(myHolder.ivTgContextTutwo);//图片
-//            }else {
-//                myHolder.ivTgContextTuone.setVisibility(View.VISIBLE);
-//                Glide.with(context).load(str[0]).into(myHolder.ivTgContextTuone);//图片
-//            }
-//
-//        }
-//
-//
-//
-//        if (bean.getImgs().length() > 0 && !bean.getImgs().contains("|")) {
-//            Glide.with(context).load(bean.getImgs()).into(myHolder.ivTgContextTu);//图片
-//        }
 
 
     }
@@ -151,6 +101,8 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
         TextView tvGuanzu;
         @BindView(R.id.rl_all)
         RelativeLayout rlAll;
+        @BindView(R.id.speak)
+        RelativeLayout speak;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);

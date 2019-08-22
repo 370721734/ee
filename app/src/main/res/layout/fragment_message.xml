@@ -26,6 +26,7 @@
         android:layout_width="30dp"
         android:layout_height="30dp"
         android:src="@mipmap/edit_icon"
+        android:padding="5dp"
         android:layout_alignParentRight="true"
         android:layout_marginRight="16dp"
         android:layout_centerVertical="true"

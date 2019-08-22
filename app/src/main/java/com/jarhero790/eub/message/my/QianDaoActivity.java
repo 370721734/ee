@@ -43,7 +43,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
-
+//用户任务中心
 public class QianDaoActivity extends AppCompatActivity implements QianDaoContract.View {
 
     @BindView(R.id.ivback)
@@ -148,6 +148,13 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
         setContentView(R.layout.activity_qian_dao);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+        calendar=Calendar.getInstance();
+//        year=calendar.get(Calendar.YEAR);
+//
+//        month=calendar.get(Calendar.MONTH);
+
+        day=calendar.get(Calendar.DAY_OF_MONTH);
+//        Log.e("-----day-",year+"  "+month+"  "+day);
         Intent intent=getIntent();
         tvJin.setText("我的金币:"+intent.getStringExtra("money"));
         String signtime=intent.getStringExtra("signtime");
@@ -155,8 +162,17 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
             tvQiandao.setText("签到");
             Log.e("----------11",signtime);
         }else {
-            tvQiandao.setText("已签到");//如何保存状态
-            Log.e("----------22",signtime);
+            //判断是否是今天才行
+            if (signtime.length()>9){
+                if (signtime.substring(8,10).equals(day+"")){
+                    tvQiandao.setText("已签到");//如何保存状态
+                    Log.e("----------22",signtime);
+                }else {
+                    tvQiandao.setText("签到");
+                    Log.e("----------33",signtime);
+                }
+            }
+
         }
 
         //刷新
@@ -181,12 +197,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
     }
 
     private void initDate() {
-        calendar=Calendar.getInstance();
-        year=calendar.get(Calendar.YEAR);
 
-        month=calendar.get(Calendar.MONTH);
-
-        day=calendar.get(Calendar.DAY_OF_MONTH);
 
         int currentMonthLastDay = getCurrentMonthLastDay();
         Log.e("----------m",""+currentMonthLastDay);

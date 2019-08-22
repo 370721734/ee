@@ -20,6 +20,9 @@
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
+
+
+
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
@@ -29,6 +32,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
+        android:networkSecurityConfig="@xml/network_security_config"
         tools:ignore="GoogleAppIndexingWarning">
         <activity android:name=".message.message.ConversationListActivity"
             android:screenOrientation="portrait">

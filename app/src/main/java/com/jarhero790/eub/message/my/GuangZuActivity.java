@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.activity.FensiActivity;
@@ -24,6 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.rong.imkit.RongIM;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -64,9 +66,8 @@ public class GuangZuActivity extends AppCompatActivity {
                                     rlv.setVisibility(View.VISIBLE);
                                     GridLayoutManager manager = new GridLayoutManager(GuangZuActivity.this, 1);
                                     rlv.setLayoutManager(manager);
-                                    adapter=new GuangZuAdapter(GuangZuActivity.this,list,myclick,touclick);
+                                    adapter=new GuangZuAdapter(GuangZuActivity.this,list,myclick,touclick,speak);
                                     rlv.setAdapter(adapter);
-
 
                                 } else {
                                     nodingdan.setVisibility(View.VISIBLE);
@@ -92,13 +93,27 @@ public class GuangZuActivity extends AppCompatActivity {
     GuangZuAdapter.Myclick myclick=new GuangZuAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
+          //关注
 
         }
     };
     GuangZuAdapter.Myclick touclick=new GuangZuAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-
+         //个人信息
+        }
+    };
+    GuangZuAdapter.Myclick speak=new GuangZuAdapter.Myclick() {
+        @Override
+        public void myClick(int position, View view) {
+         //聊天
+            if (list.get(position).getIs_likeEach()==1){
+                if (RongIM.getInstance()!=null){
+                    RongIM.getInstance().startPrivateChat(GuangZuActivity.this,list.get(position).getRong_id()+"",list.get(position).getNickname());
+                }
+            }else {
+                Toast.makeText(GuangZuActivity.this,"要互相关注后才能聊天",Toast.LENGTH_SHORT).show();
+            }
         }
     };
 }

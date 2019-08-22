@@ -15,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.OnViewPagerListener;
@@ -444,7 +445,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
           // 加载视频的预览图片 Glide方式
         Glide.with(this)
                 .load(vedio.getVideo_img())
-                .placeholder(android.R.color.white)
+                .apply(new RequestOptions().placeholder(android.R.color.white))
                 .into(mTikTokController.getThumb());
 
         View itemView = recyclerView.getChildAt(0);

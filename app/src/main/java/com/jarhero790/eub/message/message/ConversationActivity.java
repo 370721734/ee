@@ -16,17 +16,22 @@ import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.utils.CommonUtil;
 
 import java.lang.annotation.Target;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationFragment;
+import io.rong.imkit.fragment.IHistoryDataResultCallback;
 import io.rong.imkit.model.UIMessage;
 import io.rong.imkit.plugin.location.IUserInfoProvider;
+import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
+import io.rong.imlib.model.MessageContent;
 import io.rong.imlib.model.UserInfo;
 
 public class ConversationActivity extends FragmentActivity implements NameContract, RongIM.UserInfoProvider {
@@ -43,6 +48,13 @@ public class ConversationActivity extends FragmentActivity implements NameContra
     private String userimg="/upload/avatar/5d5bb5c80d3d6.png";
 
 
+    private String mTargetId; //目标 Id
+    private String title;//名字
+    private Conversation.ConversationType mConversationType; //会话类型
+
+    private int latestMessageId=-1;
+    private int count=10;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,9 +62,24 @@ public class ConversationActivity extends FragmentActivity implements NameContra
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
 //        TargetUserId
-        String name = Conversation.ConversationType.PRIVATE.getName();
-        int value = Conversation.ConversationType.PRIVATE.getValue();
-        Log.e("---------333",name+"   "+value);//-------333: private   1
+//        String name = Conversation.ConversationType.PRIVATE.getName();
+//        int value = Conversation.ConversationType.PRIVATE.getValue();
+//        Log.e("---------333",name+"   "+value);//-------333: private   1
+
+
+        /* 从 intent 携带的数据里获取 targetId 和会话类型*/
+        Intent intent=getIntent();
+        mTargetId=intent.getData().getQueryParameter("targetId");
+        title=intent.getData().getQueryParameter("title");
+        mConversationType= Conversation.ConversationType.valueOf(intent.getData().getLastPathSegment().toUpperCase(Locale.US));
+        Log.e("----------hehe",mTargetId+" "+title+" "+mConversationType);
+        names.setText(title);
+
+
+
+
+
+
 
 
         FragmentManager fragmentManage = getSupportFragmentManager();
@@ -64,7 +91,50 @@ public class ConversationActivity extends FragmentActivity implements NameContra
         Conversation.ConversationType conversationType = fragement.getConversationType();
         Log.e("---------2",conversationType.getName());
 
-        names.setText(targetId);
+
+        //历史消息
+
+        //在会话界面中拿到当前页面的最后一条消息
+        RongIM.getInstance().getConversation(conversationType, targetId, new RongIMClient.ResultCallback<Conversation>() {
+            @Override
+            public void onSuccess(Conversation conversation) {
+                latestMessageId = conversation.getLatestMessageId();
+                RongIMClient.getInstance().getHistoryMessages(conversationType, targetId, latestMessageId, count, new RongIMClient.ResultCallback<List<Message>>() {
+                    @Override
+                    public void onSuccess(List<Message> messages) {
+                                 Log.e("--------d",messages.size()+"");//1
+                        List<String> searchableWord=new ArrayList<>();
+                        for (int i = 0; i < messages.size(); i++) {
+                            MessageContent content = messages.get(i).getContent();
+                              searchableWord = content.getSearchableWord();
+
+                            Log.e("-----------a",messages.get(i).getObjectName());
+                            Log.e("-----------b",messages.get(i).getExtra());
+                        }
+
+                        for (int i = 0; i < searchableWord.size(); i++) {
+                            Log.e("----------c",searchableWord.get(i));
+                        }
+                    }
+
+                    @Override
+                    public void onError(RongIMClient.ErrorCode errorCode) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
+
+            }
+        });
+
+
+
+
+
+
 
 //        String title = fragement.getArguments().getString("title");
 //        Log.e("----------4",title);

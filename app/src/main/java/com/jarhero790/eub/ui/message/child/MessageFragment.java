@@ -258,6 +258,7 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
 
 
     private void initConversationList() {
+        //动态的
         FragmentManager fragmentManage = getChildFragmentManager();
         ConversationListFragment fragement = (ConversationListFragment) fragmentManage.findFragmentById(R.id.conversationlist);
         Uri uri = Uri.parse("rong://" + getActivity().getApplicationInfo().packageName).buildUpon()
@@ -272,9 +273,10 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
 
 
 
+        //不需要启动,静态的
 //        Map<String, Boolean> supportedConversation=new HashMap<>();
-//        supportedConversation.put(Conversation.ConversationType.PRIVATE.getName(),false);
-//        supportedConversation.put(Conversation.ConversationType.GROUP.getName(),false);
+//        supportedConversation.put(Conversation.ConversationType.PRIVATE.getName(),true); // 会话列表需要显示私聊会话, 第二个参数 true 代表私聊会话需要聚合显示
+//        supportedConversation.put(Conversation.ConversationType.GROUP.getName(),false);// 会话列表需要显示群组会话, 第二个参数 false 代表群组会话不需要聚合显示
 //        supportedConversation.put(Conversation.ConversationType.PUBLIC_SERVICE.getName(),false);
 //        supportedConversation.put(Conversation.ConversationType.APP_PUBLIC_SERVICE.getName(),false);
 //        supportedConversation.put(Conversation.ConversationType.SYSTEM.getName(),true);

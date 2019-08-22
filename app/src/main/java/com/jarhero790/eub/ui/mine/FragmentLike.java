@@ -14,6 +14,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.LikeBean;
+import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -92,6 +93,10 @@ public class FragmentLike extends SupportFragment {
                             likeBeans = response.body().getData();
                             GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
                             rlv.setLayoutManager(manager);
+                            LinearItemDecoration linearItemDecoration=new LinearItemDecoration();
+                            linearItemDecoration.setSpanSpace(10);
+                            linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+                            rlv.addItemDecoration(linearItemDecoration);
                             adapter = new LikeAdapter(getActivity(), likeBeans, myclickdele, myclicktu);
                             rlv.setAdapter(adapter);
 

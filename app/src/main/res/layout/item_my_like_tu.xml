@@ -19,7 +19,7 @@
             android:layout_height="match_parent"
             android:adjustViewBounds="true"
             android:scaleType="fitXY"
-            android:src="@mipmap/gift3"
+            android:src="@mipmap/video_deault"
             android:visibility="visible" />
     </FrameLayout>
 
