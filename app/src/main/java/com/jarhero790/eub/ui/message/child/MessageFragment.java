@@ -50,6 +50,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationListFragment;
+import io.rong.imkit.fragment.IHistoryDataResultCallback;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import okhttp3.ResponseBody;
@@ -234,6 +235,19 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
         initConversationList();
 
 
+
+
+    }
+
+    /**
+     * <p> 获取当前用户本地会话列表的默认方法，该方法返回的是以下类型的会话列表：私聊，群组，系统会话。如果
+     * 您需要获取其它类型的会话列表,可以使用{@link #getConversationList(ResultCallback, Conversation.ConversationType...)} 方法。
+     * <strong>注意：</strong>当更换设备或者清除缓存后，拉取到的是暂存在融云服务器中该账号当天收发过消息的会话列表。</p>
+     *
+     * @param callback 获取会话列表的回调。
+     */
+    public void getConversationList(final RongIMClient.ResultCallback<List<Conversation>> callback) {
+
     }
 
 //    private void rongyun() {
@@ -271,6 +285,32 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
                 .build();
         fragement.setUri(uri);
 
+        RongIMClient.getInstance().getConversationList(new RongIMClient.ResultCallback<List<Conversation>>() {
+            @Override
+            public void onSuccess(List<Conversation> conversations) {
+                Log.e("-----------------conf",conversations.size()+" ");
+
+                for (int i = 0; i < conversations.size(); i++) {
+                    conversations.get(i).getLatestMessageId();
+                }
+            }
+
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
+
+            }
+        }, Conversation.ConversationType.PRIVATE);
+//        fragement.getConversationList(conversationType, new IHistoryDataResultCallback<List<Conversation>>() {
+//            @Override
+//            public void onResult(List<Conversation> conversations) {
+//
+//            }
+//
+//            @Override
+//            public void onError() {
+//
+//            }
+//        });
 
 
         //不需要启动,静态的

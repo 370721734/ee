@@ -217,6 +217,7 @@ public class FensiActivity extends Activity {
         public void myClick(int position, View view) {
             Log.e("--------2", "" + position + "  " + arrayList.get(position).getUser_id());
             Intent intent=new Intent(FensiActivity.this, GeRenInfoActivity.class);
+            intent.putExtra("userid",arrayList.get(position).getUser_id());
             startActivity(intent);
 
         }

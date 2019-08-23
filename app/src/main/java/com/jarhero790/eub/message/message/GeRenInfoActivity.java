@@ -1,12 +1,16 @@
 package com.jarhero790.eub.message.message;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.SupportActivity;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -14,18 +18,37 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.api.Api;
+import com.jarhero790.eub.message.bean.GeRenBean;
+import com.jarhero790.eub.message.contract.ISupp;
+import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.ui.mine.FragmentLike;
 import com.jarhero790.eub.ui.mine.FragmentZuoping;
+import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+//别、个人信息页面
+@SuppressLint("RestrictedApi")
 public class GeRenInfoActivity extends AppCompatActivity {
 
     @BindView(R.id.back)
@@ -59,13 +82,65 @@ public class GeRenInfoActivity extends AppCompatActivity {
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
 
+    private int uid;
+    private String userid;
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        initDate();
+    }
+
+    CustomProgressDialog dialog=new CustomProgressDialog();
+
+  private   GeRenBean.DataBean bean;
+
+    @Subscribe(sticky = true ,threadMode = ThreadMode.MAIN)
+    public void geren(GeRenBean.DataBean beans){
+        if (beans!=null){
+            setBean(beans);
+
+            Log.e("-----------","什么"+beans.getFensi());//有了
+        }
+
+
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ge_ren_info);
         CommonUtil.setStatusBarTransparent(this);
+        EventBus.getDefault().register(this);
         ButterKnife.bind(this);
+        Intent intent = getIntent();
+        uid = intent.getIntExtra("userid", 5044);
+        userid=intent.getStringExtra("userid");
+//        GeRenBean bean=intent.getParcelableExtra("bean");
+//        Log.e("---------1", bean.toString());
+//        if (getBean()!=null && getBean().getData()!=null && getBean().getCode() == 200) {
+//            if (bean.getData() != null && bean.getData().getUser() != null) {
+//                Log.e("-----2", getBean().getData().getFensi() + " " + getBean().getData().getUser().getNickname());
+//                Log.e("---------3", getBean().getData().toString());
+//                Log.e("-------4", getBean().getData().getUser().toString());
+//
+//                textViewNickName.setText(getBean().getData().getUser().getNickname());
+//                tvTvhao.setText("钻视TV号:" + getBean().getData().getUser().getId());
+//                Glide.with(GeRenInfoActivity.this).load(Api.TU + getBean().getData().getUser().getHeadimgurl())
+//                        .apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(ivUserimage);
+//
+//                tvGuanzhu.setText("" + getBean().getData().getLike());
+//                fensi.setText("" + getBean().getData().getFensi());
+//                tvHuozai.setText("" + getBean().getData().getZan());
+//                tvMemo.setText(getBean().getData().getUser().getSign());
+//            }
+//        }
 
+
+
+
+        initDate(userid);
         tabLayout.addTab(tabLayout.newTab().setText("作 品"));//给TabLayout添加Tab
         tabLayout.addTab(tabLayout.newTab().setText("喜 欢"));
         tabLayout.post(new Runnable() {
@@ -78,26 +153,26 @@ public class GeRenInfoActivity extends AppCompatActivity {
         tabLayout.getTabAt(0).select();
         FragmentManager fm = getSupportFragmentManager();
         FragmentTransaction transaction = fm.beginTransaction();
-        transaction.replace(R.id.container, FragmentZuoping.newInstance()); //连接TabLayout下的Fragment需要放置的位置
+        transaction.replace(R.id.container, FragmentZuopingGeRen.newInstance()); //连接TabLayout下的Fragment需要放置的位置
         transaction.commit();
 
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
-                FragmentManager fm =getSupportFragmentManager();
+                FragmentManager fm = getSupportFragmentManager();
                 //开启事务
                 FragmentTransaction transaction;
                 switch (tab.getPosition()) {
                     case 0:
                         transaction = fm.beginTransaction();
-                        transaction.replace(R.id.container, FragmentZuoping.newInstance()); //连接TabLayout下的Fragment需要放置的位置
+                        transaction.replace(R.id.container, FragmentZuopingGeRen.newInstance()); //连接TabLayout下的Fragment需要放置的位置
                         transaction.commit();
                         break;
 
                     case 1:
                         transaction = fm.beginTransaction();
-                        transaction.replace(R.id.container, FragmentLike.newInstance()); //连接TabLayout下的Fragment需要放置的位置
+                        transaction.replace(R.id.container, FragmentLikeGeRen.newInstance()); //连接TabLayout下的Fragment需要放置的位置
                         transaction.commit();
                         break;
                 }
@@ -113,6 +188,53 @@ public class GeRenInfoActivity extends AppCompatActivity {
 
             }
         });
+
+
+
+
+
+
+
+    }
+
+    private void initDate(String userid) {
+        dialog.createLoadingDialog(this,"正在加载...");
+        dialog.show();
+        RetrofitManager.getInstance().getDataServer().getgerenuserinfos(SharePreferenceUtil.getToken(AppUtils.getContext()), userid)
+                .enqueue(new Callback<GeRenBean>() {
+                    @Override
+                    public void onResponse(Call<GeRenBean> call, Response<GeRenBean> response) {
+                        if (response.isSuccessful()) {
+                            dialog.dismiss();
+                            GeRenBean bean = response.body();
+                            Log.e("---------1", bean.toString());
+                            if (bean.getCode() == 200) {
+                                if (bean.getData() != null && bean.getData().getUser() != null) {
+                                    Log.e("-----2", bean.getData().getFensi() + " " + bean.getData().getUser().getNickname());
+                                    Log.e("---------3", bean.getData().toString());
+                                    Log.e("-------4", bean.getData().getUser().toString());
+
+                                    textViewNickName.setText(bean.getData().getUser().getNickname());
+                                    tvTvhao.setText("钻视TV号:" + bean.getData().getUser().getId());
+                                    Glide.with(GeRenInfoActivity.this).load(Api.TU + bean.getData().getUser().getHeadimgurl())
+                                            .apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(ivUserimage);
+
+                                    tvGuanzhu.setText("" + bean.getData().getLike());
+                                    fensi.setText("" + bean.getData().getFensi());
+                                    tvHuozai.setText("" + bean.getData().getZan());
+                                    tvMemo.setText(bean.getData().getUser().getSign());
+                                }
+                            }
+                        }else {
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<GeRenBean> call, Throwable t) {
+                        dialog.dismiss();
+                    }
+                });
 
     }
 
@@ -152,4 +274,21 @@ public class GeRenInfoActivity extends AppCompatActivity {
         }
     }
 
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
+    }
+
+
+    public GeRenBean.DataBean getBean() {
+        return bean;
+    }
+
+    public void setBean(GeRenBean.DataBean bean) {
+        this.bean = bean;
+    }
 }

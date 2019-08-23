@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.ImageView;
 import com.dueeeke.videoplayer.controller.BaseVideoController;
+import com.dueeeke.videoplayer.controller.MediaPlayerControl;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.jarhero790.eub.R;
@@ -54,6 +55,13 @@ public class TikTokController extends BaseVideoController {
                 break;
             case VideoView.STATE_PREPARED:
                // L.e("STATE_PREPARED");
+                break;
+            case VideoView.PLAYER_FULL_SCREEN:
+               // L.e("STATE_PREPARED");
+//                if (mMediaPlayer==null){
+//                    mMediaPlayer.startFullScreen();
+//                }
+
                 break;
         }
     }

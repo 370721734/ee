@@ -16,11 +16,16 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
+import com.jarhero790.eub.message.bean.GeRenBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import butterknife.BindView;
@@ -53,23 +58,75 @@ public class MoreActivity extends AppCompatActivity {
     private String userimg;
     private String username;
 
+    GeRenBean bean;
+
+
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(Object myEvent) {
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_more);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+        EventBus.getDefault().register(this);
         Intent intent = getIntent();
         userid = intent.getStringExtra("userid");
+        initDate(userid);
         if (userid != null)
             tvZhuanhao.setText("钻视tv号：" + userid);
-        username = intent.getStringExtra("username");
-        if (username != null)
-            tvName.setText(username);
-        userimg = intent.getStringExtra("userimg");
-        if (userimg != null)
-            Glide.with(this).load(Api.TU + userimg).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(touImage);
+//        username = intent.getStringExtra("username");
+//        if (username != null)
+//            tvName.setText(username);
+//        userimg = intent.getStringExtra("userimg");
+//        if (userimg != null)
+//            Glide.with(this).load(Api.TU + userimg).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(touImage);
 
+
+    }
+    CustomProgressDialog dialog=new CustomProgressDialog();
+    private void initDate(String uid) {
+        dialog.createLoadingDialog(this,"正在加载...");
+        dialog.show();
+        RetrofitManager.getInstance().getDataServer().getgerenuserinfos(SharePreferenceUtil.getToken(AppUtils.getContext()), uid)
+                .enqueue(new Callback<GeRenBean>() {
+                    @Override
+                    public void onResponse(Call<GeRenBean> call, Response<GeRenBean> response) {
+                        if (response.isSuccessful()) {
+                            dialog.dismiss();
+                             bean = response.body();
+                            Log.e("---------1", bean.toString());
+                            if (bean.getCode() == 200) {
+                                if (bean.getData() != null && bean.getData().getUser() != null) {
+                                    Log.e("-----2", bean.getData().getFensi() + " " + bean.getData().getUser().getNickname());
+                                    Log.e("---------3", bean.getData().toString());
+                                    Log.e("-------4", bean.getData().getUser().toString());
+
+
+                                    tvName.setText(bean.getData().getUser().getNickname());
+//                                    tvTvhao.setText("钻视TV号:" + bean.getData().getUser().getId());
+                                    Glide.with(MoreActivity.this).load(Api.TU + bean.getData().getUser().getHeadimgurl())
+                                            .apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(touImage);
+
+//                                    tvGuanzhu.setText("" + bean.getData().getLike());
+//                                    fensi.setText("" + bean.getData().getFensi());
+//                                    tvHuozai.setText("" + bean.getData().getZan());
+//                                    tvMemo.setText(bean.getData().getUser().getSign());
+                                }
+                            }
+                        }else {
+                            dialog.dismiss();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<GeRenBean> call, Throwable t) {
+                        dialog.dismiss();
+                    }
+                });
 
     }
 
@@ -80,7 +137,10 @@ public class MoreActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.userinfo:
-                startActivity(new Intent(this, GeRenInfoActivity.class).putExtra("userid", userid));
+                if (bean==null)
+                    return;
+                EventBus.getDefault().post(bean.getData());
+                startActivity(new Intent(this, GeRenInfoActivity.class).putExtra("userid", userid).putExtra("bean",bean));
                 break;
             case R.id.jiubao:
                 startActivity(new Intent(this, JiuBaoActivity.class).putExtra("userid", userid));
@@ -110,6 +170,14 @@ public class MoreActivity extends AppCompatActivity {
                 dialog.show();
 
                 break;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
         }
     }
 

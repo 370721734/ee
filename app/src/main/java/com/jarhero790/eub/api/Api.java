@@ -7,6 +7,7 @@ import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.bean.VideoBean;
 import com.jarhero790.eub.message.bean.FenSiTBean;
+import com.jarhero790.eub.message.bean.GeRenBean;
 import com.jarhero790.eub.message.bean.GiftBean;
 import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.bean.JiangLiBean;
@@ -148,6 +149,15 @@ public interface Api {
     @POST("web/index/usercenter")
     Observable<ResponseBody> getuserinfo(@Field("token") String token);
 
+    //别，个人中心
+    @FormUrlEncoded
+    @POST("web/index/usercenter")
+    Call<GeRenBean> getgerenuserinfo(@Field("token") String token, @Field("uid") Integer uid);
+    //别，个人中心
+    @FormUrlEncoded
+    @POST("web/index/usercenter")
+    Call<GeRenBean> getgerenuserinfos(@Field("token") String token, @Field("uid") String uid);
+
 
     //个人签到页面
     @FormUrlEncoded
@@ -205,11 +215,21 @@ public interface Api {
     @POST("web/index/myfabu")
     Call<MyFaBuBean> myfabu(@Field("token") String token);
 
+    //个人中心我的视频other
+    @FormUrlEncoded
+    @POST("web/index/myfabu")
+    Call<MyFaBuBean> myfabuother(@Field("token") String token,@Field("uid") String uid);
+
 
     //个人中心点赞的视频
     @FormUrlEncoded
     @POST("web/index/zanvideo")
     Call<LikeBean> zanvideo(@Field("token") String token);
+
+    //个人中心点赞的视频other
+    @FormUrlEncoded
+    @POST("web/index/zanvideo")
+    Call<LikeBean> zanvideoother(@Field("token") String token,@Field("uid") String uid);
 
     //我的关注
     @FormUrlEncoded

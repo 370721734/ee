@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="@color/backgroudcolor"
     android:orientation="vertical"
     >
 <RelativeLayout
@@ -197,6 +197,7 @@
         android:background="#000000"
         android:visibility="gone"
         android:layout_height="match_parent"/>
+
     <fragment
         android:id="@+id/conversationlist"
         android:name="io.rong.imkit.fragment.ConversationListFragment"

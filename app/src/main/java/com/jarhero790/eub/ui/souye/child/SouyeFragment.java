@@ -2,6 +2,7 @@ package com.jarhero790.eub.ui.souye.child;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -85,18 +86,27 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @Override
     public void onClick(View v) {
           switch (v.getId()){
-              case R.id.tuijian:
+              case R.id.tuijian://推荐
                   textViewTuijian.setBackgroundResource(R.drawable.button_shape1);
+                  textViewTuijian.setTextColor(Color.parseColor("#0E0E0E"));
+                  textViewZuixin.setTextColor(Color.parseColor("#EFEDED"));
+                  textViewChangshipin.setTextColor(Color.parseColor("#EFEDED"));
                   textViewZuixin.setBackgroundResource(0);
                   textViewChangshipin.setBackgroundResource(0);
                   break;
-              case R.id.zuixin:
+              case R.id.zuixin://最新
                   textViewZuixin.setBackgroundResource(R.drawable.button_shape1);
+                  textViewTuijian.setTextColor(Color.parseColor("#EFEDED"));
+                  textViewZuixin.setTextColor(Color.parseColor("#0E0E0E"));
+                  textViewChangshipin.setTextColor(Color.parseColor("#EFEDED"));
                   textViewTuijian.setBackgroundResource(0);
                   textViewChangshipin.setBackgroundResource(0);
                   break;
-              case R.id.changshipin:
+              case R.id.changshipin://长视频
                   textViewChangshipin.setBackgroundResource(R.drawable.button_shape1);
+                  textViewTuijian.setTextColor(Color.parseColor("#EFEDED"));
+                  textViewZuixin.setTextColor(Color.parseColor("#EFEDED"));
+                  textViewChangshipin.setTextColor(Color.parseColor("#0E0E0E"));
                   textViewTuijian.setBackgroundResource(0);
                   textViewZuixin.setBackgroundResource(0);
                   break;
@@ -162,14 +172,16 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         View view = layoutManager.findViewByPosition(mCurrentPosition);
         ImageView ivLike=view.findViewById(R.id.iv_like);
         TextView tvLike=view.findViewById(R.id.tv_like);
-        tvLike.setText(shipinDianZan.getNum());
+//        tvLike.setText(shipinDianZan.getNum());
         //1表示已点赞；0表示未点赞或者取消点赞
-        String value=shipinDianZan.getIs();
-        if(value.equals("1")){
-            ivLike.setImageResource(R.drawable.iv_like_selected);
-        }else{
-            ivLike.setImageResource(R.drawable.iv_like_unselected);
-        }
+//        String value=shipinDianZan.getIs();
+//        if(value.equals("1")){
+//            ivLike.setImageResource(R.drawable.iv_like_selected);
+//        }else{
+//            ivLike.setImageResource(R.drawable.iv_like_unselected);
+//        }
+
+        //设置首页UI
     }
 
 
@@ -177,6 +189,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     @Override
     public void updateVideos(ArrayList<Video> videos) {
+        //设置视频
         lists.addAll(videos);
         if(flag.get()==true){
             tikTokAdapter = new TikTokAdapter(lists, AppUtils.getContext());
@@ -376,8 +389,19 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         mVideoView = new VideoView(AppUtils.getContext());
         //视频循环播放
         mVideoView.setLooping(true);
+//        boolean fullScreen = mVideoView.isFullScreen();
+//        if (!fullScreen){
+//            Log.e("---------","没有全屏");
+//            mVideoView.startFullScreen();
+//
+//
+//        }else {
+//            Log.e("---------","当前是全屏");
+//        }
         mTikTokController = new TikTokController(AppUtils.getContext());
+
         mVideoView.setVideoController(mTikTokController);
+        mVideoView.startFullScreen();
         /**
          * 推荐  最新  长视频
          */
@@ -451,32 +475,33 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         View itemView = recyclerView.getChildAt(0);
         //设置播放的url
         mVideoView.setUrl(vedio.getUrl());
+//        mVideoView.startFullScreen();
         //重要
         mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         //获取视频宽高,其中width: mVideoSize[0], height: mVideoSize[1]
-        int[] size= mVideoView.getVideoSize();
-        String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
-        Log.e("Android短视频1",value);
+//        int[] size= mVideoView.getVideoSize();
+//        String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
+//        Log.e("Android短视频1",value);
 
-        int[] screenWidthHeight=AppUtils.getScreenWidthHeight(AppUtils.getContext());
-        int value2=screenWidthHeight[0];
-        int value3=screenWidthHeight[0];
-        Log.e("Android短视频2",value2+"---"+value3);
+//        int[] screenWidthHeight=AppUtils.getScreenWidthHeight(AppUtils.getContext());
+//        int value2=screenWidthHeight[0];
+//        int value3=screenWidthHeight[0];
+//        Log.e("Android短视频2",value2+"---"+value3);
 
-        int width=AppUtils.getWindowWidth(AppUtils.getContext());
-        int height=AppUtils.getWindowHeigh(AppUtils.getContext());
-        Log.e("Android短视频3",width+"---"+height);
+//        int width=AppUtils.getWindowWidth(AppUtils.getContext());
+//        int height=AppUtils.getWindowHeigh(AppUtils.getContext());
+//        Log.e("Android短视频3",width+"---"+height);
 
         int screenWidth=AppUtils.getScreenWidth(getBindActivity());
         int screenHeight=AppUtils.getWindowHeigh(AppUtils.getContext());
-        Log.e("Android短视频4",screenWidth+"---"+screenHeight);
+//        Log.e("Android短视频4",screenWidth+"---"+screenHeight);
 
-        Log.e("11111111111","位置:"+position+"---"+vedio.getUrl());
+//        Log.e("11111111111","位置:"+position+"---"+vedio.getUrl());
 
         if(position==0||position==1||position==3||position==6||position==7){
             RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(
-                    RelativeLayout.LayoutParams.MATCH_PARENT,500);
-            params.setMargins(0, 400, 0, 0);
+                    screenWidth ,screenHeight);//RelativeLayout.LayoutParams.MATCH_PARENT 500
+            params.setMargins(0, 0, 0, 0);//top 400
             mVideoView.setLayoutParams(params);
             View view = layoutManager.findViewByPosition(position);	//为recyclerView中item位置
             view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.INVISIBLE);

@@ -30,6 +30,7 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:orientation="horizontal"
+            android:background="@drawable/titlebg"
             android:layout_marginTop="22dp"
             >
 
@@ -38,7 +39,7 @@
                 android:layout_width="60dp"
                 android:layout_height="29dp"
                 android:background="@drawable/button_shape1"
-                android:textColor="#3CB371"
+                android:textColor="#0E0E0E"
                 android:textSize="15sp"
                 android:gravity="center"
                 android:text="推荐"
@@ -48,8 +49,7 @@
                 android:id="@+id/zuixin"
                 android:layout_width="60dp"
                 android:layout_height="29dp"
-
-                android:textColor="#3CB371"
+                android:textColor="#EFEDED"
                 android:textSize="15sp"
                 android:gravity="center"
                 android:text="最新"
@@ -60,7 +60,7 @@
                 android:layout_width="60dp"
                 android:layout_height="29dp"
 
-                android:textColor="#3CB371"
+                android:textColor="#EFEDED"
                 android:textSize="15sp"
                 android:gravity="center"
                 android:text="长视频"
@@ -79,15 +79,7 @@
             android:tint="#f2f2f2"
             />
 
-      <ImageView
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_below="@id/search_icon"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
-        android:src="@mipmap/baoxiang"
 
-        />
 
 
 

@@ -15,16 +15,18 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.Video;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
+//播放视频适配
 public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolder> {
 
     private List<Video> videos;
     private Context context;
-    RotateAnimation rotateAnimation;
+    RotateAnimation rotateAnimation;//旋转动画
     public TikTokAdapter.OnItemClickListener mOnItemClickListerer;
 
     //为RecyclerView的Item添加监听
@@ -127,6 +129,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
      */
     @Override
     public void onBindViewHolder(final VideoHolder holder, int position) {
+
          Video video=videos.get(position);
         /** Fresco方式加载
          Uri uri = Uri.parse(video.getVideo_img());
@@ -220,6 +223,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         CircleImageView circleImageView;
         //关注按钮
         Button btn_attention;
+        VideoView videoView;
 
 
         VideoHolder(View itemView) {
@@ -239,6 +243,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
             btn_attention= itemView.findViewById(R.id.btn_attention);
             circleImageView =itemView.findViewById(R.id.circleImageView);
+            videoView=itemView.findViewById(R.id.videoView);
+
         }
     }
 }

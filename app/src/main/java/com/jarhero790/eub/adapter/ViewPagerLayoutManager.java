@@ -66,7 +66,7 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
     @Override
     public void onScrollStateChanged(int state) {
         switch (state) {
-            case RecyclerView.SCROLL_STATE_IDLE:
+            case RecyclerView.SCROLL_STATE_IDLE://RecyclerView当前没有滚动
                 View viewIdle = mPagerSnapHelper.findSnapView(this);
                 int positionIdle = getPosition(viewIdle);
                 if (mOnViewPagerListener != null && getChildCount() == 1) {
@@ -74,14 +74,14 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
                 }
                 //onNextPageImageListener.showNextImage(positionIdle+"--");
                 break;
-            case RecyclerView.SCROLL_STATE_DRAGGING:
+            case RecyclerView.SCROLL_STATE_DRAGGING://RecyclerView当前正被外部输入（如用户触摸输入）拖动
                 View viewDrag = mPagerSnapHelper.findSnapView(this);
                 int positionDrag = getPosition(viewDrag);
                // Toast.makeText(AppUtils.getContext(),positionDrag,Toast.LENGTH_LONG).show();
                 //String url=lists.get(positionDrag+1).getVideo_img();
 
                 break;
-            case RecyclerView.SCROLL_STATE_SETTLING:
+            case RecyclerView.SCROLL_STATE_SETTLING://RecyclerView当前正在将动画设置到最终位置，而不受外部控制。
                 View viewSettling = mPagerSnapHelper.findSnapView(this);
                 //int positionSettling = getPosition(viewSettling);
                 break;

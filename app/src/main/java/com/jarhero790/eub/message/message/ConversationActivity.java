@@ -55,6 +55,8 @@ public class ConversationActivity extends FragmentActivity implements NameContra
     private int latestMessageId=-1;
     private int count=10;
 
+    List<Message> messageList=new ArrayList<>();//保存所有聊天消息
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -91,37 +93,48 @@ public class ConversationActivity extends FragmentActivity implements NameContra
         Conversation.ConversationType conversationType = fragement.getConversationType();
         Log.e("---------2",conversationType.getName());
 
+        List<Message> checkedMessages = fragement.getCheckedMessages();
+        for (int i = 0; i < checkedMessages.size(); i++) {
+
+            Log.e("--------",checkedMessages.get(i).getContent().toString());
+        }
+
+
+
 
         //历史消息
-
-        //在会话界面中拿到当前页面的最后一条消息
-        RongIM.getInstance().getConversation(conversationType, targetId, new RongIMClient.ResultCallback<Conversation>() {
+        RongIMClient.getInstance().getConversation(conversationType, targetId, new RongIMClient.ResultCallback<Conversation>() {
             @Override
             public void onSuccess(Conversation conversation) {
-                latestMessageId = conversation.getLatestMessageId();
-                RongIMClient.getInstance().getHistoryMessages(conversationType, targetId, latestMessageId, count, new RongIMClient.ResultCallback<List<Message>>() {
-                    @Override
-                    public void onSuccess(List<Message> messages) {
-                                 Log.e("--------d",messages.size()+"");//1
-                        List<String> searchableWord=new ArrayList<>();
-                        for (int i = 0; i < messages.size(); i++) {
-                            MessageContent content = messages.get(i).getContent();
-                              searchableWord = content.getSearchableWord();
+                if (conversation!=null){
+                    int latestMessageId=   conversation.getLatestMessageId();
 
-                            Log.e("-----------a",messages.get(i).getObjectName());
-                            Log.e("-----------b",messages.get(i).getExtra());
+                    RongIMClient.getInstance().getHistoryMessages(conversationType, targetId, latestMessageId, count, new RongIMClient.ResultCallback<List<Message>>() {
+                        @Override
+                        public void onSuccess(List<Message> messages) {//消息有了，怎么保存
+                            messageList.addAll(messages);//添加消息
+                            Log.e("--------d0", messages.size() + "");//1
+                            List<String> searchableWord = new ArrayList<>();
+                            for (int i = 0; i < messages.size(); i++) {
+                                MessageContent content = messages.get(i).getContent();
+                                searchableWord = content.getSearchableWord();
+
+                                Log.e("-----------a0", messages.get(i).getObjectName());
+                                Log.e("-----------b0", messages.get(i).getExtra());
+                            }
+
+                            for (int i = 0; i < searchableWord.size(); i++) {
+                                Log.e("----------c0", searchableWord.get(i));
+                            }
                         }
 
-                        for (int i = 0; i < searchableWord.size(); i++) {
-                            Log.e("----------c",searchableWord.get(i));
+                        @Override
+                        public void onError(RongIMClient.ErrorCode errorCode) {
+
                         }
-                    }
+                    });
+                }
 
-                    @Override
-                    public void onError(RongIMClient.ErrorCode errorCode) {
-
-                    }
-                });
             }
 
             @Override
@@ -129,6 +142,47 @@ public class ConversationActivity extends FragmentActivity implements NameContra
 
             }
         });
+
+
+
+        //在会话界面中拿到当前页面的最后一条消息
+        RongIM.getInstance().getConversation(conversationType, targetId, new RongIMClient.ResultCallback<Conversation>() {
+                    @Override
+                    public void onSuccess(Conversation conversation) {
+                        if (conversation!=null){
+                            latestMessageId = conversation.getLatestMessageId();
+                            RongIMClient.getInstance().getHistoryMessages(conversationType, targetId, latestMessageId, count, new RongIMClient.ResultCallback<List<Message>>() {
+                                @Override
+                                public void onSuccess(List<Message> messages) {
+                                    Log.e("--------d", messages.size() + "");//1
+                                    List<String> searchableWord = new ArrayList<>();
+                                    for (int i = 0; i < messages.size(); i++) {
+                                        MessageContent content = messages.get(i).getContent();
+                                        searchableWord = content.getSearchableWord();
+
+                                        Log.e("-----------a", messages.get(i).getObjectName());
+                                        Log.e("-----------b", messages.get(i).getExtra());
+                                    }
+
+                                    for (int i = 0; i < searchableWord.size(); i++) {
+                                        Log.e("----------c", searchableWord.get(i));
+                                    }
+                                }
+
+                                @Override
+                                public void onError(RongIMClient.ErrorCode errorCode) {
+
+                                }
+                            });
+                        }
+
+
+                }
+
+            @Override
+            public void onError(RongIMClient.ErrorCode errorCode) {
+
+            }});
 
 
 
@@ -175,7 +229,7 @@ public class ConversationActivity extends FragmentActivity implements NameContra
             case R.id.menu_more:
                 Intent intent=new Intent(ConversationActivity.this,MoreActivity.class);
                 intent.putExtra("userid",userid);
-                intent.putExtra("username",username);
+                intent.putExtra("username",title);
                 intent.putExtra("userimg",userimg);
                 startActivity(intent);
                 break;
