@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
 import retrofit2.Call;
@@ -33,6 +35,10 @@ public class FragmentZuoping extends SupportFragment {
 
     RecyclerView rlv;
     Unbinder unbinder;
+    @BindView(R.id.nodingdan)
+    RelativeLayout nodingdan;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
     private View view;
     private static FragmentZuoping instance = null;
 
@@ -50,11 +56,10 @@ public class FragmentZuoping extends SupportFragment {
     }
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_zuoping, container, false);
-        rlv=view.findViewById(R.id.rlv);
+        rlv = view.findViewById(R.id.rlv);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -67,34 +72,60 @@ public class FragmentZuoping extends SupportFragment {
         initDate();
 
     }
-    CustomProgressDialog dialog=new CustomProgressDialog();
+
+    CustomProgressDialog dialog = new CustomProgressDialog();
+    Call<MyFaBuBean> calls = null;
+
     private void initDate() {
-        dialog.createLoadingDialog(getActivity(),"正在加载...");
+        dialog.createLoadingDialog(getActivity(), "正在加载...");
         dialog.show();
         RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
+                        calls = call;
                         if (response.isSuccessful()) {
                             dialog.dismiss();
-                            list = response.body().getData();
-                            GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
-                            rlv.setLayoutManager(manager);
-                            LinearItemDecoration linearItemDecoration=new LinearItemDecoration();
-                            linearItemDecoration.setSpanSpace(10);
-                            linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                            rlv.addItemDecoration(linearItemDecoration);
-                            adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
-                            rlv.setAdapter(adapter);
+                            if (response.body()!=null && response.body().getData()!=null){
+                                if (response.body().getData().size() > 0) {
+                                    list.clear();
+                                    rlv.setVisibility(View.VISIBLE);
+                                    nodingdan.setVisibility(View.GONE);
+                                    wangluoyichang.setVisibility(View.GONE);
+                                    list = response.body().getData();
+                                    GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
+                                    rlv.setLayoutManager(manager);
+                                    LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
+                                    linearItemDecoration.setSpanSpace(10);
+                                    linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+                                    rlv.addItemDecoration(linearItemDecoration);
+                                    adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
+                                    rlv.setAdapter(adapter);
+                                }else {
+                                    rlv.setVisibility(View.GONE);
+                                    nodingdan.setVisibility(View.VISIBLE);
+                                    wangluoyichang.setVisibility(View.GONE);
+                                }
+                            }else {
+                                rlv.setVisibility(View.GONE);
+                                nodingdan.setVisibility(View.VISIBLE);
+                                wangluoyichang.setVisibility(View.GONE);
+                            }
 
-                        }else {
+                        } else {
                             dialog.dismiss();
+                            rlv.setVisibility(View.GONE);
+                            nodingdan.setVisibility(View.GONE);
+                            wangluoyichang.setVisibility(View.VISIBLE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
                         dialog.dismiss();
+                        rlv.setVisibility(View.GONE);
+                        nodingdan.setVisibility(View.GONE);
+                        wangluoyichang.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -102,14 +133,14 @@ public class FragmentZuoping extends SupportFragment {
     ZuoPingAdapter.Myclick myclickdele = new ZuoPingAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------1",""+position);
+            Log.e("-------1", "" + position);
         }
     };
 
     ZuoPingAdapter.Myclick myclicktu = new ZuoPingAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------2",""+position);
+            Log.e("-------2", "" + position);
         }
     };
 
@@ -117,6 +148,20 @@ public class FragmentZuoping extends SupportFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.wangluoyichang)
+    public void onClick() {
+        initDate();
+
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (calls!=null){
+            calls.cancel();
+        }
     }
 }
 

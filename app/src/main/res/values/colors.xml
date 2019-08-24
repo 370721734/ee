@@ -205,6 +205,8 @@
 
 
 
+    <color name="guangpan">#10ffffff</color>
+    <color name="progressbar">#40ffffff</color>
 
 
 </resources>

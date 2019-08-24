@@ -127,8 +127,6 @@ public class FragmentLikeGeRen extends Fragment {
                                 nodingdan.setVisibility(View.VISIBLE);
                                 wangluoyichang.setVisibility(View.GONE);
                             }
-
-
                         } else {
                             dialog.dismiss();
                             rlv.setVisibility(View.GONE);

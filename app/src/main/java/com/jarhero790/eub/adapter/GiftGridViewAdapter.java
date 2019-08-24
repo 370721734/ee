@@ -1,26 +1,36 @@
 package com.jarhero790.eub.adapter;
 
-import android.net.Uri;
+import android.content.Context;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.Gift;
 import com.jarhero790.eub.utils.AppUtils;
+
 import java.util.ArrayList;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class GiftGridViewAdapter extends BaseAdapter {
 
     private ArrayList<Gift> giftList;
+    private Context context;
 
-    public GiftGridViewAdapter(ArrayList<Gift>  giftList ) {
+    public GiftGridViewAdapter(ArrayList<Gift> giftList, Context context) {
 
         this.giftList = giftList;
+        this.context = context;
     }
 
     @Override
@@ -45,32 +55,70 @@ public class GiftGridViewAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
-        Holder holder;
+        ViewHolder holder;
         if (convertView == null) {
-            holder = new Holder();
             convertView = LayoutInflater.from(AppUtils.getContext()).inflate(R.layout.gift_gridview_item, null);
-            holder.giftIcon = convertView.findViewById(R.id.gift_icon);
+            holder = new ViewHolder(convertView);
+
+//            holder.giftIcon = convertView.findViewById(R.id.gift_icon);
             //设置显示图片
-            holder.giftIcon.setImageURI(Uri.parse(Api.HOST+giftList.get(position).getImg()));
+//            holder.giftIcon.setImageURI(Uri.parse(Api.TU+giftList.get(position).getImg()));
+//            Glide.with(context).load(Api.GIFT + giftList.get(position).getImg()).apply(new RequestOptions().placeholder(R.mipmap.gift1)
+//                    .error(R.mipmap.gift1)).into(holder.giftIcon);
+//            Log.e("h",Api.TU+giftList.get(position).getImg());
+//            holder.giftName = convertView.findViewById(R.id.giftName);
+//            holder.giftName.setText(giftList.get(position).getName());
 
-            Log.e("h",Api.HOST+giftList.get(position).getImg());
-            holder.giftName = convertView.findViewById(R.id.giftName);
-            holder.giftName.setText(giftList.get(position).getName());
-
-            holder.giftJiaZhi = convertView.findViewById(R.id.giftJiaZhi);
-            holder.giftJiaZhi.setText(giftList.get(position).getMoney());
+//            holder.giftJiaZhi = convertView.findViewById(R.id.giftJiaZhi);
+//            holder.giftJiaZhi.setText(giftList.get(position).getMoney());
 
             convertView.setTag(holder);
         } else {
-            holder = (Holder) convertView.getTag();
+            holder = (ViewHolder) convertView.getTag();
         }
+        holder.bindView(giftList.get(position));
+
+        holder.framelayoutContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+                if (giftClick!=null){
+                    giftClick.onItemclick(view,position);
+                }
+            }
+        });
 
         return convertView;
     }
 
-    class Holder {
+    class ViewHolder {
+        @BindView(R.id.gift_icon)
         ImageView giftIcon;
+        @BindView(R.id.giftName)
         TextView giftName;
+        @BindView(R.id.giftJiaZhi)
         TextView giftJiaZhi;
+        @BindView(R.id.framelayout_container)
+        LinearLayout framelayoutContainer;
+
+        ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+        private void bindView(Gift gift){
+            Glide.with(context).load(Api.GIFT + gift.getImg()).apply(new RequestOptions().placeholder(R.mipmap.gift1)
+                    .error(R.mipmap.gift1)).into(giftIcon);
+            giftName.setText(gift.getName());
+            giftJiaZhi.setText(gift.getMoney());
+        }
+    }
+
+
+    public interface GiftClick{
+        void onItemclick(View view,int position);
+    }
+    private GiftClick giftClick;
+
+    public void setGiftClick(GiftClick giftClick) {
+        this.giftClick = giftClick;
     }
 }

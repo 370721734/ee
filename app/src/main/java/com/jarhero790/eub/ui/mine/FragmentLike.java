@@ -8,12 +8,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
-import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
@@ -26,6 +25,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
 import retrofit2.Call;
@@ -33,9 +33,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentLike extends SupportFragment {
-//    @BindView(R.id.rlv)
+    //    @BindView(R.id.rlv)
     RecyclerView rlv;
     Unbinder unbinder;
+    @BindView(R.id.nodingdan)
+    RelativeLayout nodingdan;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
     private View view;
 
     private static FragmentLike instance = null;
@@ -73,7 +77,7 @@ public class FragmentLike extends SupportFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mine_like, container, false);
-        rlv=view.findViewById(R.id.rlv);
+        rlv = view.findViewById(R.id.rlv);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -86,35 +90,52 @@ public class FragmentLike extends SupportFragment {
         initDate();
 
     }
-    CustomProgressDialog dialog=new CustomProgressDialog();
+
+    CustomProgressDialog dialog = new CustomProgressDialog();
+    retrofit2.Call<LikeBean> calls=null;
     private void initDate() {
-        dialog.createLoadingDialog(getActivity(),"正在加载...");
+        dialog.createLoadingDialog(getActivity(), "正在加载...");
         dialog.show();
         RetrofitManager.getInstance().getDataServer().zanvideo(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<LikeBean>() {
                     @Override
                     public void onResponse(Call<LikeBean> call, Response<LikeBean> response) {
+                        calls=call;
                         if (response.isSuccessful()) {
                             dialog.dismiss();
-                            likeBeans = response.body().getData();
-                            GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
-                            rlv.setLayoutManager(manager);
-                            LinearItemDecoration linearItemDecoration=new LinearItemDecoration();
-                            linearItemDecoration.setSpanSpace(10);
-                            linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                            rlv.addItemDecoration(linearItemDecoration);
-                            adapter = new LikeAdapter(getActivity(), likeBeans, myclickdele, myclicktu);
-                            rlv.setAdapter(adapter);
-
-                        }else {
+                            if (response.body().getData().size()>0){
+                                likeBeans.clear();
+                                rlv.setVisibility(View.VISIBLE);
+                                nodingdan.setVisibility(View.GONE);
+                                wangluoyichang.setVisibility(View.GONE);
+                                likeBeans = response.body().getData();
+                                GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
+                                rlv.setLayoutManager(manager);
+                                LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
+                                linearItemDecoration.setSpanSpace(10);
+                                linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+                                rlv.addItemDecoration(linearItemDecoration);
+                                adapter = new LikeAdapter(getActivity(), likeBeans, myclickdele, myclicktu);
+                                rlv.setAdapter(adapter);
+                            }else {
+                                rlv.setVisibility(View.GONE);
+                                nodingdan.setVisibility(View.VISIBLE);
+                                wangluoyichang.setVisibility(View.GONE);
+                            }
+                        } else {
                             dialog.dismiss();
+                            rlv.setVisibility(View.GONE);
+                            nodingdan.setVisibility(View.GONE);
+                            wangluoyichang.setVisibility(View.VISIBLE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<LikeBean> call, Throwable t) {
-                        Toast.makeText(getActivity(),"网络请求异常",Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
+                        rlv.setVisibility(View.GONE);
+                        nodingdan.setVisibility(View.GONE);
+                        wangluoyichang.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -137,5 +158,18 @@ public class FragmentLike extends SupportFragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick(R.id.wangluoyichang)
+    public void onClick() {
+        initDate();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (calls!=null){
+            calls.cancel();
+        }
     }
 }

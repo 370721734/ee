@@ -116,6 +116,7 @@ public class GeRenInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
 //        uid = intent.getIntExtra("userid", 5044);
         userid = intent.getStringExtra("userid");
+        Log.e("----------","eee"+userid);
 //        GeRenBean bean=intent.getParcelableExtra("bean");
 //        Log.e("---------1", bean.toString());
 //        if (getBean()!=null && getBean().getData()!=null && getBean().getCode() == 200) {
@@ -198,13 +199,14 @@ public class GeRenInfoActivity extends AppCompatActivity {
                     public void onResponse(Call<GeRenBean> call, Response<GeRenBean> response) {
                         if (response.isSuccessful()) {
                             dialog.dismiss();
-                            GeRenBean bean = response.body();
-                            Log.e("---------1", bean.toString());
-                            if (bean.getCode() == 200) {
+
+                            if (response.body().getCode() == 200) {
+                                GeRenBean bean = response.body();
+                                Log.e("---------1", bean.toString());
                                 if (bean.getData() != null && bean.getData().getUser() != null) {
-                                    Log.e("-----2", bean.getData().getFensi() + " " + bean.getData().getUser().getNickname());
-                                    Log.e("---------3", bean.getData().toString());
-                                    Log.e("-------4", bean.getData().getUser().toString());
+//                                    Log.e("-----2", bean.getData().getFensi() + " " + bean.getData().getUser().getNickname());
+//                                    Log.e("---------3", bean.getData().toString());
+//                                    Log.e("-------4", bean.getData().getUser().toString());
 
                                     textViewNickName.setText(bean.getData().getUser().getNickname());
                                     tvTvhao.setText("钻视TV号:" + bean.getData().getUser().getId());

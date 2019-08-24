@@ -6,6 +6,7 @@ import com.jarhero790.eub.bean.MessagesBean;
 import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.bean.VideoBean;
+import com.jarhero790.eub.message.bean.CurrVedoBean;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GeRenBean;
 import com.jarhero790.eub.message.bean.GiftBean;
@@ -32,6 +33,7 @@ public interface Api {
 //    public final static String HOST = "http://49.234.23.127/";
     public final static String HOST = "http://120.79.222.191/zstv/public/index.php/";
     public final static String TU = "http://120.79.222.191/zstv/public";
+    public final static String GIFT = "http://120.79.222.191/zstv/public/";
 
 
 
@@ -149,14 +151,18 @@ public interface Api {
     @POST("web/index/usercenter")
     Observable<ResponseBody> getuserinfo(@Field("token") String token);
 
-    //别，个人中心
+    //个人中心
     @FormUrlEncoded
     @POST("web/index/usercenter")
-    Call<GeRenBean> getgerenuserinfo(@Field("token") String token, @Field("uid") Integer uid);
+    Call<GeRenBean> getgerenuser(@Field("token") String token);
     //别，个人中心
     @FormUrlEncoded
     @POST("web/index/usercenter")
     Call<GeRenBean> getgerenuserinfos(@Field("token") String token, @Field("uid") String uid);
+    //别，个人中心
+    @FormUrlEncoded
+    @POST("web/index/usercenter")
+    Call<ResponseBody> getgerenss(@Field("token") String token, @Field("uid") String uid);
 
 
     //个人签到页面
@@ -192,6 +198,13 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/index")
     Call<GiftBean> mygift(@Field("token") String token);
+
+
+    //赠送礼物
+    @FormUrlEncoded
+    @POST("web/index/sendGift")
+    Call<CurrVedoBean> sendGift(@Field("token") String token, @Field("vid") String vid, @Field("gid") String gid);
+
 
     //我的点赞
     @FormUrlEncoded

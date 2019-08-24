@@ -3,6 +3,7 @@ package com.jarhero790.eub.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.Video;
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -144,13 +146,26 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
 
 
-//        holder.tv_content.setText(video.getTitle());//??
-        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
+        if (video.getTitle().length()>0){
+            holder.tv_content.setVisibility(View.VISIBLE);
+            holder.tv_content.setText(video.getTitle());
+        }else {
+            holder.tv_content.setVisibility(View.GONE);
+        }
+
+//        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
         holder.tv_uname.setText("@"+video.getNickname());
         //点赞数量
         holder.tv_like.setText(video.getZan());
         //评论数量
         holder.tv_pinglun.setText(video.getCommentNum());
+        //tou
+        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+        .error(R.mipmap.souye_logo)).into(holder.userimage);
+        //旋转图
+        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+//        Log.e("--------",Api.GIFT+video.getHeadimgurl());
         holder.circleImageView.startAnimation(rotateAnimation);
         onClick(holder, position);
     }
@@ -227,6 +242,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         //关注按钮
         Button btn_attention;
         VideoView videoView;
+        CircleImageView userimage;
+
 
 
         VideoHolder(View itemView) {
@@ -247,6 +264,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             btn_attention= itemView.findViewById(R.id.btn_attention);
             circleImageView =itemView.findViewById(R.id.circleImageView);
             videoView=itemView.findViewById(R.id.videoView);
+
+            userimage=itemView.findViewById(R.id.souye_logo);
 
         }
     }

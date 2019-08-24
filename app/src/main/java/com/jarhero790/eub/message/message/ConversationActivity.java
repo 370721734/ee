@@ -228,7 +228,7 @@ public class ConversationActivity extends FragmentActivity implements NameContra
                 break;
             case R.id.menu_more:
                 Intent intent=new Intent(ConversationActivity.this,MoreActivity.class);
-                intent.putExtra("userid",userid);
+                intent.putExtra("userid",mTargetId);
                 intent.putExtra("username",title);
                 intent.putExtra("userimg",userimg);
                 startActivity(intent);

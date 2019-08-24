@@ -9,12 +9,46 @@
     android:background="@drawable/gift_shape"
     >
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:gravity="center_vertical"
+        android:layout_height="30dp">
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前金币:"
+            android:textColor="#ff484747"
+            android:textSize="15sp"
+            />
+        <TextView
+            android:id="@+id/tv_gold_coin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:layout_toRightOf="@id/text"
+            android:textColor="#E92E70"
+            android:textSize="15sp"
+            />
+        
+        <ImageView
+            android:id="@+id/gift_exit"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/gift_exit"
+            android:layout_marginRight="@dimen/dp_10"
+            android:padding="6dp"
+            android:layout_alignParentRight="true"/>
+    </RelativeLayout>
+
     <GridView
         android:id="@+id/gridview"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:numColumns="auto_fit"
         android:columnWidth="80dp"
+        android:layout_marginTop="20dp"
         android:stretchMode="columnWidth"
         android:verticalSpacing="10dp"
         android:horizontalSpacing="10dp"

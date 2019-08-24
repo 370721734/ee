@@ -97,13 +97,15 @@ public class MoreActivity extends AppCompatActivity {
                     public void onResponse(Call<GeRenBean> call, Response<GeRenBean> response) {
                         if (response.isSuccessful()) {
                             dialog.dismiss();
-                             bean = response.body();
-                            Log.e("---------1", bean.toString());
-                            if (bean.getCode() == 200) {
+
+//                            Log.e("---------1", bean.toString());
+                            if (response.body().getCode() == 200) {
+
+                                bean = response.body();
                                 if (bean.getData() != null && bean.getData().getUser() != null) {
-                                    Log.e("-----2", bean.getData().getFensi() + " " + bean.getData().getUser().getNickname());
-                                    Log.e("---------3", bean.getData().toString());
-                                    Log.e("-------4", bean.getData().getUser().toString());
+//                                    Log.e("-----2", bean.getData().getFensi() + " " + bean.getData().getUser().getNickname());
+//                                    Log.e("---------3", bean.getData().toString());
+//                                    Log.e("-------4", bean.getData().getUser().toString());
 
 
                                     tvName.setText(bean.getData().getUser().getNickname());
@@ -138,6 +140,8 @@ public class MoreActivity extends AppCompatActivity {
                 break;
             case R.id.userinfo:
                 if (bean==null)
+                    return;
+                if (userid==null)
                     return;
                 EventBus.getDefault().post(bean.getData());
                 startActivity(new Intent(this, GeRenInfoActivity.class).putExtra("userid", userid).putExtra("bean",bean));

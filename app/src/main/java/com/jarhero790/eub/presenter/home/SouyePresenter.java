@@ -41,7 +41,7 @@ public class SouyePresenter extends SouyeContract.SouyePresenter {
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(Throwable throwable) throws Exception {
-                        Toast.makeText(getContext(),throwable.getMessage(),Toast.LENGTH_LONG).show();
+//                        Toast.makeText(getContext(),"服务繁忙",Toast.LENGTH_LONG).show();
                     }
                 }));
     }
