@@ -6,14 +6,15 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.GiftAdapter;
+import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GiftBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -42,6 +43,8 @@ public class GiftActivity extends AppCompatActivity {
     @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
     LinearLayoutManager manager;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,56 +52,89 @@ public class GiftActivity extends AppCompatActivity {
         setContentView(R.layout.activity_gift);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
-        manager=new LinearLayoutManager(this);
+        manager = new LinearLayoutManager(this);
         recyclerViewPinLen.setLayoutManager(manager);
 
         initDate();
     }
 
-    WaitPorgressDialog dialog;
+    CustomProgressDialog dialog = new CustomProgressDialog();
+    retrofit2.Call<GiftBean> calls=null;
 
     private void initDate() {
-        dialog = new WaitPorgressDialog(this);
-        dialog.isShowing();
+        dialog.createLoadingDialog(this, "正在加载...");
+        dialog.show();
 
         RetrofitManager.getInstance().getDataServer().mygift(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<GiftBean>() {
                     @Override
                     public void onResponse(Call<GiftBean> call, Response<GiftBean> response) {
-                        Log.e("-------","1:"+response.body().getCode());
+//                        Log.e("-------", "1:" + response.body().getCode());
+                        calls=call;
                         if (response.isSuccessful()) {
                             dialog.dismiss();
                             if (response.body().getCode() == 200) {
-                                Log.e("-------","1:"+response.body().getData().size());
+//                                Log.e("-------", "1:" + response.body().getData().size());
+                                giftBeanList.clear();
+                                nodingdan.setVisibility(View.GONE);
+                                wangluoyichang.setVisibility(View.GONE);
+                                recyclerViewPinLen.setVisibility(View.VISIBLE);
                                 giftBeanList = response.body().getData();
                                 giftAdapter = new GiftAdapter(GiftActivity.this, giftBeanList, myclick);
                                 recyclerViewPinLen.setAdapter(giftAdapter);
-                                LinearItemDecoration itemDecoration=new LinearItemDecoration();
+                                LinearItemDecoration itemDecoration = new LinearItemDecoration();
                                 itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
                                 recyclerViewPinLen.addItemDecoration(itemDecoration);
 
+                            }else {
+                                nodingdan.setVisibility(View.VISIBLE);
+                                wangluoyichang.setVisibility(View.GONE);
+                                recyclerViewPinLen.setVisibility(View.GONE);
                             }
 
                         } else {
                             dialog.dismiss();
+                            nodingdan.setVisibility(View.GONE);
+                            wangluoyichang.setVisibility(View.VISIBLE);
+                            recyclerViewPinLen.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GiftBean> call, Throwable t) {
                         dialog.dismiss();
+                        nodingdan.setVisibility(View.GONE);
+                        wangluoyichang.setVisibility(View.VISIBLE);
+                        recyclerViewPinLen.setVisibility(View.GONE);
                     }
                 });
     }
 
-    @OnClick(R.id.back)
-    public void onClick() {
-        finish();
-    }
-    GiftAdapter.Myclick myclick=new GiftAdapter.Myclick() {
+
+    GiftAdapter.Myclick myclick = new GiftAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
 
         }
     };
+
+    @OnClick({R.id.back, R.id.wangluoyichang})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.wangluoyichang:
+                initDate();
+                break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (calls!=null){
+            calls.cancel();
+        }
+    }
 }

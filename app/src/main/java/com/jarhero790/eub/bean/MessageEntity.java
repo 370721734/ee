@@ -3,6 +3,8 @@ package com.jarhero790.eub.bean;
 
 import com.chad.library.adapter.base.entity.MultiItemEntity;
 
+
+///没用
 public class MessageEntity implements MultiItemEntity {
 
     public static final int TYPE_SYSTEM = 1;

@@ -11,11 +11,13 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
@@ -31,7 +33,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FragmentLike extends SupportFragment {
-    @BindView(R.id.rlv)
+//    @BindView(R.id.rlv)
     RecyclerView rlv;
     Unbinder unbinder;
     private View view;
@@ -71,6 +73,7 @@ public class FragmentLike extends SupportFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mine_like, container, false);
+        rlv=view.findViewById(R.id.rlv);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -83,13 +86,16 @@ public class FragmentLike extends SupportFragment {
         initDate();
 
     }
-
+    CustomProgressDialog dialog=new CustomProgressDialog();
     private void initDate() {
+        dialog.createLoadingDialog(getActivity(),"正在加载...");
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().zanvideo(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<LikeBean>() {
                     @Override
                     public void onResponse(Call<LikeBean> call, Response<LikeBean> response) {
                         if (response.isSuccessful()) {
+                            dialog.dismiss();
                             likeBeans = response.body().getData();
                             GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
                             rlv.setLayoutManager(manager);
@@ -100,12 +106,15 @@ public class FragmentLike extends SupportFragment {
                             adapter = new LikeAdapter(getActivity(), likeBeans, myclickdele, myclicktu);
                             rlv.setAdapter(adapter);
 
+                        }else {
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<LikeBean> call, Throwable t) {
-
+                        Toast.makeText(getActivity(),"网络请求异常",Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
     }

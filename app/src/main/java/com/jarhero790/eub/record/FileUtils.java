@@ -614,7 +614,6 @@ public class FileUtils {
         try {
             fileSum = getMD5FromFile(filePath);
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         return ((file.length() == size) && checkSum.equals(fileSum));
@@ -690,7 +689,6 @@ public class FileUtils {
      */
     public static boolean fileRename(String fromName, String toName) {
         synchronized (gSyncCode) {
-            // TODO: 根据文件名判断是否属于同一挂载点
             File fromFile = new File(fromName);
             File toFile = new File(toName);
             if (!fromFile.exists()) {
@@ -738,7 +736,6 @@ public class FileUtils {
         try {
             digest = MessageDigest.getInstance("MD5");
         } catch (NoSuchAlgorithmException e1) {
-            // TODO Auto-generated catch block
             e1.printStackTrace();
             Log.e(TAG, new StringBuilder("NoSuchAlgorithmException: ").append(e1).toString());
         }
@@ -896,14 +893,12 @@ public class FileUtils {
 
             return result.toString();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } finally {
                     bufferedReader = null;
@@ -915,7 +910,6 @@ public class FileUtils {
                 try {
                     inputStreamReader.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } finally {
                     inputStreamReader = null;
@@ -964,14 +958,12 @@ public class FileUtils {
 
             return result.toString();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } finally {
             if (bufferedReader != null) {
                 try {
                     bufferedReader.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } finally {
                     bufferedReader = null;
@@ -983,7 +975,6 @@ public class FileUtils {
                 try {
                     inputStreamReader.close();
                 } catch (IOException e) {
-                    // TODO Auto-generated catch block
                     e.printStackTrace();
                 } finally {
                     inputStreamReader = null;

@@ -17,6 +17,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.jarhero790.eub.aop.logincore.LoginManger;
+import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.bean.Conver;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.jarhero790.eub.aop.annotation.LoginFilter;
@@ -27,6 +30,10 @@ import com.jarhero790.eub.ui.message.child.MessageFragment;
 import com.jarhero790.eub.ui.mine.child.MineFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFragment;
 import com.jarhero790.eub.utils.AppUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -78,6 +85,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     public static final int FOURTH = 3;
 
 
+    private String islogin="ddd";
     public String getSHA1Signature(Context context){
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
@@ -223,20 +231,33 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         //Log.e("签名",getSHA1Signature(AppUtils.getContext()));
+        EventBus.getDefault().register(this);
         setStatusBarTransparent();
         requestPermissions(this);
     }
 
 
+    @Subscribe(threadMode=ThreadMode.MAIN)
+    public void event(Conver bean){
+        Log.e("--------ksksk=>",bean.getName());
+        islogin=bean.getName();
+    }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, GlobalApplication.getContext());
         Log.e("---------","onDestroy");
+        if (EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        islogin="33333333";
+    }
 
     public void clickHome(){
         int[] widthHeight=AppUtils.getScreenWidthHeight(this);
@@ -250,7 +271,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 
 
 
-    @LoginFilter(loginDefine = 0)
+//    @LoginFilter(loginDefine = 0)
     public void clickAttention(){
         int[] widthHeight=AppUtils.getScreenWidthHeight(this);
         int screenHeight=widthHeight[1];
@@ -268,7 +289,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         showHideFragment(mFragments[SECOND]);
     }
 
-    @LoginFilter(loginDefine = 0)
+//    @LoginFilter(loginDefine = 0)
     public void clickMessage(){
         int[] widthHeight=AppUtils.getScreenWidthHeight(this);
         int screenHeight=widthHeight[1];
@@ -286,7 +307,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         showHideFragment(mFragments[THIRD]);
     }
 
-    @LoginFilter(loginDefine = 0)
+//    @LoginFilter(loginDefine = 0)
     public void clickMine(){
         int[] widthHeight=AppUtils.getScreenWidthHeight(this);
         int screenHeight=widthHeight[1];
@@ -314,17 +335,58 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
               clickHome();
               break;
           case R.id.attention:
-              clickAttention();
+
+              if (islogin.equals("ddd")){
+                  return;
+              }
+              if (islogin.equals("400")){
+                  Intent intent = new Intent(this, LoginNewActivity.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                  startActivity(intent);
+              }else {
+                  clickAttention();
+              }
+
               break;
           case R.id.record:
-              Intent intent=new Intent(MainActivity.this,TCVideoRecordActivity.class);
-              startActivity(intent);
+              if (islogin.equals("ddd")){
+                  return;
+              }
+              if (islogin.equals("400")){
+                  Intent intent = new Intent(this, LoginNewActivity.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                  startActivity(intent);
+              }else {
+                  Intent intent=new Intent(MainActivity.this,TCVideoRecordActivity.class);
+                  startActivity(intent);
+              }
+
               break;
           case R.id.message:
-              clickMessage();
+              if (islogin.equals("ddd")){
+                  return;
+              }
+              if (islogin.equals("400")){
+                  Intent intent = new Intent(this, LoginNewActivity.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                  startActivity(intent);
+              }else {
+                  clickMessage();
+              }
+
               break;
           case R.id.mine:
-              clickMine();
+              if (islogin.equals("ddd")){
+                  return;
+              }
+              if (islogin.equals("400")){
+                  Intent intent = new Intent(this, LoginNewActivity.class);
+                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
+                  startActivity(intent);
+              }else {
+                  clickMine();
+              }
+
               break;
        }
     }

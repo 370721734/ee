@@ -14,6 +14,7 @@ import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
@@ -66,13 +67,16 @@ public class FragmentZuoping extends SupportFragment {
         initDate();
 
     }
-
+    CustomProgressDialog dialog=new CustomProgressDialog();
     private void initDate() {
+        dialog.createLoadingDialog(getActivity(),"正在加载...");
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         if (response.isSuccessful()) {
+                            dialog.dismiss();
                             list = response.body().getData();
                             GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
                             rlv.setLayoutManager(manager);
@@ -83,12 +87,14 @@ public class FragmentZuoping extends SupportFragment {
                             adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
                             rlv.setAdapter(adapter);
 
+                        }else {
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
-
+                        dialog.dismiss();
                     }
                 });
     }

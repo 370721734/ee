@@ -82,7 +82,7 @@ public class GeRenInfoActivity extends AppCompatActivity {
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
 
-    private int uid;
+//    private int uid;
     private String userid;
 
     @Override
@@ -91,18 +91,17 @@ public class GeRenInfoActivity extends AppCompatActivity {
 //        initDate();
     }
 
-    CustomProgressDialog dialog=new CustomProgressDialog();
+    CustomProgressDialog dialog = new CustomProgressDialog();
 
-  private   GeRenBean.DataBean bean;
+    private GeRenBean.DataBean bean;
 
-    @Subscribe(sticky = true ,threadMode = ThreadMode.MAIN)
-    public void geren(GeRenBean.DataBean beans){
-        if (beans!=null){
+    @Subscribe(sticky = true, threadMode = ThreadMode.MAIN)
+    public void geren(GeRenBean.DataBean beans) {
+        if (beans != null) {
             setBean(beans);
 
-            Log.e("-----------","什么"+beans.getFensi());//有了
+            Log.e("-----------", "什么" + beans.getFensi());//有了
         }
-
 
 
     }
@@ -115,8 +114,8 @@ public class GeRenInfoActivity extends AppCompatActivity {
         EventBus.getDefault().register(this);
         ButterKnife.bind(this);
         Intent intent = getIntent();
-        uid = intent.getIntExtra("userid", 5044);
-        userid=intent.getStringExtra("userid");
+//        uid = intent.getIntExtra("userid", 5044);
+        userid = intent.getStringExtra("userid");
 //        GeRenBean bean=intent.getParcelableExtra("bean");
 //        Log.e("---------1", bean.toString());
 //        if (getBean()!=null && getBean().getData()!=null && getBean().getCode() == 200) {
@@ -136,8 +135,6 @@ public class GeRenInfoActivity extends AppCompatActivity {
 //                tvMemo.setText(getBean().getData().getUser().getSign());
 //            }
 //        }
-
-
 
 
         initDate(userid);
@@ -190,15 +187,10 @@ public class GeRenInfoActivity extends AppCompatActivity {
         });
 
 
-
-
-
-
-
     }
 
     private void initDate(String userid) {
-        dialog.createLoadingDialog(this,"正在加载...");
+        dialog.createLoadingDialog(this, "正在加载...");
         dialog.show();
         RetrofitManager.getInstance().getDataServer().getgerenuserinfos(SharePreferenceUtil.getToken(AppUtils.getContext()), userid)
                 .enqueue(new Callback<GeRenBean>() {
@@ -225,7 +217,7 @@ public class GeRenInfoActivity extends AppCompatActivity {
                                     tvMemo.setText(bean.getData().getUser().getSign());
                                 }
                             }
-                        }else {
+                        } else {
                             dialog.dismiss();
                         }
                     }
@@ -246,39 +238,34 @@ public class GeRenInfoActivity extends AppCompatActivity {
     public static void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
         Class<?> tabLayout = tabs.getClass();
         Field tabStrip = null;
-        try {
-            tabStrip = tabLayout.getDeclaredField("mTabStrip");
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        }
-
-        tabStrip.setAccessible(true);
         LinearLayout llTab = null;
-        try {
-            llTab = (LinearLayout) tabStrip.get(tabs);
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
-
         int left = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, leftDip, Resources.getSystem().getDisplayMetrics());
         int right = (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, rightDip, Resources.getSystem().getDisplayMetrics());
 
-        for (int i = 0; i < llTab.getChildCount(); i++) {
-            View child = llTab.getChildAt(i);
-            child.setPadding(0, 0, 0, 0);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
-            params.leftMargin = left;
-            params.rightMargin = right;
-            child.setLayoutParams(params);
-            child.invalidate();
+        try {
+            tabStrip = tabLayout.getDeclaredField("mTabStrip");
+            tabStrip.setAccessible(true);
+            llTab = (LinearLayout) tabStrip.get(tabs);
+            for (int i = 0; i < llTab.getChildCount(); i++) {
+                View child = llTab.getChildAt(i);
+                child.setPadding(0, 0, 0, 0);
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+                params.leftMargin = left;
+                params.rightMargin = right;
+                child.setLayoutParams(params);
+                child.invalidate();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
+
     }
 
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(!EventBus.getDefault().isRegistered(this)){
+        if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
     }

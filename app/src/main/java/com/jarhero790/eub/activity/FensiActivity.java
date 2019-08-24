@@ -22,13 +22,10 @@ import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
-
-import org.greenrobot.eventbus.EventBus;
-import org.greenrobot.eventbus.Subscribe;
-import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -52,6 +49,8 @@ public class FensiActivity extends Activity {
 
     @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
     private RecyclerView recyclerViewFensi;
 
     FeiSiAdapter feiSiAdapter;
@@ -105,37 +104,54 @@ public class FensiActivity extends Activity {
 
     }
 
+    CustomProgressDialog dialog = new CustomProgressDialog();
+    retrofit2.Call<FenSiTBean> calls=null;
+
     private void getfensitwo() {
+        dialog.createLoadingDialog(this, "正在加载...");
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().getfensi(SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new retrofit2.Callback<FenSiTBean>() {
             @Override
             public void onResponse(retrofit2.Call<FenSiTBean> call, retrofit2.Response<FenSiTBean> response) {
+                calls=call;
                 if (response.isSuccessful()) {
+                    dialog.dismiss();
                     int code = response.body().getCode();
-                    arrayList.clear();
                     if (code == 200) {
+                        arrayList.clear();
                         arrayList = response.body().getData();
 //                        Log.e("---------200", arrayList.get(0).getAddtime() + "");
                         if (arrayList.size() > 0) {
                             nodingdan.setVisibility(View.GONE);
+                            wangluoyichang.setVisibility(View.GONE);
                             recyclerViewFensi.setVisibility(View.VISIBLE);
                             GridLayoutManager manager = new GridLayoutManager(FensiActivity.this, 1);
                             recyclerViewFensi.setLayoutManager(manager);
                             LinearItemDecoration itemDecoration = new LinearItemDecoration();
                             recyclerViewFensi.addItemDecoration(itemDecoration);
-                            feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick,speak);
+                            feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick, touclick, speak);
                             recyclerViewFensi.setAdapter(feiSiAdapter);
                         } else {
                             nodingdan.setVisibility(View.VISIBLE);
+                            wangluoyichang.setVisibility(View.GONE);
                             recyclerViewFensi.setVisibility(View.GONE);
                         }
 
                     }
+                } else {
+                    dialog.dismiss();
+                    nodingdan.setVisibility(View.GONE);
+                    wangluoyichang.setVisibility(View.VISIBLE);
+                    recyclerViewFensi.setVisibility(View.GONE);
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<FenSiTBean> call, Throwable t) {
-
+                dialog.dismiss();
+                nodingdan.setVisibility(View.GONE);
+                wangluoyichang.setVisibility(View.VISIBLE);
+                recyclerViewFensi.setVisibility(View.GONE);
             }
         });
     }
@@ -185,7 +201,7 @@ public class FensiActivity extends Activity {
                         runOnUiThread(new Runnable() {
                             @Override
                             public void run() {
-                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick,touclick,speak);
+                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick, touclick, speak);
                                 recyclerViewFensi.setAdapter(feiSiAdapter);
                             }
                         });
@@ -215,22 +231,25 @@ public class FensiActivity extends Activity {
     FeiSiAdapter.Myclick touclick = new FeiSiAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-            Log.e("--------2", "" + position + "  " + arrayList.get(position).getUser_id());
-            Intent intent=new Intent(FensiActivity.this, GeRenInfoActivity.class);
-            intent.putExtra("userid",arrayList.get(position).getUser_id());
-            startActivity(intent);
+//            Log.e("--------2", "" + position + "  " + arrayList.get(position).getUser_id());
+            if (arrayList.get(position).getUser_id()>0){
+                Intent intent = new Intent(FensiActivity.this, GeRenInfoActivity.class);
+                intent.putExtra("userid", ""+arrayList.get(position).getUser_id()+"");
+                startActivity(intent);
+            }
+
 
         }
     };
     FeiSiAdapter.Myclick speak = new FeiSiAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-            Log.e("--------3", "" + position + "  " + arrayList.get(position).getUser_id()+"  "+arrayList.get(position).getNickname());
+            Log.e("--------3", "" + position + "  " + arrayList.get(position).getUser_id() + "  " + arrayList.get(position).getNickname());
 //            --------3: 0  5032  5032
             //1.判断是否互关
-            if (arrayList.get(position).getIs_likeEach()==1){
-                if (RongIM.getInstance()!=null){
-                    RongIM.getInstance().startPrivateChat(FensiActivity.this,arrayList.get(position).getRong_id()+"",arrayList.get(position).getNickname());
+            if (arrayList.get(position).getIs_likeEach() == 1) {
+                if (RongIM.getInstance() != null) {
+                    RongIM.getInstance().startPrivateChat(FensiActivity.this, arrayList.get(position).getRong_id() + "", arrayList.get(position).getNickname());
 
 
                     //不用了
@@ -240,8 +259,8 @@ public class FensiActivity extends Activity {
 //
 //                    }
                 }
-            }else {
-                Toast.makeText(FensiActivity.this,"要互相关注后才能聊天",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(FensiActivity.this, "要互相关注后才能聊天", Toast.LENGTH_SHORT).show();
             }
 
 
@@ -284,14 +303,30 @@ public class FensiActivity extends Activity {
         });
     }
 
-    @OnClick(R.id.back)
-    public void onClick() {
-        finish();
-    }
 
     private NameContract nameContract;
 
     public void setNameContract(NameContract nameContract) {
         this.nameContract = nameContract;
+    }
+
+    @OnClick({R.id.back, R.id.wangluoyichang})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.wangluoyichang:
+                getfensitwo();
+                break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (calls!=null){
+            calls.cancel();
+        }
     }
 }

@@ -30,7 +30,6 @@ public class VideoUtil {
     public static final String RES_PREFIX_HTTPS = "https://";
     public static final String[] GPU_GL_ONE_THREAD = new String[]{"PowerVR SGX 544MP", "Adreno (TM) 306"};
 
-    //TODO
     public static Context getContext() {
         return getContext();
     }

@@ -15,6 +15,7 @@ import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.message.adapter.GuangZuAdapter;
 import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -51,14 +52,16 @@ public class GuangZuActivity extends AppCompatActivity {
 
         initDate();
     }
-
+    CustomProgressDialog dialog=new CustomProgressDialog();
     private void initDate() {
-
+        dialog.createLoadingDialog(this,"正在加载...");
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().mylike(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<GuangZuBean>() {
                     @Override
                     public void onResponse(Call<GuangZuBean> call, Response<GuangZuBean> response) {
                         if (response.isSuccessful()) {
+                            dialog.dismiss();
                             if (response.body().getCode() == 200) {
                                 list = response.body().getData();
                                 if (list.size() > 0) {
@@ -75,12 +78,14 @@ public class GuangZuActivity extends AppCompatActivity {
 
                                 }
                             }
+                        }else {
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GuangZuBean> call, Throwable t) {
-
+                        dialog.dismiss();
                     }
                 });
     }

@@ -10,13 +10,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
 import com.jarhero790.eub.message.bean.LikeBean;
+import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
@@ -25,8 +28,8 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
-import me.yokeyword.fragmentation.SupportFragment;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,6 +38,10 @@ public class FragmentLikeGeRen extends Fragment {
     @BindView(R.id.rlv)
     RecyclerView rlv;
     Unbinder unbinder;
+    @BindView(R.id.nodingdan)
+    RelativeLayout nodingdan;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
     private View view;
 
     private static FragmentLikeGeRen instance = null;
@@ -56,10 +63,8 @@ public class FragmentLikeGeRen extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent=getActivity().getIntent();
-        uid = intent.getIntExtra("userid", 5044);
-        userid=intent.getStringExtra("userid");
-        Log.e("---------------uid",uid+"");
+        Intent intent = getActivity().getIntent();
+        userid = intent.getStringExtra("userid");
         initDate(userid);
     }
 
@@ -82,10 +87,8 @@ public class FragmentLikeGeRen extends Fragment {
     }
 
 
-
-
-    private  int uid;
     private String userid;
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -93,28 +96,53 @@ public class FragmentLikeGeRen extends Fragment {
 
     }
 
+    CustomProgressDialog dialog = new CustomProgressDialog();
+    retrofit2.Call<LikeBean> calls=null;
     private void initDate(String s) {
-        RetrofitManager.getInstance().getDataServer().zanvideoother(SharePreferenceUtil.getToken(AppUtils.getContext()),s)
+        dialog.createLoadingDialog(getActivity(), "正在加载...");
+        dialog.show();
+        RetrofitManager.getInstance().getDataServer().zanvideoother(SharePreferenceUtil.getToken(AppUtils.getContext()), s)
                 .enqueue(new Callback<LikeBean>() {
                     @Override
                     public void onResponse(Call<LikeBean> call, Response<LikeBean> response) {
+                        calls=call;
                         if (response.isSuccessful()) {
-                            likeBeans = response.body().getData();
-                            GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
-                            rlv.setLayoutManager(manager);
-                            LinearItemDecoration linearItemDecoration=new LinearItemDecoration();
-                            linearItemDecoration.setSpanSpace(10);
-                            linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                            rlv.addItemDecoration(linearItemDecoration);
-                            adapter = new LikeAdapter(getActivity(), likeBeans, myclickdele, myclicktu);
-                            rlv.setAdapter(adapter);
+                            dialog.dismiss();
+                            if (response.body().getData().size()>0){
+                                likeBeans.clear();
+                                rlv.setVisibility(View.VISIBLE);
+                                nodingdan.setVisibility(View.GONE);
+                                wangluoyichang.setVisibility(View.GONE);
+                                likeBeans = response.body().getData();
+                                GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
+                                rlv.setLayoutManager(manager);
+                                LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
+                                linearItemDecoration.setSpanSpace(10);
+                                linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+                                rlv.addItemDecoration(linearItemDecoration);
+                                adapter = new LikeAdapter(getActivity(), likeBeans, myclickdele, myclicktu);
+                                rlv.setAdapter(adapter);
+                            }else {
+                                rlv.setVisibility(View.GONE);
+                                nodingdan.setVisibility(View.VISIBLE);
+                                wangluoyichang.setVisibility(View.GONE);
+                            }
 
+
+                        } else {
+                            dialog.dismiss();
+                            rlv.setVisibility(View.GONE);
+                            nodingdan.setVisibility(View.GONE);
+                            wangluoyichang.setVisibility(View.VISIBLE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<LikeBean> call, Throwable t) {
-
+                        dialog.dismiss();
+                        rlv.setVisibility(View.GONE);
+                        nodingdan.setVisibility(View.GONE);
+                        wangluoyichang.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -137,5 +165,20 @@ public class FragmentLikeGeRen extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+
+    @OnClick(R.id.wangluoyichang)
+    public void onClick() {
+        if (userid!=null)
+            initDate(userid);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (calls!=null){
+            calls.cancel();
+        }
     }
 }

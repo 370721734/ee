@@ -17,6 +17,7 @@ import com.jarhero790.eub.bean.MessagesBean;
 import com.jarhero790.eub.message.adapter.SysMessageAdapter;
 import com.jarhero790.eub.message.bean.SysMessageBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -56,13 +57,16 @@ public class SysMessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         initDate();
     }
-
+    CustomProgressDialog dialog=new CustomProgressDialog();
     private void initDate() {
+        dialog.createLoadingDialog(this,"正在加载...");
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().getSysMessages(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<SysMessageBean>() {
                     @Override
                     public void onResponse(Call<SysMessageBean> call, Response<SysMessageBean> response) {
                         if (response.isSuccessful()) {
+                            dialog.dismiss();
                             if (response.body().getCode() == 200) {
                                 list.clear();
                                 Log.e("---------", response.toString());
@@ -89,12 +93,14 @@ public class SysMessageActivity extends AppCompatActivity {
 
 
                             }
+                        }else {
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<SysMessageBean> call, Throwable t) {
-
+                        dialog.dismiss();
                     }
                 });
     }

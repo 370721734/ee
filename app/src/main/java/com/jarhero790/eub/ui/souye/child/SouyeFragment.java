@@ -221,13 +221,23 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     @Override
     public void onPause() {
-        super.onPause();
         if(mVideoView!=null){
             mVideoView.pause();
         }
+        super.onPause();
+
         if(!EventBus.getDefault().isRegistered(this)){
             EventBus.getDefault().unregister(this);
         }
+    }
+
+    @Override
+    public void onStop() {
+        if (mVideoView!=null){
+            mVideoView.release();
+        }
+        super.onStop();
+
     }
 
 

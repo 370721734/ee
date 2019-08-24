@@ -12,6 +12,7 @@ import com.jarhero790.eub.bean.MessageSystem;
 import com.jarhero790.eub.utils.AppUtils;
 import java.util.List;
 
+//没用了，可以借鉴
 public class MessageAdapter extends BaseMultiItemQuickAdapter<MessageEntity, BaseViewHolder> {
 
     public MessageAdapter(List<MessageEntity> data) {

@@ -11,8 +11,10 @@ import android.widget.Toast;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.PinLAdapter;
+import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.MyPL;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -43,6 +45,8 @@ public class PinLenActivity extends AppCompatActivity {
     SmartRefreshLayout mSwipeLayout;
     @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
 
     private int page = 1;
 
@@ -79,16 +83,17 @@ public class PinLenActivity extends AppCompatActivity {
         });
     }
 
-    WaitPorgressDialog dialog;
+    CustomProgressDialog dialog = new CustomProgressDialog();
+    retrofit2.Call<MyPL> calls=null;
 
     private void initDate() {
-        dialog = new WaitPorgressDialog(this);
-        dialog.isShowing();
-
+        dialog.createLoadingDialog(this, "正在加载...");
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().mypinlen(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<MyPL>() {
                     @Override
                     public void onResponse(Call<MyPL> call, Response<MyPL> response) {
+                        calls=call;
                         if (response.isSuccessful()) {
                             dialog.dismiss();
 
@@ -96,12 +101,11 @@ public class PinLenActivity extends AppCompatActivity {
                                 mSwipeLayout.setVisibility(View.VISIBLE);
                                 recyclerViewPinLen.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
+                                wangluoyichang.setVisibility(View.GONE);
                                 itemlist.clear();
                                 MyPL.DataBean body = (MyPL.DataBean) response.body().getData();
                                 itemlist.add(body);
-
-                                Log.e("---------1", itemlist.size() + "");
-
+//                                Log.e("---------1", itemlist.size() + "");
                                 if (page == 1) {
                                     list.clear();
                                     list.addAll(itemlist);
@@ -115,6 +119,7 @@ public class PinLenActivity extends AppCompatActivity {
                                 if (page == 1) {
                                     recyclerViewPinLen.setVisibility(View.GONE);
                                     mSwipeLayout.setVisibility(View.GONE);
+                                    wangluoyichang.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
 
                                 } else {
@@ -122,23 +127,27 @@ public class PinLenActivity extends AppCompatActivity {
                                 }
                             }
 
-                        }else {
+                        } else {
                             dialog.dismiss();
+                            recyclerViewPinLen.setVisibility(View.GONE);
+                            mSwipeLayout.setVisibility(View.GONE);
+                            wangluoyichang.setVisibility(View.VISIBLE);
+                            nodingdan.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<MyPL> call, Throwable t) {
                         dialog.dismiss();
+                        recyclerViewPinLen.setVisibility(View.GONE);
+                        mSwipeLayout.setVisibility(View.GONE);
+                        wangluoyichang.setVisibility(View.VISIBLE);
+                        nodingdan.setVisibility(View.GONE);
                     }
                 });
 
     }
 
-    @OnClick(R.id.back)
-    public void onClick() {
-        finish();
-    }
 
     PinLAdapter.Myclick myclick = new PinLAdapter.Myclick() {
         @Override
@@ -146,4 +155,24 @@ public class PinLenActivity extends AppCompatActivity {
 
         }
     };
+
+    @OnClick({R.id.back, R.id.wangluoyichang})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.wangluoyichang:
+                initDate();
+                break;
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (calls!=null){
+            calls.cancel();
+        }
+    }
 }

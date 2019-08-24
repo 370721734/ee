@@ -14,10 +14,10 @@ import com.jarhero790.eub.message.adapter.ZanAdapter;
 import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
-import com.jarhero790.eub.widget.WaitPorgressDialog;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +41,8 @@ public class ZanActivity extends AppCompatActivity {
     LinearLayoutManager manager;
     @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,24 +55,26 @@ public class ZanActivity extends AppCompatActivity {
         initDate();
     }
 
-    WaitPorgressDialog dialog;
+    CustomProgressDialog dialog = new CustomProgressDialog();
 
     private void initDate() {
-        dialog = new WaitPorgressDialog(this);
-        dialog.isShowing();
+        dialog.createLoadingDialog(this, "正在加载...");
+        dialog.show();
 
         RetrofitManager.getInstance().getDataServer().myzan(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<ZanBean>() {
                     @Override
                     public void onResponse(Call<ZanBean> call, Response<ZanBean> response) {
-                        Log.e("-------", "1:" + response.body().getCode());
+//                        Log.e("-------", "1:" + response.body().getCode());
                         if (response.isSuccessful()) {
                             dialog.dismiss();
                             if (response.body().getCode() == 200) {
                                 if (response.body().getData().size() > 0) {
+                                    giftBeanList.clear();
                                     recyclerViewZan.setVisibility(View.VISIBLE);
                                     nodingdan.setVisibility(View.GONE);
-                                    Log.e("-------", "1:" + response.body().getData().size());
+                                    wangluoyichang.setVisibility(View.GONE);
+//                                    Log.e("-------", "1:" + response.body().getData().size());
                                     giftBeanList = response.body().getData();
                                     zanAdapter = new ZanAdapter(ZanActivity.this, giftBeanList, myclick);
                                     recyclerViewZan.setAdapter(zanAdapter);
@@ -79,6 +83,7 @@ public class ZanActivity extends AppCompatActivity {
                                     recyclerViewZan.addItemDecoration(itemDecoration);
                                 } else {
                                     recyclerViewZan.setVisibility(View.GONE);
+                                    wangluoyichang.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                 }
 
@@ -87,20 +92,22 @@ public class ZanActivity extends AppCompatActivity {
 
                         } else {
                             dialog.dismiss();
+                            nodingdan.setVisibility(View.GONE);
+                            wangluoyichang.setVisibility(View.VISIBLE);
+                            recyclerViewZan.setVisibility(View.GONE);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ZanBean> call, Throwable t) {
                         dialog.dismiss();
+                        nodingdan.setVisibility(View.GONE);
+                        wangluoyichang.setVisibility(View.VISIBLE);
+                        recyclerViewZan.setVisibility(View.GONE);
                     }
                 });
     }
 
-    @OnClick(R.id.back)
-    public void onClick() {
-        finish();
-    }
 
     ZanAdapter.Myclick myclick = new ZanAdapter.Myclick() {
         @Override
@@ -108,4 +115,16 @@ public class ZanActivity extends AppCompatActivity {
 
         }
     };
+
+    @OnClick({R.id.back, R.id.wangluoyichang})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.wangluoyichang:
+                initDate();
+                break;
+        }
+    }
 }

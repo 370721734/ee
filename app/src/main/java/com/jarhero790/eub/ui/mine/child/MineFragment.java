@@ -37,6 +37,7 @@ import com.jarhero790.eub.bean.User;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.contract.mine.MineMainContract;
 import com.jarhero790.eub.eventbus.MessageEventUser;
+import com.jarhero790.eub.message.bean.Conver;
 import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.bean.UserCen;
 import com.jarhero790.eub.message.message.ZanActivity;
@@ -272,9 +273,28 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             int code = object.getInteger("code");
             String msg = object.getString("msg");
             if (code == 400) {
-//                Log.e("---------555", "" + code);
+                Log.e("---------555", "" + code);
+                EventBus.getDefault().post(new Conver("400"));
                 //注意 登录成功之后  一定要写上这句代码
-                SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, AppUtils.getContext());
+//                SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, AppUtils.getContext());
+//                ILoginFilter abd=new ILoginFilter() {
+//                    @Override
+//                    public void login(Context applicationContext, int loginDefine) {
+//                        Log.e("---------login=>",loginDefine+"");
+//                    }
+//
+//                    @Override
+//                    public boolean isLogin(Context applicationContext) {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public void clearLoginStatus(Context applicationContext) {
+//                        SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, applicationContext);
+//                    }
+//                };
+//                LoginAssistant.getInstance().setILoginFilter(abd);
+
 //                Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
 
 //                ILoginFilter iLoginFilter = LoginAssistant.getInstance().getILoginFilter();
@@ -284,6 +304,8 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                iLoginFilter.login(mContext,0);
 
 
+            }else {
+                EventBus.getDefault().post(new Conver("200"));
             }
 
 
@@ -292,6 +314,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             app.setUserCen(userInfo);
             Log.e("qawe", userInfo.getData().getUser().getHeadimgurl());//有了
             if (code == 200) {
+
                 JSONObject jsonObject1 = object.getJSONObject("data");
                 String zan = jsonObject1.getString("zan");
                 String like = jsonObject1.getString("like");
@@ -470,14 +493,16 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 startActivity(intent);
                 break;
             case R.id.iv_edit:
-                Intent intent1 = new Intent(getActivity(), SettingActivity.class);
-                intent1.putExtra("name", app.getUserCen().getData().getUser().getNickname());
-                intent1.putExtra("sign", app.getUserCen().getData().getUser().getSign());
-                intent1.putExtra("sex", app.getUserCen().getData().getUser().getSex());
-                intent1.putExtra("heading", app.getUserCen().getData().getUser().getHeadimgurl());
-                intent1.putExtra("city", app.getUserCen().getData().getUser().getCity());
+                if (app.getUserCen().getData().getUser()!=null){
+                    Intent intent1 = new Intent(getActivity(), SettingActivity.class);
+                    intent1.putExtra("name", app.getUserCen().getData().getUser().getNickname());
+                    intent1.putExtra("sign", app.getUserCen().getData().getUser().getSign());
+                    intent1.putExtra("sex", app.getUserCen().getData().getUser().getSex());
+                    intent1.putExtra("heading", app.getUserCen().getData().getUser().getHeadimgurl());
+                    intent1.putExtra("city", app.getUserCen().getData().getUser().getCity());
+                    startActivity(intent1);
+                }
 
-                startActivity(intent1);
                 break;
 
             case R.id.myguanzu:

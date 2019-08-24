@@ -142,7 +142,10 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                 .into(holder.video_thumb);
 
         holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
-        holder.tv_content.setText(video.getTitle());
+
+
+//        holder.tv_content.setText(video.getTitle());//??
+        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
         holder.tv_uname.setText("@"+video.getNickname());
         //点赞数量
         holder.tv_like.setText(video.getZan());

@@ -33,11 +33,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.JsonBean;
 import com.jarhero790.eub.message.message.PrivateJiuBaoActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.GetJsonDataUtil;
@@ -745,13 +747,16 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }
-
+    CustomProgressDialog dialog=new CustomProgressDialog();
     private void editinfo(String sign, String nickname, String sex, String city, String headimg) {
+        dialog.createLoadingDialog(this,"正在加载...");
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().editinfo(SharePreferenceUtil.getToken(AppUtils.getContext()), sign, nickname, sex, city, headimg)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
+                            dialog.dismiss();
                             try {
                                 String json = response.body().string();
                                 Log.e("--------a=>", json);
@@ -768,12 +773,15 @@ public class SettingActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
+                        }else {
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-
+                        Toast.makeText(SettingActivity.this,"网络请求异常",Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
                     }
                 });
     }
