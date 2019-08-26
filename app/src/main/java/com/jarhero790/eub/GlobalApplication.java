@@ -13,15 +13,13 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.UserCen;
-import com.jarhero790.eub.message.bean.Userbean;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.tencent.ugc.TXUGCBase;
-import com.jarhero790.eub.activity.LoginActivity;
 import com.jarhero790.eub.aop.logincore.ILoginFilter;
 import com.jarhero790.eub.aop.logincore.LoginManger;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
+
 import io.rong.imkit.RongIM;
-import io.rong.imlib.IFwLogCallback;
 
 
 public class GlobalApplication extends Application {

@@ -1,6 +1,8 @@
 package com.jarhero790.eub.message.bean;
 
-public class Conver {
+
+
+public class Conver{
    private String name;
 
     public Conver(String name) {
@@ -14,4 +16,7 @@ public class Conver {
     public void setName(String name) {
         this.name = name;
     }
+
+
+
 }

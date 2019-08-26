@@ -88,7 +88,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     private AtomicBoolean flag = new AtomicBoolean(true);
 
 
-    private boolean isPrepared=false;
+//    private boolean isPrepared = true;
 
     private static SouyeFragment instance = null;
 
@@ -100,6 +100,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     }
 
 
+    private boolean isLook = true;//可见
 
     @Override
     public void onClick(View v) {
@@ -116,11 +117,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 cate.set(0);
                 page.set(1);
 //                //加载数据
-                if (lists.size()>0){
+                if (lists.size() > 0) {
                     lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
                 }
-                if (mVideoView.isPlaying()){
+                if (mVideoView.isPlaying()) {
                     mVideoView.release();
                 }
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
@@ -139,11 +140,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 cate.set(1);
                 page.set(1);
                 //加载数据
-                if (lists.size()>0){
+                if (lists.size() > 0) {
                     lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
                 }
-                if (mVideoView.isPlaying()){
+                if (mVideoView.isPlaying()) {
                     mVideoView.release();
                 }
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
@@ -161,11 +162,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 cate.set(2);
                 page.set(1);
                 //加载数据
-                if (lists.size()>0){
+                if (lists.size() > 0) {
                     lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
                 }
-                if (mVideoView.isPlaying()){
+                if (mVideoView.isPlaying()) {
                     mVideoView.release();
                 }
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
@@ -197,13 +198,13 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e("-----------","souye-onViewCreated");
+        Log.e("-----------", "souye-onViewCreated");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Log.e("-----------","souye-onActivityCreated");
+        Log.e("-----------", "souye-onActivityCreated");
     }
 
     @Override
@@ -250,10 +251,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @Override
     public void updateVideos(ArrayList<Video> videos) {
         //设置视频
-        Log.e("---------","有没有反应");
-//        if (lists.size()>0)
+        Log.e("---------", "有没有反应");
+
 //        lists.clear();
         lists.addAll(videos);
+
         if (flag.get() == true) {
             tikTokAdapter = new TikTokAdapter(lists, AppUtils.getContext());
             recyclerView.setLayoutManager(layoutManager);
@@ -262,11 +264,23 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             videosPageListenerOnListener();
             adapterSetOnItemClickListerer();
 
+//            startPlay(mCurrentPosition);
             tikTokAdapter.notifyDataSetChanged();
+            if (mCurrentPosition != 0)
+                startPlay(mCurrentPosition);//ok
+            Log.e("----------", "来了没有true");
         } else {
             //tikTokAdapter.notifyDataSetChanged();
+//            startPlay(mCurrentPosition);
             tikTokAdapter.notifyItemRangeInserted(lists.size() - 1, videos.size());
             //tikTokAdapter.notifyItemRangeChanged(lists.size()-1,videos.size());
+            Log.e("----------", "来了没有false");
+        }
+
+        if (lists.size() > 0) {
+            Log.e("-------size:", "" + lists.size());
+        } else {
+            Log.e("-------size:", "0");
         }
 
     }
@@ -286,7 +300,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         //可见的并且是初始化之后才加载
-        Log.e("----------","看看"+isVisibleToUser);
+        Log.e("----------", "看看" + isVisibleToUser);
         super.setUserVisibleHint(isVisibleToUser);
 
 //        if (isPrepared && isVisibleToUser) {
@@ -301,6 +315,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         if (mVideoView != null) {
             mVideoView.pause();
         }
+
         super.onPause();
         Log.e("-------", "souye-onPause");
         if (!EventBus.getDefault().isRegistered(this)) {
@@ -310,9 +325,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     @Override
     public void onStop() {
-        if (mVideoView != null) {
-            mVideoView.release();
-        }
+//        if (mVideoView != null) {
+//            mVideoView.release();
+//        }
         //在停止播放后，显示播放图标，点击播放图标继续播放
         super.onStop();
         Log.e("-------", "souye-onStop");
@@ -323,21 +338,32 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void onResume() {
         super.onResume();
         if (mVideoView != null) {
-            mVideoView.resume();
+            Log.e("---------islokk", "" + isLook());
+            if (isLook()) {
+                mVideoView.resume();
+                flag.set(true);
+            }
+//            if (mPresenter!=null)
+//            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+            Log.e("-------", "souye-onResume");
+        } else {
+            Log.e("-------", "souye-onResumeN");
         }
-        Log.e("-------", "souye-onResume");
+
     }
 
 
     @Override
     public void onDestroy() {
         super.onDestroy();
+        setLook(true);
         if (mVideoView != null) {
             mVideoView.release();
         }
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        Log.e("--------", "souye-ondestroy");
     }
 
 
@@ -347,22 +373,24 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         super.onHiddenChanged(hidden);
 //        Log.e("------------","切换333看看"+hidden);
         if (hidden) {
+            setLook(false);
             if (mVideoView != null) {
                 mVideoView.pause();
             }
             if (!EventBus.getDefault().isRegistered(this)) {
                 EventBus.getDefault().unregister(this);
             }
-        } else {
+        } else {//可见
+            setLook(true);
             if (mVideoView != null) {
                 mVideoView.resume();
-//                Log.e("----------1","是不是这里"+mCurrentPosition);
+                Log.e("----------1", "是不是这里" + mCurrentPosition);
                 startPlay(mCurrentPosition);
-            }else {
+            } else {
                 mVideoView = new VideoView(AppUtils.getContext());
                 mVideoView.resume();
                 startPlay(mCurrentPosition);
-//                Log.e("----------2","是不是这里");
+                Log.e("----------2", "是不是这里");
             }
         }
     }
@@ -387,6 +415,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     showGift();
                 } else if (type.equals("关注")) {
                     attention(lists.get(position).getUid(), SharePreferenceUtil.getToken(AppUtils.getContext()));
+                }else if (type.equals("红心")){
+                    Log.e("-------------","you");
                 }
             }
         });
@@ -536,7 +566,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     }
 
     private void startPlay(int position) {
-        if (lists==null || lists.size()==0)
+        if (lists == null || lists.size() == 0)
             return;
         Video vedio = lists.get(position);
         //EventBus.getDefault().post(position);
@@ -598,15 +628,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        }
 
 
-
-
-
         //开始播放视频
         mVideoView.start();
-        Log.e("---------max-",""+"  "+mVideoView.getDuration());
+        Log.e("---------max-", "" + "  " + mVideoView.getDuration());
         RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
         ViewParent parent = mVideoView.getParent();
-        Log.e("---------max-",""+"  "+mVideoView.getDuration());
+        Log.e("---------max-", "" + "  " + mVideoView.getDuration());
         if (parent instanceof RelativeLayout) {
             ((RelativeLayout) parent).removeView(mVideoView);
         }
@@ -630,44 +657,41 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
             @Override
             public void onPlayStateChanged(int playState) {
+
+//                isplay=mVideoView.isPlaying();
 //                Log.e("---Play",""+playState);
-                int[] size= mVideoView.getVideoSize();
+                int[] size = mVideoView.getVideoSize();
 //                String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
 //                Log.e("Android短视频6",value);
 //
 //                Log.e("-------------s------",""+size[1]);
                 //高度OK
-                if (size[1]<640){
+                if (size[1] < 640) {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT, 600);//RelativeLayout.LayoutParams.MATCH_PARENT 500
                     params.addRule(RelativeLayout.CENTER_VERTICAL);
                     params.setMargins(0, 0, 0, 0);//top 400
                     mVideoView.setLayoutParams(params);
                     View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
-                    if (view!=null)
-                    view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.INVISIBLE);
-                }else {
+                    if (view != null)
+                        view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.INVISIBLE);
+                } else {
                     RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
                             RelativeLayout.LayoutParams.MATCH_PARENT,
                             RelativeLayout.LayoutParams.MATCH_PARENT);
                     params.setMargins(0, 0, 0, 0);
                     mVideoView.setLayoutParams(params);
                     View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置
-                    if (view!=null)
-                    view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
+                    if (view != null)
+                        view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
                 }
-
-
-
-
-
-
 
 
                 //进度//ok
                 int duration = (int) mVideoView.getDuration();
-                Log.e("---------max-",""+duration+"  "+mVideoView.getDuration());
-                proPercent.setMax(duration);
+                Log.e("---------max-", "" + duration + "  " + mVideoView.getDuration());
+                if (proPercent != null)
+                    proPercent.setMax(duration);
 
 //                Message message=new Message();
 //                message.what=11;
@@ -675,16 +699,20 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        handler.sendMessageAtTime(message,500);
 
 
-                if (duration!=0){
+                if (duration != 0) {
                     new Thread() {
                         @Override
                         public void run() {
                             super.run();
 
-                            while (mVideoView.isPlaying()){
+                            if (mVideoView == null)
+                                return;
+
+                            while (mVideoView.isPlaying()) {
                                 int currentPosition = (int) mVideoView.getCurrentPosition();
-                                Log.e("-----pro",""+currentPosition+"  "+mVideoView.getCurrentPosition());
-                                proPercent.setProgress(currentPosition);
+//                                    Log.e("-----pro",""+currentPosition+"  "+mVideoView.getCurrentPosition());
+                                if (proPercent != null)
+                                    proPercent.setProgress(currentPosition);
                                 try {
                                     Thread.sleep(500);
                                 } catch (InterruptedException e) {
@@ -692,32 +720,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                                 }
                             }
 
+
                         }
                     }.start();
                 }
 
 
-
-
-
-
             }
         });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //        mVideoView.setOnClickListener(new View.OnClickListener() {
@@ -726,9 +736,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                Log.e("---------","点击了视频");
 //            }
 //        });
-
-
-
 
 
     }
@@ -747,23 +754,32 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         View rootView = super.onCreateView(inflater, container, savedInstanceState);
         unbinder = ButterKnife.bind(this, rootView);
         //已经初始化
-        isPrepared = true;
+//        isPrepared = true;
         return rootView;
     }
 
     @SuppressLint("HandlerLeak")
-    Handler handler=new Handler(){
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-           switch (msg.what){
-               case 11:
-                   int curr= (int) msg.obj;
-                   Log.e("-----pro11",""+curr+"  "+mVideoView.getCurrentPosition());
-                   proPercent.setProgress(curr);
-                   break;
-           }
+            switch (msg.what) {
+                case 11:
+                    int curr = (int) msg.obj;
+                    Log.e("-----pro11", "" + curr + "  " + mVideoView.getCurrentPosition());
+                    proPercent.setProgress(curr);
+                    break;
+            }
 
         }
     };
+
+
+    public boolean isLook() {
+        return isLook;
+    }
+
+    public void setLook(boolean look) {
+        isLook = look;
+    }
 }

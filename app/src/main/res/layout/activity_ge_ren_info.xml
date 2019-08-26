@@ -192,7 +192,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:layout_marginTop="@dimen/rc_dimen_size_18"
+                    android:layout_marginTop="18dp"
                     android:text=""
                     android:textColor="#fffefefe"
                     android:textSize="14sp"
@@ -201,7 +201,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:visibility="visible"
-                    android:layout_height="@dimen/rc_dimen_size_18" />
+                    android:layout_height="18dp" />
 
             </LinearLayout>
 

@@ -35,9 +35,7 @@ public class FragmentZuoping extends SupportFragment {
 
     RecyclerView rlv;
     Unbinder unbinder;
-    @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
-    @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
     private View view;
     private static FragmentZuoping instance = null;
@@ -61,6 +59,8 @@ public class FragmentZuoping extends SupportFragment {
         view = inflater.inflate(R.layout.fragment_zuoping, container, false);
         rlv = view.findViewById(R.id.rlv);
         unbinder = ButterKnife.bind(this, view);
+        nodingdan=view.findViewById(R.id.nodingdan);
+        wangluoyichang=view.findViewById(R.id.wangluoyichang);
         return view;
     }
 

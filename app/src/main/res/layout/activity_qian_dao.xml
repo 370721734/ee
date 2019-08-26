@@ -119,7 +119,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rc_dimen_size_5"
+                        android:layout_marginTop="5dp"
                         android:text="今天"
                         android:textColor="#fffca714"
                         android:textSize="9sp" />
@@ -141,7 +141,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rc_dimen_size_5"
+                        android:layout_marginTop="5dp"
                         android:text="2天"
                         android:textColor="#ff757575"
                         android:textSize="9sp" />
@@ -163,7 +163,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rc_dimen_size_5"
+                        android:layout_marginTop="5dp"
                         android:text="3天"
                         android:textColor="#ff757575"
                         android:textSize="9sp" />
@@ -185,7 +185,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rc_dimen_size_5"
+                        android:layout_marginTop="5dp"
                         android:text="4天"
                         android:textColor="#ff757575"
                         android:textSize="9sp" />
@@ -207,7 +207,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rc_dimen_size_5"
+                        android:layout_marginTop="5dp"
                         android:text="5天"
                         android:textColor="#ff757575"
                         android:textSize="9sp" />
@@ -229,7 +229,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rc_dimen_size_5"
+                        android:layout_marginTop="5dp"
                         android:text="6天"
                         android:textColor="#ff757575"
                         android:textSize="9sp" />
@@ -251,7 +251,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/rc_dimen_size_5"
+                        android:layout_marginTop="5dp"
                         android:text="7天"
                         android:textColor="#ff757575"
                         android:textSize="9sp" />
@@ -287,7 +287,7 @@
                 android:orientation="horizontal">
 
                 <View
-                    android:layout_width="@dimen/rc_dimen_size_3"
+                    android:layout_width="3dp"
                     android:layout_height="@dimen/sp_14"
                     android:layout_marginLeft="9dp"
                     android:layout_marginTop="15dp"
@@ -328,7 +328,7 @@
                     android:id="@+id/iv_icon"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_9"
+                    android:layout_marginLeft="9dp"
                     android:layout_toRightOf="@id/tv_pinglun_text"
                     android:src="@mipmap/zhangli_icon" />
 
@@ -355,8 +355,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_6"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/view"
                     android:text="0"
                     android:textColor="#fffa8c4b"
@@ -367,7 +367,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tvview_text"
                     android:text="/1"
                     android:textColor="#9E9D9D"
@@ -412,7 +412,7 @@
                     android:id="@+id/iv_icon2"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_9"
+                    android:layout_marginLeft="9dp"
                     android:layout_toRightOf="@id/tv_pinglun_text2"
                     android:src="@mipmap/zhangli_icon" />
 
@@ -439,8 +439,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text2"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_6"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/view2"
                     android:text="0"
                     android:textColor="#fffa8c4b"
@@ -451,7 +451,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text2"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tvview_text2"
                     android:text="/1"
                     android:textColor="#9E9D9D"
@@ -496,7 +496,7 @@
                     android:id="@+id/iv_icon3"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_9"
+                    android:layout_marginLeft="9dp"
                     android:layout_toRightOf="@id/tv_pinglun_text3"
                     android:src="@mipmap/zhangli_icon" />
 
@@ -523,8 +523,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text3"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_6"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/view3"
                     android:text="0"
                     android:textColor="#fffa8c4b"
@@ -535,7 +535,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text3"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tvview_text3"
                     android:text="/1"
                     android:textColor="#9E9D9D"
@@ -580,7 +580,7 @@
                     android:id="@+id/iv_icon4"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_9"
+                    android:layout_marginLeft="9dp"
                     android:layout_toRightOf="@id/tv_pinglun_text4"
                     android:src="@mipmap/zhangli_icon" />
 
@@ -607,8 +607,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text4"
-                    android:layout_marginLeft="@dimen/rc_dimen_size_6"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginLeft="6dp"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/view4"
                     android:text="0"
                     android:textColor="#fffa8c4b"
@@ -619,7 +619,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_pinglun_text4"
-                    android:layout_marginTop="@dimen/rc_dimen_size_5"
+                    android:layout_marginTop="5dp"
                     android:layout_toRightOf="@id/tvview_text4"
                     android:text="/1"
                     android:textColor="#9E9D9D"

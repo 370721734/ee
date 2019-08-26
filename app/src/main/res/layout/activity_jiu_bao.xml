@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/rc_dimen_size_5"
+            android:layout_marginLeft="5dp"
             android:src="@mipmap/back"/>
 
         <TextView

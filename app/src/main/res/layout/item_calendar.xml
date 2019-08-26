@@ -10,17 +10,17 @@
             android:layout_height="wrap_content"
             android:text="30"
             android:textColor="#ff353535"
-            android:layout_marginTop="@dimen/rc_dimen_size_5"
-            android:layout_marginBottom="@dimen/rc_dimen_size_5"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:textSize="15sp"
             />
         <ImageView
             android:id="@+id/iv_icon"
             android:visibility="gone"
-            android:layout_width="@dimen/rc_dimen_size_18"
-            android:layout_marginTop="@dimen/rc_dimen_size_5"
-            android:layout_marginBottom="@dimen/rc_dimen_size_5"
-            android:layout_height="@dimen/rc_dimen_size_18"
+            android:layout_width="18dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_height="18dp"
             android:src="@mipmap/selete_icon"/>
 
 

@@ -20,6 +20,8 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.Video;
+import com.jarhero790.eub.message.souye.GuanPanView;
+
 import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -165,8 +167,14 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         //旋转图
         Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
                 .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
         holder.circleImageView.startAnimation(rotateAnimation);
+
+
+//        holder.guanPanView.init();
+//        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
+//        holder.guanPanView.startAnimation(rotateAnimation);
         onClick(holder, position);
     }
 
@@ -216,6 +224,14 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                 mOnItemClickListerer.onItemClick(position, "关注", view, view, view);
             }
         });
+
+        //红心
+        holder.rlhead.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListerer.onItemClick(position, "红心", view, view, view);
+            }
+        });
     }
 
     @Override
@@ -244,6 +260,9 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         VideoView videoView;
         CircleImageView userimage;
 
+        GuanPanView guanPanView;
+        RelativeLayout rlhead;
+
 
 
         VideoHolder(View itemView) {
@@ -266,7 +285,9 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             videoView=itemView.findViewById(R.id.videoView);
 
             userimage=itemView.findViewById(R.id.souye_logo);
+            guanPanView=itemView.findViewById(R.id.guanpan);
 
+            rlhead=itemView.findViewById(R.id.rlhead);
         }
     }
 }

@@ -37,6 +37,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:id="@+id/rlhead"
         android:layout_marginBottom="50dp">
 
         <LinearLayout
@@ -122,34 +123,52 @@
                 android:src="@mipmap/icon_video_share" />
 
 
+
             <RelativeLayout
-                android:layout_width="wrap_content"
+                android:layout_width="70dp"
+                android:orientation="horizontal"
                 android:layout_height="wrap_content">
 
-                <com.jarhero790.eub.widget.Music
-                    android:id="@+id/m"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    app:musicimg="@mipmap/music1" />
-
-                <com.jarhero790.eub.widget.Music2
-                    android:id="@+id/m2"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    app:musicimg="@mipmap/music2" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/circleImageView"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
                     app:civ_border_width="5dp"
+                    android:visibility="visible"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
                     app:civ_circle_background_color="@color/guangpan"
                     android:layout_marginBottom="13dp"
                     android:src="@mipmap/music" />
+
+                <com.jarhero790.eub.widget.Music
+                    android:id="@+id/m"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="20dp"
+
+                    app:musicimg="@mipmap/music1" />
+
+                <com.jarhero790.eub.widget.Music2
+                    android:id="@+id/m2"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="30dp"
+                    app:musicimg="@mipmap/music2" />
+
+
+                <com.jarhero790.eub.message.souye.GuanPanView
+                    android:id="@+id/guanpan"
+                    android:layout_width="50dp"
+                    android:visibility="gone"
+                    android:layout_height="50dp" />
             </RelativeLayout>
 
 
         </LinearLayout>
+
+
 
         <RelativeLayout
             android:id="@+id/rl_user"
@@ -209,6 +228,7 @@
                 android:layout_marginBottom="@dimen/dp_10"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp" />
+
 
 
 

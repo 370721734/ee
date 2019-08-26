@@ -285,21 +285,21 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
                 .build();
         fragement.setUri(uri);
 
-        RongIMClient.getInstance().getConversationList(new RongIMClient.ResultCallback<List<Conversation>>() {
-            @Override
-            public void onSuccess(List<Conversation> conversations) {
-                Log.e("-----------------conf",conversations.size()+" ");
-
-                for (int i = 0; i < conversations.size(); i++) {
-                    conversations.get(i).getLatestMessageId();
-                }
-            }
-
-            @Override
-            public void onError(RongIMClient.ErrorCode errorCode) {
-
-            }
-        }, Conversation.ConversationType.PRIVATE);
+//        RongIMClient.getInstance().getConversationList(new RongIMClient.ResultCallback<List<Conversation>>() {
+//            @Override
+//            public void onSuccess(List<Conversation> conversations) {
+//                Log.e("-----------------conf",conversations.size()+" ");
+//
+//                for (int i = 0; i < conversations.size(); i++) {
+//                    conversations.get(i).getLatestMessageId();
+//                }
+//            }
+//
+//            @Override
+//            public void onError(RongIMClient.ErrorCode errorCode) {
+//
+//            }
+//        }, Conversation.ConversationType.PRIVATE);
 //        fragement.getConversationList(conversationType, new IHistoryDataResultCallback<List<Conversation>>() {
 //            @Override
 //            public void onResult(List<Conversation> conversations) {

@@ -30,10 +30,10 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface Api {
-//    public final static String HOST = "http://49.234.23.127/";
-    public final static String HOST = "http://120.79.222.191/zstv/public/index.php/";
-    public final static String TU = "http://120.79.222.191/zstv/public";
-    public final static String GIFT = "http://120.79.222.191/zstv/public/";
+    public final static String HOST = "http://www.51ayhd.com/zstv/public/index.php/";
+//    public final static String HOST = "http://120.79.222.191/zstv/public/index.php/";
+    public final static String TU = "http://www.51ayhd.com/zstv/public";
+    public final static String GIFT = "http://www.51ayhd.com/zstv/public/";
 
 
 

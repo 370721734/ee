@@ -38,8 +38,8 @@
         android:layout_width="15dp"
         android:layout_height="@dimen/sp_14"
         android:layout_alignParentBottom="true"
-        android:layout_marginLeft="@dimen/rc_dimen_size_5"
-        android:layout_marginBottom="@dimen/rc_dimen_size_7"
+        android:layout_marginLeft="5dp"
+        android:layout_marginBottom="7dp"
         android:src="@mipmap/my_xin" />
 
     <TextView
@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_4"
-        android:layout_marginBottom="@dimen/rc_dimen_size_7"
+        android:layout_marginBottom="7dp"
         android:layout_toRightOf="@id/iv_xin"
         android:text=""
         android:textColor="#ffffffff"
@@ -62,7 +62,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_4"
         android:layout_marginRight="@dimen/dp_10"
-        android:layout_marginBottom="@dimen/rc_dimen_size_7"
+        android:layout_marginBottom="7dp"
         android:text=""
         android:visibility="gone"
         android:textColor="#ffffffff"
@@ -73,7 +73,7 @@
         android:layout_height="@dimen/sp_14"
         android:visibility="gone"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/rc_dimen_size_7"
+        android:layout_marginBottom="7dp"
         android:layout_toLeftOf="@id/tv_go"
         android:src="@mipmap/my_go" />
 </RelativeLayout>
