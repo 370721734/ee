@@ -5,4 +5,9 @@
         <certificates src="system"/>
     </trust-anchors>
     </base-config>
+     <!--Android 9.0 上部分域名时使用 http -->
+    <domain-config cleartextTrafficPermitted="true">
+        <domain includeSubdomains="true">"http://120.79.222.191/zstv/public/index.php/"</domain>
+
+    </domain-config>
 </network-security-config>

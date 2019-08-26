@@ -385,8 +385,8 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
         call.enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("注册异常", e.getMessage());
-                Toast.makeText(QianDaoActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
+//                Log.e("注册异常", e.getMessage());
+//                Toast.makeText(QianDaoActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
             }
 
             @Override
