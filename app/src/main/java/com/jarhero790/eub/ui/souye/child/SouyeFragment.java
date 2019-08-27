@@ -8,10 +8,12 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -41,6 +43,7 @@ import com.jarhero790.eub.ui.souye.BottomGiftDialog;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
 import com.jarhero790.eub.ui.souye.BottomShareDialog;
 import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.LogUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -54,6 +57,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.rong.imlib.IFwLogCallback;
 
 //1.动画旋转问题
 //2分享，3.金币，4光盘，5进度
@@ -113,6 +117,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 textViewZuixin.setBackgroundResource(0);
                 textViewChangshipin.setBackgroundResource(0);
 
+                if (mVideoView.isPlaying()) {
+                    mVideoView.release();
+                }
 
                 cate.set(0);
                 page.set(1);
@@ -121,9 +128,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
                 }
-                if (mVideoView.isPlaying()) {
-                    mVideoView.release();
-                }
+
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("------1--",cate.get()+"");
@@ -250,6 +255,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     @Override
     public void updateVideos(ArrayList<Video> videos) {
+
         //设置视频
         Log.e("---------", "有没有反应");
 
@@ -264,24 +270,68 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             videosPageListenerOnListener();
             adapterSetOnItemClickListerer();
 
-//            startPlay(mCurrentPosition);
-            tikTokAdapter.notifyDataSetChanged();
+
             if (mCurrentPosition != 0)
                 startPlay(mCurrentPosition);//ok
             Log.e("----------", "来了没有true");
+
+            tikTokAdapter.notifyDataSetChanged();
         } else {
             //tikTokAdapter.notifyDataSetChanged();
 //            startPlay(mCurrentPosition);
+
             tikTokAdapter.notifyItemRangeInserted(lists.size() - 1, videos.size());
             //tikTokAdapter.notifyItemRangeChanged(lists.size()-1,videos.size());
             Log.e("----------", "来了没有false");
         }
 
-        if (lists.size() > 0) {
-            Log.e("-------size:", "" + lists.size());
-        } else {
-            Log.e("-------size:", "0");
-        }
+//        if (lists.size() > 0) {
+//            Log.e("-------size:", "" + lists.size());
+//        } else {
+//            Log.e("-------size:", "0");
+//        }
+
+
+
+
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+                Log.e("-------NEW-",newState+" ");
+                tikTokAdapter.setIsshow(false);
+//                if (newState==RecyclerView.SCROLL_STATE_IDLE){
+
+//                    tikTokAdapter.notifyItemChanged(mCurrentPosition);
+//                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+
+//                LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
+                int childCount = layoutManager.getChildCount();
+                Log.e("-------------","11-->"+childCount);////子数
+                int itemCount = layoutManager.getItemCount();// item总数
+                Log.e("-------------","22-->"+itemCount);
+                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+                //当前屏幕 首个 可见的 Item 的position
+                LogUtils.e("-------------当前屏幕 可见的 Item 个数:"+childCount+",Item总共的个:"+itemCount+",当前屏幕 首个 可见的 Item 的position"+firstVisibleItemPosition);
+
+                if (firstVisibleItemPosition!=mCurrentPosition){
+                    Log.e("-----------gg","1不同");
+
+                }
+
+                super.onScrolled(recyclerView, dx, dy);
+                Log.e("-------NEW-","dx>"+dx+" "+"dy>"+dy);
+
+
+            }
+        });
+
+
 
     }
 
@@ -417,6 +467,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     attention(lists.get(position).getUid(), SharePreferenceUtil.getToken(AppUtils.getContext()));
                 }else if (type.equals("红心")){
                     Log.e("-------------","you");
+                    if (mVideoView.isPlaying()){
+                        mVideoView.pause();
+                        tikTokAdapter.setIsshow(true);
+                    }else {
+                        mVideoView.resume();
+                        tikTokAdapter.setIsshow(false);
+                    }
+
                 }
             }
         });
@@ -443,6 +501,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 if (mCurrentPosition == position) return;
                 startPlay(position);
                 mCurrentPosition = position;
+//                Log.e("-----------gg","2222222222不同");
+                //ok
+                View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
+                if (view != null)
+                    view.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
             }
         }, lists);
 
@@ -653,12 +716,23 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                int[] size= mVideoView.getVideoSize();
 //                String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
 //                Log.e("Android短视频5",value);
+
+
             }
 
             @Override
             public void onPlayStateChanged(int playState) {
 
 //                isplay=mVideoView.isPlaying();
+//                if (mVideoView.isPlaying()){
+//                    tikTokAdapter.setIsshow(false);
+////                    tikTokAdapter.notifyItemChanged(mCurrentPosition);
+//                }else {
+//                    tikTokAdapter.setIsshow(true);
+////                    tikTokAdapter.notifyItemChanged(mCurrentPosition);
+//                }
+
+
 //                Log.e("---Play",""+playState);
                 int[] size = mVideoView.getVideoSize();
 //                String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
@@ -718,6 +792,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                                 } catch (InterruptedException e) {
                                     e.printStackTrace();
                                 }
+
+
                             }
 
 

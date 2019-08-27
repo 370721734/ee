@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
@@ -23,6 +24,7 @@ import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.message.souye.GuanPanView;
 
 import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 //播放视频适配
@@ -33,6 +35,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     RotateAnimation rotateAnimation;//旋转动画
     public TikTokAdapter.OnItemClickListener mOnItemClickListerer;
 
+    private boolean isshow = false;
+
     //为RecyclerView的Item添加监听
     public interface OnItemClickListener {
         void onItemClick(int position, String type, View view, View view1, View view2);
@@ -41,7 +45,6 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     public void setOnItemClickListerer(TikTokAdapter.OnItemClickListener listerer) {
         this.mOnItemClickListerer = listerer;
     }
-
 
 
     public TikTokAdapter(List<Video> videos, Context context) {
@@ -90,9 +93,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     /**
      * 获取显示类型，返回值可在onCreateViewHolder中拿到，以决定加载哪种ViewHolder
 
-     @Override
-     public int getItemViewType(int position) {
-        return super.getItemViewType(position);
+     @Override public int getItemViewType(int position) {
+     return super.getItemViewType(position);
      }
      */
 
@@ -103,29 +105,28 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public void onViewRecycled(@NonNull VideoHolder holder) {
         super.onViewRecycled(holder);
-        ImageView imageView1=holder.video_thumb;
-        ImageView imageView2=holder.iv_like;
-        ImageView imageView3=holder.iv_commit;
-        ImageView imageView4=holder.iv_share;
-        ImageView imageView5=holder.iv_gift;
+        ImageView imageView1 = holder.video_thumb;
+        ImageView imageView2 = holder.iv_like;
+        ImageView imageView3 = holder.iv_commit;
+        ImageView imageView4 = holder.iv_share;
+        ImageView imageView5 = holder.iv_gift;
 
-        if (imageView1!=null){
+        if (imageView1 != null) {
             Glide.with(context).clear(imageView1);
         }
-        if (imageView2!=null){
+        if (imageView2 != null) {
             Glide.with(context).clear(imageView2);
         }
-        if (imageView3!=null){
+        if (imageView3 != null) {
             Glide.with(context).clear(imageView3);
         }
-        if (imageView4!=null){
+        if (imageView4 != null) {
             Glide.with(context).clear(imageView4);
         }
-        if (imageView5!=null){
+        if (imageView5 != null) {
             Glide.with(context).clear(imageView5);
         }
     }
-
 
 
     /**
@@ -134,7 +135,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public void onBindViewHolder(final VideoHolder holder, int position) {
 
-         Video video=videos.get(position);
+        Log.e("------------------","??????"+position);
+        Video video = videos.get(position);
         /** Fresco方式加载
          Uri uri = Uri.parse(video.getVideo_img());
          holder.video_thumb.setImageURI(uri);
@@ -148,22 +150,22 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
 
 
-        if (video.getTitle().length()>0){
+        if (video.getTitle().length() > 0) {
             holder.tv_content.setVisibility(View.VISIBLE);
             holder.tv_content.setText(video.getTitle());
-        }else {
+        } else {
             holder.tv_content.setVisibility(View.GONE);
         }
 
 //        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
-        holder.tv_uname.setText("@"+video.getNickname());
+        holder.tv_uname.setText("@" + video.getNickname());
         //点赞数量
         holder.tv_like.setText(video.getZan());
         //评论数量
         holder.tv_pinglun.setText(video.getCommentNum());
         //tou
         Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-        .error(R.mipmap.souye_logo)).into(holder.userimage);
+                .error(R.mipmap.souye_logo)).into(holder.userimage);
         //旋转图
         Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
                 .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
@@ -172,16 +174,12 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.circleImageView.startAnimation(rotateAnimation);
 
 
+
 //        holder.guanPanView.init();
 //        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
 //        holder.guanPanView.startAnimation(rotateAnimation);
         onClick(holder, position);
     }
-
-
-
-
-
 
 
     private void onClick(VideoHolder holder, int position) {
@@ -225,11 +223,30 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             }
         });
 
-        //红心
+        //红心ok
         holder.rlhead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 mOnItemClickListerer.onItemClick(position, "红心", view, view, view);
+
+                if (isIsshow()) {
+                    holder.play_pause.setVisibility(View.VISIBLE);
+                } else {
+                    holder.play_pause.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        //ok
+        holder.play_pause.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListerer.onItemClick(position, "红心", view, view, view);
+                if (isIsshow()) {
+                    holder.play_pause.setVisibility(View.VISIBLE);
+                } else {
+                    holder.play_pause.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -240,7 +257,13 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     }
 
 
-
+    public static abstract class MyClcik implements View.OnClickListener{
+        public abstract void Onclck(View v,int pos);
+        @Override
+        public void onClick(View v) {
+            Onclck(v, (Integer) v.getTag());
+        }
+    }
 
 
     public class VideoHolder extends RecyclerView.ViewHolder {
@@ -262,32 +285,54 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         GuanPanView guanPanView;
         RelativeLayout rlhead;
-
+        ImageView play_pause;
 
 
         VideoHolder(View itemView) {
             super(itemView);
             video_thumb = itemView.findViewById(R.id.souye_page_video_thumb);
-            relativeLayout= itemView.findViewById(R.id.rl_all);
+            relativeLayout = itemView.findViewById(R.id.rl_all);
 
             iv_commit = itemView.findViewById(R.id.iv_commit);
-            iv_like= itemView.findViewById(R.id.iv_like);
-            iv_share= itemView.findViewById(R.id.iv_share);
+            iv_like = itemView.findViewById(R.id.iv_like);
+            iv_share = itemView.findViewById(R.id.iv_share);
             iv_gift = itemView.findViewById(R.id.iv_gift);
 
             tv_content = itemView.findViewById(R.id.tv_content);
             tv_uname = itemView.findViewById(R.id.tv_uname);
-            tv_like= itemView.findViewById(R.id.tv_like);
-            tv_pinglun= itemView.findViewById(R.id.tv_pinglun);
+            tv_like = itemView.findViewById(R.id.tv_like);
+            tv_pinglun = itemView.findViewById(R.id.tv_pinglun);
 
-            btn_attention= itemView.findViewById(R.id.btn_attention);
-            circleImageView =itemView.findViewById(R.id.circleImageView);
-            videoView=itemView.findViewById(R.id.videoView);
+            btn_attention = itemView.findViewById(R.id.btn_attention);
+            circleImageView = itemView.findViewById(R.id.circleImageView);
+            videoView = itemView.findViewById(R.id.videoView);
 
-            userimage=itemView.findViewById(R.id.souye_logo);
-            guanPanView=itemView.findViewById(R.id.guanpan);
+            userimage = itemView.findViewById(R.id.souye_logo);
+            guanPanView = itemView.findViewById(R.id.guanpan);
 
-            rlhead=itemView.findViewById(R.id.rlhead);
+            rlhead = itemView.findViewById(R.id.rlhead);
+            play_pause = itemView.findViewById(R.id.iv_play_pause);
         }
+    }
+
+
+    public boolean isIsshow() {
+        return isshow;
+    }
+
+    public void setIsshow(boolean isshow) {
+        this.isshow = isshow;
+
+    }
+
+
+    public interface OnItemCL {
+        void Cliek(View view, int pos);
+    }
+
+    private OnItemCL onItemCL;
+
+    public void setOnItemCL(OnItemCL onItemCL) {
+        this.onItemCL = onItemCL;
     }
 }

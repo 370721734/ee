@@ -364,6 +364,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
               break;
           case R.id.message:
               if (islogin.equals("ddd")){
+                  Log.e("-------------","ddd");
                   return;
               }
               if (islogin.equals("400")){
