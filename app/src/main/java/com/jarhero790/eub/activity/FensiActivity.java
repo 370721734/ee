@@ -128,6 +128,7 @@ public class FensiActivity extends Activity {
                             GridLayoutManager manager = new GridLayoutManager(FensiActivity.this, 1);
                             recyclerViewFensi.setLayoutManager(manager);
                             LinearItemDecoration itemDecoration = new LinearItemDecoration();
+                            itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
                             recyclerViewFensi.addItemDecoration(itemDecoration);
                             feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick, touclick, speak);
                             recyclerViewFensi.setAdapter(feiSiAdapter);

@@ -70,11 +70,12 @@
 
         <ImageView
             android:id="@+id/search_icon"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
+            android:layout_width="30dp"
+            android:layout_height="29dp"
+            android:padding="6dp"
             android:layout_alignParentLeft="true"
             android:layout_marginLeft="25dp"
-            android:layout_marginTop="29dp"
+            android:layout_marginTop="22dp"
             android:src="@mipmap/search_icon"
             android:tint="#f2f2f2"
             />

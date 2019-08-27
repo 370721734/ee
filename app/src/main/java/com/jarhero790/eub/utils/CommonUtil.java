@@ -14,6 +14,7 @@ import android.view.WindowInsets;
 import com.jarhero790.eub.GlobalApplication;
 
 import java.io.ByteArrayOutputStream;
+import java.text.DecimalFormat;
 
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
@@ -28,6 +29,21 @@ public class CommonUtil {
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         view.measure(widthMeasureSpec, heightMeasureSpec);
+    }
+
+    public static String showzannum(int s) {
+        if (s > 9999) {
+            try {
+                float b = Float.valueOf(s) / 10000f;
+                String format = new DecimalFormat("#.#").format(b);
+                return format+"w";
+            } catch (Exception e) {
+                return s+"";
+            }
+
+        } else {
+            return "" + s;
+        }
     }
 
 
@@ -69,46 +85,46 @@ public class CommonUtil {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
              */
-            RongIM.connect(token, new RongIMClient.ConnectCallback() {
-
-
-                /**
-                 * Token 错误，在线上环境下主要是因为 Token 已经过期，您需要向 App Server 重新请求一个新的
-                 * Token
-                 */
-                @Override
-                public void onTokenIncorrect() {
-                    Log.e("LoginActivity", "--onTokenIncorrect");
-                }
-
-                /**
-                 * 连接融云成功
-                 *
-                 * @param userid
-                 *            当前 token
-                 */
-                @Override
-                public void onSuccess(String userid) {
-//                    EBmessage eb = new EBmessage();
-//                    eb.setStatus(true);
-//                    eb.setMessage("success");
-//                    eb.setFrom("connect");
-//                    EventBus.getDefault().post(eb);
-                    Log.e("LoginActivity", "--onSuccess" + userid);
-                }
-
-
-                /**
-                 * 连接融云失败
-                 *
-                 * @param errorCode
-                 *            错误码，可到官网 查看错误码对应的注释
-                 */
-                @Override
-                public void onError(RongIMClient.ErrorCode errorCode) {
-                    Log.e("LoginActivity", "--onError" + errorCode.getMessage());
-                }
-            });
+//            RongIM.connect(token, new RongIMClient.ConnectCallback() {
+//
+//
+//                /**
+//                 * Token 错误，在线上环境下主要是因为 Token 已经过期，您需要向 App Server 重新请求一个新的
+//                 * Token
+//                 */
+//                @Override
+//                public void onTokenIncorrect() {
+//                    Log.e("LoginActivity", "--onTokenIncorrect");
+//                }
+//
+//                /**
+//                 * 连接融云成功
+//                 *
+//                 * @param userid
+//                 *            当前 token
+//                 */
+//                @Override
+//                public void onSuccess(String userid) {
+////                    EBmessage eb = new EBmessage();
+////                    eb.setStatus(true);
+////                    eb.setMessage("success");
+////                    eb.setFrom("connect");
+////                    EventBus.getDefault().post(eb);
+//                    Log.e("LoginActivity", "--onSuccess" + userid);
+//                }
+//
+//
+//                /**
+//                 * 连接融云失败
+//                 *
+//                 * @param errorCode
+//                 *            错误码，可到官网 查看错误码对应的注释
+//                 */
+//                @Override
+//                public void onError(RongIMClient.ErrorCode errorCode) {
+//                    Log.e("LoginActivity", "--onError" + errorCode.getMessage());
+//                }
+//            });
         }
 
 

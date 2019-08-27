@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/backgroudcolor"
+    tools:context=".message.souye.SearchResultActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="88dp"
+        android:background="@color/backgroudcolor"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/ivback"
+            android:layout_width="21dp"
+            android:layout_height="30dp"
+            android:layout_marginLeft="15dp"
+            android:padding="5dp"
+            android:src="@mipmap/btn_back_gray" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/serch_bg"
+            android:layout_marginLeft="19dp"
+            android:layout_marginRight="19dp"
+            android:layout_toLeftOf="@id/ivsearch"
+            android:layout_toRightOf="@id/ivback"
+            android:layout_height="37dp">
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="24dp"
+                android:src="@mipmap/search" />
+
+            <EditText
+                android:id="@+id/et_search"
+                android:layout_width="match_parent"
+                android:layout_height="37dp"
+                android:layout_marginLeft="19dp"
+                android:layout_marginRight="19dp"
+                android:background="@null"
+                android:gravity="center"
+                android:hint="输入用户名或标题"
+                android:text=""
+                android:textColor="#ff7c7c86"
+                android:textColorHint="#ff7c7c86"
+                android:textSize="15sp" />
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/ivsearch"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:padding="5dp"
+            android:src="@mipmap/search" />
+
+
+    </RelativeLayout>
+</LinearLayout>

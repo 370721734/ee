@@ -246,9 +246,9 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
      *
      * @param callback 获取会话列表的回调。
      */
-    public void getConversationList(final RongIMClient.ResultCallback<List<Conversation>> callback) {
-
-    }
+//    public void getConversationList(final RongIMClient.ResultCallback<List<Conversation>> callback) {
+//
+//    }
 
 //    private void rongyun() {
 //        RongIM.connect(rong_token, new RongIMClient.ConnectCallback() {

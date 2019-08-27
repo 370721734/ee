@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
-    <base-config cleartextTrafficPermitted="true" >
-    <trust-anchors>
-        <certificates src="system"/>
-    </trust-anchors>
-    </base-config>
+    <base-config cleartextTrafficPermitted="true" />
+    <!--<trust-anchors>-->
+        <!--<certificates src="system"/>-->
+    <!--</trust-anchors>-->
+    <!--</base-config>-->
      <!--Android 9.0 上部分域名时使用 http -->
-    <domain-config cleartextTrafficPermitted="true">
-        <domain includeSubdomains="true">"51ayhd.com"</domain>
+    <!--<domain-config cleartextTrafficPermitted="true">-->
+        <!--<domain includeSubdomains="true">"51ayhd.com"</domain>-->
 
-    </domain-config>
+    <!--</domain-config>-->
 </network-security-config>

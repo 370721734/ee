@@ -70,6 +70,7 @@ public class GlobalApplication extends Application {
         RongIM.init(this);
 
 
+
     }
 
 

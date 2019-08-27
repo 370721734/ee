@@ -21,10 +21,6 @@
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
-
-    <!---->
-    <!--android:resizeableActivity="true"-->
-
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
@@ -35,12 +31,16 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity android:name=".message.souye.SearchResultActivity"></activity>
+        <activity android:name=".message.souye.SearchActivity" />
         <activity
             android:name=".message.message.ConversationListActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data
                     android:host="com.jarhero790.eub"
                     android:pathPrefix="/conversationlist"
@@ -52,7 +52,9 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data
                     android:host="com.jarhero790.eub"
                     android:pathPrefix="/conversation/"

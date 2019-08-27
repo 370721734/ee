@@ -25,8 +25,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationFragment;
-import io.rong.imkit.fragment.IHistoryDataResultCallback;
-import io.rong.imkit.model.UIMessage;
 import io.rong.imkit.plugin.location.IUserInfoProvider;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;

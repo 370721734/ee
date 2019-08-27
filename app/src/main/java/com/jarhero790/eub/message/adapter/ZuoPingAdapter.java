@@ -14,6 +14,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.ZanBean;
+import com.jarhero790.eub.utils.CommonUtil;
 
 import java.text.DecimalFormat;
 import java.util.List;
@@ -47,8 +48,8 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
     public void onBindViewHolder(@NonNull ZuoPingAdapter.MyHolder holder, int position) {
         MyFaBuBean.DataBean bean = list.get(position);
         Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.video_deault).error(R.mipmap.video_deault)).into(holder.ivIcon);
-        holder.tvXin.setText(shownum(bean.getZan()));
-        holder.tvGo.setText(shownum(bean.getVisit_val()));
+        holder.tvXin.setText(CommonUtil.showzannum(bean.getZan()));
+        holder.tvGo.setText(CommonUtil.showzannum(bean.getVisit_val()));
 
 
         holder.rll.setTag(position);
@@ -59,20 +60,7 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
     }
 
 
-    private String shownum(int s) {
-        if (s > 9999) {
-            try {
-                float b = Float.valueOf(s) / 10000f;
-                String format = new DecimalFormat("#.#").format(b);
-                return format+"w";
-            } catch (Exception e) {
-               return s+"";
-            }
 
-        } else {
-            return "" + s;
-        }
-    }
 
     @Override
     public int getItemCount() {

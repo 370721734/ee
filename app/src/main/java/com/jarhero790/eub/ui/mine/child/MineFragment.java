@@ -332,6 +332,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
                 Log.e("----------token", userInfo.getData().getUser().getRong_token());
 
+
                 //连接融
                 connect(userInfo.getData().getUser().getRong_token(), getActivity());
                 RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
@@ -619,7 +620,12 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         if (context.getApplicationInfo().packageName.equals(GlobalApplication.getCurProcessName(context.getApplicationContext()))) {
             /**
              * IMKit SDK调用第二步,建立与服务器的连接
+             *
+             *
              */
+
+
+
             RongIM.connect(token, new RongIMClient.ConnectCallback() {
 
 

@@ -2,6 +2,7 @@ package com.jarhero790.eub.message.message;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
@@ -54,13 +55,16 @@ public class PinLenActivity extends AppCompatActivity {
     List<MyPL.DataBean> itemlist = new ArrayList<>();
     PinLAdapter pinLAdapter;
 
+    LinearLayoutManager manager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pin_len);
         CommonUtil.setStatusBarTransparent(this);
         ButterKnife.bind(this);
-
+        manager = new LinearLayoutManager(this);
+        recyclerViewPinLen.setLayoutManager(manager);
         initDate();
 
         mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {

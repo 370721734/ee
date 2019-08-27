@@ -16,6 +16,7 @@ import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.MyPL;
 import com.jarhero790.eub.message.bean.PinLenBean;
+import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.bean.SysMessageBean;
 import com.jarhero790.eub.message.bean.ZanBean;
 
@@ -273,6 +274,13 @@ public interface Api {
 
 
 
+
+
+
+    //搜索页面
+    @FormUrlEncoded
+    @POST("user/index/search")
+    Call<SearchBean> search(@Field("page") Integer page, @Field("token") String token);
 
 
 
