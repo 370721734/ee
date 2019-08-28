@@ -185,24 +185,24 @@
     <View
         android:layout_marginTop="15dp"
         android:layout_width="match_parent"
-        android:layout_height="0.5dp"
+        android:layout_height="0.2dp"
         android:background="#ffffff"
         />
 
 
-
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/recyclerViewMessage"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:background="#000000"
-        android:visibility="gone"
-        android:layout_height="match_parent"/>
+        android:orientation="vertical"
+        android:background="@color/backgroudcolor"
+        android:layout_height="match_parent">
+        <fragment
+            android:id="@+id/conversationlist"
+            android:name="io.rong.imkit.fragment.ConversationListFragment"
+            android:tag="ConversationListFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0px"
+            android:layout_weight="1" />
+    </LinearLayout>
 
-    <fragment
-        android:id="@+id/conversationlist"
-        android:name="io.rong.imkit.fragment.ConversationListFragment"
-        android:tag="ConversationListFragment"
-        android:layout_width="match_parent"
-        android:layout_height="0px"
-        android:layout_weight="1" />
+
 </LinearLayout>

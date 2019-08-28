@@ -59,7 +59,7 @@ public class RetrofitManager {
         this.context=context;
         Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
         retrofit=new Retrofit.Builder()
-                .baseUrl(SERVER_ADDRESS)
+                .baseUrl(Api.HOST)
                 .client(okHttpClient)
 //                .client(new OkHttpClient.Builder().addInterceptor(new MyInterceptor()).build())
                 .addConverterFactory(GsonConverterFactory.create(gson))

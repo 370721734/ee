@@ -62,7 +62,7 @@ import butterknife.Unbinder;
 import io.rong.imlib.IFwLogCallback;
 
 //1.动画旋转问题
-//2分享，3.金币，4光盘，5进度
+//2分享，3.金币，4光盘，
 public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePresenter>
         implements SouyeContract.ISouyeView, View.OnClickListener, ViewPagerLayoutManager.OnNextPageImageListener {
 
@@ -266,6 +266,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
         //设置视频
         Log.e("---------", "有没有反应");
+
 
 //        lists.clear();
         lists.addAll(videos);
@@ -598,6 +599,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     public void showPingLun() {
         BottomPingLunDialog bottomPingLunDialog = BottomPingLunDialog.newInstance();
+        bottomPingLunDialog.setCuposition(lists.get(mCurrentPosition).getVideo_id());
         bottomPingLunDialog.show(getChildFragmentManager(), "pinglun");
     }
 

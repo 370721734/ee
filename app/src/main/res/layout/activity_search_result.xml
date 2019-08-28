@@ -4,33 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/backgroudcolor"
+    android:orientation="vertical"
     tools:context=".message.souye.SearchResultActivity">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="88dp"
-        android:background="@color/backgroudcolor"
-        android:gravity="center_vertical">
+        android:background="@color/backgroudcolor">
 
         <ImageView
             android:id="@+id/ivback"
             android:layout_width="21dp"
             android:layout_height="30dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
             android:padding="5dp"
             android:src="@mipmap/btn_back_gray" />
 
+
+        <TextView
+            android:id="@+id/tv_cancel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="16dp"
+            android:text="取消"
+            android:textColor="#ff9da0a6"
+            android:textSize="15sp" />
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:orientation="horizontal"
-            android:background="@drawable/serch_bg"
+            android:layout_height="37dp"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="19dp"
             android:layout_marginRight="19dp"
-            android:layout_toLeftOf="@id/ivsearch"
+            android:layout_toLeftOf="@id/tv_cancel"
             android:layout_toRightOf="@id/ivback"
-            android:layout_height="37dp">
+            android:background="@drawable/serch_bg"
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="16dp"
@@ -55,16 +68,117 @@
 
         </LinearLayout>
 
-
-        <ImageView
-            android:id="@+id/ivsearch"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:padding="5dp"
-            android:src="@mipmap/search" />
-
-
     </RelativeLayout>
+
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/m_swipe_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible">
+
+        <com.scwang.smartrefresh.layout.header.ClassicsHeader
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="15dp"
+                    android:text="用户"
+                    android:textColor="#ff5c5f68"
+                    android:textSize="13sp" />
+
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="51dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="20dp">
+
+                    <de.hdodenhof.circleimageview.CircleImageView
+                        android:id="@+id/iv_image"
+                        android:layout_width="51dp"
+                        android:layout_height="51dp"
+                        android:src="@mipmap/logo" />
+
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@id/iv_image"
+                        android:text="钻视tv"
+                        android:textColor="#ffffffff"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:id="@+id/tv_memo"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_name"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_toRightOf="@id/iv_image"
+                        android:text="粉丝：999"
+                        android:textColor="#ffa5a4a4"
+                        android:textSize="12sp" />
+
+
+                    <TextView
+                        android:id="@+id/tv_guanzu"
+                        android:layout_width="75dp"
+                        android:layout_height="28dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginRight="15dp"
+                        android:background="@drawable/guanzu"
+                        android:gravity="center"
+                        android:text="关注"
+                        android:textColor="#ffffffff"
+                        android:textSize="13sp" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginTop="20dp"
+                    android:layout_marginRight="15dp"
+                    android:background="#7D7D7D" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginTop="25dp"
+                    android:layout_marginRight="15dp">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/rlv"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </android.support.v7.widget.RecyclerView>
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+
+        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:srlClassicsSpinnerStyle="Translate" />
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+
 </LinearLayout>

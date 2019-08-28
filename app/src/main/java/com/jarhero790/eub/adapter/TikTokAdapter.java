@@ -316,6 +316,11 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     }
 
 
+    public void setVideos(List<Video> videos) {
+        this.videos = videos;
+        notifyDataSetChanged();
+    }
+
     public boolean isIsshow() {
         return isshow;
     }

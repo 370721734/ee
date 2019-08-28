@@ -54,7 +54,9 @@ public class GiftActivity extends AppCompatActivity {
         CommonUtil.setStatusBarTransparent(this);
         manager = new LinearLayoutManager(this);
         recyclerViewPinLen.setLayoutManager(manager);
-
+        LinearItemDecoration itemDecoration = new LinearItemDecoration();
+        itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+        recyclerViewPinLen.addItemDecoration(itemDecoration);
         initDate();
     }
 
@@ -65,38 +67,35 @@ public class GiftActivity extends AppCompatActivity {
         dialog.createLoadingDialog(this, "正在加载...");
         dialog.show();
 
-        RetrofitManager.getInstance().getDataServer().mygift(SharePreferenceUtil.getToken(AppUtils.getContext()))
+        RetrofitManager.getInstance().getDataServer().getmygift(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<GiftBean>() {
                     @Override
                     public void onResponse(Call<GiftBean> call, Response<GiftBean> response) {
-//                        Log.e("-------", "1:" + response.body().getCode());
+                        Log.e("-------55", "1:" + response.body().getCode());
                         calls=call;
                         if (response.isSuccessful()) {
                             dialog.dismiss();
-                            if (response.body().getCode() == 200) {
-//                                Log.e("-------", "1:" + response.body().getData().size());
+                            if (response.body()!=null && response.body().getData().size()>0) {
+                                Log.e("-------55", "1:" + response.body().getData().size());
                                 giftBeanList.clear();
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
-                                recyclerViewPinLen.setVisibility(View.VISIBLE);
+                                mSwipeLayout.setVisibility(View.VISIBLE);
                                 giftBeanList = response.body().getData();
                                 giftAdapter = new GiftAdapter(GiftActivity.this, giftBeanList, myclick);
                                 recyclerViewPinLen.setAdapter(giftAdapter);
-                                LinearItemDecoration itemDecoration = new LinearItemDecoration();
-                                itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                                recyclerViewPinLen.addItemDecoration(itemDecoration);
 
                             }else {
                                 nodingdan.setVisibility(View.VISIBLE);
                                 wangluoyichang.setVisibility(View.GONE);
-                                recyclerViewPinLen.setVisibility(View.GONE);
+                                mSwipeLayout.setVisibility(View.GONE);
                             }
 
                         } else {
                             dialog.dismiss();
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
-                            recyclerViewPinLen.setVisibility(View.GONE);
+                            mSwipeLayout.setVisibility(View.GONE);
                         }
                     }
 
@@ -105,7 +104,7 @@ public class GiftActivity extends AppCompatActivity {
                         dialog.dismiss();
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
-                        recyclerViewPinLen.setVisibility(View.GONE);
+                        mSwipeLayout.setVisibility(View.GONE);
                     }
                 });
     }

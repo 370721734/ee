@@ -15,8 +15,10 @@ import com.jarhero790.eub.message.bean.JiangLiBean;
 import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.MyPL;
+import com.jarhero790.eub.message.bean.OtherPingLBean;
 import com.jarhero790.eub.message.bean.PinLenBean;
 import com.jarhero790.eub.message.bean.SearchBean;
+import com.jarhero790.eub.message.bean.SearchResultBean;
 import com.jarhero790.eub.message.bean.SysMessageBean;
 import com.jarhero790.eub.message.bean.ZanBean;
 
@@ -137,7 +139,7 @@ public interface Api {
     //短信接口
     @FormUrlEncoded
     @POST("user/login/send_sms")
-    Observable<ResponseBody> getsms(@Field("mobile") String mobile);
+    Call<ResponseBody> getsms(@Field("mobile") String mobile);
 
 
     //短信登陆
@@ -195,10 +197,15 @@ public interface Api {
 
 
 
-    //我的礼物列表
+    //礼物列表  注意
     @FormUrlEncoded
     @POST("web/index/index")
     Call<GiftBean> mygift(@Field("token") String token);
+
+    //我的礼物  注意
+    @FormUrlEncoded
+    @POST("web/index/mygift")
+    Call<GiftBean> getmygift(@Field("token") String token);
 
 
     //赠送礼物
@@ -283,9 +290,18 @@ public interface Api {
     Call<SearchBean> search(@Field("page") Integer page, @Field("token") String token);
 
 
+    //搜索用户
+    @FormUrlEncoded
+    @POST("user/index/dosearch")
+    Call<SearchResultBean> dosearch(@Field("keywords") String keywords, @Field("page") Integer page, @Field("token") String token);
+
+
+
+
+
 
     //获取评论
     @FormUrlEncoded
     @POST("web/index/getComment")
-    Call<ResponseBody> getpinlen(@Field("page") Integer page, @Field("vid") String v, @Field("token") String token);
+    Call<OtherPingLBean> getotherpinlen(@Field("page") Integer page, @Field("vid") String v, @Field("token") String token);
 }

@@ -19,6 +19,7 @@ import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.eventbus.MessageEventUser;
 import com.jarhero790.eub.message.bean.Userbean;
+import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -38,6 +39,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 public class LoginPhoneActivity extends AppCompatActivity {
 
@@ -89,27 +91,14 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     time.start();
                 }
 
-
-                //通过RequestBody.create 创建requestBody对象
-                RequestBody requestBody = new MultipartBody.Builder()
-                        .setType(MultipartBody.FORM)
-                        .addFormDataPart("mobile", etPhone.getEditableText().toString())
-                        .build();
-                OkHttpClient okHttpClient = new OkHttpClient();
-                Request request = new Request.Builder().url(Api.HOST + "user/login/send_sms").post(requestBody).build();
-                Call call = okHttpClient.newCall(request);
-                call.enqueue(new Callback() {
+                RetrofitManager.getInstance().getDataServer().getsms(userphone).enqueue(new retrofit2.Callback<ResponseBody>() {
                     @Override
-                    public void onFailure(Call call, IOException e) {
-                        Log.e("注册异常", e.getMessage());
-                        Toast.makeText(LoginPhoneActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
-                    }
+                    public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
 
-                    @Override
-                    public void onResponse(Call call, Response response) throws IOException {
-                        String result = response.body().string();
                         try {
-//                            Log.e("-----1:", result);//{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
+                          //{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
+                            String result = response.body().string();
+                            Log.e("-----1:", result);
                             JSONObject jsonObject = new JSONObject(result);
                             int code = jsonObject.optInt("code");
                             String msg = (String) jsonObject.get("msg");
@@ -127,10 +116,35 @@ public class LoginPhoneActivity extends AppCompatActivity {
 
                         }
 
-                        Log.e("注册结果", result);
-                        //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+
                     }
                 });
+
+//                //通过RequestBody.create 创建requestBody对象
+//                RequestBody requestBody = new MultipartBody.Builder()
+//                        .setType(MultipartBody.FORM)
+//                        .addFormDataPart("mobile", etPhone.getEditableText().toString())
+//                        .build();
+//                OkHttpClient okHttpClient = new OkHttpClient();
+//                Request request = new Request.Builder().url(Api.HOST + "user/login/send_sms").post(requestBody).build();
+//                Call call = okHttpClient.newCall(request);
+//                call.enqueue(new Callback() {
+//                    @Override
+//                    public void onFailure(Call call, IOException e) {
+//                        Log.e("注册异常", e.getMessage());
+//                        Toast.makeText(LoginPhoneActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
+//                    }
+//
+//                    @Override
+//                    public void onResponse(Call call, Response response) throws IOException {
+//
+//                        //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
+//                    }
+//                });
                 break;
             case R.id.submit:
                 String userphone2 = etPhone.getEditableText().toString();

@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -59,14 +57,14 @@ import okhttp3.ResponseBody;
 public class MessageFragment extends BaseMVPCompatFragment<MessageContract.MessagePresenter>
         implements MessageContract.IMessageView {
 
-    @BindView(R.id.recyclerViewMessage)
-    RecyclerView recyclerView;
+//    @BindView(R.id.recyclerViewMessage)
+//    RecyclerView recyclerView;
 
 
     @BindView(R.id.fensi)
     LinearLayout linearLayout_fensi;
 
-    LinearLayoutManager layoutManager;
+//    LinearLayoutManager layoutManager;
 
     private static MessageFragment messageFragment;
     Unbinder unbinder;
@@ -333,8 +331,8 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
 
     @Override
     public void initUI(View view, @Nullable Bundle savedInstanceState) {
-        layoutManager = new LinearLayoutManager(AppUtils.getContext());
-        recyclerView.setLayoutManager(layoutManager);
+//        layoutManager = new LinearLayoutManager(AppUtils.getContext());
+//        recyclerView.setLayoutManager(layoutManager);
 //        linearLayout_fensi.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {

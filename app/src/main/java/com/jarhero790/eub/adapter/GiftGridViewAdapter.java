@@ -15,19 +15,21 @@ import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.Gift;
+import com.jarhero790.eub.message.bean.GiftBean;
 import com.jarhero790.eub.utils.AppUtils;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class GiftGridViewAdapter extends BaseAdapter {
 
-    private ArrayList<Gift> giftList;
+    private List<GiftBean.DataBean> giftList;
     private Context context;
 
-    public GiftGridViewAdapter(ArrayList<Gift> giftList, Context context) {
+    public GiftGridViewAdapter(List<GiftBean.DataBean> giftList, Context context) {
 
         this.giftList = giftList;
         this.context = context;
@@ -104,7 +106,7 @@ public class GiftGridViewAdapter extends BaseAdapter {
         ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
-        private void bindView(Gift gift){
+        private void bindView(GiftBean.DataBean gift){
             Glide.with(context).load(Api.GIFT + gift.getImg()).apply(new RequestOptions().placeholder(R.mipmap.gift1)
                     .error(R.mipmap.gift1)).into(giftIcon);
             giftName.setText(gift.getName());

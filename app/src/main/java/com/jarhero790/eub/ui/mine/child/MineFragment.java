@@ -515,52 +515,52 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         }
     }
 
-    //签到
-    private void qiandao() {
-
-
-        //通过RequestBody.create 创建requestBody对象
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("token", SharePreferenceUtil.getToken(AppUtils.getContext()))
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(Api.HOST + "web/index/signIn").post(requestBody).build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("注册异常", e.getMessage());
-                Toast.makeText(getActivity(), "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                String result = response.body().string();
-                try {//{"code":200,"data":15,"msg":""}
-                    Log.e("-----1:", result);
-                    org.json.JSONObject jsonObject = new org.json.JSONObject(result);
-                    int code = jsonObject.optInt("code");
-                    String msg = (String) jsonObject.get("msg");
-                    Log.e("注册结果msg值", msg);
-                    if (code == 200) {
-//                        org.json.JSONObject data = jsonObject.optJSONObject("data");
-//                        msgid=data.optString("msgId");
-//                                Log.e("----------2:",msgid);//ok
-
+    //签到  不能用
+//    private void qiandao() {
+//
+//
+//        //通过RequestBody.create 创建requestBody对象
+//        RequestBody requestBody = new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM)
+//                .addFormDataPart("token", SharePreferenceUtil.getToken(AppUtils.getContext()))
+//                .build();
+//        OkHttpClient okHttpClient = new OkHttpClient();
+//        Request request = new Request.Builder().url(Api.HOST + "web/index/signIn").post(requestBody).build();
+//        Call call = okHttpClient.newCall(request);
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.e("注册异常", e.getMessage());
+//                Toast.makeText(getActivity(), "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
+//            }
+//
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//                String result = response.body().string();
+//                try {//{"code":200,"data":15,"msg":""}
+//                    Log.e("-----1:", result);
+//                    org.json.JSONObject jsonObject = new org.json.JSONObject(result);
+//                    int code = jsonObject.optInt("code");
+//                    String msg = (String) jsonObject.get("msg");
+//                    Log.e("注册结果msg值", msg);
+//                    if (code == 200) {
+////                        org.json.JSONObject data = jsonObject.optJSONObject("data");
+////                        msgid=data.optString("msgId");
+////                                Log.e("----------2:",msgid);//ok
+//
+////                        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
+//                    } else {
 //                        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-                    } else {
-                        Toast.makeText(getActivity(), msg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-
-                }
-
-//                Log.e("注册结果", result);
-                //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
-            }
-        });
-    }
+//                    }
+//                } catch (Exception e) {
+//
+//                }
+//
+////                Log.e("注册结果", result);
+//                //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
+//            }
+//        });
+//    }
 
 
     /**

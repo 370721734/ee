@@ -67,7 +67,12 @@ public class FragmentZuoping extends SupportFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
+        rlv.setLayoutManager(manager);
+        LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
+        linearItemDecoration.setSpanSpace(10);
+        linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+        rlv.addItemDecoration(linearItemDecoration);
 
         initDate();
 
@@ -93,12 +98,7 @@ public class FragmentZuoping extends SupportFragment {
                                     nodingdan.setVisibility(View.GONE);
                                     wangluoyichang.setVisibility(View.GONE);
                                     list = response.body().getData();
-                                    GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
-                                    rlv.setLayoutManager(manager);
-                                    LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
-                                    linearItemDecoration.setSpanSpace(10);
-                                    linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                                    rlv.addItemDecoration(linearItemDecoration);
+
                                     adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
                                     rlv.setAdapter(adapter);
                                 }else {

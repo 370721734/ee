@@ -57,7 +57,7 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
 //        }
 
 
-        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "+关注");
+        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "已关注");
 
         myHolder.tvGuanzu.setTag(position);
         myHolder.tvGuanzu.setOnClickListener(myclick);

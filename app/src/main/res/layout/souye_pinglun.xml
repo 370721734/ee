@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#111111"
+    android:background="#151517"
     >
 
-    <ExpandableListView
-        android:id="@+id/expandableListView"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rlv"
         android:layout_width="match_parent"
-        android:layout_height="400dp"
-        android:divider="@null"
-        android:listSelector="@android:color/transparent"
-        android:scrollbars="none"/>
+        android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

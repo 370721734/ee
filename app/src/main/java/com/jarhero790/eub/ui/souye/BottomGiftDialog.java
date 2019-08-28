@@ -22,7 +22,6 @@ import com.google.gson.Gson;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.GiftGridViewAdapter;
 import com.jarhero790.eub.api.Api;
-import com.jarhero790.eub.bean.Gift;
 import com.jarhero790.eub.bean.GiftBean;
 import com.jarhero790.eub.message.bean.CurrVedoBean;
 import com.jarhero790.eub.message.bean.GeRenBean;
@@ -34,6 +33,8 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.MultipartBody;
@@ -47,7 +48,8 @@ public class BottomGiftDialog extends DialogFragment implements AdapterView.OnIt
     private View view;
     private Window window;
     private GridView gridView;
-    ArrayList<Gift> giftList=new ArrayList<>();
+//    ArrayList<Gift> giftList=new ArrayList<>();
+    List<com.jarhero790.eub.message.bean.GiftBean.DataBean> giftList=new ArrayList<>();
     private Context context;
     TextView goldcoin;
     ImageView cancle;
@@ -101,7 +103,7 @@ public class BottomGiftDialog extends DialogFragment implements AdapterView.OnIt
 
                 if (!curposition.equals("-1")){
 //                    Log.e("------------1",""+curposition);
-                    sendGift(curposition,giftList.get(position).getGift_id());
+                    sendGift(curposition,giftList.get(position).getGift_id()+"");
                 }
             }
         });
@@ -204,35 +206,58 @@ public class BottomGiftDialog extends DialogFragment implements AdapterView.OnIt
 
 
 public void requestData(){
-    //通过RequestBody.create 创建requestBody对象
-    RequestBody requestBody = new MultipartBody.Builder()
-            .setType(MultipartBody.FORM)
-            .addFormDataPart("token", SharePreferenceUtil.getToken(getContext()))
-            .build();
 
-    OkHttpClient okHttpClient = new OkHttpClient();
-    Request request = new Request.Builder().url(Api.HOST+"web/index/index").post(requestBody).build();
-    Call call = okHttpClient.newCall(request);
-    call.enqueue(new Callback() {
-        @Override
-        public void onFailure(Call call, IOException e) {
-            Log.e("注册异常",e.getMessage());
-        }
-
-        @Override
-        public void onResponse(Call call, Response response) throws IOException {
-            String result = response.body().string();
-            Gson gson=new Gson();
-            GiftBean giftBean = gson.fromJson(result, GiftBean.class);
-            if(giftBean.getCode().equals("200")){
-                giftList =giftBean.getData();
-                context=getContext();
-                Log.e("------gift.size=>",giftList.get(0).getImg()+"  "+context);
-                //发送
-                EventBus.getDefault().post("ok");
+        RetrofitManager.getInstance().getDataServer().mygift(SharePreferenceUtil.getToken(getContext())).enqueue(new retrofit2.Callback<com.jarhero790.eub.message.bean.GiftBean>() {
+            @Override
+            public void onResponse(retrofit2.Call<com.jarhero790.eub.message.bean.GiftBean> call, retrofit2.Response<com.jarhero790.eub.message.bean.GiftBean> response) {
+                if (response.isSuccessful()){
+                    if (response.body()!=null && response.body().getCode()==200){
+                        giftList =response.body().getData();
+                        context=getContext();
+                        Log.e("------gift.size=>",giftList.get(0).getImg()+"  "+context);
+                        //发送
+                        EventBus.getDefault().post("ok");
+                    }
+                }
             }
-        }
-    });
+
+            @Override
+            public void onFailure(retrofit2.Call<com.jarhero790.eub.message.bean.GiftBean> call, Throwable t) {
+
+            }
+        });
+
+
+
+    //通过RequestBody.create 创建requestBody对象
+//    RequestBody requestBody = new MultipartBody.Builder()
+//            .setType(MultipartBody.FORM)
+//            .addFormDataPart("token", SharePreferenceUtil.getToken(getContext()))
+//            .build();
+//
+//    OkHttpClient okHttpClient = new OkHttpClient();
+//    Request request = new Request.Builder().url(Api.HOST+"web/index/index").post(requestBody).build();
+//    Call call = okHttpClient.newCall(request);
+//    call.enqueue(new Callback() {
+//        @Override
+//        public void onFailure(Call call, IOException e) {
+//            Log.e("注册异常",e.getMessage());
+//        }
+//
+//        @Override
+//        public void onResponse(Call call, Response response) throws IOException {
+//            String result = response.body().string();
+//            Gson gson=new Gson();
+//            GiftBean giftBean = gson.fromJson(result, GiftBean.class);
+//            if(giftBean.getCode().equals("200")){
+//                giftList =giftBean.getData();
+//                context=getContext();
+//                Log.e("------gift.size=>",giftList.get(0).getImg()+"  "+context);
+//                //发送
+//                EventBus.getDefault().post("ok");
+//            }
+//        }
+//    });
 
 }
 

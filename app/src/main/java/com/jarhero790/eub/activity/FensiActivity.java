@@ -157,69 +157,69 @@ public class FensiActivity extends Activity {
         });
     }
 
-    public void getfensi() {
-        //通过RequestBody.create 创建requestBody对象
-        RequestBody requestBody = new MultipartBody.Builder()
-                .setType(MultipartBody.FORM)
-                .addFormDataPart("token", SharePreferenceUtil.getToken(AppUtils.getContext()))
-                .build();
-        OkHttpClient okHttpClient = new OkHttpClient();
-        Request request = new Request.Builder().url(Api.HOST + "web/index/myfensi").post(requestBody).build();
-        Call call = okHttpClient.newCall(request);
-        call.enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                Log.e("注册异常", e.getMessage());
-                Toast.makeText(FensiActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-
-                try {
+//    public void getfensi() {
+//        //通过RequestBody.create 创建requestBody对象
+//        RequestBody requestBody = new MultipartBody.Builder()
+//                .setType(MultipartBody.FORM)
+//                .addFormDataPart("token", SharePreferenceUtil.getToken(AppUtils.getContext()))
+//                .build();
+//        OkHttpClient okHttpClient = new OkHttpClient();
+//        Request request = new Request.Builder().url(Api.HOST + "web/index/myfensi").post(requestBody).build();
+//        Call call = okHttpClient.newCall(request);
+//        call.enqueue(new Callback() {
+//            @Override
+//            public void onFailure(Call call, IOException e) {
+//                Log.e("注册异常", e.getMessage());
+//                Toast.makeText(FensiActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
+//            }
 //
-
-                    String result = response.body().string();
-                    Log.e("------12", result);
-                    //{"code":200,"data":[{"nickname":"5032","headimgurl":"\/static\/images\/usertouxiang.png","rong_id":5032,"rong_token":"VymYdNrAg1tJrBcEbUoMMTC+AcwG9OuaMU77gxnpvCMxkD1T1b7Lk\/mroIXOIJjxL4OSg1toIa2Vo1pe6RwiTQ==","user_id":5032,"is_likeEach":1,"addtime":"2019-08-17 17:05:13"}],"msg":""}
-                    Gson gson = new Gson();
-                    FenSiTBean fenSiBean = gson.fromJson(result, FenSiTBean.class);
-                    List<FenSiTBean.DataBean> arrayList = fenSiBean.getData();
-
-                    Log.e("--------4", "" + arrayList.size() + arrayList.get(0).getNickname());
-
-                    JSONObject jsonObject = JSON.parseObject(result);
-                    int code = jsonObject.getInteger("code");
-                    String msg = (String) jsonObject.getString("msg");
-//                    Log.e("注册结果msg值", msg);
-                    if (code == 200) {
-//                        JSONObject data = jsonObject.optJSONObject("data");
-//                        msgid=data.optString("msgId");
-                        Log.e("----------2:", "ok");//ok
-
+//            @Override
+//            public void onResponse(Call call, Response response) throws IOException {
+//
+//                try {
+////
+//
+//                    String result = response.body().string();
+//                    Log.e("------12", result);
+//                    //{"code":200,"data":[{"nickname":"5032","headimgurl":"\/static\/images\/usertouxiang.png","rong_id":5032,"rong_token":"VymYdNrAg1tJrBcEbUoMMTC+AcwG9OuaMU77gxnpvCMxkD1T1b7Lk\/mroIXOIJjxL4OSg1toIa2Vo1pe6RwiTQ==","user_id":5032,"is_likeEach":1,"addtime":"2019-08-17 17:05:13"}],"msg":""}
+//                    Gson gson = new Gson();
+//                    FenSiTBean fenSiBean = gson.fromJson(result, FenSiTBean.class);
+//                    List<FenSiTBean.DataBean> arrayList = fenSiBean.getData();
+//
+//                    Log.e("--------4", "" + arrayList.size() + arrayList.get(0).getNickname());
+//
+//                    JSONObject jsonObject = JSON.parseObject(result);
+//                    int code = jsonObject.getInteger("code");
+//                    String msg = (String) jsonObject.getString("msg");
+////                    Log.e("注册结果msg值", msg);
+//                    if (code == 200) {
+////                        JSONObject data = jsonObject.optJSONObject("data");
+////                        msgid=data.optString("msgId");
+//                        Log.e("----------2:", "ok");//ok
+//
+////                        Toast.makeText(FensiActivity.this, msg, Toast.LENGTH_LONG).show();
+//
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick, touclick, speak);
+//                                recyclerViewFensi.setAdapter(feiSiAdapter);
+//                            }
+//                        });
+//
+//                    } else {
 //                        Toast.makeText(FensiActivity.this, msg, Toast.LENGTH_LONG).show();
-
-                        runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick, touclick, speak);
-                                recyclerViewFensi.setAdapter(feiSiAdapter);
-                            }
-                        });
-
-                    } else {
-                        Toast.makeText(FensiActivity.this, msg, Toast.LENGTH_LONG).show();
-                    }
-                } catch (Exception e) {
-
-                }
-
-//                Log.e("注册结果", result);
-                //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
-            }
-        });
-
-    }
+//                    }
+//                } catch (Exception e) {
+//
+//                }
+//
+////                Log.e("注册结果", result);
+//                //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
+//            }
+//        });
+//
+//    }
 
 
     FeiSiAdapter.Myclick myclick = new FeiSiAdapter.Myclick() {
@@ -282,7 +282,7 @@ public class FensiActivity extends Activity {
                         String msg = object.optString("msg");
                         if (code == 200) {
                             Log.e("----------jj", "0" + msg);
-                            getfensitwo();
+                            getfensitwo();//刷新
                             Toast.makeText(FensiActivity.this, msg, Toast.LENGTH_SHORT).show();
 
                         } else {

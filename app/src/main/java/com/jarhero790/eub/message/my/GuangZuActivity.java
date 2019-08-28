@@ -3,16 +3,20 @@ package com.jarhero790.eub.message.my;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.message.adapter.GuangZuAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GuangZuBean;
+import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
@@ -26,6 +30,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -44,12 +49,19 @@ public class GuangZuActivity extends AppCompatActivity {
     @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
 
+    LinearLayoutManager layoutManager;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guang_zu);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+        layoutManager=new LinearLayoutManager(this);
+        rlv.setLayoutManager(layoutManager);
+        LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
+        linearItemDecoration.setSpanSpace(20);
+        linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+        rlv.addItemDecoration(linearItemDecoration);
 
         initDate();
     }
@@ -67,22 +79,21 @@ public class GuangZuActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             dialog.dismiss();
                             if (response.body().getCode() == 200) {
-                                if (list.size() > 0) {
+                                Log.e("---?",response.body().getData().size()+"");
                                     list.clear();
                                     nodingdan.setVisibility(View.GONE);
                                     wangluoyichang.setVisibility(View.GONE);
                                     rlv.setVisibility(View.VISIBLE);
                                     list = response.body().getData();
-                                    GridLayoutManager manager = new GridLayoutManager(GuangZuActivity.this, 1);
-                                    rlv.setLayoutManager(manager);
+//                                    GridLayoutManager manager = new GridLayoutManager(GuangZuActivity.this, 1);
+//                                    rlv.setLayoutManager(manager);
                                     adapter = new GuangZuAdapter(GuangZuActivity.this, list, myclick, touclick, speak);
                                     rlv.setAdapter(adapter);
 
-                                } else {
-                                    nodingdan.setVisibility(View.VISIBLE);
-                                    wangluoyichang.setVisibility(View.GONE);
-                                    rlv.setVisibility(View.GONE);
-                                }
+                            }else {
+                                nodingdan.setVisibility(View.VISIBLE);
+                                wangluoyichang.setVisibility(View.GONE);
+                                rlv.setVisibility(View.GONE);
                             }
                         } else {
                             dialog.dismiss();
@@ -108,7 +119,7 @@ public class GuangZuActivity extends AppCompatActivity {
         @Override
         public void myClick(int position, View view) {
             //关注
-
+            guanzu(list.get(position).getId() + "");
         }
     };
     GuangZuAdapter.Myclick touclick = new GuangZuAdapter.Myclick() {
@@ -144,6 +155,43 @@ public class GuangZuActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    private void guanzu(String id) {
+        RetrofitManager.getInstance().getDataServer().getguanzu(id, SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new retrofit2.Callback<ResponseBody>() {
+            @Override
+            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    String json = null;
+                    try {
+                        json = response.body().string();
+                        Log.e("----------jj", json);
+                        org.json.JSONObject object = new org.json.JSONObject(json);
+                        int code = object.optInt("code");
+                        String msg = object.optString("msg");
+                        if (code == 200) {
+                            Log.e("----------jj", "0" + msg);
+                            initDate();
+                            Toast.makeText(GuangZuActivity.this, msg, Toast.LENGTH_SHORT).show();
+
+                        } else {
+                            Toast.makeText(GuangZuActivity.this, msg, Toast.LENGTH_SHORT).show();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+
+                }
+
+            }
+
+            @Override
+            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
 
     @Override
     protected void onStop() {

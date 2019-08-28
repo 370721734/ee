@@ -101,7 +101,7 @@ public class PinLenActivity extends AppCompatActivity {
                         if (response.isSuccessful()) {
                             dialog.dismiss();
 
-                            if (response.body().getData().size() > 0) {
+                            if (response.body()!=null && response.body().getData().size() > 0) {
                                 mSwipeLayout.setVisibility(View.VISIBLE);
                                 recyclerViewPinLen.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
