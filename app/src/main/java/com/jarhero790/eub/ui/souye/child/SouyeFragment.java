@@ -2,6 +2,7 @@ package com.jarhero790.eub.ui.souye.child;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
@@ -38,6 +39,7 @@ import com.jarhero790.eub.base.BasePresenter;
 import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
+import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
@@ -67,6 +69,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @BindView(R.id.pro_percent)
     ProgressBar proPercent;
     Unbinder unbinder;
+    @BindView(R.id.search_icon)
+    ImageView searchIcon;
     private int mCurrentPosition;//当前播放的第几个视频 ，
     private List<Video> lists = new ArrayList<>();
     private TikTokController mTikTokController;
@@ -177,6 +181,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
+                break;
+            case R.id.search_icon:
+                Intent sear=new Intent(getActivity(), SearchActivity.class);
+                startActivity(sear);
                 break;
         }
     }
@@ -475,6 +483,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         tikTokAdapter.setIsshow(false);
                     }
 
+                } else if (type.equals("红心")) {
+                    Log.e("-------------", "you");
                 }
             }
         });
@@ -576,6 +586,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         textViewTuijian.setOnClickListener(this);
         textViewZuixin.setOnClickListener(this);
         textViewChangshipin.setOnClickListener(this);
+        searchIcon.setOnClickListener(this);
+
     }
 
 

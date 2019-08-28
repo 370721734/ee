@@ -23,9 +23,14 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-//    dexOptions {
-//        javaMaxHeapSize "4g"
-//    }
+    lintOptions {
+        checkReleaseBuilds false
+
+        abortOnError false
+    }
+    dexOptions {
+        javaMaxHeapSize "4g"
+    }
 
 
     defaultConfig {
@@ -124,13 +129,14 @@ dependencies {
     //    implementation files('libs/aspectjrt.jar')
 
     /**
-     *     融云sdk
+     *       融云sdk
      */
 
-    implementation 'cn.rongcloud.sdk:im_kit:2.9.18'
+    //    implementation 'cn.rongcloud.sdk:im_kit:2.9.18'
 
     //im_kit必须依赖im_lib，所以需要加入对应依赖
-    implementation 'cn.rongcloud.sdk:im_lib:2.9.18'
+
+    //    implementation 'cn.rongcloud.sdk:im_lib:2.9.18'
     implementation 'com.alibaba:fastjson:1.1.71.android'
 
     //
@@ -142,7 +148,8 @@ dependencies {
     implementation 'com.github.silladus:basiclib:1.0.2'
     implementation 'com.github.silladus:PagerIndicator:1.0.2'
 
-    //
+    api project(':IMKit')
 
+    //
 
 }

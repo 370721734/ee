@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
+import com.jarhero790.eub.message.bean.UserInfo;
 import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.utils.CommonUtil;
 
@@ -30,9 +31,8 @@ import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;
 import io.rong.imlib.model.MessageContent;
-import io.rong.imlib.model.UserInfo;
 
-public class ConversationActivity extends FragmentActivity implements NameContract, RongIM.UserInfoProvider {
+public class ConversationActivity extends FragmentActivity {
 
     @BindView(R.id.back)
     ImageView back;
@@ -191,12 +191,12 @@ public class ConversationActivity extends FragmentActivity implements NameContra
 //        String title = fragement.getArguments().getString("title");
 //        Log.e("----------4",title);
 
-        fragement.getUserInfo(targetId, new IUserInfoProvider.UserInfoCallback() {
-            @Override
-            public void onGotUserInfo(UserInfo userInfo) {
-                Log.e("-----------3",userInfo.getUserId()+","+userInfo.getName()+","+userInfo.getPortraitUri());
-            }
-        });
+//        fragement.getUserInfo(targetId, new IUserInfoProvider.UserInfoCallback() {
+//            @Override
+//            public void onGotUserInfo(UserInfo userInfo) {
+//                Log.e("-----------3",userInfo.getUserId()+","+userInfo.getName()+","+userInfo.getPortraitUri());
+//            }
+//        });
 
 
         Uri uri = Uri.parse("rong://" + getApplicationInfo().packageName).buildUpon()
@@ -234,15 +234,15 @@ public class ConversationActivity extends FragmentActivity implements NameContra
         }
     }
 
-    @Override
-    public void getNickName(String name) {
-        Log.e("------------name:",name+"  "+Conversation.ConversationType.PRIVATE.getName());
-    }
+//    @Override
+//    public void getNickName(String name) {
+//        Log.e("------------name:",name+"  "+Conversation.ConversationType.PRIVATE.getName());
+//    }
 
 
-    @Override
-    public UserInfo getUserInfo(String s) {
-        Log.e("---------who:",s);
-        return new UserInfo(userid,username,Uri.parse(Api.TU+userimg));
-    }
+//    @Override
+//    public UserInfo getUserInfo(String s) {
+//        Log.e("---------who:",s);
+//        return new UserInfo(userid,username,Uri.parse(Api.TU+userimg));
+//    }
 }
