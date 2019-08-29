@@ -22,7 +22,7 @@ import com.jarhero790.eub.message.adapter.SearchAdapter;
 import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -113,19 +113,19 @@ public class SearchActivity extends AppCompatActivity {
 //        RetrofitManager.getInstance().getDataServer().search()
 //    }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
     Call<SearchBean> calls = null;
 
     private void initDate() {
-        dialog.createLoadingDialog(this, "正在加载...");
-        dialog.setCancelable(true);
-        dialog.show();
+//        dialog.createLoadingDialog(this, "正在加载...");
+//        dialog.setCancelable(true);
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().search(page, SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<SearchBean>() {
                     @Override
                     public void onResponse(Call<SearchBean> call, Response<SearchBean> response) {
                         calls = call;
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         if (response.isSuccessful()) {
                             if (response.body().getCode() == 200) {
                                 visitBeans = response.body().getData().getVisit();
@@ -172,7 +172,7 @@ public class SearchActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<SearchBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                     }
                 });
     }

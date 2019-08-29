@@ -18,7 +18,7 @@ import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
@@ -45,7 +45,7 @@ public class FragmentZuopingGeRen extends Fragment {
     private static FragmentZuopingGeRen instance = null;
 
     ZuoPingAdapter adapter;
-    List<MyFaBuBean.DataBean> list = new ArrayList<>();
+    ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();
 
     public static FragmentZuopingGeRen newInstance() {
         if (instance == null) {
@@ -90,19 +90,19 @@ public class FragmentZuopingGeRen extends Fragment {
 
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
     retrofit2.Call<MyFaBuBean> calls=null;
 
     private void initDate(String s) {
-        dialog.createLoadingDialog(getActivity(), "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(getActivity(), "正在加载...");
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().myfabuother(SharePreferenceUtil.getToken(AppUtils.getContext()), s)
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         calls=call;
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             if (response.body().getData().size()>0){
                                 list.clear();
                                 rlv.setVisibility(View.VISIBLE);
@@ -120,7 +120,7 @@ public class FragmentZuopingGeRen extends Fragment {
 
 
                         } else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
@@ -129,7 +129,7 @@ public class FragmentZuopingGeRen extends Fragment {
 
                     @Override
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);

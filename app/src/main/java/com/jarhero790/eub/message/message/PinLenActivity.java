@@ -15,7 +15,7 @@ import com.jarhero790.eub.message.adapter.PinLAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.MyPL;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -87,19 +87,19 @@ public class PinLenActivity extends AppCompatActivity {
         });
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
     retrofit2.Call<MyPL> calls=null;
 
     private void initDate() {
-        dialog.createLoadingDialog(this, "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(this, "正在加载...");
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().mypinlen(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<MyPL>() {
                     @Override
                     public void onResponse(Call<MyPL> call, Response<MyPL> response) {
                         calls=call;
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
 
                             if (response.body()!=null && response.body().getData().size() > 0) {
                                 mSwipeLayout.setVisibility(View.VISIBLE);
@@ -132,7 +132,7 @@ public class PinLenActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             recyclerViewPinLen.setVisibility(View.GONE);
                             mSwipeLayout.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
@@ -142,7 +142,7 @@ public class PinLenActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<MyPL> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         recyclerViewPinLen.setVisibility(View.GONE);
                         mSwipeLayout.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);

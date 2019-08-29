@@ -64,6 +64,15 @@ public class Video implements Serializable {
     private String commentNum;
     private String is_like;
 
+
+    public Video(String uid, String url, String zan, String caifu, String video_img) {
+        this.uid = uid;
+        this.url = url;
+        this.zan = zan;
+        this.caifu = caifu;
+        this.video_img = video_img;
+    }
+
     public String getId() {
         return id;
     }

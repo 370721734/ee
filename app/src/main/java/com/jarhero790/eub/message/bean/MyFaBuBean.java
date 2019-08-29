@@ -1,8 +1,12 @@
 package com.jarhero790.eub.message.bean;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 //我的作品
-public class MyFaBuBean {
+public class MyFaBuBean implements Serializable {
 
     /**
      * code : 200
@@ -12,7 +16,7 @@ public class MyFaBuBean {
 
     private int code;
     private String msg;
-    private List<DataBean> data;
+    private ArrayList<DataBean> data;
 
     public int getCode() {
         return code;
@@ -30,15 +34,15 @@ public class MyFaBuBean {
         this.msg = msg;
     }
 
-    public List<DataBean> getData() {
+    public ArrayList<DataBean> getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(ArrayList<DataBean> data) {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable{
         /**
          * id : 580
          * uid : 5045

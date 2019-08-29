@@ -9,12 +9,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
@@ -39,7 +37,7 @@ import com.jarhero790.eub.base.BasePresenter;
 import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
-import com.jarhero790.eub.message.bean.DialogPBean;
+import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
@@ -60,13 +58,13 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.rong.imlib.IFwLogCallback;
 
 //1.动画旋转问题
 //2分享，3.金币，4光盘，
 public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePresenter>
         implements SouyeContract.ISouyeView, View.OnClickListener, ViewPagerLayoutManager.OnNextPageImageListener {
 
+    View viewplaypause;
     @BindView(R.id.pro_percent)
     ProgressBar proPercent;
     Unbinder unbinder;
@@ -122,9 +120,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 textViewZuixin.setBackgroundResource(0);
                 textViewChangshipin.setBackgroundResource(0);
 
-                if (mVideoView.isPlaying()) {
-                    mVideoView.release();
-                }
+
+                viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
+                if (viewplaypause != null)
+                    viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                mVideoView.release();
 
                 cate.set(0);
                 page.set(1);
@@ -154,9 +154,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
                 }
-                if (mVideoView.isPlaying()) {
-                    mVideoView.release();
-                }
+                viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
+                if (viewplaypause != null)
+                    viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                mVideoView.release();
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------2-",cate.get()+"");
@@ -176,9 +177,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
                 }
-                if (mVideoView.isPlaying()) {
-                    mVideoView.release();
-                }
+                viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
+                if (viewplaypause != null)
+                    viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                mVideoView.release();
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
@@ -402,6 +404,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             if (isLook()) {
                 mVideoView.resume();
                 flag.set(true);
+
+
             }
 //            if (mPresenter!=null)
 //            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
@@ -442,10 +446,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             }
         } else {//可见
             setLook(true);
+            viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
+            if (viewplaypause != null)
+                viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
             if (mVideoView != null) {
                 mVideoView.resume();
                 Log.e("----------1", "是不是这里" + mCurrentPosition);
                 startPlay(mCurrentPosition);
+
             } else {
                 mVideoView = new VideoView(AppUtils.getContext());
                 mVideoView.resume();
@@ -515,9 +523,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 mCurrentPosition = position;
 //                Log.e("-----------gg","2222222222不同");
                 //ok
-                View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
-                if (view != null)
-                    view.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                viewplaypause = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
+                if (viewplaypause != null)
+                    viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
             }
         }, lists);
 
@@ -598,18 +606,40 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         bottomShareDialog.show(getChildFragmentManager(), "share");
     }
 
+    //ok
     public void showPingLun() {
-        BottomPingLunDialog bottomPingLunDialog = BottomPingLunDialog.newInstance();
-        bottomPingLunDialog.setCuposition(lists.get(mCurrentPosition).getVideo_id());
-        EventBus.getDefault().post(new DialogPBean(lists.get(mCurrentPosition).getVideo_id()));
-        bottomPingLunDialog.show(getChildFragmentManager(), "pinglun");
+//        Log.e("--------token","token");
+//        Log.e("--------token",SharePreferenceUtil.getToken(AppUtils.getContext()));
+//
+//        if (SharePreferenceUtil.getToken(AppUtils.getContext())==null){
+//            Log.e("--------token","token1");
+//        }
+
+        if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+//            Log.e("--------token","token2");
+            startActivity(new Intent(getActivity(), LoginNewActivity.class));
+        }else {
+            BottomPingLunDialog bottomPingLunDialog = BottomPingLunDialog.newInstance();
+            Bundle args=new Bundle();
+            args.putString("vid",lists.get(mCurrentPosition).getVideo_id());
+            bottomPingLunDialog.setArguments(args);
+            bottomPingLunDialog.show(getChildFragmentManager(), "pinglun");
+        }
+
     }
 
     //ok
     public void showGift() {
-        BottomGiftDialog bottomGiftDialog = BottomGiftDialog.newInstance();
-        bottomGiftDialog.setCuposition(lists.get(mCurrentPosition).getVideo_id());
-        bottomGiftDialog.show(getChildFragmentManager(), "gift");
+        if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+            startActivity(new Intent(getActivity(), LoginNewActivity.class));
+        }else {
+            BottomGiftDialog bottomGiftDialog = BottomGiftDialog.newInstance();
+            Bundle args=new Bundle();
+            args.putString("vid",lists.get(mCurrentPosition).getVideo_id());
+            bottomGiftDialog.setArguments(args);
+            bottomGiftDialog.show(getChildFragmentManager(), "gift");
+        }
+
     }
 
 
@@ -830,6 +860,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        });
 
 
+
+
+
+
     }
 
 
@@ -874,4 +908,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void setLook(boolean look) {
         isLook = look;
     }
+
+
+
+//    public interface PinL{
+//        void Clicker(String str);
+//    }
+//    private PinL pinL;
+//
+//    public void setPinL(PinL pinL) {
+//        this.pinL = pinL;
+//    }
 }

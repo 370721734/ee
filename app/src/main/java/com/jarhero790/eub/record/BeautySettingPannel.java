@@ -236,7 +236,7 @@ public class BeautySettingPannel extends FrameLayout implements SeekBar.OnSeekBa
 
     LinearLayout mSeekBarLL = null;
     TextView mSeekBarValue = null;
-    CustomProgressDialog mCustomProgressDialog;
+//    CustomProgressDialog mCustomProgressDialog;
 
     private SeekBar mThirdGradleSeekBar;
 
@@ -413,9 +413,9 @@ public class BeautySettingPannel extends FrameLayout implements SeekBar.OnSeekBa
                                         ((Activity) mContext).runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if (mCustomProgressDialog != null) {
-                                                    mCustomProgressDialog.dismiss();
-                                                }
+//                                                if (mCustomProgressDialog != null) {
+//                                                    mCustomProgressDialog.dismiss();
+//                                                }
                                                 Toast.makeText(mContext, errorMsg, Toast.LENGTH_SHORT).show();
                                             }
                                         });
@@ -427,14 +427,14 @@ public class BeautySettingPannel extends FrameLayout implements SeekBar.OnSeekBa
                                             @Override
                                             public void run() {
                                                 Log.i(TAG, "onDownloadProgress, progress = " + progress);
-                                                if (mCustomProgressDialog == null) {
-                                                    mCustomProgressDialog = new CustomProgressDialog();
-                                                    mCustomProgressDialog.createLoadingDialog(mContext, "");
-                                                    mCustomProgressDialog.setCancelable(false); // 设置是否可以通过点击Back键取消
-                                                    mCustomProgressDialog.setCanceledOnTouchOutside(false); // 设置在点击Dialog外是否取消Dialog进度条
-                                                    mCustomProgressDialog.show();
-                                                }
-                                                mCustomProgressDialog.setMsg(progress + "%");
+//                                                if (mCustomProgressDialog == null) {
+//                                                    mCustomProgressDialog = new CustomProgressDialog();
+//                                                    mCustomProgressDialog.createLoadingDialog(mContext, "");
+//                                                    mCustomProgressDialog.setCancelable(false); // 设置是否可以通过点击Back键取消
+//                                                    mCustomProgressDialog.setCanceledOnTouchOutside(false); // 设置在点击Dialog外是否取消Dialog进度条
+//                                                    mCustomProgressDialog.show();
+//                                                }
+//                                                mCustomProgressDialog.setMsg(progress + "%");
                                             }
                                         });
                                     }
@@ -446,10 +446,10 @@ public class BeautySettingPannel extends FrameLayout implements SeekBar.OnSeekBa
                                         ((Activity) mContext).runOnUiThread(new Runnable() {
                                             @Override
                                             public void run() {
-                                                if (mCustomProgressDialog != null) {
-                                                    mCustomProgressDialog.dismiss();
-                                                    mCustomProgressDialog = null;
-                                                }
+//                                                if (mCustomProgressDialog != null) {
+//                                                    mCustomProgressDialog.dismiss();
+//                                                    mCustomProgressDialog = null;
+//                                                }
                                                 setPickerEffect(mSencodGradleType, index);
                                             }
                                         });

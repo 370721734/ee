@@ -6,6 +6,9 @@ import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import com.jarhero790.eub.bean.Video;
+import com.jarhero790.eub.message.bean.MyFaBuBean;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -16,6 +19,7 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
     private RecyclerView mRecyclerView;
     private int mDrift;//位移，用来判断移动方向
     private List<Video> lists;
+    private ArrayList<MyFaBuBean.DataBean> liststwo;
     private Context context;
     private OnNextPageImageListener onNextPageImageListener;
 
@@ -119,6 +123,11 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
     public void setOnViewPagerListener(OnViewPagerListener listener,List<Video> lists){
         this.mOnViewPagerListener = listener;
         this.lists=lists;
+    }
+
+    public void setOnViewPagerListenertwo(OnViewPagerListener listener, ArrayList<MyFaBuBean.DataBean> lists){
+        this.mOnViewPagerListener = listener;
+        this.liststwo=lists;
     }
 
     private RecyclerView.OnChildAttachStateChangeListener mChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {

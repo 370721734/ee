@@ -1,5 +1,6 @@
 package com.jarhero790.eub.adapter;
 
+import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -24,14 +25,17 @@ public class AttentionUsersAndVideosAdapter extends RecyclerView.Adapter<Recycle
     //关注的用户所发布的视频
     ArrayList<AttentionVideo> attentionUsersVideos;
 
+    private Context mcontext;
+
     public final static int TYPE_1= 10000;//横向列表的viewType
     public final static int TYPE_2= 20000;//垂直列表的viewType
 
 
-    public AttentionUsersAndVideosAdapter(AttentionUserAndVideoBen attentionUserAndVideoBen) {
+    public AttentionUsersAndVideosAdapter(AttentionUserAndVideoBen attentionUserAndVideoBen,Context context) {
         this.attentionUserAndVideoBen = attentionUserAndVideoBen;
         attentionUsers=attentionUserAndVideoBen.getData().getMylike();
         attentionUsersVideos=attentionUserAndVideoBen.getData().getVideo();
+        mcontext=context;
     }
 
     @NonNull
@@ -58,7 +62,7 @@ public class AttentionUsersAndVideosAdapter extends RecyclerView.Adapter<Recycle
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
         if (viewHolder instanceof AttentionsUsersViewHolder) {
               AttentionsUsersViewHolder attentionsUsersViewHolder=(AttentionsUsersViewHolder)viewHolder;
-              AttentionUsersAdapter attentionUsersAdapter=new AttentionUsersAdapter(attentionUsers);
+              AttentionUsersAdapter attentionUsersAdapter=new AttentionUsersAdapter(attentionUsers,mcontext);
               LinearLayoutManager linearLayoutManager=new LinearLayoutManager(AppUtils.getContext(),LinearLayoutManager.HORIZONTAL,false);
               attentionsUsersViewHolder.recyclerViewAttentionsUsers.setLayoutManager(linearLayoutManager);
               attentionsUsersViewHolder.recyclerViewAttentionsUsers.setAdapter(attentionUsersAdapter);
@@ -67,7 +71,7 @@ public class AttentionUsersAndVideosAdapter extends RecyclerView.Adapter<Recycle
 
         if (viewHolder instanceof AttentionsUsersVideosViewHolder) {
             AttentionsUsersVideosViewHolder attentionsUsersVideosViewHolder=(AttentionsUsersVideosViewHolder)viewHolder;
-            AttentionVideosAdapter attentionVideosAdapter=new AttentionVideosAdapter(attentionUsersVideos);
+            AttentionVideosAdapter attentionVideosAdapter=new AttentionVideosAdapter(attentionUsersVideos,mcontext);
             LinearLayoutManager linearLayoutManager=new LinearLayoutManager(AppUtils.getContext(),LinearLayoutManager.VERTICAL,false);
             attentionsUsersVideosViewHolder.recyclerViewAttentionsUsersVideos.setLayoutManager(linearLayoutManager);
             attentionsUsersVideosViewHolder.recyclerViewAttentionsUsersVideos.setAdapter(attentionVideosAdapter);

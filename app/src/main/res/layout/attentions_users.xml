@@ -4,18 +4,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#222222"
+    android:orientation="vertical"
+    android:background="@color/backgroudcolor"
     >
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/attentionuser_recyclerview"
         android:scrollbars="none"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
 
 
-
+<View
+    android:layout_width="match_parent"
+    android:layout_height="0.3dp"
+    android:background="#A0A0A0"
+    android:alpha="0.5"/>
 
 
 

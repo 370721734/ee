@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -13,9 +14,10 @@ import android.widget.RelativeLayout;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
+import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
@@ -41,7 +43,7 @@ public class FragmentZuoping extends SupportFragment {
     private static FragmentZuoping instance = null;
 
     ZuoPingAdapter adapter;
-    List<MyFaBuBean.DataBean> list = new ArrayList<>();
+    ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();
 
     public static FragmentZuoping newInstance() {
         if (instance == null) {
@@ -78,19 +80,19 @@ public class FragmentZuoping extends SupportFragment {
 
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
     Call<MyFaBuBean> calls = null;
 
     private void initDate() {
-        dialog.createLoadingDialog(getActivity(), "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(getActivity(), "正在加载...");
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         calls = call;
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             if (response.body()!=null && response.body().getData()!=null){
                                 if (response.body().getData().size() > 0) {
                                     list.clear();
@@ -113,7 +115,7 @@ public class FragmentZuoping extends SupportFragment {
                             }
 
                         } else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
@@ -122,7 +124,7 @@ public class FragmentZuoping extends SupportFragment {
 
                     @Override
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
@@ -140,7 +142,12 @@ public class FragmentZuoping extends SupportFragment {
     ZuoPingAdapter.Myclick myclicktu = new ZuoPingAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------2", "" + position);
+//            Log.e("-------2", "" + position+","+list.get(position).getUrl());
+            Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
+            intent.putExtra("position",position);
+            intent.putExtra("vidlist",list);
+            startActivity(intent);
+
         }
     };
 

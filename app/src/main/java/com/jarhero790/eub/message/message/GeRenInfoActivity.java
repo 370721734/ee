@@ -26,7 +26,7 @@ import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.GeRenBean;
 import com.jarhero790.eub.message.contract.ISupp;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.ui.mine.FragmentLike;
 import com.jarhero790.eub.ui.mine.FragmentZuoping;
 import com.jarhero790.eub.utils.AppUtils;
@@ -92,7 +92,7 @@ public class GeRenInfoActivity extends AppCompatActivity {
 //        initDate();
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
 
     private GeRenBean.DataBean bean;
 
@@ -192,14 +192,14 @@ public class GeRenInfoActivity extends AppCompatActivity {
     }
 
     private void initDate(String userid) {
-        dialog.createLoadingDialog(this, "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(this, "正在加载...");
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().getgerenuserinfos(SharePreferenceUtil.getToken(AppUtils.getContext()), userid)
                 .enqueue(new Callback<GeRenBean>() {
                     @Override
                     public void onResponse(Call<GeRenBean> call, Response<GeRenBean> response) {
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
 
                             if (response.body().getCode() == 200) {
                                 GeRenBean bean = response.body();
@@ -221,13 +221,13 @@ public class GeRenInfoActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GeRenBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                     }
                 });
 

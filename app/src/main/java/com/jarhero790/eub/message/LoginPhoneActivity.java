@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -82,7 +83,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
                 break;
             case R.id.tv_ma:
                 String userphone = etPhone.getEditableText().toString();
-                if (userphone != null && userphone.equals("")) {
+                if (TextUtils.isEmpty(userphone)) {
                     Toast.makeText(this, "手机号码不能为空", Toast.LENGTH_LONG).show();
                     return;
                 }

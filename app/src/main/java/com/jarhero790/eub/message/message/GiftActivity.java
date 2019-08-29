@@ -14,7 +14,7 @@ import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GiftBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -60,12 +60,12 @@ public class GiftActivity extends AppCompatActivity {
         initDate();
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
     retrofit2.Call<GiftBean> calls=null;
 
     private void initDate() {
-        dialog.createLoadingDialog(this, "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(this, "正在加载...");
+//        dialog.show();
 
         RetrofitManager.getInstance().getDataServer().getmygift(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<GiftBean>() {
@@ -74,7 +74,7 @@ public class GiftActivity extends AppCompatActivity {
                         Log.e("-------55", "1:" + response.body().getCode());
                         calls=call;
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             if (response.body()!=null && response.body().getData().size()>0) {
                                 Log.e("-------55", "1:" + response.body().getData().size());
                                 giftBeanList.clear();
@@ -92,7 +92,7 @@ public class GiftActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                             mSwipeLayout.setVisibility(View.GONE);
@@ -101,7 +101,7 @@ public class GiftActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<GiftBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                         mSwipeLayout.setVisibility(View.GONE);

@@ -18,7 +18,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.GeRenBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -87,16 +87,16 @@ public class MoreActivity extends AppCompatActivity {
 
 
     }
-    CustomProgressDialog dialog=new CustomProgressDialog();
+//    CustomProgressDialog dialog=new CustomProgressDialog();
     private void initDate(String uid) {
-        dialog.createLoadingDialog(this,"正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(this,"正在加载...");
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().getgerenuserinfos(SharePreferenceUtil.getToken(AppUtils.getContext()), uid)
                 .enqueue(new Callback<GeRenBean>() {
                     @Override
                     public void onResponse(Call<GeRenBean> call, Response<GeRenBean> response) {
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
 
 //                            Log.e("---------1", bean.toString());
                             if (response.body().getCode() == 200) {
@@ -120,13 +120,13 @@ public class MoreActivity extends AppCompatActivity {
                                 }
                             }
                         }else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GeRenBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                     }
                 });
 

@@ -26,6 +26,7 @@ import com.jarhero790.eub.bean.GiftBean;
 import com.jarhero790.eub.message.bean.CurrVedoBean;
 import com.jarhero790.eub.message.bean.GeRenBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 import org.greenrobot.eventbus.EventBus;
@@ -71,9 +72,9 @@ public class BottomGiftDialog extends DialogFragment implements AdapterView.OnIt
     }
 
     private String curposition="-1";
-    public void setCuposition(String cuposition){
-        curposition=cuposition;
-    }
+//    public void setCuposition(String cuposition){
+//        curposition=cuposition;
+//    }
 
     @Override
     public void onPause() {
@@ -184,6 +185,15 @@ public class BottomGiftDialog extends DialogFragment implements AdapterView.OnIt
     }
 
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Bundle bundle=getArguments();
+        if (bundle!=null){
+            curposition=bundle.getString("vid");
+            Log.e("------------vid=>",curposition);
+        }
+    }
 
     @Override
     public void onStart() {
@@ -204,13 +214,15 @@ public class BottomGiftDialog extends DialogFragment implements AdapterView.OnIt
     }
 
 
-
+//    CustomProgressDialog dialog = new CustomProgressDialog();
 public void requestData(){
-
+//    dialog.createLoadingDialog(getActivity(), "正在加载...");
+//    dialog.show();
         RetrofitManager.getInstance().getDataServer().mygift(SharePreferenceUtil.getToken(getContext())).enqueue(new retrofit2.Callback<com.jarhero790.eub.message.bean.GiftBean>() {
             @Override
             public void onResponse(retrofit2.Call<com.jarhero790.eub.message.bean.GiftBean> call, retrofit2.Response<com.jarhero790.eub.message.bean.GiftBean> response) {
                 if (response.isSuccessful()){
+//                    dialog.dismiss();
                     if (response.body()!=null && response.body().getCode()==200){
                         giftList =response.body().getData();
                         context=getContext();
@@ -218,12 +230,14 @@ public void requestData(){
                         //发送
                         EventBus.getDefault().post("ok");
                     }
+                }else {
+//                    dialog.dismiss();
                 }
             }
 
             @Override
             public void onFailure(retrofit2.Call<com.jarhero790.eub.message.bean.GiftBean> call, Throwable t) {
-
+//                dialog.dismiss();
             }
         });
 

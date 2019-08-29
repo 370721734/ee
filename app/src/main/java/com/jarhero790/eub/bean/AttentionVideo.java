@@ -78,6 +78,8 @@ public class AttentionVideo  {
      */
     private String url;
 
+    private String income;
+
     /**
      * 添加时间
      */
@@ -140,6 +142,14 @@ public class AttentionVideo  {
      *纬度
      */
     private String lat;
+
+    private String video_id;
+
+    private String nickname;
+
+    private String headimgurl;
+
+    private String is_zan;
 
 
     /**
@@ -298,6 +308,46 @@ public class AttentionVideo  {
 
     public void setComment(ArrayList<AttentionUserVideosComment> comment) {
         this.comment = comment;
+    }
+
+    public String getIncome() {
+        return income;
+    }
+
+    public void setIncome(String income) {
+        this.income = income;
+    }
+
+    public String getVideo_id() {
+        return video_id;
+    }
+
+    public void setVideo_id(String video_id) {
+        this.video_id = video_id;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public String getHeadimgurl() {
+        return headimgurl;
+    }
+
+    public void setHeadimgurl(String headimgurl) {
+        this.headimgurl = headimgurl;
+    }
+
+    public String getIs_zan() {
+        return is_zan;
+    }
+
+    public void setIs_zan(String is_zan) {
+        this.is_zan = is_zan;
     }
 
     @Override

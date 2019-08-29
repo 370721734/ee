@@ -80,7 +80,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private ImageView mIvConfirm;
     private TextView mProgressTime;
     private Button mBtnRecordRotation;
-    private CustomProgressDialog mCustomProgressDialog;
+//    private CustomProgressDialog mCustomProgressDialog;
     private ImageView mIvTorch;
     private ImageView mIvMusic;
     private ImageView mIvBeauty;
@@ -361,10 +361,10 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mGestureDetector = new GestureDetector(this, this);
         mScaleGestureDetector = new ScaleGestureDetector(this, this);
 
-        mCustomProgressDialog = new CustomProgressDialog();
-        mCustomProgressDialog.createLoadingDialog(this, "");
-        mCustomProgressDialog.setCancelable(false); // 设置是否可以通过点击Back键取消
-        mCustomProgressDialog.setCanceledOnTouchOutside(false); // 设置在点击Dialog外是否取消Dialog进度条
+//        mCustomProgressDialog = new CustomProgressDialog();
+//        mCustomProgressDialog.createLoadingDialog(this, "");
+//        mCustomProgressDialog.setCancelable(false); // 设置是否可以通过点击Back键取消
+//        mCustomProgressDialog.setCanceledOnTouchOutside(false); // 设置在点击Dialog外是否取消Dialog进度条
 
         mIvTorch = (ImageView) findViewById(R.id.btn_torch);
         mIvTorch.setOnClickListener(this);
@@ -684,7 +684,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             }
 
         } else if (i == R.id.btn_confirm) {//                mCompleteProgressDialog.show();
-            mCustomProgressDialog.show();
+//            mCustomProgressDialog.show();
             stopRecord();
 
         } else if (i == R.id.iv_scale) {
@@ -1189,7 +1189,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onRecordComplete(TXRecordCommon.TXRecordResult result) {
-        mCustomProgressDialog.dismiss();
+//        mCustomProgressDialog.dismiss();
 
         mTXRecordResult = result;
 

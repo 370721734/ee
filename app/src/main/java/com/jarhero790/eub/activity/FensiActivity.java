@@ -22,7 +22,6 @@ import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -104,18 +103,18 @@ public class FensiActivity extends Activity {
 
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
     retrofit2.Call<FenSiTBean> calls=null;
 
     private void getfensitwo() {
-        dialog.createLoadingDialog(this, "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(this, "正在加载...");
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().getfensi(SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new retrofit2.Callback<FenSiTBean>() {
             @Override
             public void onResponse(retrofit2.Call<FenSiTBean> call, retrofit2.Response<FenSiTBean> response) {
                 calls=call;
                 if (response.isSuccessful()) {
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     int code = response.body().getCode();
                     if (code == 200) {
                         arrayList.clear();
@@ -140,7 +139,7 @@ public class FensiActivity extends Activity {
 
                     }
                 } else {
-                    dialog.dismiss();
+//                    dialog.dismiss();
                     nodingdan.setVisibility(View.GONE);
                     wangluoyichang.setVisibility(View.VISIBLE);
                     recyclerViewFensi.setVisibility(View.GONE);
@@ -149,7 +148,7 @@ public class FensiActivity extends Activity {
 
             @Override
             public void onFailure(retrofit2.Call<FenSiTBean> call, Throwable t) {
-                dialog.dismiss();
+//                dialog.dismiss();
                 nodingdan.setVisibility(View.GONE);
                 wangluoyichang.setVisibility(View.VISIBLE);
                 recyclerViewFensi.setVisibility(View.GONE);

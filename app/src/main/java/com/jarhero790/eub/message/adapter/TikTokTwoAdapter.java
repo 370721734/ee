@@ -1,4 +1,4 @@
-package com.jarhero790.eub.adapter;
+package com.jarhero790.eub.message.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -19,8 +19,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.Video;
+import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.souye.GuanPanView;
 
 import java.util.List;
@@ -28,12 +28,12 @@ import java.util.List;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 //播放视频适配
-public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolder> {
+public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.VideoHolder> {
 
-    private List<Video> videos;
+    private List<MyFaBuBean.DataBean> videos;
     private Context context;
     RotateAnimation rotateAnimation;//旋转动画
-    public TikTokAdapter.OnItemClickListener mOnItemClickListerer;
+    public TikTokTwoAdapter.OnItemClickListener mOnItemClickListerer;
 
     private boolean isshow = false;
 
@@ -42,12 +42,12 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         void onItemClick(int position, String type, View view, View view1, View view2);
     }
 
-    public void setOnItemClickListerer(TikTokAdapter.OnItemClickListener listerer) {
+    public void setOnItemClickListerer(TikTokTwoAdapter.OnItemClickListener listerer) {
         this.mOnItemClickListerer = listerer;
     }
 
 
-    public TikTokAdapter(List<Video> videos, Context context) {
+    public TikTokTwoAdapter(List<MyFaBuBean.DataBean> videos, Context context) {
         this.videos = videos;
         this.context = context;
         rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
@@ -136,7 +136,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     public void onBindViewHolder(final VideoHolder holder, int position) {
 
         Log.e("------------------","??????"+position);
-        Video video = videos.get(position);
+        MyFaBuBean.DataBean video = videos.get(position);
         /** Fresco方式加载
          Uri uri = Uri.parse(video.getVideo_img());
          holder.video_thumb.setImageURI(uri);
@@ -150,37 +150,38 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
 
 
-        if (video.getTitle()!=null && video.getTitle().length() > 0) {
-            holder.tv_content.setVisibility(View.VISIBLE);
-            holder.tv_content.setText(video.getTitle());
-        } else {
-            holder.tv_content.setVisibility(View.GONE);
-        }
-
-//        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
-        holder.tv_uname.setText("@" + video.getNickname());
-        //点赞数量
-        holder.tv_like.setText(video.getZan());
-        //评论数量
-        holder.tv_pinglun.setText(video.getCommentNum());
-        //财富`
-        holder.caifu.setText(video.getCaifu());
-        //tou
-        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                .error(R.mipmap.souye_logo)).into(holder.userimage);
-        //旋转图
-        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-
-//        Log.e("--------",Api.GIFT+video.getHeadimgurl());
-        holder.circleImageView.startAnimation(rotateAnimation);
-
-
-
-//        holder.guanPanView.init();
-//        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
-//        holder.guanPanView.startAnimation(rotateAnimation);
-        onClick(holder, position);
+//        if (video.getTitle()!=null && video.getTitle().length() > 0) {
+//            holder.tv_content.setVisibility(View.VISIBLE);
+//            holder.tv_content.setText(video.getTitle());
+//        } else {
+//            holder.tv_content.setVisibility(View.GONE);
+//        }
+//
+////        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
+//        holder.tv_uname.setText("@" + video.getNickname());
+//        //点赞数量
+//        holder.tv_like.setText(video.getZan());
+//        //评论数量
+//        holder.tv_pinglun.setText(video.getCommentNum());
+//        //tou
+//        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+//                .error(R.mipmap.souye_logo)).into(holder.userimage);
+//        //旋转图
+//        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+//                .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+//
+////        Log.e("--------",Api.GIFT+video.getHeadimgurl());
+//        holder.circleImageView.startAnimation(rotateAnimation);
+//
+//
+//
+////        holder.guanPanView.init();
+////        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
+////        holder.guanPanView.startAnimation(rotateAnimation);
+//
+//
+//
+//        onClick(holder, position);
     }
 
 
@@ -292,8 +293,6 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         RelativeLayout rlhead;
         ImageView play_pause;
 
-        TextView caifu;
-
 
         VideoHolder(View itemView) {
             super(itemView);
@@ -319,12 +318,11 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
             rlhead = itemView.findViewById(R.id.rlhead);
             play_pause = itemView.findViewById(R.id.iv_play_pause);
-            caifu=itemView.findViewById(R.id.tv_gold_coin);
         }
     }
 
 
-    public void setVideos(List<Video> videos) {
+    public void setVideos(List<MyFaBuBean.DataBean> videos) {
         this.videos = videos;
         notifyDataSetChanged();
     }

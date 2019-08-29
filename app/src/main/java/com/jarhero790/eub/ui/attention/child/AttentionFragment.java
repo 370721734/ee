@@ -69,7 +69,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     @Override
     public void displayMyAttentionUsersAndVideos(AttentionUserAndVideoBen attentionUserAndVideoBen) {
         //Log.e("接收的数据",attentionUserAndVideoBen.toString());
-        attentionUsersAndVideosAdapter = new AttentionUsersAndVideosAdapter(attentionUserAndVideoBen);
+        attentionUsersAndVideosAdapter = new AttentionUsersAndVideosAdapter(attentionUserAndVideoBen,getActivity());
         recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
         recyclerViewAttentionUsers.setAdapter(attentionUsersAndVideosAdapter);
         /**

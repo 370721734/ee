@@ -14,7 +14,7 @@ import com.jarhero790.eub.message.adapter.ZanAdapter;
 import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -55,11 +55,11 @@ public class ZanActivity extends AppCompatActivity {
         initDate();
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
 
     private void initDate() {
-        dialog.createLoadingDialog(this, "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(this, "正在加载...");
+//        dialog.show();
 
         RetrofitManager.getInstance().getDataServer().myzan(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<ZanBean>() {
@@ -67,7 +67,7 @@ public class ZanActivity extends AppCompatActivity {
                     public void onResponse(Call<ZanBean> call, Response<ZanBean> response) {
 //                        Log.e("-------", "1:" + response.body().getCode());
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             if (response.body().getCode() == 200) {
                                 if (response.body().getData().size() > 0) {
                                     giftBeanList.clear();
@@ -91,7 +91,7 @@ public class ZanActivity extends AppCompatActivity {
                             }
 
                         } else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                             recyclerViewZan.setVisibility(View.GONE);
@@ -100,7 +100,7 @@ public class ZanActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ZanBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                         recyclerViewZan.setVisibility(View.GONE);

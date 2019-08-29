@@ -18,7 +18,7 @@ import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -66,18 +66,18 @@ public class GuangZuActivity extends AppCompatActivity {
         initDate();
     }
 
-    CustomProgressDialog dialog = new CustomProgressDialog();
+//    CustomProgressDialog dialog = new CustomProgressDialog();
     retrofit2.Call<GuangZuBean> calls=null;
     private void initDate() {
-        dialog.createLoadingDialog(this, "正在加载...");
-        dialog.show();
+//        dialog.createLoadingDialog(this, "正在加载...");
+//        dialog.show();
         RetrofitManager.getInstance().getDataServer().mylike(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<GuangZuBean>() {
                     @Override
                     public void onResponse(Call<GuangZuBean> call, Response<GuangZuBean> response) {
                         calls=call;
                         if (response.isSuccessful()) {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             if (response.body().getCode() == 200) {
                                 Log.e("---?",response.body().getData().size()+"");
                                     list.clear();
@@ -96,7 +96,7 @@ public class GuangZuActivity extends AppCompatActivity {
                                 rlv.setVisibility(View.GONE);
                             }
                         } else {
-                            dialog.dismiss();
+//                            dialog.dismiss();
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                             rlv.setVisibility(View.GONE);
@@ -105,7 +105,7 @@ public class GuangZuActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<GuangZuBean> call, Throwable t) {
-                        dialog.dismiss();
+//                        dialog.dismiss();
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                         rlv.setVisibility(View.GONE);

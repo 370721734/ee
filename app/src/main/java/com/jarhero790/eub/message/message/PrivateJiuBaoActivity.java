@@ -21,7 +21,7 @@ import com.jarhero790.eub.message.my.FullyGridLayoutManager;
 import com.jarhero790.eub.message.my.GridImageAdapter;
 import com.jarhero790.eub.message.my.SettingActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.record.CustomProgressDialog;
+
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -213,7 +213,7 @@ public class PrivateJiuBaoActivity extends AppCompatActivity {
         }
 
     }
-    CustomProgressDialog dialog=new CustomProgressDialog();
+//    CustomProgressDialog dialog=new CustomProgressDialog();
 
     @OnClick({R.id.back, R.id.submit, R.id.tu})
     public void onViewClicked(View view) {
@@ -239,14 +239,14 @@ public class PrivateJiuBaoActivity extends AppCompatActivity {
                 }
 
 
-                dialog.createLoadingDialog(this,"正在提交...");
-                dialog.show();
+//                dialog.createLoadingDialog(this,"正在提交...");
+//                dialog.show();
                 RetrofitManager.getInstance().getDataServer().report(SharePreferenceUtil.getToken(AppUtils.getContext()), userid, type, content, img1, img2, img3, img4)
                         .enqueue(new Callback<ResponseBody>() {
                             @Override
                             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                                 if (response.isSuccessful()) {
-                                    dialog.dismiss();
+//                                    dialog.dismiss();
                                     try {
                                         String json = response.body().string();
 //                                        Log.e("------4444-----", json);
@@ -263,13 +263,13 @@ public class PrivateJiuBaoActivity extends AppCompatActivity {
                                         e.printStackTrace();
                                     }
                                 }else {
-                                    dialog.dismiss();
+//                                    dialog.dismiss();
                                 }
                             }
 
                             @Override
                             public void onFailure(Call<ResponseBody> call, Throwable t) {
-                                dialog.dismiss();
+//                                dialog.dismiss();
                             }
                         });
 

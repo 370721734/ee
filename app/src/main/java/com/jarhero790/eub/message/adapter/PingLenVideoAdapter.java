@@ -51,6 +51,8 @@ public class PingLenVideoAdapter extends RecyclerView.Adapter<PingLenVideoAdapte
         myHolder.content.setText(bean.getContent()+"  "+bean.getAddtime());
         myHolder.tvZan.setText(CommonUtil.showzannum(bean.getZan()));
 
+
+
 //
 //        if (bean.getAddtime().length() > 9) {
 //            myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));

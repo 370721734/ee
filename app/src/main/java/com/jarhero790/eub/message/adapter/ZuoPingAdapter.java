@@ -17,6 +17,7 @@ import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.utils.CommonUtil;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -26,11 +27,11 @@ import butterknife.ButterKnife;
 public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder> {
 
     private Context context;
-    private List<MyFaBuBean.DataBean> list;
+    private ArrayList<MyFaBuBean.DataBean> list;
     private Myclick myclick_delete;
     private Myclick myclick_tu;
 
-    public ZuoPingAdapter(Context context, List<MyFaBuBean.DataBean> list, Myclick myclick_delete, Myclick myclick_tu) {
+    public ZuoPingAdapter(Context context, ArrayList<MyFaBuBean.DataBean> list, Myclick myclick_delete, Myclick myclick_tu) {
         this.context = context;
         this.list = list;
         this.myclick_delete = myclick_delete;
