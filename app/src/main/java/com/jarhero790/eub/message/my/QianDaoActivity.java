@@ -368,13 +368,25 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 
     //个人签到页
     public void pinlen() {
-
-        RetrofitManager.getInstance().getDataServer().qiandao(SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new retrofit2.Callback<ResponseBody>() {
+        //通过RequestBody.create 创建requestBody对象
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("token", SharePreferenceUtil.getToken(AppUtils.getContext()))
+                .build();
+        OkHttpClient okHttpClient = new OkHttpClient();
+        Request request = new Request.Builder().url(Api.HOST + "web/index/sign_in").post(requestBody).build();
+        Call call = okHttpClient.newCall(request);
+        call.enqueue(new Callback() {
             @Override
-            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+            public void onFailure(Call call, IOException e) {
+//                Log.e("注册异常", e.getMessage());
+//                Toast.makeText(QianDaoActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
+            }
 
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                String result = response.body().string();
                 try {
-                    String result = response.body().string();
 //                    Log.e("-----1:", result);//{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
                     JSONObject object = JSONObject.parseObject(result);
                     PinLenBean bean = JSON.toJavaObject(object, PinLenBean.class);
@@ -522,38 +534,11 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                 } catch (Exception e) {
 
                 }
-            }
 
-            @Override
-            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
-
+//                Log.e("注册结果", result);
+                //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
             }
         });
-
-
-//        //通过RequestBody.create 创建requestBody对象
-//        RequestBody requestBody = new MultipartBody.Builder()
-//                .setType(MultipartBody.FORM)
-//                .addFormDataPart("token", SharePreferenceUtil.getToken(AppUtils.getContext()))
-//                .build();
-//        OkHttpClient okHttpClient = new OkHttpClient();
-//        Request request = new Request.Builder().url(Api.HOST + "web/index/sign_in").post(requestBody).build();
-//        Call call = okHttpClient.newCall(request);
-//        call.enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-////                Log.e("注册异常", e.getMessage());
-////                Toast.makeText(QianDaoActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//
-//
-////                Log.e("注册结果", result);
-//                //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
-//            }
-//        });
     }
 
 

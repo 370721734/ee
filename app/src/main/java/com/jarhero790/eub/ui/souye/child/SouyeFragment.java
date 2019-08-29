@@ -39,6 +39,7 @@ import com.jarhero790.eub.base.BasePresenter;
 import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
+import com.jarhero790.eub.message.bean.DialogPBean;
 import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
@@ -600,6 +601,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void showPingLun() {
         BottomPingLunDialog bottomPingLunDialog = BottomPingLunDialog.newInstance();
         bottomPingLunDialog.setCuposition(lists.get(mCurrentPosition).getVideo_id());
+        EventBus.getDefault().post(new DialogPBean(lists.get(mCurrentPosition).getVideo_id()));
         bottomPingLunDialog.show(getChildFragmentManager(), "pinglun");
     }
 

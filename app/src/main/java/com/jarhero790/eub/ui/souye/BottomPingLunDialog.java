@@ -19,12 +19,15 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.adapter.CommentExpandAdapter;
 import com.jarhero790.eub.message.adapter.PingLenVideoAdapter;
+import com.jarhero790.eub.message.bean.DialogPBean;
 import com.jarhero790.eub.message.bean.OtherPingLBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,6 +79,19 @@ public class BottomPingLunDialog extends DialogFragment {
     }
 
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEvent(String str){
+
+        adapter=new PingLenVideoAdapter(getActivity(),listBeans,myclick);
+        recyclerView.setAdapter(adapter);
+    }
+
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onEV(DialogPBean bean){
+        Log.e("--------------bean=>",bean.getVid());
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater,  ViewGroup container,  Bundle savedInstanceState) {
         // 去掉默认的标题
@@ -86,10 +102,7 @@ public class BottomPingLunDialog extends DialogFragment {
 //        CommentExpandAdapter adapter = new CommentExpandAdapter(inflater);
 //        expandableListView.setAdapter(adapter);
 
-        GridLayoutManager manager = new GridLayoutManager(getActivity(), 1);
-        recyclerView.setLayoutManager(manager);
-        adapter=new PingLenVideoAdapter(getActivity(),listBeans,myclick);
-        recyclerView.setAdapter(adapter);
+
 
 
         return frView;
@@ -99,7 +112,9 @@ public class BottomPingLunDialog extends DialogFragment {
     @Override
     public void onStart() {
         super.onStart();
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
+        GridLayoutManager manager = new GridLayoutManager(getActivity(), 1);
+        recyclerView.setLayoutManager(manager);
         if (curposition.equals("-1")){
             page=1;
             Log.e("------","来了没有");
@@ -150,6 +165,8 @@ public class BottomPingLunDialog extends DialogFragment {
                         if (response.isSuccessful()){
                             if (response.body()!=null && response.body().getCode()==200){
                                 itemlistBeans=response.body().getData().getCommentList();
+                                Log.e("----------k","="+itemlistBeans.size());
+                                EventBus.getDefault().post("ok");
 //                                layoutManager=new LinearLayoutManager(getActivity());
 //                                recyclerView.setLayoutManager(layoutManager);
 
@@ -178,5 +195,19 @@ public class BottomPingLunDialog extends DialogFragment {
 
         }
     };
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if(EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if(EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 }
