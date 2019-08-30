@@ -84,8 +84,8 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
      * 加载ViewHolder的布局
      */
     @Override
-    public VideoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemView = LayoutInflater.from(context).inflate(R.layout.souye_vedio_recyleview_item, parent, false);
+    public VideoHolder onCreateViewHolder(ViewGroup parent, int viewType) {  //parent -->null
+        View itemView = LayoutInflater.from(context).inflate(R.layout.souye_vedio_recyleview_item, null, false);
         return new VideoHolder(itemView);
     }
 

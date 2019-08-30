@@ -18,13 +18,21 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
     private OnViewPagerListener mOnViewPagerListener;
     private RecyclerView mRecyclerView;
     private int mDrift;//位移，用来判断移动方向
-    private List<Video> lists;
-    private ArrayList<MyFaBuBean.DataBean> liststwo;
+//    private List<Video> lists;
+//    private ArrayList<MyFaBuBean.DataBean> liststwo;
     private Context context;
     private OnNextPageImageListener onNextPageImageListener;
 
     public void setOnNextPageImageListener(OnNextPageImageListener onNextPageImageListener) {
         this.onNextPageImageListener = onNextPageImageListener;
+    }
+
+    public void setOnViewPagerListenertwo(OnViewPagerListener listener) {
+        this.mOnViewPagerListener = listener;
+    }
+
+    public void setOnViewPagerListener(OnViewPagerListener listener) {
+        this.mOnViewPagerListener = listener;
     }
 
     public interface OnNextPageImageListener {
@@ -122,12 +130,12 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
      */
     public void setOnViewPagerListener(OnViewPagerListener listener,List<Video> lists){
         this.mOnViewPagerListener = listener;
-        this.lists=lists;
+//        this.lists=lists;
     }
 
     public void setOnViewPagerListenertwo(OnViewPagerListener listener, ArrayList<MyFaBuBean.DataBean> lists){
         this.mOnViewPagerListener = listener;
-        this.liststwo=lists;
+//        this.liststwo=lists;
     }
 
     private RecyclerView.OnChildAttachStateChangeListener mChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
