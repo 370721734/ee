@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <com.dueeeke.videoplayer.player.VideoView
+        android:id="@+id/videoView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        />
 
     <ImageView
         android:id="@+id/thumb"
@@ -10,4 +18,252 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"/>
 
-</FrameLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/rlhead"
+        android:layout_marginBottom="50dp">
+
+        <ImageView
+            android:id="@+id/iv_play_pause"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/play_icon"
+            android:visibility="gone"
+            android:layout_centerInParent="true"/>
+
+        <LinearLayout
+            android:id="@+id/ll_like"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="13dp"
+            android:gravity="center_horizontal"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/linearLayout_heart"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:clickable="true"
+                android:gravity="center">
+
+                <!-- 点赞-->
+                <ImageView
+                    android:id="@+id/iv_like"
+                    android:layout_width="33dp"
+                    android:layout_height="31dp"
+                    android:layout_marginBottom="10dp"
+                    android:src="@mipmap/icon_video_heart" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:text="0"
+                android:textColor="#F4F0F0"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_gold_coin"
+                android:layout_width="23dp"
+                android:layout_height="35dp"
+                android:layout_marginBottom="10dp"
+                android:src="@mipmap/iv_gold_coin" />
+
+            <TextView
+                android:id="@+id/tv_gold_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:text="0"
+                android:textColor="#F4F0F0"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_commit"
+                android:layout_width="30dp"
+                android:layout_height="29dp"
+                android:layout_marginBottom="10dp"
+                android:src="@mipmap/icon_video_commit" />
+
+            <TextView
+                android:id="@+id/tv_pinglun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="25dp"
+                android:text="0"
+                android:textColor="#F4F0F0"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:id="@+id/iv_gift"
+                android:layout_width="26dp"
+                android:layout_height="26dp"
+                android:layout_marginBottom="25dp"
+                android:src="@mipmap/gift" />
+
+
+            <ImageView
+                android:id="@+id/iv_share"
+                android:layout_width="25dp"
+                android:layout_height="24dp"
+                android:layout_marginBottom="55dp"
+                android:src="@mipmap/icon_video_share" />
+
+
+
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:orientation="horizontal"
+                android:layout_height="wrap_content">
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/circleImageView"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    app:civ_border_width="5dp"
+                    android:visibility="visible"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginRight="15dp"
+                    app:civ_circle_background_color="@color/guangpan"
+                    android:layout_marginBottom="13dp"
+                    android:src="@mipmap/music" />
+
+                <com.jarhero790.eub.widget.Music
+                    android:id="@+id/m"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="20dp"
+
+                    app:musicimg="@mipmap/music1" />
+
+                <com.jarhero790.eub.widget.Music2
+                    android:id="@+id/m2"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_marginTop="30dp"
+                    app:musicimg="@mipmap/music2" />
+
+
+                <com.jarhero790.eub.message.souye.GuanPanView
+                    android:id="@+id/guanpan"
+                    android:layout_width="50dp"
+                    android:visibility="gone"
+                    android:layout_height="50dp" />
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+
+
+        <RelativeLayout
+            android:id="@+id/rl_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="90dp">
+
+            <LinearLayout
+                android:id="@+id/lltext"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginBottom="@dimen/dp_10"
+                android:orientation="horizontal">
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/souye_logo"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:src="@mipmap/souye_logo"/>
+                <TextView
+                    android:id="@+id/tv_uname"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="top"
+                    android:text="遨游"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:textColor="#FFEEEEEE"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+
+                <Button
+                    android:id="@+id/btn_attention"
+                    android:layout_width="60dp"
+                    android:layout_height="25dp"
+                    android:layout_marginLeft="@dimen/dp_10"
+                    android:layout_gravity="center_vertical"
+                    android:background="@drawable/button_shape3"
+                    android:text="+关注"
+                    android:textColor="#FFEEEEEE"
+                    android:textSize="16sp"
+                    android:textStyle="normal" />
+            </LinearLayout>
+
+
+
+            <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/lltext"
+                android:gravity="top"
+                android:lineSpacingExtra="3dp"
+                android:text=""
+                android:layout_marginBottom="@dimen/dp_10"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+
+
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="162dp"
+            android:layout_height="27dp"
+            android:layout_above="@id/rl_user"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="19dp"
+
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:adjustViewBounds="true"
+                android:src="@mipmap/goods_bg"/>
+            <TextView
+                android:id="@+id/tvgoodsnum"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="160"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="34dp"
+                android:textColor="#ffffffff"
+                android:textSize="12sp"
+                />
+            <TextView
+                android:id="@+id/tvgoodstext"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="#视频同款商品"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_10"
+                android:gravity="center_vertical"
+                android:textColor="#ffffffff"
+                android:textSize="12sp"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
+
+</RelativeLayout>

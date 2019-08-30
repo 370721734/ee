@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -15,6 +16,8 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.AttentionUserVideosComment;
 import com.jarhero790.eub.bean.AttentionVideo;
+import com.jarhero790.eub.message.attention.AttPinLAdapter;
+import com.jarhero790.eub.message.attention.OnItemClickear;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 
@@ -27,10 +30,23 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
     private ArrayList<AttentionVideo> attentionUsersVideos;
     private Context mcontext;
 
+//    public interface OnItemClick{
+//        void linerck(int position,String type,View view);
+//    }
+//    private OnItemClick onItemClick;
+//
+//    public void setOnItemClick(OnItemClick onItemClick) {
+//        this.onItemClick = onItemClick;
+//    }
+
+  private  OnItemClickear onItemClickear;
+
+
     //13410484747测试账号
-    public AttentionVideosAdapter(ArrayList<AttentionVideo> attentionUsersVideos,Context context){
+    public AttentionVideosAdapter(ArrayList<AttentionVideo> attentionUsersVideos,Context context,OnItemClickear onItemClickear){
         this.attentionUsersVideos=attentionUsersVideos;
         mcontext=context;
+        this.onItemClickear = onItemClickear;
     }
 
 
@@ -46,7 +62,7 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
         AttentionVideo attentionVideo=attentionUsersVideos.get(position);
         ArrayList<AttentionUserVideosComment> comments=attentionVideo.getComment();
         String videoImg=attentionVideo.getVideo_img();
-        Log.e("-------------hed",videoImg);
+//        Log.e("-------------hed",videoImg);
         if (videoImg.startsWith("http")){
             Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
                     .into(holder.ivdeault);
@@ -78,7 +94,8 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
 
 
         String vedioTitle=attentionVideo.getTitle();
-        holder.attentionsUserName.setText(vedioTitle);
+        holder.title.setText(vedioTitle);
+        holder.attentionsUserName.setText(attentionVideo.getNickname());
         String time=attentionVideo.getAddtime();
          if (time.length()>9){
              holder.date.setText(time.substring(5,10));
@@ -87,6 +104,63 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
          }
 
         Glide.with(AppUtils.getContext()).load(R.mipmap.icon_video_share).into(holder.share);
+
+        ArrayList<AttentionUserVideosComment> comment = attentionUsersVideos.get(position).getComment();
+        if (comment.size()>0){
+            holder.tvmore.setText("查看全部"+comment.size()+"条评论");
+        }else {
+            holder.tvmore.setText("暂无评论");
+        }
+
+        AttPinLAdapter attPinLAdapter=new AttPinLAdapter(mcontext,comment);
+        holder.listView.setAdapter(attPinLAdapter);
+
+
+        holder.videoPlayer.setUrl(attentionUsersVideos.get(position).getUrl());
+        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        holder.videoPlayer.start();
+
+
+        onClick(holder,position);
+    }
+
+    private void onClick(CustomViewHolder holder, int position) {
+        holder.share.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickear!=null){
+                    onItemClickear.linerck(position,"分享",view,view);
+                }
+            }
+        });
+        holder.pinglun.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickear!=null){
+                    onItemClickear.linerck(position,"评论",view,view);
+                }
+            }
+        });
+        holder.videolike.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickear!=null){
+                    onItemClickear.linerck(position,"点赞",view,view);
+                }
+            }
+        });
+        holder.ivplay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickear!=null){
+                    onItemClickear.linerck(position,"播放",view,holder.videoPlayer);
+                }
+            }
+        });
+
+
+
+
     }
 
     @Override
@@ -95,7 +169,7 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
     }
 
     class CustomViewHolder extends RecyclerView.ViewHolder {
-        private TextView date,attentionsUserName,zan;
+        private TextView date,attentionsUserName,zan,title,tvmore;
         private VideoView videoPlayer;
         private ImageView share;
         private ImageView pinglun;
@@ -103,6 +177,10 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
 
         CircleImageView userimage;
         ImageView ivdeault;
+
+        ImageView ivplay;
+
+        ListView listView;
 
 
         public CustomViewHolder(View view) {
@@ -116,6 +194,10 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
             userimage=view.findViewById(R.id.attentionsUserIcon);
             ivdeault=view.findViewById(R.id.iv_deault);
             zan=view.findViewById(R.id.zanshu);
+            ivplay=view.findViewById(R.id.iv_play);
+            title=view.findViewById(R.id.tv_text);
+            listView=view.findViewById(R.id.lv);
+            tvmore=view.findViewById(R.id.tv_more);
         }
     }
 }

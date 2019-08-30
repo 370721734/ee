@@ -326,6 +326,9 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 userInfoList.add(new UserInfo(userInfo.getData().getUser().getRong_id() + "", userInfo.getData().getUser().getNickname(), Uri.parse(Api.TU + userInfo.getData().getUser().getHeadimgurl())));//"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"
             }
             if (userInfo.getCode() == 200) {
+                app.setUserzhong(userInfo.getData().getUser());
+
+                SharePreferenceUtil.setuserid(userInfo.getData().getUser().getUser_id()+"",getActivity());
                 tvMemo.setText(userInfo.getData().getUser().getSign());
                 money = userInfo.getData().getUser().getMoney() + "";
                 signtime = userInfo.getData().getUser().getSigntime();

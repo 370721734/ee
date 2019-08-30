@@ -33,7 +33,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     private List<Video> videos;
     private Context context;
     RotateAnimation rotateAnimation;//旋转动画
-    public TikTokAdapter.OnItemClickListener mOnItemClickListerer;
+    private TikTokAdapter.OnItemClickListener mOnItemClickListerer;
 
     private boolean isshow = false;
 

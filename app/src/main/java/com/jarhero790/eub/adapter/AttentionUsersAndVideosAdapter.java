@@ -12,6 +12,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.AttentionUser;
 import com.jarhero790.eub.bean.AttentionUserAndVideoBen;
 import com.jarhero790.eub.bean.AttentionVideo;
+import com.jarhero790.eub.message.attention.OnItemClickear;
 import com.jarhero790.eub.utils.AppUtils;
 import java.util.ArrayList;
 
@@ -26,16 +27,18 @@ public class AttentionUsersAndVideosAdapter extends RecyclerView.Adapter<Recycle
     ArrayList<AttentionVideo> attentionUsersVideos;
 
     private Context mcontext;
+    private OnItemClickear onItemClickear;
 
     public final static int TYPE_1= 10000;//横向列表的viewType
     public final static int TYPE_2= 20000;//垂直列表的viewType
 
 
-    public AttentionUsersAndVideosAdapter(AttentionUserAndVideoBen attentionUserAndVideoBen,Context context) {
+    public AttentionUsersAndVideosAdapter(AttentionUserAndVideoBen attentionUserAndVideoBen,Context context,OnItemClickear onItemClickear) {
         this.attentionUserAndVideoBen = attentionUserAndVideoBen;
         attentionUsers=attentionUserAndVideoBen.getData().getMylike();
         attentionUsersVideos=attentionUserAndVideoBen.getData().getVideo();
         mcontext=context;
+        this.onItemClickear = onItemClickear;
     }
 
     @NonNull
@@ -71,7 +74,7 @@ public class AttentionUsersAndVideosAdapter extends RecyclerView.Adapter<Recycle
 
         if (viewHolder instanceof AttentionsUsersVideosViewHolder) {
             AttentionsUsersVideosViewHolder attentionsUsersVideosViewHolder=(AttentionsUsersVideosViewHolder)viewHolder;
-            AttentionVideosAdapter attentionVideosAdapter=new AttentionVideosAdapter(attentionUsersVideos,mcontext);
+            AttentionVideosAdapter attentionVideosAdapter=new AttentionVideosAdapter(attentionUsersVideos,mcontext,onItemClickear);
             LinearLayoutManager linearLayoutManager=new LinearLayoutManager(AppUtils.getContext(),LinearLayoutManager.VERTICAL,false);
             attentionsUsersVideosViewHolder.recyclerViewAttentionsUsersVideos.setLayoutManager(linearLayoutManager);
             attentionsUsersVideosViewHolder.recyclerViewAttentionsUsersVideos.setAdapter(attentionVideosAdapter);

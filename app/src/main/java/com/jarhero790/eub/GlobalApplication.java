@@ -34,6 +34,7 @@ public class GlobalApplication extends Application {
     private UserBean userbean;
 
     private UserCen userCen;
+    private UserCen.DataBean.UserBean userzhong;
 
     public  String TOKEN;
 
@@ -175,5 +176,14 @@ public class GlobalApplication extends Application {
             }
         }
         return null;
+    }
+
+
+    public UserCen.DataBean.UserBean getUserzhong() {
+        return userzhong;
+    }
+
+    public void setUserzhong(UserCen.DataBean.UserBean userzhong) {
+        this.userzhong = userzhong;
     }
 }

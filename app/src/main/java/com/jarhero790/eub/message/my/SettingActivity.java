@@ -372,6 +372,7 @@ public class SettingActivity extends AppCompatActivity {
                 SharePreferenceUtil.clearToken(this);
                 SharePreferenceUtil.clearSharePref(SharePreferenceUtil.IS_LOGIN, this);
                 startActivity(new Intent(this, LoginNewActivity.class));
+                SharePreferenceUtil.clearUserid(this);
                 break;
             case R.id.tv_xieyi:
                 startActivity(new Intent(SettingActivity.this, XieYiActivity.class));

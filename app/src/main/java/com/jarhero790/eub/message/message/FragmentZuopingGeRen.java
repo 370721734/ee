@@ -16,6 +16,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
+import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
@@ -37,7 +38,7 @@ public class FragmentZuopingGeRen extends Fragment {
 
     RecyclerView rlv;
     Unbinder unbinder;
-    @BindView(R.id.nodingdan)
+//    @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
     @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
@@ -62,6 +63,7 @@ public class FragmentZuopingGeRen extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_zuoping, container, false);
         rlv = view.findViewById(R.id.rlv);
+        nodingdan=view.findViewById(R.id.nodingdan);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -148,6 +150,10 @@ public class FragmentZuopingGeRen extends Fragment {
         @Override
         public void myclick(int position, View view) {
             Log.e("-------2", "" + position);
+            Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
+            intent.putExtra("position",position);
+            intent.putExtra("vidlist",list);
+            startActivity(intent);
         }
     };
 

@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.mine;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
@@ -14,6 +15,8 @@ import android.widget.Toast;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
 import com.jarhero790.eub.message.bean.LikeBean;
+import com.jarhero790.eub.message.bean.MyFaBuBean;
+import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
@@ -44,7 +47,7 @@ public class FragmentLike extends SupportFragment {
 
     private static FragmentLike instance = null;
 
-    List<LikeBean.DataBean> likeBeans = new ArrayList<>();
+    ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();
     LikeAdapter adapter;
 
     public static FragmentLike newInstance() {
@@ -92,30 +95,30 @@ public class FragmentLike extends SupportFragment {
     }
 
 //    CustomProgressDialog dialog = new CustomProgressDialog();
-    retrofit2.Call<LikeBean> calls=null;
+    retrofit2.Call<MyFaBuBean> calls=null;
     private void initDate() {
 //        dialog.createLoadingDialog(getActivity(), "正在加载...");
 //        dialog.show();
         RetrofitManager.getInstance().getDataServer().zanvideo(SharePreferenceUtil.getToken(AppUtils.getContext()))
-                .enqueue(new Callback<LikeBean>() {
+                .enqueue(new Callback<MyFaBuBean>() {
                     @Override
-                    public void onResponse(Call<LikeBean> call, Response<LikeBean> response) {
+                    public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         calls=call;
                         if (response.isSuccessful()) {
 //                            dialog.dismiss();
                             if (response.body().getData().size()>0){
-                                likeBeans.clear();
+                                list.clear();
                                 rlv.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
-                                likeBeans = response.body().getData();
+                                list = response.body().getData();
                                 GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
                                 rlv.setLayoutManager(manager);
                                 LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
                                 linearItemDecoration.setSpanSpace(10);
                                 linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
                                 rlv.addItemDecoration(linearItemDecoration);
-                                adapter = new LikeAdapter(getActivity(), likeBeans, myclickdele, myclicktu);
+                                adapter = new LikeAdapter(getActivity(), list, myclickdele, myclicktu);
                                 rlv.setAdapter(adapter);
                             }else {
                                 rlv.setVisibility(View.GONE);
@@ -131,7 +134,7 @@ public class FragmentLike extends SupportFragment {
                     }
 
                     @Override
-                    public void onFailure(Call<LikeBean> call, Throwable t) {
+                    public void onFailure(Call<MyFaBuBean> call, Throwable t) {
 //                        dialog.dismiss();
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
@@ -150,7 +153,11 @@ public class FragmentLike extends SupportFragment {
     LikeAdapter.Myclick myclicktu = new LikeAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------2", "" + position);
+//            Log.e("-------2", "" + position);
+            Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
+            intent.putExtra("position",position);
+            intent.putExtra("vidlist",list);
+            startActivity(intent);
         }
     };
 

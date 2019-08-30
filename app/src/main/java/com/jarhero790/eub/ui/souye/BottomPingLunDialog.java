@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.PingLenVideoAdapter;
@@ -27,10 +30,14 @@ import com.jarhero790.eub.utils.SharePreferenceUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -42,8 +49,11 @@ public class BottomPingLunDialog extends DialogFragment {
     private Window window;
 
     private RecyclerView recyclerView;
-    TextView tvnum;
+    TextView tvnum,fa;
+    EditText mcontent;
     ImageView imageView;
+
+   private String vid;
     private static BottomPingLunDialog instance = null;
 
     private DialogInterface.OnDismissListener mOnClickListener;
@@ -109,6 +119,8 @@ public class BottomPingLunDialog extends DialogFragment {
         recyclerView = frView.findViewById(R.id.rlv);
         tvnum = frView.findViewById(R.id.tv_num);
         imageView = frView.findViewById(R.id.iv_exit);
+        fa=frView.findViewById(R.id.tv_fa);
+        mcontent=frView.findViewById(R.id.et_content);
 
         //默认展开所有回复
 //        CommentExpandAdapter adapter = new CommentExpandAdapter(inflater);
@@ -131,7 +143,7 @@ public class BottomPingLunDialog extends DialogFragment {
         EventBus.getDefault().register(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-            String vid = bundle.getString("vid");
+             vid = bundle.getString("vid");
             Log.e("------------vid=>", vid);
             page = 1;
             requestdate(vid);
@@ -196,6 +208,64 @@ public class BottomPingLunDialog extends DialogFragment {
             }
         });
 
+
+        //ok
+        fa.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String etcontent=mcontent.getText().toString();
+                if (TextUtils.isEmpty(etcontent)){
+                    Toast.makeText(getActivity(),"不能发送空消息",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                fa.setEnabled(false);
+                fatext(etcontent);
+            }
+        });
+
+    }
+
+    private void fatext(String str) {
+
+        if (vid==null){
+            fa.setEnabled(true);
+            return;
+        }
+
+        RetrofitManager.getInstance().getDataServer().attention_pinlen(str,vid,SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        String json=response.body().string();
+                        Log.e("---------",json);
+                        JSONObject object=new JSONObject(json);
+                        int code=object.optInt("code");
+                        String msg=object.optString("msg");
+                        if (code==200){
+                            requestdate(vid);
+                            fa.setEnabled(true);
+                        }else {
+                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                            fa.setEnabled(true);
+                        }
+
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    fa.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                fa.setEnabled(true);
+            }
+        });
     }
 
 //    CustomProgressDialog dialog = new CustomProgressDialog();

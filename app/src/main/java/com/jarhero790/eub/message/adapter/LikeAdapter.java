@@ -25,11 +25,11 @@ import butterknife.ButterKnife;
 public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.MyHolder> {
 
     private Context context;
-    private List<LikeBean.DataBean> list;
+    private List<MyFaBuBean.DataBean> list;
     private Myclick myclick_delete;
     private Myclick myclick_tu;
 
-    public LikeAdapter(Context context, List<LikeBean.DataBean> list, Myclick myclick_delete, Myclick myclick_tu) {
+    public LikeAdapter(Context context, List<MyFaBuBean.DataBean> list, Myclick myclick_delete, Myclick myclick_tu) {
         this.context = context;
         this.list = list;
         this.myclick_delete = myclick_delete;
@@ -45,7 +45,7 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.MyHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull LikeAdapter.MyHolder holder, int position) {
-        LikeBean.DataBean bean = list.get(position);
+        MyFaBuBean.DataBean bean = list.get(position);
         Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.video_deault).error(R.mipmap.video_deault)).into(holder.ivIcon);
         holder.tvXin.setText(shownum(bean.getZan()));
         holder.tvGo.setText(shownum(bean.getVisit_val()));

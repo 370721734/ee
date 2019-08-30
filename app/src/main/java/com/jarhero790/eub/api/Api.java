@@ -134,6 +134,13 @@ public interface Api {
      */
     @POST("web/index/zan")
     Observable<ShipinDianZanBean> zan(@Query("vid") String videoID, @Query("token") String tokenValue);
+    /**
+     * 视频点赞或者取消赞
+     * vid	   	视频ID
+       token	token*
+     */
+    @POST("web/index/zan")
+    Call<ShipinDianZanBean> zanorno(@Query("vid") String videoID, @Query("token") String tokenValue);
 
 
     //短信接口
@@ -245,12 +252,12 @@ public interface Api {
     //个人中心点赞的视频
     @FormUrlEncoded
     @POST("web/index/zanvideo")
-    Call<LikeBean> zanvideo(@Field("token") String token);
+    Call<MyFaBuBean> zanvideo(@Field("token") String token);
 
     //个人中心点赞的视频other
     @FormUrlEncoded
     @POST("web/index/zanvideo")
-    Call<LikeBean> zanvideoother(@Field("token") String token,@Field("uid") String uid);
+    Call<MyFaBuBean> zanvideoother(@Field("token") String token,@Field("uid") String uid);
 
     //我的关注
     @FormUrlEncoded
@@ -304,4 +311,19 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/getComment")
     Call<OtherPingLBean> getotherpinlen(@Field("page") Integer page, @Field("vid") String v, @Field("token") String token);
+
+
+
+
+    //发布的视频进行评论
+    @FormUrlEncoded
+    @POST("web/index/comment")
+    Call<ResponseBody> attention_pinlen(@Field("comment") String comment, @Field("vid") String v, @Field("token") String token);
+
+
+
+
+
+
+
 }

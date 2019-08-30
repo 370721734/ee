@@ -336,10 +336,17 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
               break;
           case R.id.attention:
 
-              if (islogin.equals("ddd")){
-                  return;
-              }
-              if (islogin.equals("400")){
+//              if (islogin.equals("ddd")){
+//                  return;
+//              }
+//              if (islogin.equals("400")){
+//
+//              }else {
+//
+//              }
+
+
+              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
                   Intent intent = new Intent(this, LoginNewActivity.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                   startActivity(intent);
@@ -347,12 +354,19 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
                   clickAttention();
               }
 
+
               break;
           case R.id.record:
-              if (islogin.equals("ddd")){
-                  return;
-              }
-              if (islogin.equals("400")){
+//              if (islogin.equals("ddd")){
+//                  return;
+//              }
+//              if (islogin.equals("400")){
+//
+//              }else {
+//
+//              }
+
+              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
                   Intent intent = new Intent(this, LoginNewActivity.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                   startActivity(intent);
@@ -361,13 +375,21 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
                   startActivity(intent);
               }
 
+
+
               break;
           case R.id.message:
-              if (islogin.equals("ddd")){
-                  Log.e("-------------","ddd");
-                  return;
-              }
-              if (islogin.equals("400")){
+//              if (islogin.equals("ddd")){
+//                  Log.e("-------------","ddd");
+//                  return;
+//              }
+//              if (islogin.equals("400")){
+//
+//              }else {
+//
+//              }
+
+              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
                   Intent intent = new Intent(this, LoginNewActivity.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                   startActivity(intent);
@@ -377,10 +399,17 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 
               break;
           case R.id.mine:
-              if (islogin.equals("ddd")){
-                  return;
-              }
-              if (islogin.equals("400")){
+//              if (islogin.equals("ddd")){
+//                  return;
+//              }
+//              if (islogin.equals("400")){
+//
+//              }else {
+//
+//              }
+
+
+              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
                   Intent intent = new Intent(this, LoginNewActivity.class);
                   intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
                   startActivity(intent);

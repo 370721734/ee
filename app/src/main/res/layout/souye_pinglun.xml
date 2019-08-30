@@ -30,6 +30,8 @@
             android:layout_centerVertical="true"
             android:src="@mipmap/pinlenexit"/>
     </RelativeLayout>
+    
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -42,5 +44,36 @@
         </android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:gravity="center_vertical"
+        android:layout_height="52dp">
+
+        <TextView
+            android:id="@+id/tv_fa"
+            android:layout_width="55dp"
+            android:layout_height="28dp"
+            android:text="发送"
+            android:background="@drawable/atten_fa_butt"
+            android:textColor="#ff3f3f3f"
+            android:layout_alignParentRight="true"
+            android:textSize="15sp"
+            android:gravity="center"
+            android:layout_marginRight="15dp"
+            />
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_toLeftOf="@id/tv_fa"
+            android:layout_width="match_parent"
+            android:hint="发送消息..."
+            android:paddingLeft="10dp"
+            android:textColorHint="#676A73"
+            android:textColor="@android:color/white"
+            android:background="@drawable/atten_fa"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="20dp"
+            android:layout_height="34dp" />
+    </RelativeLayout>
 
 </LinearLayout>

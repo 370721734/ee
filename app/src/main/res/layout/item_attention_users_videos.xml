@@ -60,22 +60,23 @@
             android:layout_width="match_parent"
             android:layout_height="390dp"
             android:background="#222222" />
+
         <ImageView
             android:id="@+id/iv_deault"
             android:layout_width="match_parent"
             android:layout_height="390dp"
-            android:scaleType="fitXY"
             android:adjustViewBounds="true"
-             />
+            android:scaleType="fitXY" />
 
         <ImageView
             android:id="@+id/iv_play"
-            android:layout_width="14dp"
-            android:layout_height="23dp"
+            android:layout_width="24dp"
+            android:layout_height="33dp"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
             android:layout_marginRight="12dp"
             android:layout_marginBottom="19dp"
+            android:padding="6dp"
             android:src="@mipmap/play_pause_icon" />
 
         <TextView
@@ -84,7 +85,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="43dp"
+            android:layout_marginRight="33dp"
             android:layout_marginBottom="16dp"
             android:layout_toLeftOf="@id/iv_play"
             android:text="钻视tv迭代开发火热进行中，请耐心等待下一
@@ -107,8 +108,8 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="7-18"
-            android:textSize="12dp"
-            android:textColor="#6D7079" />
+            android:textColor="#6D7079"
+            android:textSize="12dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -131,8 +132,8 @@
                 android:layout_width="25dp"
                 android:layout_height="24dp"
                 android:layout_gravity="center"
-                android:gravity="center"
                 android:layout_marginRight="34dp"
+                android:gravity="center"
                 android:src="@mipmap/videos_pinglun" />
 
             <ImageView
@@ -149,9 +150,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="162dp"
-        android:background="#1D1F2B"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
+        android:background="#1D1F2B"
         android:orientation="vertical">
 
         <TextView
@@ -161,8 +162,8 @@
             android:layout_marginLeft="10dp"
             android:layout_marginTop="11dp"
             android:text=""
-            android:textSize="13dp"
-            android:textColor="#AAADB6" />
+            android:textColor="#AAADB6"
+            android:textSize="13dp" />
 
         <View
             android:layout_width="match_parent"
@@ -170,32 +171,25 @@
             android:layout_marginTop="@dimen/dp_10"
             android:background="#434343" />
 
-        <TextView
-            android:id="@+id/pingluncontent1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="路人甲: 你这个视频不好呀！"
-            android:textColor="#ffffff"
-            android:textSize="18dp" />
+        <ListView
+            android:id="@+id/lv"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="11dp"
+            android:divider="#1D1F2B"
+            android:dividerHeight="1dp"
+            android:layout_marginRight="10dp">
+
+        </ListView>
 
         <TextView
-            android:id="@+id/pingluncontent2"
+            android:id="@+id/tv_more"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="30dp"
-            android:text="路人乙: 你这个APP的确一般呀！"
-            android:textColor="#ffffff"
-            android:textSize="18dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="30dp"
-            android:text="查看全部1000条评论"
+            android:text=""
             android:textColor="#ffffff" />
-
-
 
 
     </LinearLayout>
