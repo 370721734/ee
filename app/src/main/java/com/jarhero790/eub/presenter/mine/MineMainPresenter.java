@@ -62,7 +62,7 @@ public class MineMainPresenter extends MineMainContract.MineMainPresenter {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Toast.makeText(getContext(),"请求异常",Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(),"请求异常",Toast.LENGTH_LONG).show();
             }
         }));
 
@@ -83,7 +83,7 @@ public class MineMainPresenter extends MineMainContract.MineMainPresenter {
         }, new Consumer<Throwable>() {
             @Override
             public void accept(Throwable throwable) throws Exception {
-                Toast.makeText(getContext(),"请求异常",Toast.LENGTH_LONG).show();
+//                Toast.makeText(getContext(),"请求异常",Toast.LENGTH_LONG).show();
             }
         }));
     }

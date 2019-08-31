@@ -781,7 +781,7 @@ public class SettingActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Toast.makeText(SettingActivity.this,"网络请求异常",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(SettingActivity.this,"网络请求异常",Toast.LENGTH_SHORT).show();
 //                        dialog.dismiss();
                     }
                 });

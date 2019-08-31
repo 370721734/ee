@@ -31,6 +31,7 @@ public class AttentionUsersAndVideosAdapter extends RecyclerView.Adapter<Recycle
 
     public final static int TYPE_1= 10000;//横向列表的viewType
     public final static int TYPE_2= 20000;//垂直列表的viewType
+    int firstVisibleItem, lastVisibleItem, visibleCount;
 
 
     public AttentionUsersAndVideosAdapter(AttentionUserAndVideoBen attentionUserAndVideoBen,Context context,OnItemClickear onItemClickear) {
@@ -78,6 +79,31 @@ public class AttentionUsersAndVideosAdapter extends RecyclerView.Adapter<Recycle
             LinearLayoutManager linearLayoutManager=new LinearLayoutManager(AppUtils.getContext(),LinearLayoutManager.VERTICAL,false);
             attentionsUsersVideosViewHolder.recyclerViewAttentionsUsersVideos.setLayoutManager(linearLayoutManager);
             attentionsUsersVideosViewHolder.recyclerViewAttentionsUsersVideos.setAdapter(attentionVideosAdapter);
+
+
+
+            attentionsUsersVideosViewHolder.recyclerViewAttentionsUsersVideos.addOnScrollListener(new RecyclerView.OnScrollListener() {
+                @Override
+                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                    super.onScrollStateChanged(recyclerView, newState);
+                    switch (newState){
+                        case RecyclerView.SCROLL_STATE_IDLE:
+//                            autoPlayVideo(recyclerView);//滚动停止
+                            Log.e("--------------0","滚动停止");
+                            break;
+                    }
+                }
+
+                @Override
+                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                    super.onScrolled(recyclerView, dx, dy);
+                    firstVisibleItem=linearLayoutManager.findFirstVisibleItemPosition();
+                    lastVisibleItem=linearLayoutManager.findLastVisibleItemPosition();
+                    visibleCount=lastVisibleItem-firstVisibleItem;//记录可视区域item个数
+                    Log.e("--------------0",firstVisibleItem+"  "+lastVisibleItem+"  "+visibleCount);
+                }
+            });
+
         }
 
     }

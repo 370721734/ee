@@ -161,7 +161,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
         String signtime = intent.getStringExtra("signtime");
         if (signtime == null || signtime.length() == 0 || signtime.equals("null")) {
             tvQiandao.setText("签到");
-            Log.e("----------11", signtime);
+            Log.e("----------11", "time null");
         } else {
             //判断是否是今天才行
             if (signtime.length() > 9) {
@@ -323,12 +323,14 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                     }
 
                                     tvQiandao.setText("已签到");//如何保存状态
+                                    pinlen();
 
 
                                     //set image
                                     calendarAdapter.setNumber(day);
                                     Log.e("-----------1", "" + day);
                                     calendarAdapter.notifyDataSetChanged();
+                                    Toast.makeText(QianDaoActivity.this, msg, Toast.LENGTH_SHORT).show();
                                 } else {
                                     tvQiandao.setText("已签到");
                                     if (data == null || data.length() == 0 || data.equals("") || data.equals("null")) {

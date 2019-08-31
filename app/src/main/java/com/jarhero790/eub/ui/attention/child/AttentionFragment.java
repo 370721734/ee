@@ -2,6 +2,7 @@ package com.jarhero790.eub.ui.attention.child;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,6 +14,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.dueeeke.videoplayer.player.VideoView;
+import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.AttentionUsersAndVideosAdapter;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
@@ -50,6 +52,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     AttentionUsersAndVideosAdapter attentionUsersAndVideosAdapter;
 
     private static AttentionFragment attentionFragment;
+
+    int firstVisibleItem, lastVisibleItem, visibleCount;
 
     public static AttentionFragment newInstance() {
         if(attentionFragment==null){
@@ -94,6 +98,90 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         attentionUsersAndVideosAdapter = new AttentionUsersAndVideosAdapter(attentionUserAndVideoBen,getActivity(),this);
         recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
         recyclerViewAttentionUsers.setAdapter(attentionUsersAndVideosAdapter);
+
+
+
+        recyclerViewAttentionUsers.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+                VideoView videoView=view.findViewById(R.id.video_player);
+                if (videoView!=null && !videoView.isFullScreen()){
+                    videoView.release();
+                }
+            }
+        });
+
+        recyclerViewAttentionUsers.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                switch (newState){
+                    case RecyclerView.SCROLL_STATE_IDLE:
+                        autoPlayVideo(recyclerView);//滚动停止
+                        Log.e("--------------1","滚动停止");
+                        break;
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                firstVisibleItem=linearLayoutManager.findFirstVisibleItemPosition();
+                lastVisibleItem=linearLayoutManager.findLastVisibleItemPosition();
+                visibleCount=lastVisibleItem-firstVisibleItem;//记录可视区域item个数
+                Log.e("--------------1",firstVisibleItem+"  "+lastVisibleItem+"  "+visibleCount);
+            }
+
+
+            private void autoPlayVideo(RecyclerView recyclerView) {
+                //循环遍历可视区域videoview,如果完全可见就开始播放
+                for (int i = 0; i < visibleCount; i++) {
+                    if (recyclerView==null || recyclerView.getChildAt(i)==null)
+                        continue;
+                    VideoView videoView=recyclerView.getChildAt(i).findViewById(R.id.video_player);
+                    if (videoView!=null){
+                        Rect rect=new Rect();
+                        videoView.getLocalVisibleRect(rect);
+                        int videoHeight=videoView.getHeight();
+                        if (rect.top==0 && rect.bottom==videoHeight){
+                            videoView.start();
+                            return;
+                        }
+                    }
+                }
+
+            }
+        });
+
+
+//        recyclerViewAttentionUsers.post(()->{
+//            //自动播放第一个
+//            View view=recyclerViewAttentionUsers.getChildAt(0);
+//            VideoView videoView=view.findViewById(R.id.video_player);
+//            videoView.start();
+//        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         /**
         this.attentionUsers=attentionUsers;
         attentionUsersAdapter = new AttentionUsersAdapter(attentionUsers);
@@ -115,9 +203,17 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
 
 
+
     @Override
     public void showNetworkError() {
 
+    }
+
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        VideoViewManager.instance().release();
     }
 
 
@@ -179,9 +275,22 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     @Override
     public void linerck(int position, String type, View view,View view2) {
         Log.e("---------",type+"  "+position);
-        if (type.equals("播放")){
+        if (type.equals("播放")){  //点了能播放
             ImageView ivplay = (ImageView) view;
             VideoView videoView= (VideoView) view2;
+            videoView.setUrl(attentionUsersVideos.get(position).getUrl());
+            videoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+            videoView.setLooping(true);
+            videoView.start();
+
+            if (videoView.isPlaying()){
+                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
+                videoView.pause();
+            }else {
+                videoView.start();
+                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+            }
+
 
 
         }else if (type.equals("分享")){
