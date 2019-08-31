@@ -17,6 +17,8 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.AttentionUsersAndVideosAdapter;
+import com.jarhero790.eub.adapter.OnViewPagerListener;
+import com.jarhero790.eub.adapter.VideoRecyclerViewAdapter;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
 import com.jarhero790.eub.base.BasePresenter;
 import com.jarhero790.eub.bean.AttentionUserAndVideoBen;
@@ -35,6 +37,7 @@ import com.jarhero790.eub.utils.SharePreferenceUtil;
 import java.util.ArrayList;
 
 import butterknife.BindView;
+import io.rong.common.fwlog.LogEntity;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -45,6 +48,10 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
     //关注的用户所发布的视频
     LinearLayoutManager linearLayoutManager;
+    View viewplaypause;//
+    View viewivdeault;
+    View viewvideo;
+    private int mCurrentPosition;//当前播放的第几个视频 ，
 
     @BindView(R.id.recyclerViewAttentionUsers)
     RecyclerView recyclerViewAttentionUsers;
@@ -54,6 +61,12 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     private static AttentionFragment attentionFragment;
 
     int firstVisibleItem, lastVisibleItem, visibleCount;
+
+    VideoRecyclerViewAdapter adapter;
+
+
+    private boolean isLook = true;//可见
+    private VideoView mVideoView;
 
     public static AttentionFragment newInstance() {
         if(attentionFragment==null){
@@ -95,9 +108,19 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     public void displayMyAttentionUsersAndVideos(AttentionUserAndVideoBen attentionUserAndVideoBen) {
         //Log.e("接收的数据",attentionUserAndVideoBen.toString());
         attentionUsersVideos=attentionUserAndVideoBen.getData().getVideo();
-        attentionUsersAndVideosAdapter = new AttentionUsersAndVideosAdapter(attentionUserAndVideoBen,getActivity(),this);
+
+        //
+        adapter=new VideoRecyclerViewAdapter(attentionUsersVideos,getActivity(),this);
         recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
-        recyclerViewAttentionUsers.setAdapter(attentionUsersAndVideosAdapter);
+        recyclerViewAttentionUsers.setAdapter(adapter);
+
+
+
+
+
+//        attentionUsersAndVideosAdapter = new AttentionUsersAndVideosAdapter(attentionUserAndVideoBen,getActivity(),this);
+//        recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
+//        recyclerViewAttentionUsers.setAdapter(attentionUsersAndVideosAdapter);
 
 
 
@@ -110,8 +133,15 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             @Override
             public void onChildViewDetachedFromWindow(@NonNull View view) {
                 VideoView videoView=view.findViewById(R.id.video_player);
+                Log.e("------------","窗口消失了");
                 if (videoView!=null && !videoView.isFullScreen()){
                     videoView.release();
+                    viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+                    viewplaypause=linearLayoutManager.findViewByPosition(mCurrentPosition);
+                    if (viewivdeault != null)
+                        viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.VISIBLE);
+                    if (viewplaypause!=null)
+                        ((ImageView)(viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
                 }
             }
         });
@@ -135,21 +165,48 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                 lastVisibleItem=linearLayoutManager.findLastVisibleItemPosition();
                 visibleCount=lastVisibleItem-firstVisibleItem;//记录可视区域item个数
                 Log.e("--------------1",firstVisibleItem+"  "+lastVisibleItem+"  "+visibleCount);
+                mCurrentPosition=lastVisibleItem;
             }
 
 
             private void autoPlayVideo(RecyclerView recyclerView) {
                 //循环遍历可视区域videoview,如果完全可见就开始播放
-                for (int i = 0; i < visibleCount; i++) {
-                    if (recyclerView==null || recyclerView.getChildAt(i)==null)
+                for (int i = 0; i <= visibleCount; i++) {
+                    if (recyclerView==null || recyclerView.getChildAt(i)==null){
+                        Log.e("----------","1");
                         continue;
+                    }
+
                     VideoView videoView=recyclerView.getChildAt(i).findViewById(R.id.video_player);
                     if (videoView!=null){
+                        Log.e("----------","2");
                         Rect rect=new Rect();
                         videoView.getLocalVisibleRect(rect);
+
                         int videoHeight=videoView.getHeight();
+//                        Log.e("-----------height=",videoHeight+" "+rect.top+"  "+rect.bottom);
+
+//                        if (Math.abs((rect.top-rect.bottom))==videoHeight){
+//                            Log.e("----------","3");
+//                            videoView.start();
+//                            viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+//                            if (viewivdeault != null)
+//                                viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
+//                            return;
+//                        }
+
+
+
+
                         if (rect.top==0 && rect.bottom==videoHeight){
+                            Log.e("----------","3");
                             videoView.start();
+                            viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+                            viewplaypause=linearLayoutManager.findViewByPosition(mCurrentPosition);
+                            if (viewivdeault != null)
+                                viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
+                            if (viewplaypause!=null)
+                                ((ImageView)(viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
                             return;
                         }
                     }
@@ -159,12 +216,25 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         });
 
 
-//        recyclerViewAttentionUsers.post(()->{
-//            //自动播放第一个
-//            View view=recyclerViewAttentionUsers.getChildAt(0);
-//            VideoView videoView=view.findViewById(R.id.video_player);
-//            videoView.start();
-//        });
+
+
+
+        //ok
+//        startPlay(0);
+        recyclerViewAttentionUsers.post(()->{
+            //自动播放第一个
+            View view=recyclerViewAttentionUsers.getChildAt(0);
+            VideoView videoView=view.findViewById(R.id.video_player);
+            videoView.start();
+            viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+            viewplaypause=linearLayoutManager.findViewByPosition(mCurrentPosition);
+            if (viewivdeault != null)
+                viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
+            if (viewplaypause!=null)
+                ((ImageView)(viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+        });
+
+
 
 
 
@@ -202,7 +272,61 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     }
 
 
+    private void startPlay(int position){
+        //自动播放第一个
+//        View view=recyclerViewAttentionUsers.getChildAt(position);
+//        VideoView videoView=view.findViewById(R.id.video_player);
+//        videoView.start();
+        if (attentionUsersVideos==null  || attentionUsersVideos.size() == 0)
+            return;
+        mVideoView.setUrl(attentionUsersVideos.get(position).getUrl());
+        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        mVideoView.start();
+        viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+        viewplaypause=linearLayoutManager.findViewByPosition(mCurrentPosition);
+        if (viewivdeault != null)
+            viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
+        if (viewplaypause!=null)
+            ((ImageView)(viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+    }
 
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (linearLayoutManager!=null)
+        viewvideo=linearLayoutManager.findViewByPosition(mCurrentPosition);
+        if (viewvideo!=null)
+            mVideoView=viewvideo.findViewById(R.id.video_player);
+        if (hidden){
+            //不可见
+            setLook(false);
+            if (mVideoView != null) {
+                mVideoView.pause();
+                Log.e("------------","a1="+hidden);
+            }
+//            else {
+//                Log.e("------------","a2="+hidden);
+//                mVideoView = new VideoView(AppUtils.getContext());
+//                mVideoView.pause();
+//            }
+        }else {
+            //可见
+//            Log.e("------------","b="+hidden);
+            setLook(true);
+            if (mVideoView != null) {
+                mVideoView.resume();
+                Log.e("----------b1", "是不是这里" + mCurrentPosition);
+                startPlay(mCurrentPosition);
+
+            }
+//            else {
+//                mVideoView = new VideoView(AppUtils.getContext());
+//                mVideoView.resume();
+//                startPlay(mCurrentPosition);
+//                Log.e("----------b2", "是不是这里");
+//            }
+        }
+    }
 
     @Override
     public void showNetworkError() {
@@ -212,6 +336,9 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
     @Override
     public void onPause() {
+        if (mVideoView != null) {
+            mVideoView.pause();
+        }
         super.onPause();
         VideoViewManager.instance().release();
     }
@@ -227,6 +354,9 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
         //加载数据
         mPresenter.requestMyAttentionUsersAndUsersVideos();
+        viewvideo=linearLayoutManager.findViewByPosition(mCurrentPosition);
+        if (viewvideo!=null)
+        mVideoView=viewvideo.findViewById(R.id.video_player);
     }
 
     @Override
@@ -331,5 +461,39 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         }
     }
 
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (mVideoView != null) {
+            Log.e("---------islokk", "" + isLook());
+            if (isLook()) {
+                mVideoView.resume();
+//                flag.set(true);
+
+
+            }
+//            if (mPresenter!=null)
+//            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+            Log.e("-------", "attention-onResume");
+        } else {
+            Log.e("-------", "attention-onResumeN");
+        }
+
+    }
+
+
+
+
+
+
+    public boolean isLook() {
+        return isLook;
+    }
+
+    public void setLook(boolean look) {
+        isLook = look;
+    }
 }
 

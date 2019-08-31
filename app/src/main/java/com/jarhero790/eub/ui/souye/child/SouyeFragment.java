@@ -16,6 +16,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewParent;
+import android.view.animation.Animation;
+import android.view.animation.LinearInterpolator;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -60,7 +63,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 //1.动画旋转问题
-//2分享，3.金币，4光盘，
+//2分享，
 public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePresenter>
         implements SouyeContract.ISouyeView, View.OnClickListener, ViewPagerLayoutManager.OnNextPageImageListener {
 
@@ -94,7 +97,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     private AtomicBoolean flag = new AtomicBoolean(true);
 
-
+    RotateAnimation rotateAnimation;//旋转动画
+//    View viewcir;
 //    private boolean isPrepared = true;
 
     private static SouyeFragment instance = null;
@@ -113,9 +117,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tuijian://推荐
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
-                    startActivity(new Intent(getActivity(), LoginNewActivity.class));
-                } else {
                     textViewTuijian.setBackgroundResource(R.drawable.button_shape1);
                     textViewTuijian.setTextColor(Color.parseColor("#0E0E0E"));
                     textViewZuixin.setTextColor(Color.parseColor("#EFEDED"));
@@ -125,8 +126,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
 
                     viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
-                    if (viewplaypause != null)
+                    if (viewplaypause != null){
                         viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                        viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+                    }
+
                     mVideoView.release();
 
                     cate.set(0);
@@ -141,13 +145,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("------1--",cate.get()+"");
 
-                }
 
                 break;
             case R.id.zuixin://最新
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
-                    startActivity(new Intent(getActivity(), LoginNewActivity.class));
-                } else {
                     textViewZuixin.setBackgroundResource(R.drawable.button_shape1);
                     textViewTuijian.setTextColor(Color.parseColor("#EFEDED"));
                     textViewZuixin.setTextColor(Color.parseColor("#0E0E0E"));
@@ -164,19 +164,17 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                    tikTokAdapter.notifyDataSetChanged();
                     }
                     viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
-                    if (viewplaypause != null)
+                    if (viewplaypause != null){
                         viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                        viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+                    }
                     mVideoView.release();
                     mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------2-",cate.get()+"");
-                }
 
                 break;
             case R.id.changshipin://长视频
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
-                    startActivity(new Intent(getActivity(), LoginNewActivity.class));
-                } else {
                     textViewChangshipin.setBackgroundResource(R.drawable.button_shape1);
                     textViewTuijian.setTextColor(Color.parseColor("#EFEDED"));
                     textViewZuixin.setTextColor(Color.parseColor("#EFEDED"));
@@ -192,13 +190,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                    tikTokAdapter.notifyDataSetChanged();
                     }
                     viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
-                    if (viewplaypause != null)
+                    if (viewplaypause != null){
                         viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                        viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+                    }
                     mVideoView.release();
                     mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
-                }
 
                 break;
             case R.id.search_icon:
@@ -419,10 +418,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         super.onResume();
         if (mVideoView != null) {
             Log.e("---------islokk", "" + isLook());
+            rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+            rotateAnimation.setInterpolator(new LinearInterpolator());
+            rotateAnimation.setDuration(4000);
+            rotateAnimation.setRepeatCount(Animation.INFINITE);
             if (isLook()) {
                 mVideoView.resume();
                 flag.set(true);
-
+                Log.e("----------4", "是不是这里" + mCurrentPosition);
+                startPlay(mCurrentPosition);
 
             }
 //            if (mPresenter!=null)
@@ -453,8 +457,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-//        Log.e("------------","切换333看看"+hidden);
         if (hidden) {
+            Log.e("----------3","切换333看看"+hidden);
             setLook(false);
             if (mVideoView != null) {
                 mVideoView.pause();
@@ -465,8 +469,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         } else {//可见
             setLook(true);
             viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
-            if (viewplaypause != null)
+            if (viewplaypause != null){
                 viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+            }
+
             if (mVideoView != null) {
                 mVideoView.resume();
                 Log.e("----------1", "是不是这里" + mCurrentPosition);
@@ -556,8 +563,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                Log.e("-----------gg","2222222222不同");
                 //ok
                 viewplaypause = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
-                if (viewplaypause != null)
+                if (viewplaypause != null){
                     viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                    viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+                }
             }
         }, lists);
 
@@ -715,6 +724,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
          Uri uri = Uri.parse(vedio.getVideo_img());
          mTikTokController.getThumb().setImageURI(uri);
          */
+        viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
+        if (viewplaypause != null){
+            viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+            viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+        }
         // 加载视频的预览图片 Glide方式
         Glide.with(this)
                 .load(vedio.getVideo_img())
@@ -772,6 +786,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         //开始播放视频
         mVideoView.start();
         Log.e("---------max-", "" + "  " + mVideoView.getDuration());
+        if (itemView==null)
+            return;
         RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
         ViewParent parent = mVideoView.getParent();
         Log.e("---------max-", "" + "  " + mVideoView.getDuration());

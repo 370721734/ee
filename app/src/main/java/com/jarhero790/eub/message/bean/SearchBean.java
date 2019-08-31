@@ -1,8 +1,10 @@
 package com.jarhero790.eub.message.bean;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class SearchBean {
+public class SearchBean implements Serializable {
 
     /**
      * code : 200
@@ -38,27 +40,27 @@ public class SearchBean {
         this.msg = msg;
     }
 
-    public static class DataBean {
-        private List<VisitBean> visit;
-        private List<LikeBean> like;
+    public static class DataBean  implements Serializable{
+        private ArrayList<VisitBean> visit;
+        private ArrayList<LikeBean> like;
 
-        public List<VisitBean> getVisit() {
+        public ArrayList<VisitBean> getVisit() {
             return visit;
         }
 
-        public void setVisit(List<VisitBean> visit) {
+        public void setVisit(ArrayList<VisitBean> visit) {
             this.visit = visit;
         }
 
-        public List<LikeBean> getLike() {
+        public ArrayList<LikeBean> getLike() {
             return like;
         }
 
-        public void setLike(List<LikeBean> like) {
+        public void setLike(ArrayList<LikeBean> like) {
             this.like = like;
         }
 
-        public static class VisitBean {
+        public static class VisitBean  implements Serializable{
             /**
              * id : 692
              * uid : 4887
@@ -334,7 +336,7 @@ public class SearchBean {
             }
         }
 
-        public static class LikeBean {
+        public static class LikeBean implements Serializable{
             /**
              * id : 618
              * uid : 4876

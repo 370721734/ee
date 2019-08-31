@@ -20,6 +20,7 @@ import com.jarhero790.eub.message.adapter.MenuPagerAdapter;
 import com.jarhero790.eub.message.adapter.OnItemClickListener;
 import com.jarhero790.eub.message.adapter.SearchAdapter;
 import com.jarhero790.eub.message.bean.SearchBean;
+import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
@@ -63,9 +64,9 @@ public class SearchActivity extends AppCompatActivity {
 
 
     private int page;
-    List<SearchBean.DataBean.VisitBean> visitBeans = new ArrayList<>();
-    List<SearchBean.DataBean.LikeBean> likeBeans = new ArrayList<>();
-    List<SearchBean.DataBean.LikeBean> itemlikeBeans = new ArrayList<>();
+    ArrayList<SearchBean.DataBean.VisitBean> visitBeans = new ArrayList<>();
+    ArrayList<SearchBean.DataBean.LikeBean> likeBeans = new ArrayList<>();
+    ArrayList<SearchBean.DataBean.LikeBean> itemlikeBeans = new ArrayList<>();
 
     MenuPagerAdapter adapter;
 
@@ -107,6 +108,8 @@ public class SearchActivity extends AppCompatActivity {
 
             }
         });
+
+
     }
 
 //    private void initLike() {
@@ -127,7 +130,7 @@ public class SearchActivity extends AppCompatActivity {
                         calls = call;
 //                        dialog.dismiss();
                         if (response.isSuccessful()) {
-                            if (response.body().getCode() == 200) {
+                            if (response.body()!=null && response.body().getCode() == 200) {
                                 visitBeans = response.body().getData().getVisit();
                                 itemlikeBeans = response.body().getData().getLike();
                                 if (visitBeans.size()>0){
@@ -138,7 +141,17 @@ public class SearchActivity extends AppCompatActivity {
                                     adapter.setOnItemClickListener(new OnItemClickListener() {
                                         @Override
                                         public void onItemClick(View view, int position, int pagerPosition) {
-                                            Log.e("ggg", "," + adapter.getPageLayout(pagerPosition).getData().get(position).getId());
+//                                            Log.e("ggg", "," + adapter.getPageLayout(pagerPosition).getData().get(position).getId());
+//                                            Log.e("ggg",position+"  "+pagerPosition);
+                                            //position第几个
+                                            //pagerPosition第几个页面
+
+                                            Intent intent=new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+                                            intent.putExtra("position",position+(pagerPosition*6));
+                                            intent.putExtra("type","visit");
+                                            intent.putExtra("vidlist",visitBeans);
+                                            startActivity(intent);
+
                                         }
                                     });
 
@@ -148,6 +161,10 @@ public class SearchActivity extends AppCompatActivity {
                                             .setIndicatorDrawable(R.drawable.guide_rectangle_select, R.drawable.guide_rectangle_nomal)
                                             .setIndicatorSize(6, 6, 5)
                                             .initDot();
+
+
+
+
                                 }
 
 
@@ -202,6 +219,11 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void myClick(int position, View view) {
             Log.e("-----",""+position);
+            Intent intent=new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+            intent.putExtra("position",position);
+            intent.putExtra("vidlist",likeBeans);
+            intent.putExtra("type","like");
+            startActivity(intent);
         }
     };
 

@@ -134,6 +134,10 @@ public interface Api {
      */
     @POST("web/index/zan")
     Observable<ShipinDianZanBean> zan(@Query("vid") String videoID, @Query("token") String tokenValue);
+    @POST("web/index/zan")
+    Call<ResponseBody> zanoter(@Query("vid") String videoID, @Query("token") String tokenValue);
+
+
     /**
      * 视频点赞或者取消赞
      * vid	   	视频ID

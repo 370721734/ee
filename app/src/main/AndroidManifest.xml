@@ -33,6 +33,7 @@
         <activity android:name=".message.my.PlayVideoActivity"></activity>
         <activity android:name=".message.souye.SearchResultActivity" />
         <activity android:name=".message.souye.SearchActivity" />
+        <activity android:name=".message.souye.PlayVideoTwoActivity"/>
         <activity
             android:name=".message.message.ConversationListActivity"
             android:screenOrientation="portrait">

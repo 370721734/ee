@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -61,8 +62,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyHolder> 
 //
 //        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "+关注");
 //
-//        myHolder.tvGuanzu.setTag(position);
-//        myHolder.tvGuanzu.setOnClickListener(myclick);
+        myHolder.rlall.setTag(position);
+        myHolder.rlall.setOnClickListener(myclick);
 
 //
 //        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
@@ -146,6 +147,8 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyHolder> 
         ImageView ivIcon;
         @BindView(R.id.tv_num)
         TextView tvNum;
+        @BindView(R.id.rl_all)
+        RelativeLayout rlall;
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);
