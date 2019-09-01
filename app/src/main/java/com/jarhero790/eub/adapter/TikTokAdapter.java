@@ -1,10 +1,12 @@
 package com.jarhero790.eub.adapter;
 
 import android.content.Context;
+import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -22,6 +24,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.message.souye.GuanPanView;
+import com.jarhero790.eub.message.souye.Love;
 
 import java.util.List;
 
@@ -254,8 +257,52 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                 }
             }
         });
-    }
+        //hong
+//        holder.love.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+////                View view=new View(context);
+//                mOnItemClickListerer.onItemClick(position, "红红", view, view, view);
+//                Log.e("-----","hehe");
+//            }
+//        });
+//        holder.love.setCallback(new Love.ClickCallBack() {
+//            @Override
+//            public void onClick() {
+//
+//            }
+//
+//            @Override
+//            public void onDoubleClick() {
+//
+//            }
+//        });
+//        holder.love.setMoveCallBack(new Love.MoveCallBack() {
+//            @Override
+//            public void onMove(float x, float y) {
+//
+//            }
+//        });
 
+//        holder.love.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //将mHints数组内的所有元素左移一个位置
+//                System.arraycopy(mHints, 1, mHints, 0, mHints.length - 1);
+//                //获得当前系统已经启动的时间
+//                mHints[mHints.length - 1] = SystemClock.uptimeMillis();
+//
+//                if (SystemClock.uptimeMillis()-mHints[0]>=500){
+//
+//                }
+//            }
+//        });
+
+
+    }
+    //需要监听几次点击事件数组的长度就为几
+    //如果要监听双击事件则数组长度为2，如果要监听3次连续点击事件则数组长度为3...
+    long[] mHints = new long[3];//初始全部为0
     @Override
     public int getItemCount() {
         return videos.size();
@@ -293,6 +340,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         ImageView play_pause;
 
         TextView caifu;
+        Love love;
 
 
         VideoHolder(View itemView) {
@@ -320,6 +368,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             rlhead = itemView.findViewById(R.id.rlhead);
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu=itemView.findViewById(R.id.tv_gold_coin);
+            love=itemView.findViewById(R.id.love);
         }
     }
 

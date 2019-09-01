@@ -280,6 +280,13 @@
                 android:textColor="#ffffffff"
                 android:textSize="12sp" />
         </RelativeLayout>
+
+
+        <com.jarhero790.eub.message.souye.Love
+            android:id="@+id/love"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </com.jarhero790.eub.message.souye.Love>
     </RelativeLayout>
 </RelativeLayout>
 
