@@ -90,7 +90,8 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="47dp"
         android:max="100"
-        android:progress="50"
+        android:progress="0"
+        android:visibility="gone"
         android:background="@color/progressbar"
         android:progressDrawable="@drawable/progressbar_bg"
         style="?android:attr/progressBarStyleHorizontal"/>

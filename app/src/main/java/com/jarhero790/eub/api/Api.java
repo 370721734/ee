@@ -327,7 +327,21 @@ public interface Api {
 
 
 
+    //微信登陆
+    @FormUrlEncoded
+    @POST("user/Login/wechatLogin")
+    Call<UserBean> wechatLogin(@Field("openid") String openid,@Field("nickname") String nickname,@Field("sex") String sex,@Field("city") String city,@Field("province") String province,@Field("country") String country,@Field("headimgurl") String headimgurl);
 
 
 
+    //绑定手机号码
+    @FormUrlEncoded
+    @POST("user/Login/binding_mobile")
+    Call<UserBean> binding_mobile(@Field("mobile") String mobile,@Field("msgId") String msgId,@Field("smg_code") String smg_code,@Field("openid") String openid);
+
+
+    //退出登录
+    @FormUrlEncoded
+    @POST("user/Login/logout")
+    Call<ResponseBody> logout(@Field("user_id") String user_id);
 }

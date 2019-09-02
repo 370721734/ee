@@ -10,14 +10,17 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowInsets;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.jarhero790.eub.aop.logincore.LoginManger;
+import com.jarhero790.eub.base.AppManager;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.Conver;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -419,5 +422,24 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 
               break;
        }
+    }
+
+
+    private long exitTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出程序", Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+            } else {
+                AppManager.getAppManager().finishActivity();
+                AppManager.getAppManager().AppExit(this);
+                System.exit(0);
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

@@ -14,12 +14,16 @@ import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.UserCen;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.ugc.TXUGCBase;
 import com.jarhero790.eub.aop.logincore.ILoginFilter;
 import com.jarhero790.eub.aop.logincore.LoginManger;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import io.rong.imkit.RongIM;
+
+import static android.provider.UserDictionary.Words.APP_ID;
 
 
 public class GlobalApplication extends Application {
@@ -30,13 +34,15 @@ public class GlobalApplication extends Application {
 
     String ugcLicenceUrl = "http://license.vod2.myqcloud.com/license/v1/37cad01a3224fd473ab7591458a616bc/TXUgcSDK.licence"; //您从控制台申请的 licence url
     String ugcKey = "d511730b581038234dae207be1d4b3e2";
-
+    public static final String APP_ID_Wei = "wx8fe099e16a3b7fcf";
     private UserBean userbean;
 
     private UserCen userCen;
     private UserCen.DataBean.UserBean userzhong;
 
     public  String TOKEN;
+
+    public IWXAPI api;
 
     public static synchronized GlobalApplication getInstance() {
         return mApp;
@@ -72,6 +78,8 @@ public class GlobalApplication extends Application {
 
 
 
+        api = WXAPIFactory.createWXAPI(this, APP_ID_Wei, true);
+        api.registerApp(APP_ID_Wei);
     }
 
 

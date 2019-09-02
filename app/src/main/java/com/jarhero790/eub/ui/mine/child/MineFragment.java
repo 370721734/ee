@@ -137,10 +137,14 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     public void onEvent(MessageEventUser messageEvent) {
 
         User user = messageEvent.getMessage().getData();
-        Log.e("-----1", user.getId() + "  " + user.getHeadimgurl());
+//        Log.e("-----1", user.getId() + "  " + user.getHeadimgurl());
         textViewNickName.setText(user.getNickname());
         tvTvhao.setText("钻视TV号:" + user.getId());
-        Glide.with(getActivity()).load(Api.HOST + user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+        if (user.getHeadimgurl().startsWith("http")) {
+            Glide.with(getActivity()).load(user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+        } else {
+            Glide.with(getActivity()).load(Api.TU + user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+        }
 
         tvMemo.setText(user.getSign());
         money = user.getMoney();
@@ -301,7 +305,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                iLoginFilter.login(mContext,0);
 
 
-            }else {
+            } else {
                 EventBus.getDefault().post(new Conver("200"));
             }
 
@@ -318,7 +322,11 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 String fens = jsonObject1.getString("fensi");
                 textViewNickName.setText(userInfo.getData().getUser().getNickname());
                 tvTvhao.setText("钻视TV号:" + userInfo.getData().getUser().getId());
-                Glide.with(getActivity()).load(Api.TU + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+                if (userInfo.getData().getUser().getHeadimgurl().startsWith("http")) {
+                    Glide.with(getActivity()).load(userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+                } else {
+                    Glide.with(getActivity()).load(Api.TU + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+                }
                 tvHuozai.setText(zan);
                 tvGuanzhu.setText(like);
                 fensi.setText(fens);
@@ -328,7 +336,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             if (userInfo.getCode() == 200) {
                 app.setUserzhong(userInfo.getData().getUser());
 
-                SharePreferenceUtil.setuserid(userInfo.getData().getUser().getUser_id()+"",getActivity());
+                SharePreferenceUtil.setuserid(userInfo.getData().getUser().getUser_id() + "", getActivity());
                 tvMemo.setText(userInfo.getData().getUser().getSign());
                 money = userInfo.getData().getUser().getMoney() + "";
                 signtime = userInfo.getData().getUser().getSigntime();
@@ -361,7 +369,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                         RongIM.getInstance().setCurrentUserInfo(new UserInfo(userid,userInfo.getData().getUser().getUsername(),Uri.parse(Api.TU+userInfo.getData().getUser().getHeadimgurl())));
 //                         return new UserInfo(userInfo.getData().getUser().getId()+"",userInfo.getData().getUser().getUsername(), Uri.parse("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"));//Api.TU+userInfo.getData().getUser().getHeadimgurl()
 
-                        if (userInfoList!=null && userInfoList.size()>0){
+                        if (userInfoList != null && userInfoList.size() > 0) {
                             for (UserInfo info : userInfoList) {
                                 if (info.getUserId().equals(userid)) {
                                     return new UserInfo(info.getUserId(), info.getName(), info.getPortraitUri());
@@ -494,7 +502,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 startActivity(intent);
                 break;
             case R.id.iv_edit:
-                if (app.getUserCen().getData().getUser()!=null){
+                if (app.getUserCen().getData().getUser() != null) {
                     Intent intent1 = new Intent(getActivity(), SettingActivity.class);
                     intent1.putExtra("name", app.getUserCen().getData().getUser().getNickname());
                     intent1.putExtra("sign", app.getUserCen().getData().getUser().getSign());
@@ -626,7 +634,6 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
              *
              *
              */
-
 
 
             RongIM.connect(token, new RongIMClient.ConnectCallback() {

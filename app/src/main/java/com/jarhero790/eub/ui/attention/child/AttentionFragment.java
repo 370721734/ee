@@ -223,15 +223,19 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //        startPlay(0);
         recyclerViewAttentionUsers.post(()->{
             //自动播放第一个
+
             View view=recyclerViewAttentionUsers.getChildAt(0);
-            VideoView videoView=view.findViewById(R.id.video_player);
-            videoView.start();
-            viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
-            viewplaypause=linearLayoutManager.findViewByPosition(mCurrentPosition);
-            if (viewivdeault != null)
-                viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
-            if (viewplaypause!=null)
-                ((ImageView)(viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+            if (view!=null){
+                VideoView videoView=view.findViewById(R.id.video_player);
+                videoView.start();
+                viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+                viewplaypause=linearLayoutManager.findViewByPosition(mCurrentPosition);
+                if (viewivdeault != null)
+                    viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
+                if (viewplaypause!=null)
+                    ((ImageView)(viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+            }
+
         });
 
 

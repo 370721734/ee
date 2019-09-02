@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -32,6 +33,7 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
+import com.jarhero790.eub.MainActivity;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.api.Api;
@@ -367,12 +369,8 @@ public class SettingActivity extends AppCompatActivity {
 
                 break;
             case R.id.tv_exit:
-                SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, this);
-                SharePreferenceUtil.setToken("", this);
-                SharePreferenceUtil.clearToken(this);
-                SharePreferenceUtil.clearSharePref(SharePreferenceUtil.IS_LOGIN, this);
-                startActivity(new Intent(this, LoginNewActivity.class));
-                SharePreferenceUtil.clearUserid(this);
+                exitmeth();
+
                 break;
             case R.id.tv_xieyi:
                 startActivity(new Intent(SettingActivity.this, XieYiActivity.class));
@@ -385,6 +383,48 @@ public class SettingActivity extends AppCompatActivity {
                 break;
 
         }
+    }
+
+    private void exitmeth() {
+        if (!SharePreferenceUtil.getUserid(AppUtils.getContext()).equals("")){
+            Log.e("---------------exit-",SharePreferenceUtil.getUserid(AppUtils.getContext()));
+            RetrofitManager.getInstance().getDataServer().logout(SharePreferenceUtil.getUserid(AppUtils.getContext()))
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()){
+                                try {
+                                    String json=response.body().string();
+                                    Log.e("----------",json);
+                                    JSONObject object=new JSONObject(json);
+                                    int code=object.optInt("code");
+                                    String msg=object.optString("msg");
+                                    if (code==200){
+                                        SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, SettingActivity.this);
+                                        SharePreferenceUtil.setToken("", SettingActivity.this);
+                                        SharePreferenceUtil.clearToken(SettingActivity.this);
+                                        SharePreferenceUtil.clearSharePref(SharePreferenceUtil.IS_LOGIN, SettingActivity.this);
+                                        startActivity(new Intent(SettingActivity.this, LoginNewActivity.class));
+                                        SharePreferenceUtil.clearUserid(SettingActivity.this);
+//                                        Toast.makeText(SettingActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                    }else {
+                                        Toast.makeText(SettingActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                    }
+
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+                        }
+                    });
+
+        }
+
     }
 
 
@@ -898,8 +938,14 @@ public class SettingActivity extends AppCompatActivity {
         return bitmap;
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN){
+            startActivity(new Intent(this, MainActivity.class));
+        }
+        return super.onKeyDown(keyCode, event);
 
-
+    }
 
     private GridSingImageAdapter.onAddPicClickListener onAddPicClickListener = new GridSingImageAdapter.onAddPicClickListener() {
         @Override

@@ -64,8 +64,8 @@ public class SearchResultActivity extends AppCompatActivity {
 
     SearchResultBean.DataBean.UserBean userBeans;
 
-    List<SearchResultBean.DataBean.VideoBean> videoBeans = new ArrayList<>();
-    List<SearchResultBean.DataBean.VideoBean> itemvideoBeans = new ArrayList<>();
+    ArrayList<SearchResultBean.DataBean.VideoBean> videoBeans = new ArrayList<>();
+    ArrayList<SearchResultBean.DataBean.VideoBean> itemvideoBeans = new ArrayList<>();
     @BindView(R.id.tv_memo)
     TextView tvMemo;
 
@@ -74,6 +74,7 @@ public class SearchResultActivity extends AppCompatActivity {
     SearchResultAdapter searchAdapter;
 
     String word;
+    View playpause;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,7 +93,11 @@ public class SearchResultActivity extends AppCompatActivity {
         page = 1;
         initDate(word);
 
-
+//        playpause=lm.findViewByPosition(R.id.iv_play);
+//        if (playpause!=null){
+//            playpause.setVisibility(View.VISIBLE);
+//
+//        }
 
         etSearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -158,6 +163,11 @@ public class SearchResultActivity extends AppCompatActivity {
                                     @Override
                                     public void Clicklienr(int position) {
                                         Log.e("-------------",position+"");
+                                        Intent intent=new Intent(SearchResultActivity.this, PlayVideoThreeActivity.class);
+                                        intent.putExtra("position",position);
+                                        intent.putExtra("vidlist",videoBeans);
+//                                        intent.putExtra("type","like");
+                                        startActivity(intent);
                                     }
                                 });
                             }
@@ -238,5 +248,18 @@ public class SearchResultActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.e("--------","playvideothree--onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        Log.e("--------","playvideothree--onPause");
     }
 }

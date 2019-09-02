@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/login_register_bg"
-    android:orientation="vertical">
+    tools:context=".message.souye.BindPhoneActivity">
 
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:src="@mipmap/bindphone_bg"
+        android:scaleType="fitXY"
+
+        android:adjustViewBounds="true"/>
 
     <ImageView
         android:id="@+id/back"
@@ -18,12 +24,12 @@
         android:padding="11dp"
         android:src="@mipmap/back" />
 
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="93dp"
+        android:layout_centerHorizontal="true"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -59,10 +65,11 @@
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:src="@mipmap/userphone_icon" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#D4CDBC"
+                android:text="86+" />
 
             <EditText
                 android:id="@+id/et_phone"
@@ -71,7 +78,6 @@
                 android:layout_marginLeft="16dp"
                 android:background="@null"
                 android:inputType="phone"
-                android:hint="请输入手机号码"
                 android:textColorHint="#ffd4cdbc"
                 android:textColor="#ffd4cdbc"
                 android:textSize="15sp" />
@@ -88,12 +94,13 @@
             android:layout_marginTop="5dp"
             android:orientation="horizontal">
 
-            <ImageView
+            <TextView
                 android:id="@+id/ivpass"
-                android:layout_width="22dp"
-                android:layout_height="22dp"
-                android:layout_centerVertical="true"
-                android:src="@mipmap/userpassword_icon" />
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#D4CDBC"
+                android:visibility="invisible"
+                android:text="86+" />
 
             <TextView
                 android:id="@+id/tv_ma"
@@ -116,7 +123,6 @@
                 android:background="@null"
                 android:text=""
                 android:inputType="number"
-                android:hint="请输入验证码"
                 android:textColorHint="#ffd4cdbc"
                 android:textColor="#ffd4cdbc"
                 android:textSize="15sp" />
@@ -135,35 +141,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="99dp"
-            android:background="@drawable/login_text_bg"
+            android:background="@drawable/login_text_bg_19"
             android:gravity="center"
-            android:text="登陆"
-            android:textColor="#ff242424"
+            android:text="绑定"
+            android:textColor="#242424"
             android:textSize="14sp" />
 
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="15dp"
-            android:layout_marginTop="12dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="11dp"
-                android:layout_height="11dp"
-
-                android:src="@mipmap/userface_icon" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="6dp"
-                android:text="我已阅读用户协议"
-                android:textColor="#ffddd0af"
-                android:textSize="11sp" />
-        </LinearLayout>
 
 
     </LinearLayout>
-</LinearLayout>
+
+</RelativeLayout>

@@ -1,4 +1,4 @@
-package com.jarhero790.eub.message;
+package com.jarhero790.eub.message.souye;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.MainActivity;
 import com.jarhero790.eub.R;
@@ -20,7 +19,7 @@ import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.base.AppManager;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.eventbus.MessageEventUser;
-import com.jarhero790.eub.message.bean.Userbean;
+import com.jarhero790.eub.message.LoginPhoneActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
@@ -43,15 +42,14 @@ import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 
-public class LoginPhoneActivity extends AppCompatActivity {
-
+public class BindPhoneActivity extends AppCompatActivity {
 
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.et_phone)
     EditText etPhone;
     @BindView(R.id.ivpass)
-    ImageView ivpass;
+    TextView ivpass;
     @BindView(R.id.tv_ma)
     TextView tvMa;
     @BindView(R.id.et_password)
@@ -62,19 +60,21 @@ public class LoginPhoneActivity extends AppCompatActivity {
     private TimeCount time;//定时
 
     private String msgid;//ma id
+    private String openid;
 
     GlobalApplication app;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login_phone);
-        CommonUtil.setStatusBarTransparent(LoginPhoneActivity.this);
+        setContentView(R.layout.activity_bind_phone);
         ButterKnife.bind(this);
+        CommonUtil.setStatusBarTransparent(BindPhoneActivity.this);
         AppManager.getAppManager().addActivity(this);
-        time = new TimeCount(60000, 1000);
+        Intent intent=getIntent();
+        openid=intent.getStringExtra("openid");
         app= (GlobalApplication) getApplication();
-
+        time = new TimeCount(60000, 1000);
+//        Log.e("----------","来了没有2");
     }
 
     @OnClick({R.id.back, R.id.tv_ma, R.id.submit})
@@ -99,21 +99,21 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
 
                         try {
-                          //{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
+                            //{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
                             String result = response.body().string();
                             Log.e("-----1:", result);
                             JSONObject jsonObject = new JSONObject(result);
                             int code = jsonObject.optInt("code");
                             String msg = (String) jsonObject.get("msg");
-                            Log.e("注册结果msg值", msg);
+//                            Log.e("注册结果msg值", msg);
                             if (code == 200) {
                                 JSONObject data = jsonObject.optJSONObject("data");
                                 msgid=data.optString("msgId");
 //                                Log.e("----------2:",msgid);//ok
 
-                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
+                                Toast.makeText(BindPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
+                                Toast.makeText(BindPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
                             }
                         } catch (Exception e) {
 
@@ -127,27 +127,6 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     }
                 });
 
-//                //通过RequestBody.create 创建requestBody对象
-//                RequestBody requestBody = new MultipartBody.Builder()
-//                        .setType(MultipartBody.FORM)
-//                        .addFormDataPart("mobile", etPhone.getEditableText().toString())
-//                        .build();
-//                OkHttpClient okHttpClient = new OkHttpClient();
-//                Request request = new Request.Builder().url(Api.HOST + "user/login/send_sms").post(requestBody).build();
-//                Call call = okHttpClient.newCall(request);
-//                call.enqueue(new Callback() {
-//                    @Override
-//                    public void onFailure(Call call, IOException e) {
-//                        Log.e("注册异常", e.getMessage());
-//                        Toast.makeText(LoginPhoneActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
-//                    }
-//
-//                    @Override
-//                    public void onResponse(Call call, Response response) throws IOException {
-//
-//                        //Toast.makeText(RegisterByUsernameActivity.this,response.body().string(),Toast.LENGTH_LONG).show();
-//                    }
-//                });
                 break;
             case R.id.submit:
                 String userphone2 = etPhone.getEditableText().toString();
@@ -165,7 +144,59 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     return;
                 }
 
-                Log.e("---------3",userphone2+"  "+ma+"  "+ msgid);
+                Log.e("---------3",userphone2+"  "+ma+"  "+ msgid+"   "+openid);
+
+                RetrofitManager.getInstance().getDataServer().binding_mobile(userphone2,msgid,ma,openid).enqueue(new retrofit2.Callback<UserBean>() {
+                    @Override
+                    public void onResponse(retrofit2.Call<UserBean> call, retrofit2.Response<UserBean> response) {
+                        if (response.isSuccessful()){
+                            try {
+//                                String json=response.body().string();
+//                                Log.e("---------bind=",json);//怎么保存，在签名中
+//                                JSONObject object=new JSONObject(json);
+//                                int code=object.optInt("code");
+//                                String msg=object.optString("msg");
+
+
+
+                                if (response.body()!=null && response.body().getCode().equals("200")){
+                                  UserBean userBean=  response.body();
+                                    //把token保存在SharePreference
+                                    SharePreferenceUtil.setToken(userBean.getData().getToken(),AppUtils.getContext());
+                                    SharePreferenceUtil.setuserid(userBean.getData().getId(),AppUtils.getContext());
+                                    //注意 登录成功之后  一定要写上这句代码
+                                    SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, true, AppUtils.getContext());
+                                    app.setUserbean(userBean);
+                                    //发送  在MineFragment中接收
+                                    EventBus.getDefault().post(new MessageEventUser(userBean));
+                                    startActivity(new Intent(BindPhoneActivity.this, MainActivity.class));
+                                }else {
+                                    if (response.body()!=null){
+                                        String msg=response.body().getMsg();
+                                        Toast.makeText(BindPhoneActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                    }
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(retrofit2.Call<UserBean> call, Throwable t) {
+
+                    }
+                });
+
+
+
+
+
+
+
+
+                /**
+
                 //通过RequestBody.create 创建requestBody对象
                 RequestBody requestBody2 = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
@@ -180,7 +211,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call call, IOException e) {
                         Log.e("注册异常", e.getMessage());
-                        Toast.makeText(LoginPhoneActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(BindPhoneActivity.this, "异常" + e.getMessage(), Toast.LENGTH_LONG).show();
                     }
 
                     @Override
@@ -226,12 +257,12 @@ public class LoginPhoneActivity extends AppCompatActivity {
                                 SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, true, AppUtils.getContext());
                                 successBusinese(result);
 
-                                startActivity(new Intent(LoginPhoneActivity.this, MainActivity.class));
+                                startActivity(new Intent(BindPhoneActivity.this, MainActivity.class));
 
 //                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
                                 finish();
                             } else {
-                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                Toast.makeText(BindPhoneActivity.this, msg, Toast.LENGTH_SHORT).show();
                             }
                         } catch (Exception e) {
 
@@ -242,22 +273,11 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     }
                 });
 
+                */
+
                 break;
         }
-
-
     }
-
-    private void successBusinese(String data) {
-        Gson gson=new Gson();
-        UserBean userBean = gson.fromJson(data, UserBean.class);
-        //把token保存在SharePreference
-        SharePreferenceUtil.setToken(userBean.getData().getToken(),AppUtils.getContext());
-        app.setUserbean(userBean);
-        //发送  在MineFragment中接收
-        EventBus.getDefault().post(new MessageEventUser(userBean));
-    }
-
 
     class TimeCount extends CountDownTimer {
 

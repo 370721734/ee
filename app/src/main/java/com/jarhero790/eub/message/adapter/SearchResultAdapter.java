@@ -69,12 +69,12 @@ public class SearchResultAdapter extends RecyclerView.Adapter<SearchResultAdapte
        View.OnClickListener clickListener=new View.OnClickListener() {
            @Override
            public void onClick(View view) {
-               if (myHolder.ivPlay.getVisibility()==View.VISIBLE){
-                   myHolder.ivPlay.setVisibility(View.GONE);
-               }else {
-                   myHolder.ivPlay.setVisibility(View.VISIBLE);
-               }
-
+//               if (myHolder.ivPlay.getVisibility()==View.VISIBLE){
+//                   myHolder.ivPlay.setVisibility(View.GONE);
+//               }else {
+//                   myHolder.ivPlay.setVisibility(View.VISIBLE);
+//               }
+//
                if (onItem!=null){
                    onItem.Clicklienr(position);
                }

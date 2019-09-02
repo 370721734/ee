@@ -7,8 +7,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.base.AppManager;
 import com.jarhero790.eub.utils.CommonUtil;
+import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,13 +30,15 @@ public class LoginNewActivity extends AppCompatActivity {
     @BindView(R.id.zhifubao_login)
     ImageView zhifubaoLogin;
 
+    GlobalApplication app;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_new);
         ButterKnife.bind(this);
-
+          app= (GlobalApplication) getApplication();
         CommonUtil.setStatusBarTransparent(LoginNewActivity.this);
+        AppManager.getAppManager().addActivity(this);
     }
 
 
@@ -46,8 +51,15 @@ public class LoginNewActivity extends AppCompatActivity {
             case R.id.qq_login:
                 break;
             case R.id.weixin_login:
+                //微信登录
+
+                SendAuth.Req req=new SendAuth.Req();
+                req.scope = "snsapi_userinfo";
+                req.state = "wechat_sdk_demo_test";
+                app.api.sendReq(req);
                 break;
             case R.id.zhifubao_login:
+
                 break;
         }
     }
