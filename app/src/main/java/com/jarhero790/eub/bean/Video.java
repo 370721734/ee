@@ -61,7 +61,7 @@ public class Video implements Serializable {
     private String headimgurl;
     private String nickname;
     private String is_zan;
-    private String commentNum;
+    private int comment_num;
     private String is_like;
 
 
@@ -265,12 +265,12 @@ public class Video implements Serializable {
         this.is_zan = is_zan;
     }
 
-    public String getCommentNum() {
-        return commentNum;
+    public int getComment_num() {
+        return comment_num;
     }
 
-    public void setCommentNum(String commentNum) {
-        this.commentNum = commentNum;
+    public void setComment_num(int comment_num) {
+        this.comment_num = comment_num;
     }
 
     public String getIs_like() {
@@ -309,7 +309,7 @@ public class Video implements Serializable {
                 ", headimgurl='" + headimgurl + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", is_zan='" + is_zan + '\'' +
-                ", commentNum='" + commentNum + '\'' +
+                ", comment_num='" + comment_num + '\'' +
                 ", is_like='" + is_like + '\'' +
                 '}';
     }

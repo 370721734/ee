@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.my;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,19 +23,34 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.OnViewPagerListener;
 import com.jarhero790.eub.adapter.TikTokController;
 import com.jarhero790.eub.adapter.ViewPagerLayoutManager;
+import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.adapter.TikTokTwoAdapter;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
+import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.model.bean.souye.VideoBean;
+import com.jarhero790.eub.ui.souye.BottomGiftDialog;
+import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
+import com.jarhero790.eub.ui.souye.BottomShareDialog;
+import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.DataUtil;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
+//播放视频界面
 public class PlayVideoActivity extends AppCompatActivity {
 
 //    @BindView(R.id.recycler_view)
@@ -82,8 +98,8 @@ public class PlayVideoActivity extends AppCompatActivity {
 
         position = intent.getIntExtra("position", 0);
         list = (ArrayList<MyFaBuBean.DataBean>) intent.getSerializableExtra("vidlist");
-        Log.e("-----------", "a=" + position);
-        Log.e("-----------", "b=" + list.size());
+//        Log.e("-----------", "a=" + position);
+//        Log.e("-----------", "b=" + list.size());
 
 
 
@@ -115,13 +131,13 @@ public class PlayVideoActivity extends AppCompatActivity {
             public void onInitComplete() {
                 //自动播放第一条
                 startPlay(position);
-                Log.e("----------", "a=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------", "a=" + mCurrentPosition + " m=" + position);
 
             }
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-                Log.e("----------", "b=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------", "b=" + mCurrentPosition + " m=" + position);
                 if (mCurrentPosition == position) {
                     mVideoView.release();
                 }
@@ -129,7 +145,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
-                Log.e("----------", "c=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------", "c=" + mCurrentPosition + " m=" + position);
                 if (mCurrentPosition == position) return;
                 startPlay(position);
                 mCurrentPosition = position;
@@ -196,7 +212,20 @@ public class PlayVideoActivity extends AppCompatActivity {
             caifu.setText(list.get(mCurrentPosition).getCaifu()+"");
 
             TextView pinlen=view.findViewById(R.id.tv_pinglun);
-            pinlen.setText("x");
+            pinlen.setText(list.get(mCurrentPosition).getCommentNum()+"");
+
+            if (list.get(mCurrentPosition).getIs_like()==1){
+                //关注
+//                自己的不写
+            }
+
+//            ImageView ivzan=view.findViewById(R.id.iv_like);
+//            if (list.get(mCurrentPosition).getIs_zan()==1){
+//                //赞了
+//                ivzan.setImageResource(R.drawable.iv_like_selected);
+//            }else {
+//                ivzan.setImageResource(R.drawable.iv_like_unselected);
+//            }
         }
 
     }
@@ -204,21 +233,66 @@ public class PlayVideoActivity extends AppCompatActivity {
     private void adapterSetOnItemClickListerer() {
         tikTokAdapter.setOnItemClickListerer(new TikTokAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, String type, View view) {
+            public void onItemClick(int position, String type, View view,View view2) {
                 if (type.equals("评论")){
-                    Log.e("-----","1");
+                    TextView pin= (TextView) view2;
+                    showPingLun(pin);//ok
                 }else if (type.equals("分享")){
-                    Log.e("-----","2");
+                    showShare();
                 }else if (type.equals("点赞")){
-                    Log.e("-----","3");
+                    ImageView ivlike= (ImageView) view;
+                    TextView tv2= (TextView) view2;
+
+                        Log.e("-----","ivlike.isSelected=true");
+                        if (list!=null && list.size()>0){
+                            zanother(list.get(mCurrentPosition).getVideo_id()+"",ivlike,tv2);
+                        }
+
 
 
 
                 }else if (type.equals("礼物")){
-                    Log.e("-----","4");
+                    showGift();
                 }else if (type.equals("关注")){
                     Log.e("-----","5");
                 }
+            }
+        });
+    }
+
+    private void zanother(String vid,ImageView views,TextView tv) {
+        RetrofitManager.getInstance().getDataServer().zanoter(vid,SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        String json=response.body().string();
+                        Log.e("------",json);
+                        JSONObject object=new JSONObject(json);
+                        int code=object.optInt("code");
+                        if (code==200){
+                            JSONObject data=object.optJSONObject("data");
+                            String is=data.optString("is");
+                            String num=data.optString("num");
+                            if (is.equals("1")){
+                                views.setSelected(true);
+
+                            }else {
+                                views.setSelected(false);
+                            }
+                            tv.setText(num);
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
             }
         });
     }
@@ -432,33 +506,43 @@ public class PlayVideoActivity extends AppCompatActivity {
     }
 
 
-//    public void videosPageListenerOnListener() {
-//        layoutManager.setOnViewPagerListenertwo(new OnViewPagerListener() {
-//            @Override
-//            public void onInitComplete() {
-//                //自动播放第一条
-////                startPlay(position);
-//            }
-//
-//            @Override
-//            public void onPageRelease(boolean isNext, int position) {
-//                if (mCurrentPosition == position) {
-//                    mVideoView.release();
-//                }
-//            }
-//
-//            @Override
-//            public void onPageSelected(int position, boolean isBottom) {
-//                if (mCurrentPosition == position) return;
-//                startPlay(position);
-//                mCurrentPosition = position;
-//                Log.e("-----------gg","2222222222不同");
-//                //ok
-//                viewplaypause = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
-//                if (viewplaypause != null)
-//                    viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
-//            }
-//        },list);
-//
-//    }
+
+
+
+    public void showPingLun(TextView pin) {
+        if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+            startActivity(new Intent(this, LoginNewActivity.class));
+        } else {
+            BottomPingLunDialog bottomPingLunDialog = BottomPingLunDialog.newInstance();
+            Bundle args = new Bundle();
+            args.putString("vid", list.get(mCurrentPosition).getVideo_id()+"");
+            bottomPingLunDialog.setArguments(args);
+            bottomPingLunDialog.show(getSupportFragmentManager(), "pinglun");
+            bottomPingLunDialog.setPinNum(new BottomPingLunDialog.PinNum() {
+                @Override
+                public void Clicker(int num) {
+//                    Log.e("-----------num=",""+num);
+                    pin.setText(""+num);
+                }
+            });
+        }
+    }
+
+    //ok
+    public void showGift() {
+        if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+            startActivity(new Intent(this, LoginNewActivity.class));
+        } else {
+            BottomGiftDialog bottomGiftDialog = BottomGiftDialog.newInstance();
+            Bundle args = new Bundle();
+            args.putString("vid", list.get(mCurrentPosition).getVideo_id()+"");
+            bottomGiftDialog.setArguments(args);
+            bottomGiftDialog.show(getSupportFragmentManager(), "gift");
+        }
+    }
+
+    public void showShare() {
+        BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
+        bottomShareDialog.show(getSupportFragmentManager(), "share");
+    }
 }

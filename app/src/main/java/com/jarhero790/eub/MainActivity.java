@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+import com.tencent.rtmp.TXLiveBase;
 
 import com.jarhero790.eub.aop.logincore.LoginManger;
 import com.jarhero790.eub.base.AppManager;
@@ -237,6 +238,8 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         EventBus.getDefault().register(this);
         setStatusBarTransparent();
         requestPermissions(this);
+        String sdkVersionStr = TXLiveBase.getSDKVersionStr();
+        Log.e("---------sdk",sdkVersionStr);//3.0.1185
     }
 
 

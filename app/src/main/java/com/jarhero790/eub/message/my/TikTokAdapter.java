@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.souye.GuanPanView;
 import com.jarhero790.eub.model.bean.souye.VideoBean;
@@ -35,7 +36,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
     //为RecyclerView的Item添加监听
     public interface OnItemClickListener {
-        void onItemClick(int position, String type, View view);
+        void onItemClick(int position, String type, View view,View view2);
     }
 
     public void setOnItemClickListerer(TikTokAdapter.OnItemClickListener listerer) {
@@ -109,24 +110,44 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         }
 
 //        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
-//        holder.tv_uname.setText("@" + video.getNickname());
+        holder.tv_uname.setText("@" + video.getNickname());
+
+
+        if (video.getIs_zan() == 1) {
+            holder.iv_like.setSelected(true);
+        } else {
+            holder.iv_like.setSelected(false);
+        }
+
         //点赞数量
-        holder.tv_like.setText(video.getZan()+"");
+        holder.tv_like.setText(video.getZan() + "");
         //评论数量
-//        holder.tv_pinglun.setText(video.getCommentNum());
+        holder.tv_pinglun.setText(video.getCommentNum() + "");
         //财富`
-        holder.caifu.setText(video.getCaifu()+"");
+        holder.caifu.setText(video.getCaifu() + "");
         //tou
-//        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-//                .error(R.mipmap.souye_logo)).into(holder.userimage);
+        if (video.getHeadimgurl().startsWith("http")) {
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                    .error(R.mipmap.souye_logo)).into(holder.userimage);
+        } else {
+            Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                    .error(R.mipmap.souye_logo)).into(holder.userimage);
+        }
+
         //旋转图
-//        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-//                .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+        if (video.getHeadimgurl().startsWith("http")) {
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+        } else {
+            Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+        }
+
 
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
         holder.circleImageView.startAnimation(rotateAnimation);
 
-        holder.btn_attention.setText("已关注");
+        holder.btn_attention.setText("已关注");//自己的
 
 //        holder.guanPanView.init();
 //        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
@@ -142,7 +163,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "点赞", view);
+                mOnItemClickListerer.onItemClick(position, "点赞", view,holder.tv_like);
             }
         });
 
@@ -150,7 +171,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "评论", view);
+                mOnItemClickListerer.onItemClick(position, "评论", view,holder.tv_pinglun);
             }
         });
 
@@ -158,7 +179,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "分享", view);
+                mOnItemClickListerer.onItemClick(position, "分享", view,view);
             }
         });
 
@@ -166,7 +187,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_gift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "礼物", view);
+                mOnItemClickListerer.onItemClick(position, "礼物", view,view);
             }
         });
 
@@ -174,7 +195,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.btn_attention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "关注", view);
+                mOnItemClickListerer.onItemClick(position, "关注", view,view);
             }
         });
 
@@ -183,7 +204,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             @Override
             public void onClick(View view) {
                 if (mOnItemClickListerer != null) {
-                    mOnItemClickListerer.onItemClick(position, "红心", view);
+                    mOnItemClickListerer.onItemClick(position, "红心", view,view);
 
                     if (isIsshow()) {
                         holder.play_pause.setVisibility(View.VISIBLE);
@@ -199,7 +220,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "红心", view);
+                mOnItemClickListerer.onItemClick(position, "红心", view,view);
                 if (isIsshow()) {
                     holder.play_pause.setVisibility(View.VISIBLE);
                 } else {

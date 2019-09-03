@@ -42,6 +42,7 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
@@ -54,6 +55,7 @@ import com.jarhero790.eub.utils.SharePreferenceUtil;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -62,6 +64,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 //1.动画旋转问题
 //2分享，
@@ -114,6 +120,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     private boolean isLook = true;//可见
 
+//    private TextView tvzan;//点赞
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -147,6 +155,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                Log.e("------1--",cate.get()+"");
 
 
+
+                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
+
                 break;
             case R.id.zuixin://最新
                 textViewZuixin.setBackgroundResource(R.drawable.button_shape1);
@@ -173,7 +184,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------2-",cate.get()+"");
-
+                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
                 break;
             case R.id.changshipin://长视频
                 textViewChangshipin.setBackgroundResource(R.drawable.button_shape1);
@@ -199,7 +210,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
-
+                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
                 break;
             case R.id.search_icon:
                 if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
@@ -211,6 +222,27 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 break;
         }
+    }
+
+    private void wodeurl(String s1, String s2) {
+        RetrofitManager.getInstance().getDataServer().getVideourl(s1,s2).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        String json=response.body().string();
+                        Log.e("-------------jj=",json);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
 
@@ -280,7 +312,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         if (value.equals("1")) {
             ivLike.setImageResource(R.drawable.iv_like_selected);
             setIszanle(true);
-            Log.e("----------", "gogogogog");
+//            Log.e("----------", "gogogogog");
         } else {
             ivLike.setImageResource(R.drawable.iv_like_unselected);
             setIszanle(false);
@@ -517,6 +549,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
+//                        tvzan= (TextView) view1;//有了
                         likeVideo();
                     }
 
@@ -679,15 +712,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     //ok
     public void showPingLun() {
-//        Log.e("--------token","token");
-//        Log.e("--------token",SharePreferenceUtil.getToken(AppUtils.getContext()));
-//
-//        if (SharePreferenceUtil.getToken(AppUtils.getContext())==null){
-//            Log.e("--------token","token1");
-//        }
-
         if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
-//            Log.e("--------token","token2");
             startActivity(new Intent(getActivity(), LoginNewActivity.class));
         } else {
             BottomPingLunDialog bottomPingLunDialog = BottomPingLunDialog.newInstance();
@@ -695,8 +720,18 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             args.putString("vid", lists.get(mCurrentPosition).getVideo_id());
             bottomPingLunDialog.setArguments(args);
             bottomPingLunDialog.show(getChildFragmentManager(), "pinglun");
-        }
+            bottomPingLunDialog.setPinNum(new BottomPingLunDialog.PinNum() {
+                @Override
+                public void Clicker(int num) {
+                    View view = layoutManager.findViewByPosition(mCurrentPosition);
+                    if (view!=null){
+                        TextView tvLike = view.findViewById(R.id.tv_pinglun);
+                        tvLike.setText(""+num);
+                    }
 
+                }
+            });
+        }
     }
 
     //ok
@@ -710,7 +745,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             bottomGiftDialog.setArguments(args);
             bottomGiftDialog.show(getChildFragmentManager(), "gift");
         }
-
     }
 
 

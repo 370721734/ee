@@ -281,7 +281,10 @@ public class BottomPingLunDialog extends DialogFragment {
 //                            dialog.dismiss();
                             if (response.body() != null && response.body().getCode() == 200) {
                                 itemlistBeans = response.body().getData().getCommentList();
-                                Log.e("----------k", "=" + itemlistBeans.size());
+//                                Log.e("----------k", "=" + itemlistBeans.size());
+                                if (pinNum!=null){
+                                    pinNum.Clicker(itemlistBeans.size());
+                                }
 
 //                                layoutManager=new LinearLayoutManager(getActivity());
 //                                recyclerView.setLayoutManager(layoutManager);
@@ -330,5 +333,15 @@ public class BottomPingLunDialog extends DialogFragment {
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+    }
+
+
+    public interface  PinNum{
+        void Clicker(int num);
+    }
+    private PinNum pinNum;
+
+    public void setPinNum(PinNum pinNum) {
+        this.pinNum = pinNum;
     }
 }

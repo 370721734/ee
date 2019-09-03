@@ -5,6 +5,7 @@ import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
+import android.util.Log;
 import android.widget.Toast;
 import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
@@ -73,6 +74,8 @@ public class GlobalApplication extends Application {
         Fresco.initialize(this);
         //腾讯短视频
         TXUGCBase.getInstance().setLicence(context, ugcLicenceUrl, ugcKey);
+        String licenceInfo = TXUGCBase.getInstance().getLicenceInfo(this);
+        Log.e("--------------duan=",licenceInfo);
         //融云初始化
         RongIM.init(this);
 

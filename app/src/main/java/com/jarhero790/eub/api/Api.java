@@ -53,6 +53,10 @@ public interface Api {
                                     @Field("page") String pageValue);
 
 
+    @FormUrlEncoded
+    @POST("user/index/getVideo")
+    Call<ResponseBody> getVideourl(@Field("cate") String cateValue,
+                                    @Field("page") String pageValue);
 
 
 /**

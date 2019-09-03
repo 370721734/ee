@@ -138,7 +138,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public void onBindViewHolder(final VideoHolder holder, int position) {
 
-        Log.e("------------------","??????"+position);
+        Log.e("------------------", "??????" + position);
         Video video = videos.get(position);
         /** Fresco方式加载
          Uri uri = Uri.parse(video.getVideo_img());
@@ -150,10 +150,14 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                 .apply(new RequestOptions().placeholder(android.R.color.white))
                 .into(holder.video_thumb);
 
-        holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
+        if (video.getIs_zan().equals("1")) {
+            holder.iv_like.setImageResource(R.drawable.iv_like_selected);
+        } else {
+            holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
+        }
 
 
-        if (video.getTitle()!=null && video.getTitle().length() > 0) {
+        if (video.getTitle() != null && video.getTitle().length() > 0) {
             holder.tv_content.setVisibility(View.VISIBLE);
             holder.tv_content.setText(video.getTitle());
         } else {
@@ -163,21 +167,40 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
         holder.tv_uname.setText("@" + video.getNickname());
         //点赞数量
-        holder.tv_like.setText(video.getZan());
+        holder.tv_like.setText(video.getZan()+"");
         //评论数量
-        holder.tv_pinglun.setText(video.getCommentNum());
+        holder.tv_pinglun.setText(video.getComment_num()+"");
+//        Log.e("-----------ping=",video.getCommentNum());//????
         //财富`
         holder.caifu.setText(video.getCaifu());
         //tou
-        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                .error(R.mipmap.souye_logo)).into(holder.userimage);
+        if (video.getHeadimgurl().startsWith("http")) {
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                    .error(R.mipmap.souye_logo)).into(holder.userimage);
+        } else {
+            Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                    .error(R.mipmap.souye_logo)).into(holder.userimage);
+        }
+
         //旋转图
-        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+        if (video.getHeadimgurl().startsWith("http")){
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+        }else {
+            Glide.with(context).load(Api.TU+video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+        }
+
+        //关注
+        if (video.getIs_like().equals("1")){
+            holder.btn_attention.setText("已关注");
+        }else {
+            holder.btn_attention.setText("+关注");
+        }
+
 
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
         holder.circleImageView.startAnimation(rotateAnimation);
-
 
 
 //        holder.guanPanView.init();
@@ -192,7 +215,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "点赞", view, view, view);
+                mOnItemClickListerer.onItemClick(position, "点赞", view, holder.tv_like, view);
             }
         });
 
@@ -200,7 +223,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "评论", view, view, view);
+                mOnItemClickListerer.onItemClick(position, "评论", view, holder.tv_pinglun, view);
             }
         });
 
@@ -232,7 +255,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.rlhead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (mOnItemClickListerer!=null){
+                if (mOnItemClickListerer != null) {
                     mOnItemClickListerer.onItemClick(position, "红心", view, view, view);
 
                     if (isIsshow()) {
@@ -300,17 +323,20 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
 
     }
+
     //需要监听几次点击事件数组的长度就为几
     //如果要监听双击事件则数组长度为2，如果要监听3次连续点击事件则数组长度为3...
     long[] mHints = new long[3];//初始全部为0
+
     @Override
     public int getItemCount() {
         return videos.size();
     }
 
 
-    public static abstract class MyClcik implements View.OnClickListener{
-        public abstract void Onclck(View v,int pos);
+    public static abstract class MyClcik implements View.OnClickListener {
+        public abstract void Onclck(View v, int pos);
+
         @Override
         public void onClick(View v) {
             Onclck(v, (Integer) v.getTag());
@@ -367,8 +393,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
             rlhead = itemView.findViewById(R.id.rlhead);
             play_pause = itemView.findViewById(R.id.iv_play_pause);
-            caifu=itemView.findViewById(R.id.tv_gold_coin);
-            love=itemView.findViewById(R.id.love);
+            caifu = itemView.findViewById(R.id.tv_gold_coin);
+            love = itemView.findViewById(R.id.love);
         }
     }
 
