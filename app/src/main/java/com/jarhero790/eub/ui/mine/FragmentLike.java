@@ -39,9 +39,9 @@ public class FragmentLike extends SupportFragment {
     //    @BindView(R.id.rlv)
     RecyclerView rlv;
     Unbinder unbinder;
-    @BindView(R.id.nodingdan)
+//    @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
-    @BindView(R.id.wangluoyichang)
+//    @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
     private View view;
 
@@ -81,6 +81,8 @@ public class FragmentLike extends SupportFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mine_like, container, false);
         rlv = view.findViewById(R.id.rlv);
+        nodingdan=view.findViewById(R.id.nodingdan);
+        wangluoyichang=view.findViewById(R.id.wangluoyichang);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

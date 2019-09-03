@@ -20,7 +20,6 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-import com.google.android.exoplayer2.util.LongArray;
 import com.jarhero790.eub.R;
 
 import java.util.Random;
@@ -29,28 +28,28 @@ public class Love extends RelativeLayout {
     private Context mContext;
     float[] num = {-30, -20, 0, 20, 30};//随机心形图片角度
 
-    private long firstClick=0;
-    private  long lastClick=0;
-    private int midMillis=500;
+//    private long firstClick=0;
+//    private  long lastClick=0;
+//    private int midMillis=500;
     private final int MSG_ONE_CLICK=0x000012;
 
-    private int mClickcount;// 点击次数
-   private int mDownX;
-   private int mDownY;
-   private int mMoveX;
-   private int mMoveY;
-   private int mUpX;
-   private int mUpY;
-   private long mLastDownTime;
-   private long mLastUpTime;
-   private long mFirstClick;
-   private long mSecondClick;
-   private long mThreeClick;
-   private boolean isDoubleClick=false;
-   private boolean isThreeClic=false;
-   private int MAX_LONG_PRESS_TIME=350;//长按/双击最长等待时间
-    private int MAX_SINGLE_CLICK_TIME=50;//单击最长等待时间
-    private int MAX_MOVE_FOR_CLICK=50;//最长改变距离,超过则算移动
+//    private int mClickcount;// 点击次数
+//   private int mDownX;
+//   private int mDownY;
+//   private int mMoveX;
+//   private int mMoveY;
+//   private int mUpX;
+//   private int mUpY;
+//   private long mLastDownTime;
+//   private long mLastUpTime;
+//   private long mFirstClick;
+//   private long mSecondClick;
+//   private long mThreeClick;
+//   private boolean isDoubleClick=false;
+//   private boolean isThreeClic=false;
+//   private int MAX_LONG_PRESS_TIME=350;//长按/双击最长等待时间
+//    private int MAX_SINGLE_CLICK_TIME=50;//单击最长等待时间
+//    private int MAX_MOVE_FOR_CLICK=50;//最长改变距离,超过则算移动
 
     public interface ClickCallBack{
         void onClick();
@@ -62,51 +61,51 @@ public class Love extends RelativeLayout {
         this.callback = callback;
     }
 
-    private MoveCallBack moveCallBack;
-    public interface MoveCallBack {
-        void onMove(float x,float y);
-    }
+//    private MoveCallBack moveCallBack;
+//    public interface MoveCallBack {
+//        void onMove(float x,float y);
+//    }
+//
+//    public void setMoveCallBack(MoveCallBack moveCallBack) {
+//        this.moveCallBack = moveCallBack;
+//    }
 
-    public void setMoveCallBack(MoveCallBack moveCallBack) {
-        this.moveCallBack = moveCallBack;
-    }
-
-    private float startX;
-    private float startY;
-    private float rawX;
-    private float rawY;
-    private boolean isMove;
-
-    private Runnable mLongPressTask=new Runnable() {
-    @Override
-    public void run() {
-            //处理长按
-            mClickcount=0;
-        }
-    };
-    private Runnable mSingleClickTask=new Runnable() {
-    @Override
-    public void run() {
-            // 处理单击
-            mClickcount=0;
-        }
-    };
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler=new Handler(){
-        @Override
-        public void handleMessage(Message msg) {
-
-            switch (msg.what){
-                case MSG_ONE_CLICK:
-
-                    if (callback!=null){
-                         callback.onClick();
-                    }
-                    break;
-            }
-            super.handleMessage(msg);
-        }
-    };
+//    private float startX;
+//    private float startY;
+//    private float rawX;
+//    private float rawY;
+//    private boolean isMove;
+//
+//    private Runnable mLongPressTask=new Runnable() {
+//    @Override
+//    public void run() {
+//            //处理长按
+//            mClickcount=0;
+//        }
+//    };
+//    private Runnable mSingleClickTask=new Runnable() {
+//    @Override
+//    public void run() {
+//            // 处理单击
+//            mClickcount=0;
+//        }
+//    };
+//    @SuppressLint("HandlerLeak")
+//    private Handler mHandler=new Handler(){
+//        @Override
+//        public void handleMessage(Message msg) {
+//
+//            switch (msg.what){
+//                case MSG_ONE_CLICK:
+//
+//                    if (callback!=null){
+//                         callback.onClick();
+//                    }
+//                    break;
+//            }
+//            super.handleMessage(msg);
+//        }
+//    };
 
     public Love(Context context) {
         super(context);
@@ -140,15 +139,15 @@ public class Love extends RelativeLayout {
         //获得当前系统已经启动的时间
         mHits[2]= SystemClock.uptimeMillis();
 
-        Log.e("----------1","="+mHits[mHits.length-1]);
+//        Log.e("----------1","="+mHits[mHits.length-1]);
 
 
         if (mHits[0]>0) {
             if ((mHits[2] - mHits[0]) <= 500) {
 
-                Log.e("----------2", "=" + mHits[0]);
-                Log.e("----------3", "=" + mHits[1]);
-                Log.e("----------4", "=" + mHits[2]);
+//                Log.e("----------2", "=" + mHits[0]);
+//                Log.e("----------3", "=" + mHits[1]);
+//                Log.e("----------4", "=" + mHits[2]);
                 mHits[0] = SystemClock.uptimeMillis();
 
 
