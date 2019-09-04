@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    android:background="@color/backgroudcolor">
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="110dp"
+        android:layout_height="110dp">
+
+        <ImageView
+            android:id="@+id/iv_video_image"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginLeft="11dp"
+            android:adjustViewBounds="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/mine_bg" />
+
+        <ImageView
+            android:id="@+id/iv_play"
+            android:layout_width="20dp"
+            android:layout_height="25dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/play_icon" />
+
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="9dp"
+            android:text="999"
+            android:textColor="#ffe6e6e6"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:layout_width="11dp"
+            android:layout_height="14dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="6dp"
+            android:layout_marginBottom="10dp"
+            android:layout_toLeftOf="@id/tv_text"
+            android:src="@mipmap/search_hot_icon" />
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="12dp"
+        android:layout_toRightOf="@id/rl"
+        android:text="再也没有"
+        android:textColor="#fff5f5f8"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/tv_memo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_name"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_toRightOf="@id/rl"
+        android:text="杨佬叁"
+        android:textColor="#ffb3b3b4"
+        android:textSize="15sp" />
+
+
+    <TextView
+        android:id="@+id/record_add"
+        android:layout_width="65dp"
+        android:layout_height="26dp"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="10dp"
+        android:background="@drawable/record_add"
+        android:gravity="center"
+        android:text="添加"
+        android:textColor="#ffffffff"
+        android:textSize="16sp" />
+
+</RelativeLayout>

@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#0d0d0d"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="28dp"
+            android:layout_height="41dp">
+
+            <LinearLayout
+                android:id="@+id/editer_back_ll"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="12dp">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center_vertical"
+                    android:gravity="center"
+                    android:visibility="gone"
+                    android:src="@mipmap/btn_back_gray" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="4dp"
+                    android:gravity="center_vertical"
+                    android:text="取消"
+                    android:textColor="#DCDBD7"
+                    android:textSize="12dp" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text=""
+                android:textColor="#ffffff"
+                android:textSize="18dp" />
+
+            <TextView
+                android:id="@+id/editer_tv_done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|center_vertical"
+                android:layout_marginRight="16dp"
+                android:text="保存"
+                android:textColor="#DCDBD7"
+                android:textSize="12dp" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/editer_layout_player"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/black">
+            <!-- 音乐播放界面 -->
+            <FrameLayout
+                android:id="@+id/editer_fl_video"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+            <!-- 音乐播放按钮 -->
+            <ImageButton
+                android:id="@+id/editer_ib_play"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_gravity="center"
+                android:background="@drawable/ic_play_bg"
+                android:src="@mipmap/ic_pause" />
+            <!-- 音乐设置按钮 -->
+            <RelativeLayout
+                android:id="@+id/rl_bgm_setting"
+                android:layout_marginTop="20dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:visibility="gone">
+
+                <TextView
+                    android:id="@+id/tv_bgm_loop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:text="音乐循环"
+                    android:textColor="@color/white"/>
+                <CheckBox
+                    android:id="@+id/cb_bgm_loop"
+                    android:layout_below="@id/tv_bgm_loop"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+
+                <TextView
+                    android:id="@+id/tv_bgm_fade"
+                    android:layout_below="@id/cb_bgm_loop"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="音乐淡入淡出"
+                    android:textColor="@color/white"/>
+                <CheckBox
+                    android:id="@+id/cb_bgm_fade"
+                    android:layout_below="@id/tv_bgm_fade"
+                    android:layout_centerHorizontal="true"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_marginTop="30dp"
+                android:layout_marginRight="15dp"
+                android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/iv_music"
+                    android:layout_width="21dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/record_music_icon"
+                    />
+                <TextView
+                    android:id="@+id/tv_music_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="音乐"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/iv_music"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#ffe6e1e1"
+                    android:textSize="9sp"
+                    />
+                <ImageView
+                    android:id="@+id/iv_tejiao"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/tv_music_text"
+                    android:src="@mipmap/record_tejiao_icon"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_tejiao_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="特效"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/iv_tejiao"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#ffe6e1e1"
+                    android:textSize="9sp"
+                    />
+                <ImageView
+                    android:id="@+id/iv_yujin"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="14dp"
+                    android:layout_below="@id/tv_tejiao_text"
+                    android:src="@mipmap/record_yujin_icon"
+                    />
+                <TextView
+                    android:id="@+id/tv_yujin_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="滤镜"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/iv_yujin"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#ffe6e1e1"
+                    android:textSize="9sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_fen_three"
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="14dp"
+                    android:layout_below="@id/tv_yujin_text"
+                    android:src="@mipmap/record_fen_three"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_fen_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="分段"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/iv_fen_three"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#ffe6e1e1"
+                    android:textSize="9sp"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_fen_two"
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_below="@id/tv_yujin_text"
+                    android:layout_toLeftOf="@id/iv_fen_three"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:src="@mipmap/record_fen_two"
+                    />
+                <ImageView
+                    android:id="@+id/iv_fen_one"
+                    android:layout_width="15dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_below="@id/tv_yujin_text"
+                    android:layout_toLeftOf="@id/iv_fen_two"
+                    android:layout_marginRight="@dimen/dp_10"
+                    android:src="@mipmap/record_fen_one"
+                    />
+
+                <ImageView
+                    android:id="@+id/iv_xiaoyin"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="14dp"
+                    android:layout_below="@id/tv_fen_text"
+                    android:src="@mipmap/record_xiaoyin_icon"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_xiao_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="消音"
+                    android:layout_alignParentRight="true"
+                    android:layout_below="@id/iv_xiaoyin"
+                    android:layout_marginTop="8dp"
+                    android:textColor="#ffe6e1e1"
+                    android:textSize="9sp"
+                    />
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+
+        <RelativeLayout
+            android:id="@+id/editer_rl_video_progress"
+            android:layout_width="match_parent"
+            android:layout_height="60dp">
+
+            <com.jarhero790.eub.record.VideoProgressView
+                android:id="@+id/editer_video_progress_view"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_centerVertical="true" />
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="match_parent"
+                android:layout_centerHorizontal="true"
+                android:background="@color/white" />
+        </RelativeLayout>
+
+        <FrameLayout
+            android:id="@+id/editer_fl_container"
+            android:layout_width="match_parent"
+            android:layout_height="150dp" >
+        </FrameLayout>
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

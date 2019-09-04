@@ -21,6 +21,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.OrientationEventListener;
@@ -41,6 +42,8 @@ import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.ui.TXCloudVideoView;
@@ -156,6 +159,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private int mMobileRotation = Surface.ROTATION_90;
 
     private boolean mTouchFocus = true; // 是否开启手动对焦
+    private TextView tvlook;//预览
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -164,10 +168,12 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
+        CommonUtil.setStatusBarTransparent(this);
 
         setContentView(R.layout.activity_video_record);
 
         mTXCameraRecord = TXUGCRecord.getInstance(this.getApplicationContext());
+
 
         initViews();
 
@@ -320,6 +326,12 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         LinearLayout backLL = (LinearLayout) findViewById(R.id.back_ll);
         backLL.setOnClickListener(this);
 
+        RelativeLayout btn_switch_camera2=findViewById(R.id.btn_switch_camera2);
+        btn_switch_camera2.setOnClickListener(this);
+
+        tvlook=findViewById(R.id.tv_look);
+        tvlook.setOnClickListener(this);
+
         mMaskLayout = (FrameLayout) findViewById(R.id.mask);
         mMaskLayout.setOnTouchListener(this);
 
@@ -361,6 +373,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mGestureDetector = new GestureDetector(this, this);
         mScaleGestureDetector = new ScaleGestureDetector(this, this);
 
+        //自定义进度条的使用
 //        mCustomProgressDialog = new CustomProgressDialog();
 //        mCustomProgressDialog.createLoadingDialog(this, "");
 //        mCustomProgressDialog.setCancelable(false); // 设置是否可以通过点击Back键取消
@@ -370,7 +383,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mIvTorch.setOnClickListener(this);
 
         if (mFront) {
-            mIvTorch.setImageResource(R.mipmap.ugc_torch_disable);
+//            mIvTorch.setImageResource(R.mipmap.ugc_torch_disable);
+            mIvTorch.setImageResource(R.mipmap.record_shan);
             mIvTorch.setEnabled(false);
         } else {
             mIvTorch.setImageResource(R.drawable.selector_torch_close);
@@ -650,7 +664,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 mIvMusic.setImageResource(R.mipmap.ugc_record_music);
             }
 
-        } else if (i == R.id.btn_switch_camera) {
+        } else if (i == R.id.btn_switch_camera2) {
+            Log.e("---------------","旋转");
             mFront = !mFront;
             mIsTorchOpen = false;
             if (mFront) {
@@ -661,7 +676,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 mIvTorch.setEnabled(true);
             }
             if (mTXCameraRecord != null) {
-                TXCLog.i(TAG, "switchCamera = " + mFront);
+                TXCLog.e(TAG, "switchCamera = " + mFront);
                 mTXCameraRecord.switchCamera(mFront);
             }
 
@@ -685,6 +700,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
         } else if (i == R.id.btn_confirm) {//                mCompleteProgressDialog.show();
 //            mCustomProgressDialog.show();
+            //完成   预览
             stopRecord();
 
         } else if (i == R.id.iv_scale) {
@@ -705,7 +721,10 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         } else if (i == R.id.snapshot) {
             snapshot();
 
-        } else {
+        } else if (i==R.id.tv_look){
+            //
+            startPreview();
+
         }
     }
 
@@ -1206,10 +1225,19 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             if (mTXCameraRecord != null) {
                 mTXCameraRecord.getPartsManager().deleteAllParts();
             }
+
             if (mNeedEditer) {
+
                 startEditVideo();
+                ///为true 时，显示预览
+
+                Log.e("-------------------",mNeedEditer+"这里是编辑 ");
+
             } else {
-                startPreview();
+//                startPreview();
+
+                Log.e("-------------------",mNeedEditer+"这里是预览 ");
+
             }
         }
     }

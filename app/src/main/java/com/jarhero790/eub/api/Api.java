@@ -21,6 +21,8 @@ import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.bean.SearchResultBean;
 import com.jarhero790.eub.message.bean.SysMessageBean;
 import com.jarhero790.eub.message.bean.ZanBean;
+import com.jarhero790.eub.record.bean.MusicBean;
+import com.jarhero790.eub.widget.Music;
 
 import io.reactivex.Observable;
 import okhttp3.RequestBody;
@@ -348,4 +350,20 @@ public interface Api {
     @FormUrlEncoded
     @POST("user/Login/logout")
     Call<ResponseBody> logout(@Field("user_id") String user_id);
+
+
+
+    //音乐列表
+    @FormUrlEncoded
+    @POST("web/index/musicList")
+    Call<MusicBean> musicList(@Field("token") String token);
+
+
+    //音乐列表搜索
+    @FormUrlEncoded
+    @POST("web/index/musicList")
+    Call<MusicBean> musicListsoso(@Field("token") String token, @Field("keyword") String keyword);
+
+
+
 }

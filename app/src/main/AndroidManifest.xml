@@ -30,7 +30,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".message.souye.BindPhoneActivity"></activity>
+        <activity android:name=".record.SelectMusicActivity"></activity>
+        <activity android:name=".message.souye.BindPhoneActivity" />
         <activity android:name=".message.my.PlayVideoActivity" />
         <activity android:name=".message.souye.SearchResultActivity" />
         <activity android:name=".message.souye.SearchActivity" />
@@ -117,7 +118,8 @@
         <activity android:name=".activity.RegisterByUsernameActivity" />
         <activity android:name=".activity.FensiActivity" />
         <activity
-            android:name=".message.LoginNewActivity" android:launchMode="singleTask"
+            android:name=".message.LoginNewActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".message.LoginPhoneActivity"
@@ -128,6 +130,28 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:taskAffinity="com.jarhero790.eub" />
+        <activity
+            android:name=".record.TCVideoPreprocessActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.tencent.liteav.demo.videopreprocess" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".record.TCVideoPreviewActivity"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="com.tencent.liteav.demo.videopreview" />
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".record.TCVideoEditerActivity" />
     </application>
 
 </manifest>
