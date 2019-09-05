@@ -194,8 +194,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         }
         mMinDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MIN_DURATION, 5 * 1000);
         mMaxDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MAX_DURATION, 60 * 1000);
-        mAspectRatio = intent.getIntExtra(TCConstants.RECORD_CONFIG_ASPECT_RATIO, TXRecordCommon.VIDEO_ASPECT_RATIO_9_16);
-        mRecommendQuality = intent.getIntExtra(TCConstants.RECORD_CONFIG_RECOMMEND_QUALITY, -1);
+        mAspectRatio = intent.getIntExtra(TCConstants.RECORD_CONFIG_ASPECT_RATIO, TXRecordCommon.VIDEO_ASPECT_RATIO_1_1);
+        mRecommendQuality = intent.getIntExtra(TCConstants.RECORD_CONFIG_RECOMMEND_QUALITY, TXRecordCommon.VIDEO_QUALITY_LOW);
         mNeedEditer = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_NEED_EDITER, true);
         mTouchFocus = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_TOUCH_FOCUS, false);
 
@@ -503,7 +503,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             if (mIsTorchOpen) {
                 mIsTorchOpen = false;
                 if (mFront) {
-                    mIvTorch.setImageResource(R.mipmap.ugc_torch_disable);
+                    mIvTorch.setImageResource(R.mipmap.record_shan);
                     mIvTorch.setEnabled(false);
                 } else {
                     mIvTorch.setImageResource(R.drawable.selector_torch_close);
@@ -665,11 +665,11 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             }
 
         } else if (i == R.id.btn_switch_camera2) {
-            Log.e("---------------","旋转");
+//            Log.e("---------------","旋转");
             mFront = !mFront;
             mIsTorchOpen = false;
             if (mFront) {
-                mIvTorch.setImageResource(R.mipmap.ugc_torch_disable);
+                mIvTorch.setImageResource(R.mipmap.record_shan);
                 mIvTorch.setEnabled(false);
             } else {
                 mIvTorch.setImageResource(R.drawable.selector_torch_close);

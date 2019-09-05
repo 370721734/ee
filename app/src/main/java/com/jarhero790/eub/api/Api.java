@@ -255,23 +255,23 @@ public interface Api {
     //个人中心我的视频
     @FormUrlEncoded
     @POST("web/index/myfabu")
-    Call<MyFaBuBean> myfabu(@Field("token") String token);
+    Call<MyFaBuBean> myfabu(@Field("token") String token,@Field("page") Integer page);
 
     //个人中心我的视频other
     @FormUrlEncoded
     @POST("web/index/myfabu")
-    Call<MyFaBuBean> myfabuother(@Field("token") String token,@Field("uid") String uid);
+    Call<MyFaBuBean> myfabuother(@Field("token") String token,@Field("uid") String uid,@Field("page") Integer page);
 
 
     //个人中心点赞的视频
     @FormUrlEncoded
     @POST("web/index/zanvideo")
-    Call<MyFaBuBean> zanvideo(@Field("token") String token);
+    Call<MyFaBuBean> zanvideo(@Field("token") String token,@Field("page") Integer page);
 
     //个人中心点赞的视频other
     @FormUrlEncoded
     @POST("web/index/zanvideo")
-    Call<MyFaBuBean> zanvideoother(@Field("token") String token,@Field("uid") String uid);
+    Call<MyFaBuBean> zanvideoother(@Field("token") String token,@Field("uid") String uid,@Field("page") Integer page);
 
     //我的关注
     @FormUrlEncoded

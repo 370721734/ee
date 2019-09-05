@@ -63,8 +63,9 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyHolder> {
 //
 //        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "+关注");
 //
-        myHolder.rl.setTag(position);
-        myHolder.rl.setOnClickListener(touclick);
+//        myHolder.rl.setTag(position);
+//        myHolder.rl.setSelected(true);
+//        myHolder.rl.setOnClickListener(touclick);
 //
         myHolder.recordAdd.setTag(position);
         myHolder.recordAdd.setOnClickListener(speak);
@@ -72,6 +73,15 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyHolder> {
 //        myHolder.speak.setTag(position);
 //        myHolder.speak.setOnClickListener(speak);
 
+        myHolder.ivVideoImage.setSelected(true);
+        myHolder.ivVideoImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (imageClick!=null){
+                    imageClick.ClickNe(position,v);
+                }
+            }
+        });
 //
 //        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
 //
@@ -172,4 +182,13 @@ public class MusicAdapter extends RecyclerView.Adapter<MusicAdapter.MyHolder> {
     }
 
 
+    public interface ImageClick{
+        void ClickNe(int po,View view);
+    }
+
+    private ImageClick imageClick;
+
+    public void setImageClick(ImageClick imageClick) {
+        this.imageClick = imageClick;
+    }
 }

@@ -190,6 +190,7 @@ public class TCVideoPreprocessActivity extends FragmentActivity implements
         }
     }
 
+    //下一个
     private void startEditActivity() {
         // 更新一下VideoInfo的时间
         Intent intent = new Intent(this, TCVideoEditerActivity.class);

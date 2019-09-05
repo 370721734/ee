@@ -32,6 +32,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.record.fragment.TCCutterFragment;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.ugc.TXRecordCommon;
@@ -53,7 +54,7 @@ import java.util.List;
  */
 
 public class TCVideoEditerActivity extends FragmentActivity implements
-
+        TCToolsView.OnItemClickListener,
         View.OnClickListener,
         TCVideoEditerWrapper.TXVideoPreviewListenerWrapper,
         TXVideoEditer.TXVideoGenerateListener {
@@ -69,8 +70,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private FrameLayout mVideoPlayerLayout;                 // 视频承载布局
     private ImageButton mIbPlay;                            // 播放按钮
     private TextView mTvDone;
-//    private TCToolsView mToolsView;                         // 底部工具栏
-//    TCToolsView.OnItemClickListener,
+    private TCToolsView mToolsView;                         // 底部工具栏
 
     private VideoWorkProgressFragment mWorkLoadingProgress; // 生成视频的等待框
 
@@ -131,16 +131,12 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private boolean mNeedProcessVideo;
     private Handler mMainHandler;
     private boolean mGifStart;
-
     ImageView ivmusic,ivtejiao,ivyujin,ivfenthree,ivfentwo,ivfenone,ivxiaoyin;
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_video_editer);
         CommonUtil.setStatusBarTransparent(this);
-
-
         mMainHandler = new Handler(Looper.getMainLooper());
         mEditerWrapper = TCVideoEditerWrapper.getInstance();
         mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
@@ -192,7 +188,9 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         prepareVideoView(); // 设置编辑预览参数
         mKeyguardManager = (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
     }
+
     private int mRotation;
+
     private void decodeFileToBitmap(List<String> picPathList) {
         if (picPathList == null) {
             return;
@@ -216,8 +214,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     }
 
     private void initViews() {
-//        mToolsView = (TCToolsView) findViewById(R.id.editer_tools_view);
-//        mToolsView.setOnItemClickListener(this);
+        mToolsView = (TCToolsView) findViewById(R.id.editer_tools_view);
+        mToolsView.setOnItemClickListener(this);
         mLlBack = (LinearLayout) findViewById(R.id.editer_back_ll);
         mLlBack.setOnClickListener(this);
         mTvDone = (TextView) findViewById(R.id.editer_tv_done);
@@ -245,13 +243,12 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         ivfenthree.setOnClickListener(this);
         ivxiaoyin=findViewById(R.id.iv_xiaoyin);
         ivxiaoyin.setOnClickListener(this);
-
     }
 
-    public void showBgmSetting(boolean isShow){
-        if(isShow){
+    public void showBgmSetting(boolean isShow) {
+        if (isShow) {
             rlBGMSetting.setVisibility(View.VISIBLE);
-        }else if(rlBGMSetting.getVisibility() == View.VISIBLE){
+        } else if (rlBGMSetting.getVisibility() == View.VISIBLE) {
             rlBGMSetting.setVisibility(View.GONE);
         }
     }
@@ -494,13 +491,10 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         }
     }
 
-
 //    @Override
 //    public void onPreviewError(TXVideoEditConstants.TXPreviewError error) {
 //        Toast.makeText(this,"预览播放失败：" + error.errorMsg, Toast.LENGTH_SHORT).show();
 //    }
-
-
 
 
     /**
@@ -574,87 +568,89 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
 
     private void showCutterFragment() {
-//        if (mCutterFragment == null) {
-//            mCutterFragment = new TCCutterFragment();
-//        }
+        if (mCutterFragment == null) {
+            mCutterFragment = new TCCutterFragment();
+        }
         showFragment(mCutterFragment, "cutter_fragment");
     }
 
 
-//    @Override
-//    public void onClickTime() {
-//        if (mIsPicCombine) {
-//            showTransitionFragment();
-//        } else {
-//            showTimeFragment();
-//        }
-//    }
+    @Override
+    public void onClickTime() {
+        if (mIsPicCombine) {
+            showTransitionFragment();
+        } else {
+            showTimeFragment();
+        }
+    }
 
-//    @Override
-//    public void onClickCutter() {
-//        showCutterFragment();
-//    }
+    @Override
+    public void onClickCutter() {
+        showCutterFragment();
+    }
 
-//    private void showTimeFragment() {
-//        Bundle args = new Bundle();
-//        args.putBoolean("needProcessVideo", mNeedProcessVideo);
-//
+    private void showTimeFragment() {
+        Bundle args = new Bundle();
+        args.putBoolean("needProcessVideo", mNeedProcessVideo);
+
 //        if (mTimeFragment == null) {
 //            mTimeFragment = new TCTimeFragment();
 //            mTimeFragment.setArguments(args);
 //        }
-//
-//        showFragment(mTimeFragment, "time_fragment");
-//    }
 
-//    private void showTransitionFragment() {
+        showFragment(mTimeFragment, "time_fragment");
+    }
+
+    private void showTransitionFragment() {
 //        if (mTransitionFragment == null) {
 //            mTransitionFragment = new TCTransitionFragment();
 //        }
 //        showFragment(mTransitionFragment, "transition_fragment");
-//    }
+    }
 
-//    @Override
-//    public void onClickStaticFilter() {
-//        if (mStaticFilterFragment == null) {
-//            mStaticFilterFragment = new TCStaticFilterFragment();
-//        }
-//        showFragment(mStaticFilterFragment, "static_filter_fragment");
-//    }
+    @Override
+    public void onClickStaticFilter() {
+        if (mStaticFilterFragment == null) {
+            mStaticFilterFragment = new TCStaticFilterFragment();
+        }
+        showFragment(mStaticFilterFragment, "static_filter_fragment");
+    }
 
-//    @Override
-//    public void onClickMotionFilter() {
-//        if (mMotionFragment == null) {
-//            mMotionFragment = new TCMotionFragment();
-//        }
-//        showFragment(mMotionFragment, "motion_fragment");
-//    }
+    @Override
+    public void onClickMotionFilter() {
+        if (mMotionFragment == null) {
+            mMotionFragment = new TCMotionFragment();
+        }
+        showFragment(mMotionFragment, "motion_fragment");
+    }
 
-//    @Override
-//    public void onClickBGM() {
+    @Override
+    public void onClickBGM() {
 //        if (mBGMSettingFragment == null) {
 //            mBGMSettingFragment = new TCBGMSettingFragment();
 //        }
 //        showFragment(mBGMSettingFragment, "bgm_setting_fragment");
-//    }
+    }
 
-//    @Override
-//    public void onClickPaster() {
-//        stopPlay();
+    @Override
+    public void onClickPaster() {
+        stopPlay();
+        //贴纸
 //        Intent intent = new Intent(this, TCPasterActivity.class);
 //        intent.putExtra(TCConstants.INTENT_KEY_MULTI_PIC_CHOOSE, mIsPicCombine);
 //        intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, mNeedProcessVideo);
 //        startActivityForResult(intent, TCConstants.REQUEST_CODE_PASTER);
-//    }
+    }
 
-//    @Override
-//    public void onClickBubbleWord() {
-//        stopPlay();
+    @Override
+    public void onClickBubbleWord() {
+        stopPlay();
+        // 气泡字幕
 //        Intent intent = new Intent(this, TCWordEditActivity.class);
 //        intent.putExtra(TCConstants.INTENT_KEY_MULTI_PIC_CHOOSE, mIsPicCombine);
 //        intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, mNeedProcessVideo);
 //        startActivityForResult(intent, TCConstants.REQUEST_CODE_WORD);
-//    }
+    }
 
 
     private void showFragment(Fragment fragment, String tag) {
@@ -766,38 +762,38 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     }
 
     private void startGenerateGif() {
-//        if(mGifStart){
-//            Toast.makeText(TCVideoEditerActivity.this, "正在生成gif，请稍后", Toast.LENGTH_SHORT).show();
-//            return;
-//        }
-//        Toast.makeText(TCVideoEditerActivity.this, "开始生成gif", Toast.LENGTH_SHORT).show();
-//        mGifStart = true;
-//        new Thread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
+        if (mGifStart) {
+            Toast.makeText(TCVideoEditerActivity.this, "正在生成gif，请稍后", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Toast.makeText(TCVideoEditerActivity.this, "开始生成gif", Toast.LENGTH_SHORT).show();
+        mGifStart = true;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
 //                    List<Bitmap> thumbnailList = TCVideoEditerWrapper.getInstance().getAllThumbnails();
 //                    String gifPath = GifUtil.createGifByBitmaps(getGifFilePath(), thumbnailList, 200, 100, 100);
 //                    notifyGifFinish(gifPath);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                } finally {
-//                    mGifStart = false;
-//                }
-//            }
-//
-//            private void notifyGifFinish(final String gifPath) {
-//                mMainHandler.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        Toast.makeText(TCVideoEditerActivity.this, "gif生成成功，存放位置：" + gifPath, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//            }
-//        }).start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                } finally {
+                    mGifStart = false;
+                }
+            }
+
+            private void notifyGifFinish(final String gifPath) {
+                mMainHandler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        Toast.makeText(TCVideoEditerActivity.this, "gif生成成功，存放位置：" + gifPath, Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        }).start();
     }
 
-    private String getGifFilePath(){
+    private String getGifFilePath() {
         File dir = new File("/sdcard/TXUGC/");
         if (!dir.exists()) {
             dir.mkdirs();
@@ -810,7 +806,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     }
 
     private void startGenerateVideo() {
-        if(mGifStart){
+        if (mGifStart) {
             Toast.makeText(TCVideoEditerActivity.this, "正在生成gif，请稍后", Toast.LENGTH_SHORT).show();
             return;
         }
@@ -870,18 +866,18 @@ public class TCVideoEditerActivity extends FragmentActivity implements
      */
     private void addTailWaterMark() {
 
-//        TXVideoEditConstants.TXVideoInfo info = TCVideoEditerWrapper.getInstance().getTXVideoInfo();
-//
-//        Bitmap tailWaterMarkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.tcloud_logo);
-//        float widthHeightRatio = tailWaterMarkBitmap.getWidth() / (float) tailWaterMarkBitmap.getHeight();
-//
-//        TXVideoEditConstants.TXRect txRect = new TXVideoEditConstants.TXRect();
-//        txRect.width = 0.25f; // 归一化的片尾水印，这里设置了一个固定值，水印占屏幕宽度的0.25。
-//        // 后面根据实际图片的宽高比，计算出对应缩放后的图片的宽度：txRect.width * videoInfo.width 和高度：txRect.width * videoInfo.width / widthHeightRatio，然后计算出水印放中间时的左上角位置
-//        txRect.x = (info.width - txRect.width * info.width) / (2f * info.width);
-//        txRect.y = (info.height - txRect.width * info.width / widthHeightRatio) / (2f * info.height);
-//
-//        mTXVideoEditer.setTailWaterMark(tailWaterMarkBitmap, txRect, 3);
+        TXVideoEditConstants.TXVideoInfo info = TCVideoEditerWrapper.getInstance().getTXVideoInfo();
+
+        Bitmap tailWaterMarkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.tcloud_logo);
+        float widthHeightRatio = tailWaterMarkBitmap.getWidth() / (float) tailWaterMarkBitmap.getHeight();
+
+        TXVideoEditConstants.TXRect txRect = new TXVideoEditConstants.TXRect();
+        txRect.width = 0.25f; // 归一化的片尾水印，这里设置了一个固定值，水印占屏幕宽度的0.25。
+        // 后面根据实际图片的宽高比，计算出对应缩放后的图片的宽度：txRect.width * videoInfo.width 和高度：txRect.width * videoInfo.width / widthHeightRatio，然后计算出水印放中间时的左上角位置
+        txRect.x = (info.width - txRect.width * info.width) / (2f * info.width);
+        txRect.y = (info.height - txRect.width * info.width / widthHeightRatio) / (2f * info.height);
+
+        mTXVideoEditer.setTailWaterMark(tailWaterMarkBitmap, txRect, 3);
     }
 
     @Override // 生成进度回调

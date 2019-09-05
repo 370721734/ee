@@ -281,7 +281,11 @@
             android:layout_height="150dp" >
         </FrameLayout>
 
-
+        <com.jarhero790.eub.record.TCToolsView
+            android:id="@+id/editer_tools_view"
+            android:layout_width="match_parent"
+            android:visibility="invisible"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
 

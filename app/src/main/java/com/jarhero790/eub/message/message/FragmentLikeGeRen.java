@@ -15,17 +15,18 @@ import android.widget.Toast;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
-import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
-
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,12 +44,16 @@ public class FragmentLikeGeRen extends Fragment {
     RelativeLayout nodingdan;
     @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
+    @BindView(R.id.m_swipe_layout)
+    SmartRefreshLayout mSwipeLayout;
     private View view;
 
     private static FragmentLikeGeRen instance = null;
 
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();
+    ArrayList<MyFaBuBean.DataBean> itemlist = new ArrayList<>();
     LikeAdapter adapter;
+    private int page;
 
     public static FragmentLikeGeRen newInstance() {
         if (instance == null) {
@@ -64,9 +69,7 @@ public class FragmentLikeGeRen extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Intent intent = getActivity().getIntent();
-        userid = intent.getStringExtra("userid");
-        initDate(userid);
+
     }
 
 
@@ -95,42 +98,83 @@ public class FragmentLikeGeRen extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
+        Intent intent = getActivity().getIntent();
+        userid = intent.getStringExtra("userid");
+        GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
+        rlv.setLayoutManager(manager);
+        LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
+        linearItemDecoration.setSpanSpace(10);
+        linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+        rlv.addItemDecoration(linearItemDecoration);
+        page=1;
+        initDate(userid);
+
+
+        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                page = 1;
+                initDate(userid);
+                mSwipeLayout.finishRefresh(1000);
+
+            }
+        });
+        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                page++;
+                initDate(userid);
+                mSwipeLayout.finishLoadMore(1000);
+
+            }
+        });
+
     }
 
-//    CustomProgressDialog dialog = new CustomProgressDialog();
-    retrofit2.Call<MyFaBuBean> calls=null;
+    //    CustomProgressDialog dialog = new CustomProgressDialog();
+    Call<MyFaBuBean> calls = null;
+
     private void initDate(String s) {
 //        dialog.createLoadingDialog(getActivity(), "正在加载...");
 //        dialog.show();
-        RetrofitManager.getInstance().getDataServer().zanvideoother(SharePreferenceUtil.getToken(AppUtils.getContext()), s)
+        RetrofitManager.getInstance().getDataServer().zanvideoother(SharePreferenceUtil.getToken(AppUtils.getContext()), s,page)
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
-                        calls=call;
+                        calls = call;
                         if (response.isSuccessful()) {
 //                            dialog.dismiss();
-                            if (response.body().getData().size()>0){
-                                list.clear();
+                            if (response.body()!=null && response.body().getData().size() > 0) {
+                                itemlist.clear();
                                 rlv.setVisibility(View.VISIBLE);
+                                mSwipeLayout.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
-                                list = response.body().getData();
-                                GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
-                                rlv.setLayoutManager(manager);
-                                LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
-                                linearItemDecoration.setSpanSpace(10);
-                                linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                                rlv.addItemDecoration(linearItemDecoration);
-                                adapter = new LikeAdapter(getActivity(), list, myclickdele, myclicktu);
-                                rlv.setAdapter(adapter);
-                            }else {
-                                rlv.setVisibility(View.GONE);
-                                nodingdan.setVisibility(View.VISIBLE);
-                                wangluoyichang.setVisibility(View.GONE);
+                                itemlist = response.body().getData();
+
+                                if (page==1){
+                                    list.clear();
+                                    list.addAll(itemlist);
+                                    adapter = new LikeAdapter(getActivity(), list, myclickdele, myclicktu);
+                                    rlv.setAdapter(adapter);
+                                }else {
+                                    list.addAll(itemlist);
+                                    adapter.notifyDataSetChanged();
+                                }
+
+                            } else {
+                                if (page==1){
+                                    rlv.setVisibility(View.GONE);
+                                    mSwipeLayout.setVisibility(View.GONE);
+                                    nodingdan.setVisibility(View.VISIBLE);
+                                    wangluoyichang.setVisibility(View.GONE);
+                                }
+
                             }
                         } else {
 //                            dialog.dismiss();
                             rlv.setVisibility(View.GONE);
+                            mSwipeLayout.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                         }
@@ -140,6 +184,7 @@ public class FragmentLikeGeRen extends Fragment {
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
 //                        dialog.dismiss();
                         rlv.setVisibility(View.GONE);
+                        mSwipeLayout.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                     }
@@ -157,9 +202,9 @@ public class FragmentLikeGeRen extends Fragment {
         @Override
         public void myclick(int position, View view) {
             Log.e("-------2", "" + position);
-            Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
-            intent.putExtra("position",position);
-            intent.putExtra("vidlist",list);
+            Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+            intent.putExtra("position", position);
+            intent.putExtra("vidlist", list);
             startActivity(intent);
         }
     };
@@ -173,14 +218,15 @@ public class FragmentLikeGeRen extends Fragment {
 
     @OnClick(R.id.wangluoyichang)
     public void onClick() {
-        if (userid!=null)
+        if (userid != null)
+            page=1;
             initDate(userid);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        if (calls!=null){
+        if (calls != null) {
             calls.cancel();
         }
     }

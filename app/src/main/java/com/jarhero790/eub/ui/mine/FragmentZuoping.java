@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.message.adapter.LikeAdapter;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.my.PlayVideoActivity;
@@ -20,6 +21,10 @@ import com.jarhero790.eub.message.net.RetrofitManager;
 
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,9 +46,12 @@ public class FragmentZuoping extends SupportFragment {
     RelativeLayout wangluoyichang;
     private View view;
     private static FragmentZuoping instance = null;
+    SmartRefreshLayout mSwipeLayout;
 
     ZuoPingAdapter adapter;
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();
+    ArrayList<MyFaBuBean.DataBean> itemlist = new ArrayList<>();
+    private int page = 1;
 
     public static FragmentZuoping newInstance() {
         if (instance == null) {
@@ -61,8 +69,9 @@ public class FragmentZuoping extends SupportFragment {
         view = inflater.inflate(R.layout.fragment_zuoping, container, false);
         rlv = view.findViewById(R.id.rlv);
         unbinder = ButterKnife.bind(this, view);
-        nodingdan=view.findViewById(R.id.nodingdan);
-        wangluoyichang=view.findViewById(R.id.wangluoyichang);
+        nodingdan = view.findViewById(R.id.nodingdan);
+        wangluoyichang = view.findViewById(R.id.wangluoyichang);
+        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
         return view;
     }
 
@@ -76,42 +85,76 @@ public class FragmentZuoping extends SupportFragment {
         linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
         rlv.addItemDecoration(linearItemDecoration);
 
+        page = 1;
         initDate();
+
+
+        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+                page = 1;
+                initDate();
+                mSwipeLayout.finishRefresh(1000);
+
+            }
+        });
+        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+            @Override
+            public void onLoadMore(RefreshLayout refreshLayout) {
+                page++;
+                initDate();
+                mSwipeLayout.finishLoadMore(1000);
+
+            }
+        });
 
     }
 
-//    CustomProgressDialog dialog = new CustomProgressDialog();
+    //    CustomProgressDialog dialog = new CustomProgressDialog();
     Call<MyFaBuBean> calls = null;
 
     private void initDate() {
 //        dialog.createLoadingDialog(getActivity(), "正在加载...");
 //        dialog.show();
-        RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()))
+        RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()),page)
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         calls = call;
                         if (response.isSuccessful()) {
 //                            dialog.dismiss();
-                            if (response.body()!=null && response.body().getData()!=null){
-                                if (response.body().getData().size() > 0) {
-                                    list.clear();
+                            if (response.body() != null && response.body().getData() != null) {
+//                                if (response.body().getData().size() > 0) {
+                                    itemlist.clear();
                                     rlv.setVisibility(View.VISIBLE);
                                     nodingdan.setVisibility(View.GONE);
                                     wangluoyichang.setVisibility(View.GONE);
-                                    list = response.body().getData();
+                                    mSwipeLayout.setVisibility(View.VISIBLE);
+                                    itemlist = response.body().getData();
 
-                                    adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
-                                    rlv.setAdapter(adapter);
-                                }else {
-                                    rlv.setVisibility(View.GONE);
-                                    nodingdan.setVisibility(View.VISIBLE);
-                                    wangluoyichang.setVisibility(View.GONE);
-                                }
-                            }else {
+//                                    adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
+//                                    rlv.setAdapter(adapter);
+
+                                    if (page == 1) {
+                                        list.clear();
+                                        list.addAll(itemlist);
+                                        adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
+                                        rlv.setAdapter(adapter);
+                                    } else {
+                                        list.addAll(itemlist);
+                                        adapter.notifyDataSetChanged();
+                                    }
+//                                } else {
+//                                    rlv.setVisibility(View.GONE);
+//                                    nodingdan.setVisibility(View.VISIBLE);
+//                                    wangluoyichang.setVisibility(View.GONE);
+//                                    mSwipeLayout.setVisibility(View.GONE);
+//                                }
+                            } else {
                                 rlv.setVisibility(View.GONE);
                                 nodingdan.setVisibility(View.VISIBLE);
                                 wangluoyichang.setVisibility(View.GONE);
+                                mSwipeLayout.setVisibility(View.GONE);
                             }
 
                         } else {
@@ -119,6 +162,7 @@ public class FragmentZuoping extends SupportFragment {
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
+                            mSwipeLayout.setVisibility(View.GONE);
                         }
                     }
 
@@ -143,9 +187,9 @@ public class FragmentZuoping extends SupportFragment {
         @Override
         public void myclick(int position, View view) {
 //            Log.e("-------2", "" + position+","+list.get(position).getUrl());
-            Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
-            intent.putExtra("position",position);
-            intent.putExtra("vidlist",list);
+            Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+            intent.putExtra("position", position);
+            intent.putExtra("vidlist", list);
             startActivity(intent);
 
         }
@@ -159,6 +203,7 @@ public class FragmentZuoping extends SupportFragment {
 
     @OnClick(R.id.wangluoyichang)
     public void onClick() {
+        page=1;
         initDate();
 
     }
@@ -166,7 +211,7 @@ public class FragmentZuoping extends SupportFragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (calls!=null){
+        if (calls != null) {
             calls.cancel();
         }
     }

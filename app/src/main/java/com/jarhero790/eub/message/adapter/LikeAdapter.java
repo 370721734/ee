@@ -108,4 +108,14 @@ public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.MyHolder> {
             ButterKnife.bind(this, view);
         }
     }
+
+
+    public List<MyFaBuBean.DataBean> getList() {
+        return list;
+    }
+
+    public void setList(List<MyFaBuBean.DataBean> list) {
+        notifyDataSetChanged();
+        this.list = list;
+    }
 }

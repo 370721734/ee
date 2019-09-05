@@ -1,166 +1,186 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tl="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:background="@color/backgroudcolor"
-    tools:context=".record.SelectMusicActivity">
+    android:layout_height="wrap_content"
+    android:focusableInTouchMode="true"
+    android:focusable="true"
+    android:background="@color/backgroudcolor">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal"
-        android:layout_marginTop="25dp"
-        >
-
-        <ImageView
-            android:id="@+id/back"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:padding="@dimen/dp_10"
-            android:layout_marginLeft="@dimen/rc_dimen_size_5"
-            android:src="@mipmap/back"/>
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_weight="8"
-            android:layout_height="wrap_content"
-            android:textColor="#EFEDED"
-            android:textSize="18sp"
-            android:layout_gravity="center"
-            android:gravity="center"
-            android:layout_marginRight="30dp"
-            android:text="选择音乐"/>
-
-    </LinearLayout>
-
-
-
-    <View
-        android:layout_marginTop="15dp"
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#3A3A44"
-        />
-
-
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="140dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginRight="10dp">
-
-        <com.jarhero790.eub.message.souye.AdViewPager
-            android:id="@+id/m_ad_pager"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </com.jarhero790.eub.message.souye.AdViewPager>
-
-        <LinearLayout
-            android:id="@+id/layout_ad_indicator"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="90dp"
-            android:layout_marginBottom="3dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal"
-             ></LinearLayout>
-
-    </FrameLayout>
-
-
-
-
-
-
-
-    <LinearLayout
+    <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="30dp"
-        android:orientation="horizontal">
+        android:background="@color/backgroudcolor"
+        android:fitsSystemWindows="true">
+        <!--app:layout_scrollFlags="scroll|enterAlways"-->
         <LinearLayout
-            android:id="@+id/ll1"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginRight="15dp"
-            android:orientation="vertical">
+            android:id="@+id/rel"
+            android:layout_width="match_parent"
+            android:layout_height="310dp"
+            android:orientation="vertical"
+            android:background="@color/backgroudcolor"
+            app:layout_scrollFlags="scroll">
 
-            <TextView
-                android:id="@+id/tv_1"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:text="音乐专辑"
-                android:textColor="#EFEDED"                
-                android:textSize="15sp"
-                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/backgroudcolor"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_marginTop="25dp"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/back"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/rc_dimen_size_5"
+                        android:layout_weight="1"
+                        android:padding="@dimen/dp_10"
+                        android:src="@mipmap/back" />
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginRight="30dp"
+                        android:layout_weight="8"
+                        android:gravity="center"
+                        android:text="选择音乐"
+                        android:textColor="#EFEDED"
+                        android:textSize="18sp" />
+
+                </LinearLayout>
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:layout_marginTop="15dp"
+                    android:background="#3A3A44" />
+
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginRight="10dp">
+
+                    <com.jarhero790.eub.message.souye.AdViewPager
+                        android:id="@+id/m_ad_pager"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+
+                    </com.jarhero790.eub.message.souye.AdViewPager>
+
+                    <LinearLayout
+                        android:id="@+id/layout_ad_indicator"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginTop="120dp"
+                        android:layout_marginBottom="3dp"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal"></LinearLayout>
+
+
+                </FrameLayout>
+
+
+
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:text="音乐专辑"
+                    android:textColor="#EFEDED"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/iv_bot1"
+                    android:layout_width="60dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#353BFD" />
+            </LinearLayout>
 
             <View
-                android:id="@+id/iv_bot1"
-                android:layout_width="60dp"
-                android:layout_height="3dp"
-                android:layout_marginTop="5dp"
-                android:background="#353BFD"/>
+                android:layout_width="0.5dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:background="#3A3A44" />
+
+            <LinearLayout
+                android:id="@+id/ll2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:text="音乐单曲"
+                    android:textColor="#EFEDED"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/iv_bot2"
+                    android:layout_width="60dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#353BFD"
+                    android:visibility="invisible" />
+            </LinearLayout>
         </LinearLayout>
+
         <View
-            android:layout_width="0.5dp"
-            android:layout_height="16dp"
-            android:layout_gravity="center_vertical"
-            android:background="#3A3A44"/>
-        <LinearLayout
-            android:id="@+id/ll2"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:layout_marginLeft="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_2"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:text="音乐单曲"
-                android:textColor="#EFEDED"
-                android:textSize="15sp"
-                />
-            <View
-                android:id="@+id/iv_bot2"
-                android:layout_width="60dp"
-                android:layout_height="3dp"
-                android:visibility="invisible"
-                android:layout_marginTop="5dp"
-                android:background="#353BFD"/>
-        </LinearLayout>
-    </LinearLayout>
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="0.5dp"
-        android:background="#3A3A44"/>
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#3A3A44" />
 
 
-    <android.support.v4.view.ViewPager
+
+    </android.support.design.widget.AppBarLayout>
+    <com.jarhero790.eub.record.view.NoScrollViewPager
         android:id="@+id/vp"
-        android:visibility="visible"
-        android:layout_marginTop="@dimen/dp_10"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="700dp"
+        android:orientation="vertical"
 
-
-
-
-</LinearLayout>
-
-
+        />
+</android.support.design.widget.CoordinatorLayout>
 
 

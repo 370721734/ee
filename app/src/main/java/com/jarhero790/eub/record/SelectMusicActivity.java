@@ -1,19 +1,26 @@
 package com.jarhero790.eub.record;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.message.souye.AdViewPager;
+import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.record.fragment.MusicSingFragment;
 import com.jarhero790.eub.record.fragment.MusicZuangFragment;
+import com.jarhero790.eub.record.view.NoScrollViewPager;
 import com.jarhero790.eub.utils.CommonUtil;
 
 import java.util.ArrayList;
@@ -34,11 +41,13 @@ public class SelectMusicActivity extends AppCompatActivity {
     @BindView(R.id.iv_bot2)
     View ivBot2;
     @BindView(R.id.vp)
-    ViewPager vp;
+    NoScrollViewPager vp;
 
     //广告的上一个显示下标
     private int lastShowIndex;
     List<Video> lunBoTuList = new ArrayList<>();//轮播图
+
+    int[] tu = new int[]{R.mipmap.music_1, R.mipmap.music_2, R.mipmap.music_3, R.mipmap.music_4, R.mipmap.music_5, R.mipmap.music_6};
 
     private String[] titles = {"专", "单"};
     private VpAdapter adapter;
@@ -53,9 +62,11 @@ public class SelectMusicActivity extends AppCompatActivity {
         CommonUtil.setStatusBarTransparent(this);
         adapter = new VpAdapter(getSupportFragmentManager());
         vp.setAdapter(adapter);
+        vp.setScroll(false);
 
 
         //轮播图
+
         initAd();
     }
 
@@ -86,7 +97,23 @@ public class SelectMusicActivity extends AppCompatActivity {
             }
         });
 //        loadAd();
+        loadTu();
 
+    }
+
+    private void loadTu() {
+        layoutAdIndicator.removeAllViews();
+        for (int i = 0; i < tu.length; i++) {
+//            ImageView iv = new ImageView(this);
+            TextView tv=new TextView(SelectMusicActivity.this);
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT, 1);
+            tv.setBackgroundDrawable(getResources().getDrawable(R.drawable.ad_indicator_drawable));
+            lp.setMargins(5, 10, 5, 10);
+            tv.setLayoutParams(lp);
+            layoutAdIndicator.addView(tv);
+        }
+        mAdPager.setAdapter(new LunBoTuAdapter());
+        mAdPager.startLoop();
     }
 
     @OnClick({R.id.back, R.id.ll1, R.id.ll2})
@@ -148,12 +175,6 @@ public class SelectMusicActivity extends AppCompatActivity {
             return titles[position];
         }
     }
-
-
-
-
-
-
 
 
 //    private void loadAd() {
@@ -220,7 +241,7 @@ public class SelectMusicActivity extends AppCompatActivity {
 //
 //
 //    }
-//
+
 //    class LunBoAdapter extends ImagePagerAdapter {
 //        private List<LunBoTu> mlist;
 //
@@ -240,7 +261,31 @@ public class SelectMusicActivity extends AppCompatActivity {
 //    }
 
 
+    class LunBoTuAdapter extends PagerAdapter {
+        @Override
+        public int getCount() {
+            return tu.length;
+        }
 
+        @Override
+        public boolean isViewFromObject(@NonNull View view, @NonNull Object o) {
+            return view == o;
+        }
+
+        @NonNull
+        @Override
+        public Object instantiateItem(@NonNull ViewGroup container, int position) {
+            ImageView imageView = new ImageView(SelectMusicActivity.this);
+            imageView.setImageResource(tu[position]);
+            container.addView(imageView);
+            return imageView;
+        }
+
+        @Override
+        public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
+            container.removeView((ImageView) object);
+        }
+    }
 
 
 }

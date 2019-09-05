@@ -6,17 +6,20 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.record.adapter.MusicAdapter;
 import com.jarhero790.eub.record.bean.MusicBean;
+import com.jarhero790.eub.record.view.MediaPlayUtil;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
@@ -83,6 +86,20 @@ public class MusicZuangFragment extends Fragment {
                         rlv.setAdapter(adapter);
 
 
+                        adapter.setImageClick(new MusicAdapter.ImageClick() {
+                            @Override
+                            public void ClickNe(int position, View view) {
+                                ImageView v= (ImageView) view;
+                                if (v.isSelected()){
+                                    Log.e("---------","来了");
+                                    MediaPlayUtil.getInstance().stop();
+                                    MediaPlayUtil.getInstance().start(list.get(position).getUrl());
+                                }else {
+                                    Log.e("---------","来了2");
+                                    MediaPlayUtil.getInstance().stop();
+                                }
+                            }
+                        });
                     }
                 }
             }
@@ -101,10 +118,60 @@ public class MusicZuangFragment extends Fragment {
         }
     };
 
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MediaPlayUtil.getInstance().pause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        MediaPlayUtil.getInstance().stop();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        MediaPlayUtil.getInstance().release();
+    }
+
+    @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (hidden){
+            MediaPlayUtil.getInstance().pause();
+        }
+    }
+
+    private boolean isplay=true;
     MusicAdapter.Myclick touclick = new MusicAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
             //video image
+            Log.e("-------------",list.get(position).getUrl());
+            RelativeLayout relativeLayout= (RelativeLayout) view;
+            if (relativeLayout.isSelected()){
+                Log.e("---------","来了");
+                MediaPlayUtil.getInstance().stop();
+                MediaPlayUtil.getInstance().start(list.get(position).getUrl());
+            }else {
+                Log.e("---------","来了2");
+                MediaPlayUtil.getInstance().stop();
+            }
+
+//            if (isplay){
+//                MediaPlayUtil.getInstance().stop();
+//                MediaPlayUtil.getInstance().start(list.get(position).getUrl());
+//                isplay=false;
+//            }else {
+//                MediaPlayUtil.getInstance().stop();
+//                isplay=true;
+//            }
+
+
+
         }
     };
 
