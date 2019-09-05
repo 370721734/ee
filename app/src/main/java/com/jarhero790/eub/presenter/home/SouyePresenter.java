@@ -46,6 +46,19 @@ public class SouyePresenter extends SouyeContract.SouyePresenter {
                 }));
     }
 
+    @Override
+    public void getVideos(String cate, String page, String token) {
+        mRxManager.register(mIModel.getVideos(cate,page,token)
+        .subscribe(new Consumer<VideoBean>() {
+            @Override
+            public void accept(VideoBean videoBean) throws Exception {
+                if (mIView==null)
+                    return;
+                mIView.updateVideos(videoBean.getData());
+            }
+        }));
+    }
+
 
     /**
      * 点赞

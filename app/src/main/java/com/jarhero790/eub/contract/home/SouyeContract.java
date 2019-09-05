@@ -22,6 +22,7 @@ public interface SouyeContract {
 
         //获取视频列表
         public abstract void getVideos(String cate, String page);
+        public abstract void getVideos(String cate, String page,String token);
 
         //关注用户
         public abstract void attentionUser(String cate, String page);
@@ -31,6 +32,7 @@ public interface SouyeContract {
     interface ISouyeModel extends IBaseModel {
         Observable<ShipinDianZanBean> zan(String videoID, String tokenValue);
         Observable<VideoBean> getVideos(String cate, String page);
+        Observable<VideoBean> getVideos(String cate, String page,String token);
         Observable<AttentionBean> attentionUser(String buid, String token);
     }
 

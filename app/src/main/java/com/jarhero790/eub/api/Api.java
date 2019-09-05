@@ -51,12 +51,16 @@ public interface Api {
     @POST("user/index/getVideo")
     Observable<VideoBean> getVideos(@Field("cate") String cateValue,
                                     @Field("page") String pageValue);
-
-
     @FormUrlEncoded
     @POST("user/index/getVideo")
-    Call<ResponseBody> getVideourl(@Field("cate") String cateValue,
-                                    @Field("page") String pageValue);
+    Observable<VideoBean> getVideos(@Field("cate") String cateValue,
+                                    @Field("page") String pageValue,@Field("token") String tokenValue);
+
+
+//    @FormUrlEncoded
+//    @POST("user/index/getVideo")
+//    Call<ResponseBody> getVideourl(@Field("cate") String cateValue,
+//                                    @Field("page") String pageValue);
 
 
 /**

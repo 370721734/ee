@@ -144,19 +144,26 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(0);
                 page.set(1);
+                mCurrentPosition=0;
 //                //加载数据
                 if (lists.size() > 0) {
                     lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
                 }
 
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("------1--",cate.get()+"");
 
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                    Log.e("-----------","无token");
+                }else {
+                    Log.e("-----------","有token");
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                }
 
-
-                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
 
                 break;
             case R.id.zuixin://最新
@@ -170,6 +177,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(1);
                 page.set(1);
+                mCurrentPosition=0;
                 //加载数据
                 if (lists.size() > 0) {
                     lists.clear();
@@ -181,10 +189,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
                 }
                 mVideoView.release();
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                }else {
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------2-",cate.get()+"");
-                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
                 break;
             case R.id.changshipin://长视频
                 textViewChangshipin.setBackgroundResource(R.drawable.button_shape1);
@@ -196,6 +209,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(2);
                 page.set(1);
+                mCurrentPosition=0;
                 //加载数据
                 if (lists.size() > 0) {
                     lists.clear();
@@ -207,10 +221,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
                 }
                 mVideoView.release();
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                }else {
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
-                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
                 break;
             case R.id.search_icon:
                 if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
@@ -224,33 +243,40 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         }
     }
 
-    private void wodeurl(String s1, String s2) {
-        RetrofitManager.getInstance().getDataServer().getVideourl(s1,s2).enqueue(new Callback<ResponseBody>() {
-            @Override
-            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()){
-                    try {
-                        String json=response.body().string();
-                        Log.e("-------------jj=",json);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseBody> call, Throwable t) {
-
-            }
-        });
-    }
+//    private void wodeurl(String s1, String s2) {
+//        RetrofitManager.getInstance().getDataServer().getVideourl(s1,s2).enqueue(new Callback<ResponseBody>() {
+//            @Override
+//            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                if (response.isSuccessful()){
+//                    try {
+//                        String json=response.body().string();
+//                        Log.e("-------------jj=",json);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onFailure(Call<ResponseBody> call, Throwable t) {
+//
+//            }
+//        });
+//    }
 
 
     @Override
     public void initData() {
         super.initData();
         //加载数据
-        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+        if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+            Log.e("-----------","无token");
+        }else {
+            Log.e("-----------","有token");
+            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+        }
+
     }
 
     @Override
@@ -379,19 +405,19 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
 
 //                LinearLayoutManager linearLayoutManager=new LinearLayoutManager(getActivity());
-                int childCount = layoutManager.getChildCount();
+//                int childCount = layoutManager.getChildCount();
 //                Log.e("-------------", "11-->" + childCount);////子数
-                int itemCount = layoutManager.getItemCount();// item总数
+//                int itemCount = layoutManager.getItemCount();// item总数
 //                Log.e("-------------", "22-->" + itemCount);
-                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
+//                int firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition();
                 //当前屏幕 首个 可见的 Item 的position
 //                LogUtils.e("-------------当前屏幕 可见的 Item 个数:" + childCount + ",Item总共的个:" + itemCount + ",当前屏幕 首个 可见的 Item 的position" + firstVisibleItemPosition);
 
-                if (lists != null && firstVisibleItemPosition != mCurrentPosition && lists.size() > 0) {
-//                    Log.e("-----------gg", "1不同");
-                    String is_zan = lists.get(mCurrentPosition).getIs_zan();
-//                    Log.e("-----------gg","是否赞了"+is_zan);
-                }
+//                if (lists != null && firstVisibleItemPosition != mCurrentPosition && lists.size() > 0) {
+////                    Log.e("-----------gg", "1不同");
+//                    String is_zan = lists.get(mCurrentPosition).getIs_zan();
+////                    Log.e("-----------gg","是否赞了"+is_zan);
+//                }
 
                 super.onScrolled(recyclerView, dx, dy);
 //                Log.e("-------NEW-", "dx>" + dx + " " + "dy>" + dy);
@@ -863,7 +889,13 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         if (position == lists.size() - 1) {
             page.getAndIncrement();
             //加载数据
-            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+
+            if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+            }else {
+                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+            }
         }
 
         //确定高度

@@ -169,7 +169,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         //点赞数量
         holder.tv_like.setText(video.getZan()+"");
         //评论数量
-        holder.tv_pinglun.setText(video.getComment_num()+"");
+        holder.tv_pinglun.setText(video.getCommentNum()+"");
 //        Log.e("-----------ping=",video.getCommentNum());//????
         //财富`
         holder.caifu.setText(video.getCaifu());
