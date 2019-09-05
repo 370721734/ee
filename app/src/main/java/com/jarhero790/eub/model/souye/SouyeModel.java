@@ -36,6 +36,11 @@ public class SouyeModel extends BaseModel implements SouyeContract.ISouyeModel {
                                    .compose(RxHelper.<VideoBean>rxSchedulerHelper());
     }
 
+    @Override
+    public Observable<VideoBean> getVideos(String cate, String page, String token) {
+        return RetrofitCreateHelper.createApi(Api.class,Api.HOST).getVideos(cate,page,token)
+                .compose(RxHelper.rxSchedulerHelper());
+    }
 
 
     @Override

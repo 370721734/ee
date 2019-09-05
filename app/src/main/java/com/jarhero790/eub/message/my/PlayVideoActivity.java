@@ -243,10 +243,32 @@ public class PlayVideoActivity extends AppCompatActivity {
                     ImageView ivlike= (ImageView) view;
                     TextView tv2= (TextView) view2;
 
-                        Log.e("-----","ivlike.isSelected=true");
+                    if (ivlike.isSelected()){
+                        ivlike.setSelected(false);
                         if (list!=null && list.size()>0){
-                            zanother(list.get(mCurrentPosition).getVideo_id()+"",ivlike,tv2);
+                            zanother(list.get(mCurrentPosition).getVideo_id()+"");
+                            String string=tv2.getText().toString();
+                            int text=(Integer.parseInt(string)-1);
+                            tv2.setText(""+text);
+
                         }
+
+//                        Log.e("-----------str=",""+(Integer.parseInt(string)-1));
+                    }else {
+                        ivlike.setSelected(true);
+                        if (list!=null && list.size()>0){
+                            zanother(list.get(mCurrentPosition).getVideo_id()+"");
+                            String string=tv2.getText().toString();
+                            int text=(Integer.parseInt(string)+1);
+                            tv2.setText(""+text);
+//                            tikTokAdapter.notifyItemChanged(mCurrentPosition);//不能刷新？？
+                        }
+//                        String string=tv2.getText().toString();
+//                        Log.e("-----------str=",""+(Integer.parseInt(string)+1));
+                    }
+
+//                        Log.e("-----","ivlike.isSelected=true");
+
 
 
 
@@ -260,34 +282,35 @@ public class PlayVideoActivity extends AppCompatActivity {
         });
     }
 
-    private void zanother(String vid,ImageView views,TextView tv) {
+    private void zanother(String vid) {
         RetrofitManager.getInstance().getDataServer().zanoter(vid,SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()){
-                    try {
-                        String json=response.body().string();
-                        Log.e("------",json);
-                        JSONObject object=new JSONObject(json);
-                        int code=object.optInt("code");
-                        if (code==200){
-                            JSONObject data=object.optJSONObject("data");
-                            String is=data.optString("is");
-                            String num=data.optString("num");
-                            if (is.equals("1")){
-                                views.setSelected(true);
-
-                            }else {
-                                views.setSelected(false);
-                            }
-                            tv.setText(num);
-                        }
-
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
+//                tikTokAdapter.notifyItemChanged(mCurrentPosition);
+//                if (response.isSuccessful()){
+//                    try {
+//                        String json=response.body().string();
+//                        Log.e("------",json);
+//                        JSONObject object=new JSONObject(json);
+//                        int code=object.optInt("code");
+//                        if (code==200){
+//                            JSONObject data=object.optJSONObject("data");
+//                            String is=data.optString("is");
+//                            String num=data.optString("num");
+//                            if (is.equals("1")){
+//                                views.setSelected(true);
+//
+//                            }else {
+//                                views.setSelected(false);
+//                            }
+//                            tv.setText(num);
+//                        }
+//
+//
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
             }
 
             @Override
