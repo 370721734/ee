@@ -329,20 +329,20 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @Override
     public void updateLikeVideo(ShipinDianZan shipinDianZan) {
         //视频点赞  OK
-        View view = layoutManager.findViewByPosition(mCurrentPosition);
-        ImageView ivLike = view.findViewById(R.id.iv_like);
-        TextView tvLike = view.findViewById(R.id.tv_like);
-        tvLike.setText(shipinDianZan.getNum());
-        //1表示已点赞；0表示未点赞或者取消点赞
-        String value = shipinDianZan.getIs();
-        if (value.equals("1")) {
-            ivLike.setImageResource(R.drawable.iv_like_selected);
-            setIszanle(true);
-//            Log.e("----------", "gogogogog");
-        } else {
-            ivLike.setImageResource(R.drawable.iv_like_unselected);
-            setIszanle(false);
-        }
+//        View view = layoutManager.findViewByPosition(mCurrentPosition);
+//        ImageView ivLike = view.findViewById(R.id.iv_like);
+//        TextView tvLike = view.findViewById(R.id.tv_like);
+//        tvLike.setText(shipinDianZan.getNum());
+//        //1表示已点赞；0表示未点赞或者取消点赞
+//        String value = shipinDianZan.getIs();
+//        if (value.equals("1")) {
+//            ivLike.setImageResource(R.drawable.iv_like_selected);
+//            setIszanle(true);
+////            Log.e("----------", "gogogogog");
+//        } else {
+//            ivLike.setImageResource(R.drawable.iv_like_unselected);
+//            setIszanle(false);
+//        }
 
         //设置首页UI
     }
@@ -576,7 +576,41 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
 //                        tvzan= (TextView) view1;//有了
-                        likeVideo();
+
+
+
+                        ImageView ivlike= (ImageView) view;
+                        TextView tv2= (TextView) view1;
+
+                        if (ivlike.isSelected()){
+                            ivlike.setSelected(false);
+                            likeVideo();
+                            String string=tv2.getText().toString();
+                            int text=(Integer.parseInt(string)-1);
+                            tv2.setText(""+text);
+//                            if (list!=null && list.size()>0){
+//                                zanother(list.get(mCurrentPosition).getVideo_id()+"");
+//
+//
+//                            }
+
+//                        Log.e("-----------str=",""+(Integer.parseInt(string)-1));
+                        }else {
+                            ivlike.setSelected(true);
+                            likeVideo();
+                            String string=tv2.getText().toString();
+                            int text=(Integer.parseInt(string)+1);
+                            tv2.setText(""+text);
+//                            if (lists!=null && lists.size()>0){
+//                                zanother(lists.get(mCurrentPosition).getVideo_id()+"");
+//
+////                            tikTokAdapter.notifyItemChanged(mCurrentPosition);//不能刷新？？
+//                            }
+//                        String string=tv2.getText().toString();
+//                        Log.e("-----------str=",""+(Integer.parseInt(string)+1));
+                        }
+
+
                     }
 
                 } else if (type.equals("礼物")) {

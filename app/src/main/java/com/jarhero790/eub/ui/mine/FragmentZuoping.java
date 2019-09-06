@@ -116,6 +116,7 @@ public class FragmentZuoping extends SupportFragment {
     private void initDate() {
 //        dialog.createLoadingDialog(getActivity(), "正在加载...");
 //        dialog.show();
+//        Log.e("-------------","page"+page);
         RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()),page)
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override

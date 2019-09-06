@@ -76,7 +76,7 @@
                     android:layout_width="33dp"
                     android:layout_height="31dp"
                     android:layout_marginBottom="10dp"
-                    android:src="@mipmap/icon_video_heart" />
+                    android:background="@drawable/zanselector"/>
             </LinearLayout>
 
             <TextView

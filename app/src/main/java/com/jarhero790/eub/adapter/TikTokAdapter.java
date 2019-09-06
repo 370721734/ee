@@ -151,9 +151,11 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                 .into(holder.video_thumb);
 
         if (video.getIs_zan().equals("1")) {
-            holder.iv_like.setImageResource(R.drawable.iv_like_selected);
+//            holder.iv_like.setImageResource(R.drawable.iv_like_selected);
+            holder.iv_like.setSelected(true);
         } else {
-            holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
+//            holder.iv_like.setImageResource(R.drawable.iv_like_unselected);
+            holder.iv_like.setSelected(false);
         }
 
 
