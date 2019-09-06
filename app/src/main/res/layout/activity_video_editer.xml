@@ -129,8 +129,8 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/iv_music"
-                    android:layout_width="21dp"
-                    android:layout_height="18dp"
+                    android:layout_width="26dp"
+                    android:layout_height="23dp"
                     android:layout_alignParentRight="true"
                     android:src="@mipmap/record_music_icon"
                     />
@@ -147,8 +147,8 @@
                     />
                 <ImageView
                     android:id="@+id/iv_tejiao"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_marginTop="14dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/tv_music_text"
@@ -168,8 +168,8 @@
                     />
                 <ImageView
                     android:id="@+id/iv_yujin"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="14dp"
                     android:layout_below="@id/tv_tejiao_text"
@@ -189,12 +189,13 @@
 
                 <ImageView
                     android:id="@+id/iv_fen_three"
-                    android:layout_width="15dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="14dp"
                     android:layout_below="@id/tv_yujin_text"
                     android:src="@mipmap/record_fen_three"
+                    android:visibility="gone"
                     />
 
                 <TextView
@@ -207,37 +208,40 @@
                     android:layout_marginTop="8dp"
                     android:textColor="#ffe6e1e1"
                     android:textSize="9sp"
+                    android:visibility="gone"
                     />
 
                 <ImageView
                     android:id="@+id/iv_fen_two"
-                    android:layout_width="15dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
                     android:layout_marginTop="14dp"
                     android:layout_below="@id/tv_yujin_text"
                     android:layout_toLeftOf="@id/iv_fen_three"
                     android:layout_marginRight="@dimen/dp_10"
                     android:src="@mipmap/record_fen_two"
+                    android:visibility="gone"
                     />
                 <ImageView
                     android:id="@+id/iv_fen_one"
-                    android:layout_width="15dp"
-                    android:layout_height="20dp"
+                    android:layout_width="20dp"
+                    android:layout_height="25dp"
                     android:layout_marginTop="14dp"
                     android:layout_below="@id/tv_yujin_text"
                     android:layout_toLeftOf="@id/iv_fen_two"
                     android:layout_marginRight="@dimen/dp_10"
                     android:src="@mipmap/record_fen_one"
+                    android:visibility="gone"
                     />
 
                 <ImageView
                     android:id="@+id/iv_xiaoyin"
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
+                    android:layout_width="23dp"
+                    android:layout_height="23dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="14dp"
-                    android:layout_below="@id/tv_fen_text"
-                    android:src="@mipmap/record_xiaoyin_icon"
+                    android:layout_below="@id/tv_yujin_text"
+                   android:background="@drawable/item_xiaoyin"
                     />
 
                 <TextView

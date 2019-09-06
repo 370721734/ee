@@ -119,31 +119,31 @@ public class MusicZuangFragment extends Fragment {
     };
 
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        MediaPlayUtil.getInstance().pause();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        MediaPlayUtil.getInstance().stop();
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        MediaPlayUtil.getInstance().release();
-    }
-
-    @Override
-    public void onHiddenChanged(boolean hidden) {
-        super.onHiddenChanged(hidden);
-        if (hidden){
-            MediaPlayUtil.getInstance().pause();
-        }
-    }
+//    @Override
+//    public void onPause() {
+//        super.onPause();
+//        MediaPlayUtil.getInstance().pause();
+//    }
+//
+//    @Override
+//    public void onStop() {
+//        super.onStop();
+//        MediaPlayUtil.getInstance().stop();
+//    }
+//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        MediaPlayUtil.getInstance().release();
+//    }
+//
+//    @Override
+//    public void onHiddenChanged(boolean hidden) {
+//        super.onHiddenChanged(hidden);
+//        if (hidden){
+//            MediaPlayUtil.getInstance().pause();
+//        }
+//    }
 
     private boolean isplay=true;
     MusicAdapter.Myclick touclick = new MusicAdapter.Myclick() {
@@ -179,6 +179,10 @@ public class MusicZuangFragment extends Fragment {
         @Override
         public void myClick(int position, View view) {
             //add
+             Log.e("------------","add");
+             if (musicString!=null){
+                 musicString.Clicklinener(position,list.get(position).getUrl());
+             }
 
         }
     };
@@ -187,5 +191,15 @@ public class MusicZuangFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+
+    public interface MusicString{
+        void Clicklinener(int position,String url);
+    }
+    private MusicString musicString;
+
+    public void setMusicString(MusicString musicString) {
+        this.musicString = musicString;
     }
 }

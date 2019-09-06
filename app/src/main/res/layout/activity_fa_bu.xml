@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroudcolor"
+    tools:context=".record.activity.FaBuActivity">
+
+    <RelativeLayout
+        android:id="@+id/rl1"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginRight="10dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="22dp"
+            android:layout_height="31dp"
+            android:padding="6dp"
+            android:src="@mipmap/back" />
+
+
+        <TextView
+            android:id="@+id/tv_fabu"
+            android:layout_width="65dp"
+            android:layout_height="26dp"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/button_shape3"
+            android:gravity="center"
+            android:text="发布"
+            android:textColor="#ffffffff"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/iv_music"
+        android:layout_width="30dp"
+        android:layout_height="28dp"
+        android:layout_below="@id/rl1"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="20dp"
+        android:src="@mipmap/record_music_icon" />
+
+    <TextView
+        android:id="@+id/tv_text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="音乐"
+        android:layout_below="@id/iv_music"
+        android:textColor="#ffe6e1e1"
+        android:layout_marginLeft="12dp"
+        android:layout_marginTop="7dp"
+        android:textSize="14dp"
+        />
+
+
+
+    <View
+        android:id="@+id/text"
+        android:layout_width="178dp"
+        android:layout_height="1dp"
+        android:layout_alignBottom="@id/tv_text1"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:background="#494A4B"/>
+    <EditText
+        android:id="@+id/et_title"
+        android:layout_width="178dp"
+        android:layout_height="34dp"
+        android:hint="#请输入您想说的话题"
+        android:textColor="#ffa9aaab"
+        android:textSize="15sp"
+        android:textColorHint="#ffa9aaab"
+        android:background="@null"
+        android:layout_alignLeft="@id/text"
+        android:layout_above="@id/text"
+        android:layout_marginBottom="5dp"
+        />
+
+    <TextView
+        android:id="@+id/submit"
+        android:layout_width="47dp"
+        android:layout_height="26dp"
+        android:text="确认"
+        android:background="@drawable/record_submit"
+        android:gravity="center"
+        android:textColor="#ffcfd0d1"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="24dp"
+        android:textSize="15sp"
+        />
+
+    <EditText
+        android:id="@+id/et_content"
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:hint="请输入您想说的话语..."
+        android:textColor="#676A73"
+        android:layout_marginLeft="10dp"
+        android:textSize="15sp"
+        android:layout_marginRight="20dp"
+        android:layout_marginBottom="24dp"
+        android:layout_alignParentBottom="true"
+        android:textColorHint="#676A73"
+        android:background="@null"
+        android:layout_toLeftOf="@id/submit"
+        />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/tv_text1"
+        android:layout_marginTop="18dp"
+        android:layout_above="@id/et_content"
+        android:layout_marginBottom="30dp">
+
+        <com.jarhero790.eub.record.TCVideoView
+            android:id="@+id/video_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            />
+
+        <ImageView
+            android:id="@+id/cover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/record_preview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:background="@drawable/icon_record_start"
+             />
+
+    </RelativeLayout>
+
+
+
+
+</RelativeLayout>

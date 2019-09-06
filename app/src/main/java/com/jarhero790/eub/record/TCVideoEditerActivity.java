@@ -1,5 +1,6 @@
 package com.jarhero790.eub.record;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.KeyguardManager;
 import android.app.Service;
@@ -32,7 +33,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.record.activity.FaBuActivity;
+import com.jarhero790.eub.record.activity.GifUtil;
+import com.jarhero790.eub.record.activity.SelectMusicActivity;
 import com.jarhero790.eub.record.fragment.TCCutterFragment;
+import com.jarhero790.eub.record.view.MediaPlayUtil;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.ugc.TXRecordCommon;
@@ -59,6 +64,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         TCVideoEditerWrapper.TXVideoPreviewListenerWrapper,
         TXVideoEditer.TXVideoGenerateListener {
     private static final String TAG = "TCVideoEditerActivity";
+    private static final int REQUESTMUSIC = 111;
 
     private TCVideoEditerWrapper mEditerWrapper;
     // 短视频SDK获取到的视频信息
@@ -131,7 +137,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private boolean mNeedProcessVideo;
     private Handler mMainHandler;
     private boolean mGifStart;
-    ImageView ivmusic,ivtejiao,ivyujin,ivfenthree,ivfentwo,ivfenone,ivxiaoyin;
+    ImageView ivmusic, ivtejiao, ivyujin, ivfenthree, ivfentwo, ivfenone, ivxiaoyin;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -229,20 +236,21 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         cbBgmLoop = (CheckBox) findViewById(R.id.cb_bgm_loop);
         cbBgmFadeInOut = (CheckBox) findViewById(R.id.cb_bgm_fade);
 
-        ivmusic=findViewById(R.id.iv_music);
+        ivmusic = findViewById(R.id.iv_music);
         ivmusic.setOnClickListener(this);
-        ivtejiao=findViewById(R.id.iv_tejiao);
+        ivtejiao = findViewById(R.id.iv_tejiao);
         ivtejiao.setOnClickListener(this);
-        ivyujin=findViewById(R.id.iv_yujin);
+        ivyujin = findViewById(R.id.iv_yujin);
         ivyujin.setOnClickListener(this);
-        ivfenone=findViewById(R.id.iv_fen_one);
+        ivfenone = findViewById(R.id.iv_fen_one);
         ivfenone.setOnClickListener(this);
-        ivfentwo=findViewById(R.id.iv_fen_two);
+        ivfentwo = findViewById(R.id.iv_fen_two);
         ivfentwo.setOnClickListener(this);
-        ivfenthree=findViewById(R.id.iv_fen_three);
+        ivfenthree = findViewById(R.id.iv_fen_three);
         ivfenthree.setOnClickListener(this);
-        ivxiaoyin=findViewById(R.id.iv_xiaoyin);
+        ivxiaoyin = findViewById(R.id.iv_xiaoyin);
         ivxiaoyin.setOnClickListener(this);
+        ivxiaoyin.setSelected(false);
     }
 
     public void showBgmSetting(boolean isShow) {
@@ -376,6 +384,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             mTXVideoEditer.pausePlay();
             mCurrentState = PlayState.STATE_PAUSE;
             mIbPlay.setImageResource(R.mipmap.ic_play);
+
         }
     }
 
@@ -398,8 +407,15 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         // 如果编辑视频的界面发生变化，需要重新调用initPlayerLayout
         if (requestCode == TCConstants.REQUEST_CODE_PASTER || requestCode == TCConstants.REQUEST_CODE_WORD) {
             initPlayerLayout();
+        } else if (requestCode == REQUESTMUSIC && resultCode == RESULT_OK) {
+            music = data.getStringExtra("music");
+            Log.e("-----------music=", music);
+            MediaPlayUtil.getInstance().stop();
+            MediaPlayUtil.getInstance().start(music);
         }
     }
+
+    private String music = null;
 
     @Override
     protected void onResume() {
@@ -408,6 +424,11 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
 //        if (!mKeyguardManager.inKeyguardRestrictedInputMode()) { // 魅族此方法（mKeyguardManager.inKeyguardRestrictedInputMode()）返回true
         playVideo(false);
+
+        if (music != null) {
+            MediaPlayUtil.getInstance().start(music);
+        }
+
 //        }
     }
 
@@ -420,6 +441,14 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             stopGenerate();
         }
         mEditerWrapper.removeTXVideoPreviewListenerWrapper(this);
+
+        MediaPlayUtil.getInstance().pause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        MediaPlayUtil.getInstance().stop();
     }
 
     @Override
@@ -459,6 +488,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mEditerWrapper.removeTXVideoPreviewListenerWrapper(this);
         mEditerWrapper.cleaThumbnails();
         mEditerWrapper.clear();
+
+        MediaPlayUtil.getInstance().release();
     }
 
 
@@ -501,7 +532,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
      * 创建缩略图，并跳转至视频预览的Activity
      */
     private void createThumbFile(final TXVideoEditConstants.TXGenerateResult result) {
-        AsyncTask<Void, String, String> task = new AsyncTask<Void, String, String>() {
+        @SuppressLint("StaticFieldLeak") AsyncTask<Void, String, String> task = new AsyncTask<Void, String, String>() {
             @Override
             protected String doInBackground(Void... voids) {
                 File outputVideo = new File(mVideoOutputPath);
@@ -540,7 +571,54 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 if (mVideoFrom == TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD) {
                     FileUtils.deleteFile(mRecordProcessedPath);
                 }
-                startPreviewActivity(result, s);
+                //录制完成，跳到预览界面， ？？？？？？？？？？？？？？？？？？？？？
+//                startPreviewActivity(result, s);
+                //现在不是预览界面，是发布界面
+                Intent intent=new Intent(TCVideoEditerActivity.this, FaBuActivity.class);
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+                intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
+                intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+                intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
+                intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
+                intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+                if (s != null)
+                    intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
+                intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
+                startActivity(intent);
+                finish();
+
+
+
+                //预览界面
+//                private void startPreview() {
+//                    if (mTXRecordResult != null && (mTXRecordResult.retCode == TXRecordCommon.RECORD_RESULT_OK
+//                            || mTXRecordResult.retCode == TXRecordCommon.RECORD_RESULT_OK_REACHED_MAXDURATION
+//                            || mTXRecordResult.retCode == TXRecordCommon.RECORD_RESULT_OK_LESS_THAN_MINDURATION)) {
+////            Intent intent = new Intent(getApplicationContext(), TCVideoPreviewActivity.class);
+//                        Intent intent = new Intent();
+//                        intent.setAction("com.tencent.liteav.demo.videopreview");
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mTXRecordResult.retCode);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mTXRecordResult.descMsg);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mTXRecordResult.videoPath);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mTXRecordResult.coverPath);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, mDuration);
+//                        if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_LOW) {
+//                            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_360_640);
+//                        } else if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_MEDIUM) {
+//                            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);
+//                        } else if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_HIGH) {
+//                            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_720_1280);
+//                        } else {
+//                            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mRecordResolution);
+//                        }
+//                        startActivity(intent);
+//
+//                        releaseRecord();
+//                        finish();
+//                    }
+//                }
             }
 
         };
@@ -670,7 +748,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.editer_back_ll:
                 finish();
                 break;
@@ -681,12 +759,24 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 playVideo(false);
                 break;
             case R.id.iv_music:
-                startActivity(new Intent(this,SelectMusicActivity.class));
+                Intent intent = new Intent(this, SelectMusicActivity.class);
+                startActivityForResult(intent, REQUESTMUSIC);
+
                 break;
             case R.id.iv_tejiao:
+                //特效
+                if (mMotionFragment == null) {
+                    mMotionFragment = new TCMotionFragment();
+                }
+                showFragment(mMotionFragment, "motion_fragment");
 
                 break;
             case R.id.iv_yujin:
+                //滤镜
+                if (mStaticFilterFragment == null) {
+                    mStaticFilterFragment = new TCStaticFilterFragment();
+                }
+                showFragment(mStaticFilterFragment, "static_filter_fragment");
 
                 break;
             case R.id.iv_fen_one:
@@ -696,9 +786,23 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
                 break;
             case R.id.iv_fen_three:
-
+                //分段  屏幕分段
+//                if (mCutterFragment == null) {
+//                    mCutterFragment = new TCCutterFragment();
+//                }
+//                showFragment(mCutterFragment, "cutter_fragment");
                 break;
             case R.id.iv_xiaoyin:
+                //消音
+
+                if (ivxiaoyin.isSelected()){
+                    mTXVideoEditer.setVideoVolume(1.0f);
+                    ivxiaoyin.setSelected(false);
+                }else {
+                    mTXVideoEditer.setVideoVolume(0.0f);
+                    ivxiaoyin.setSelected(true);
+                }
+
 
                 break;
         }
@@ -739,7 +843,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
         mIbPlay.setImageResource(R.mipmap.ic_play);
         if (mIsPicCombine) {
-            startGenerateVideo();
+            startGenerateVideo();//生成视频
             return;
         }
 
@@ -772,9 +876,10 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             @Override
             public void run() {
                 try {
-//                    List<Bitmap> thumbnailList = TCVideoEditerWrapper.getInstance().getAllThumbnails();
-//                    String gifPath = GifUtil.createGifByBitmaps(getGifFilePath(), thumbnailList, 200, 100, 100);
-//                    notifyGifFinish(gifPath);
+                    List<Bitmap> thumbnailList = TCVideoEditerWrapper.getInstance().getAllThumbnails();
+                    String gifPath = GifUtil.createGifByBitmaps(getGifFilePath(), thumbnailList, 200, 100, 100);
+                    Log.e("--------","来否"+gifPath);
+                    notifyGifFinish(gifPath);
                 } catch (Exception e) {
                     e.printStackTrace();
                 } finally {
@@ -787,6 +892,25 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                     @Override
                     public void run() {
                         Toast.makeText(TCVideoEditerActivity.this, "gif生成成功，存放位置：" + gifPath, Toast.LENGTH_SHORT).show();
+//                        ---: finish make gif
+//                        2019-09-06 17:58:57.333 17964-18391/com.jarhero790.eub E/--------: 来否/sdcard/TXUGC/GifExample.gif
+                        //发布界面了gif        gif gif   gif   gif
+//                        Intent intent=new Intent(TCVideoEditerActivity.this, FaBuActivity.class);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+//                        if (s != null)
+//                            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
+//                        startActivity(intent);
+//                        finish();
+
+
+
                     }
                 });
             }
@@ -825,7 +949,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mWorkLoadingProgress.show(getSupportFragmentManager(), "progress_dialog");
 
         // 添加片尾水印
-        addTailWaterMark();
+//        addTailWaterMark();  //腾讯云水印
 
         mTXVideoEditer.setCutFromTime(getCutterStartTime(), getCutterEndTime());
         mTXVideoEditer.setVideoGenerateListener(this);
@@ -979,4 +1103,6 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             }
         }
     }
+
+
 }

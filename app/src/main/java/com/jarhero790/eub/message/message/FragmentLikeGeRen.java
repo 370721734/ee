@@ -122,7 +122,8 @@ public class FragmentLikeGeRen extends Fragment {
         mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                page++;
+//                page++;
+                page = 1;
                 initDate(userid);
                 mSwipeLayout.finishLoadMore(1000);
 

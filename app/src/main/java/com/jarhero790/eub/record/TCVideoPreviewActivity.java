@@ -26,6 +26,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.rtmp.ITXVodPlayListener;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.TXLog;
@@ -85,6 +86,7 @@ public class TCVideoPreviewActivity extends Activity implements View.OnClickList
         requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setContentView(R.layout.activity_video_preview);
+        CommonUtil.setStatusBarTransparent(this);
 
         mStartPreview = (ImageView) findViewById(R.id.record_preview);
         mIvToEdit = (ImageView) findViewById(R.id.record_to_edit);

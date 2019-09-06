@@ -1,10 +1,12 @@
-package com.jarhero790.eub.record;
+package com.jarhero790.eub.record.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -17,7 +19,6 @@ import android.widget.TextView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.message.souye.AdViewPager;
-import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.record.fragment.MusicSingFragment;
 import com.jarhero790.eub.record.fragment.MusicZuangFragment;
 import com.jarhero790.eub.record.view.NoScrollViewPager;
@@ -54,6 +55,9 @@ public class SelectMusicActivity extends AppCompatActivity {
     private MusicZuangFragment musicZuangFragment;
     private MusicSingFragment musicSingFragment;
 
+    private FragmentManager manager;
+    private FragmentTransaction transaction;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -68,6 +72,18 @@ public class SelectMusicActivity extends AppCompatActivity {
         //轮播图
 
         initAd();
+
+//        manager=getSupportFragmentManager();
+//        transaction=manager.beginTransaction();
+//
+//
+//        musicZuangFragment=new MusicZuangFragment();
+//        musicZuangFragment.setMusicString(new MusicZuangFragment.MusicString() {
+//            @Override
+//            public void Clicklinener(int position, String url) {
+//                Log.e("-------------","selectmusic"+position+"  "+url);
+//            }
+//        });
     }
 
 
@@ -148,12 +164,39 @@ public class SelectMusicActivity extends AppCompatActivity {
                 case 0:
                     if (musicZuangFragment == null) {
                         musicZuangFragment = new MusicZuangFragment();
+
+
+                        musicZuangFragment.setMusicString(new MusicZuangFragment.MusicString() {
+                            @Override
+                            public void Clicklinener(int position, String url) {
+//                                Log.e("-------------1","selectmusic"+position+"  "+url);
+
+                                Intent intent=getIntent();
+                                intent.putExtra("music",url);
+                                setResult(RESULT_OK,intent);
+                                finish();
+//                                MediaPlayUtil.getInstance().start(url);
+                            }
+                        });
+
                         return musicZuangFragment;
                     }
                     break;
                 case 1:
                     if (musicSingFragment == null) {
                         musicSingFragment = new MusicSingFragment();
+
+                        musicSingFragment.setMusicString(new MusicSingFragment.MusicString() {
+                            @Override
+                            public void Clicklinener(int position, String url) {
+//                                Log.e("-------------1","selectmusic"+position+"  "+url);
+
+                                Intent intent=getIntent();
+                                intent.putExtra("music",url);
+                                setResult(RESULT_OK,intent);
+                                finish();
+                            }
+                        });
                         return musicSingFragment;
                     }
                     break;

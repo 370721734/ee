@@ -98,6 +98,7 @@ public class TCEditerUtil {
         matrix.postScale(scaleWidth, scaleHeight);
         // 得到新的图片
         Bitmap newbm = Bitmap.createBitmap(bm, 0, 0, width, height, matrix, true);
+
         return newbm;
     }
 

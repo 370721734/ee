@@ -95,8 +95,10 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         ArrayList<AttentionUserVideosComment> comment = attentionVideo.getComment();
         if (comment.size()>0){
             holder.tvmore.setText("查看全部"+comment.size()+"条评论");
+            holder.tvmore.setEnabled(true);
         }else {
             holder.tvmore.setText("暂无评论");
+            holder.tvmore.setEnabled(false);
         }
 
         AttPinLAdapter attPinLAdapter=new AttPinLAdapter(mcontext,comment);
@@ -153,6 +155,15 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             public void onClick(View view) {
                 if (onItemClickear!=null){
                     onItemClickear.linerck(position,"播放",view,holder.videoPlayer);
+                }
+            }
+        });
+
+        holder.tvmore.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickear!=null){
+                    onItemClickear.linerck(position,"更多",view,view);
                 }
             }
         });

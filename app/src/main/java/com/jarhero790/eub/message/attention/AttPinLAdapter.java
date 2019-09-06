@@ -72,12 +72,13 @@ public class AttPinLAdapter extends BaseAdapter {
             content.setText("："+bean.getContent());
 
 
-            if (bean.getUid().equals(SharePreferenceUtil.getUserid(context))) {
-                Log.e("-----userid=",SharePreferenceUtil.getUserid(context));
-                benren.setVisibility(View.VISIBLE);
-            }else {
-                benren.setVisibility(View.GONE);
-            }
+            //作者
+//            if (bean.getUid().equals(SharePreferenceUtil.getUserid(context))) {
+//                Log.e("-----userid=",SharePreferenceUtil.getUserid(context));
+//                benren.setVisibility(View.VISIBLE);
+//            }else {
+//                benren.setVisibility(View.GONE);
+//            }
         }
     }
 }

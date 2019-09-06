@@ -932,7 +932,18 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             }
         }
 
+        //全屏
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, 0, 0);
+        mVideoView.setLayoutParams(params);
+        View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置
+        if (view != null)
+            view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
+
         //确定高度
+       /**
         mVideoView.setOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
             @Override
             public void onPlayerStateChanged(int playerState) {
@@ -986,7 +997,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
 
                 //进度//ok
-                /**
+
                 int duration = (int) mVideoView.getDuration();
 //                Log.e("---------max-", "" + duration + "  " + mVideoView.getDuration());
                 if (proPercent != null)
@@ -1013,11 +1024,13 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     }.start();
                 }
 
-                */
+
 
             }
         });
 
+
+        */
 
 
     }

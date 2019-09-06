@@ -56,7 +56,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     @BindView(R.id.recyclerViewAttentionUsers)
     RecyclerView recyclerViewAttentionUsers;
 
-    AttentionUsersAndVideosAdapter attentionUsersAndVideosAdapter;
+//    AttentionUsersAndVideosAdapter attentionUsersAndVideosAdapter;
 
     private static AttentionFragment attentionFragment;
 
@@ -462,6 +462,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
 
 
+        }else if (type.equals("更多")){
+            showPingLun(position);
         }
     }
 

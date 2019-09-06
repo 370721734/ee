@@ -117,7 +117,9 @@ public class MusicSingFragment extends Fragment {
         @Override
         public void myClick(int position, View view) {
             //add
-
+            if (musicString!=null){
+                musicString.Clicklinener(position,list.get(position).getUrl());
+            }
         }
     };
 
@@ -125,6 +127,16 @@ public class MusicSingFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+
+    public interface MusicString{
+        void Clicklinener(int position,String url);
+    }
+    private MusicString musicString;
+
+    public void setMusicString(MusicString musicString) {
+        this.musicString = musicString;
     }
 
 }

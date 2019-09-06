@@ -195,7 +195,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mMinDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MIN_DURATION, 5 * 1000);
         mMaxDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MAX_DURATION, 60 * 1000);
         mAspectRatio = intent.getIntExtra(TCConstants.RECORD_CONFIG_ASPECT_RATIO, TXRecordCommon.VIDEO_ASPECT_RATIO_1_1);
-        mRecommendQuality = intent.getIntExtra(TCConstants.RECORD_CONFIG_RECOMMEND_QUALITY, TXRecordCommon.VIDEO_QUALITY_LOW);
+        mRecommendQuality = intent.getIntExtra(TCConstants.RECORD_CONFIG_RECOMMEND_QUALITY, TXRecordCommon.VIDEO_QUALITY_HIGH);
         mNeedEditer = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_NEED_EDITER, true);
         mTouchFocus = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_TOUCH_FOCUS, false);
 
@@ -722,8 +722,11 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             snapshot();
 
         } else if (i==R.id.tv_look){
-            //
-            startPreview();
+            //跳到预览界面的条件
+
+            //完成   预览
+            stopRecord();
+            mNeedEditer=false;
 
         }
     }
@@ -1090,6 +1093,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         return tempOutputPath;
     }
 
+    //预览界面
     private void startPreview() {
         if (mTXRecordResult != null && (mTXRecordResult.retCode == TXRecordCommon.RECORD_RESULT_OK
                 || mTXRecordResult.retCode == TXRecordCommon.RECORD_RESULT_OK_REACHED_MAXDURATION
@@ -1206,6 +1210,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         }
     }
 
+    TXRecordCommon.TXRecordResult mresult=null;
     @Override
     public void onRecordComplete(TXRecordCommon.TXRecordResult result) {
 //        mCustomProgressDialog.dismiss();
@@ -1234,7 +1239,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 Log.e("-------------------",mNeedEditer+"这里是编辑 ");
 
             } else {
-//                startPreview();
+                startPreview();
 
                 Log.e("-------------------",mNeedEditer+"这里是预览 ");
 

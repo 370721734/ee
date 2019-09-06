@@ -129,7 +129,7 @@ dependencies {
     //    implementation files('libs/aspectjrt.jar')
 
     /**
-     *       融云sdk
+     *        融云sdk
      */
 
     //    implementation 'cn.rongcloud.sdk:im_kit:2.9.18'
@@ -147,9 +147,9 @@ dependencies {
     implementation 'me.drakeet.multitype:multitype:3.4.4'
     implementation 'com.github.silladus:basiclib:1.0.2'
     implementation 'com.github.silladus:PagerIndicator:1.0.2'
-
     api project(':IMKit')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
+
     //
 
 }

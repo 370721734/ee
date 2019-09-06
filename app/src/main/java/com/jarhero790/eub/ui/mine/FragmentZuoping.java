@@ -101,7 +101,8 @@ public class FragmentZuoping extends SupportFragment {
         mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
-                page++;
+//                page++;
+                page=1;
                 initDate();
                 mSwipeLayout.finishLoadMore(1000);
 
