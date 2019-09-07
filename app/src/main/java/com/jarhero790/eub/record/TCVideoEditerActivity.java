@@ -103,6 +103,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private int mVideoFrom;
     public boolean isPreviewFinish;
 
+    private String mid="";//音乐ID
+
     // =========== 音乐设置项（在选择背景音乐的时候出现） ===========
     private RelativeLayout rlBGMSetting;
     public CheckBox cbBgmLoop;
@@ -409,7 +411,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             initPlayerLayout();
         } else if (requestCode == REQUESTMUSIC && resultCode == RESULT_OK) {
             music = data.getStringExtra("music");
-            Log.e("-----------music=", music);
+            mid=data.getStringExtra("mid");
+//            Log.e("-----------music=", music);
             MediaPlayUtil.getInstance().stop();
             MediaPlayUtil.getInstance().start(music);
         }
@@ -582,6 +585,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
                 intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
                 intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+                intent.putExtra("mid",mid);
                 if (s != null)
                     intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
                 intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
@@ -903,6 +907,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+//                        intent.putExtra("mid",mid);
 //                        if (s != null)
 //                            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());

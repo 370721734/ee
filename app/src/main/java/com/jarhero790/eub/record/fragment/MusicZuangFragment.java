@@ -181,7 +181,7 @@ public class MusicZuangFragment extends Fragment {
             //add
              Log.e("------------","add");
              if (musicString!=null){
-                 musicString.Clicklinener(position,list.get(position).getUrl());
+                 musicString.Clicklinener(position,list.get(position).getUrl(),list.get(position).getId()+"");
              }
 
         }
@@ -195,7 +195,7 @@ public class MusicZuangFragment extends Fragment {
 
 
     public interface MusicString{
-        void Clicklinener(int position,String url);
+        void Clicklinener(int position,String url,String mid);
     }
     private MusicString musicString;
 

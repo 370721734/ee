@@ -9,6 +9,7 @@ import com.tencent.liteav.basic.log.TXCLog;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.List;
@@ -58,7 +59,7 @@ public class GifUtil {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         image.compress(Bitmap.CompressFormat.JPEG, 100, baos);//质量压缩方法，这里100表示不压缩，把压缩后的数据存放到baos中
         int options = 100;
-        while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于400kb,大于继续压缩
+        while (baos.toByteArray().length / 1024 > 100) {  //循环判断如果压缩后图片是否大于100kb,大于继续压缩
             baos.reset();//重置baos即清空baos
             image.compress(Bitmap.CompressFormat.JPEG, options, baos);//这里压缩options%，把压缩后的数据存放到baos中
             options -= 10;//每次都减少10
@@ -66,6 +67,34 @@ public class GifUtil {
         ByteArrayInputStream isBm = new ByteArrayInputStream(baos.toByteArray());//把压缩后的数据baos存放到ByteArrayInputStream中
         Bitmap bitmap = BitmapFactory.decodeStream(isBm, null, null);//把ByteArrayInputStream数据生成图片
         return bitmap;
+    }
+
+
+    /**
+     * 照片转byte二进制 * @param imagepath 需要转byte的照片路径 * @return 已经转成的byte * @throws Exception
+     */
+    public static byte[] readStream(String imagepath) throws Exception {
+        FileInputStream fs = new FileInputStream(imagepath);
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        while (-1 != (len = fs.read(buffer))) {
+            outStream.write(buffer, 0, len);
+        }
+        outStream.close();
+        fs.close();
+        return outStream.toByteArray();
+    }
+
+    /**
+     * byte数组转换为二进制字符串,每个字节以","隔开
+     **/
+    public static String byteArrToBinStr(byte[] b) {
+        StringBuffer result = new StringBuffer();
+        for (int i = 0; i < b.length; i++) {
+            result.append(Long.toString(b[i] & 0xff, 2) + ",");
+        }
+        return result.toString().substring(0, result.length() - 1);
     }
 
 }

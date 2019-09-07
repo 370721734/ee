@@ -1,23 +1,28 @@
 package com.jarhero790.eub.record.activity;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.record.TCConstants;
-import com.jarhero790.eub.record.TCVideoView;
 import com.jarhero790.eub.record.view.MediaPlayUtil;
+import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
-import com.tencent.liteav.basic.log.TXCLog;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 import com.tencent.rtmp.ITXVodPlayListener;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.TXVodPlayConfig;
@@ -25,11 +30,19 @@ import com.tencent.rtmp.TXVodPlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
 
 import java.io.File;
-import java.util.Locale;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListener {
 
@@ -70,6 +83,12 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     ImageView mStartPreview;
     private boolean mStartSeek = false;
 
+    private String mid;
+    private String img;
+    private String address="";
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,6 +98,9 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
         mTXCloudVideoView = (TXCloudVideoView) findViewById(R.id.video_view);
         mImageViewBg = (ImageView) findViewById(R.id.cover);
         mStartPreview = (ImageView) findViewById(R.id.record_preview);
+
+        Intent intent=getIntent();
+        mid=intent.getStringExtra("mid");
 
 
         mVideoSource = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
@@ -93,6 +115,10 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                     .into(mImageViewBg);
         }
 
+        Bitmap bitmap = BitmapFactory.decodeFile(mCoverImagePath);
+        Bitmap newbitmap=GifUtil.compressImage(bitmap);
+        img="data:image/png;base64," + CommonUtil.convertIconToString(newbitmap);
+
         mTXVodPlayer = new TXVodPlayer(this);
         mTXPlayConfig = new TXVodPlayConfig();
         mTXCloudVideoView.disableLog(true);
@@ -106,6 +132,97 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 finish();
                 break;
             case R.id.tv_fabu:
+
+                String title=etTitle.getText().toString();
+                if (TextUtils.isEmpty(title)){
+                    Toast.makeText(this,"请输入标题",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                address=etContent.getText().toString();
+
+                Map<String, RequestBody> bodyMap=new HashMap<>();
+                File file=new File(mVideoPath);
+                if (!file.exists()){
+                    file.mkdirs();
+                }
+                if (mid==null || img==null){
+                    Log.e("--------mid=",mid+"  img="+img);
+                    Toast.makeText(this,"图片或音乐为空",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+//                RequestBody ytoken=RequestBody.create(MediaType.parse("text/plain"), SharePreferenceUtil.getToken(AppUtils.getContext()));
+//                RequestBody ymid=RequestBody.create(MediaType.parse("text/plain"),mid);//音乐ID
+//                RequestBody yimg=RequestBody.create(MediaType.parse("text/plain"),img);//base64
+//                RequestBody ytitle=RequestBody.create(MediaType.parse("text/plain"),title);//标题
+//                RequestBody yaddress=RequestBody.create(MediaType.parse("text/plain"),address);//地址
+//                RequestBody yfile=RequestBody.create(MediaType.parse("multipart/form-data"),file);//
+//                bodyMap.put("token",ytoken);
+//                bodyMap.put("mid",ymid);
+//                bodyMap.put("img",yimg);
+//                bodyMap.put("title",ytitle);
+//                bodyMap.put("address",yaddress);
+//                MultipartBody.Part part=MultipartBody.Part.createFormData(file.getName(),file.getName(),yfile);
+                byte[] bytes=new byte[]{};
+                try {
+                    bytes=GifUtil.readStream(mVideoPath);
+
+                   String newbytes=new String(bytes,"UTF-8");
+
+
+//                    if (bytes.length>0){
+
+                        RetrofitManager.getInstance().getDataServer().uploadmusic(SharePreferenceUtil.getToken(AppUtils.getContext())
+                                ,mid,img,title,newbytes,address).enqueue(new Callback<ResponseBody>() {
+                            @Override
+                            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                if (response.isSuccessful()) {
+                                    //Response{protocol=http/1.1, code=500, message=Internal Server Error, url=http://www.51ayhd.com/zstv/public/index.php/web/index/uploadLocal}
+                                    try {
+                                        String json = response.body().string();
+                                        Log.e("--------------333", json);
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }else {
+                                    Log.e("--------------333", "fail");
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                                Log.e("--------------333", "fail3");
+                            }
+                        });
+
+
+//                    }
+
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+
+
+//                RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap,part).enqueue(new Callback<ResponseBody>() {
+//                    @Override
+//                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                        if (response.isSuccessful()){
+//                            try {
+//                                String json=response.body().string();
+//                                Log.e("--------------333",json);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//                    }
+//
+//                    @Override
+//                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//
+//                    }
+//                });
                 break;
             case R.id.iv_music:
                 Intent intent = new Intent(this, SelectMusicActivity.class);
@@ -159,6 +276,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
         super.onActivityResult(requestCode, resultCode, data);
        if (requestCode == REQUESTMUSIC && resultCode == RESULT_OK) {
             music = data.getStringExtra("music");
+            mid=data.getStringExtra("mid");
             Log.e("-----------music=", music);
             MediaPlayUtil.getInstance().stop();
             MediaPlayUtil.getInstance().start(music);

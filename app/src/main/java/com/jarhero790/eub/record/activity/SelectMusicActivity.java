@@ -168,11 +168,12 @@ public class SelectMusicActivity extends AppCompatActivity {
 
                         musicZuangFragment.setMusicString(new MusicZuangFragment.MusicString() {
                             @Override
-                            public void Clicklinener(int position, String url) {
+                            public void Clicklinener(int position, String url,String mid) {
 //                                Log.e("-------------1","selectmusic"+position+"  "+url);
 
                                 Intent intent=getIntent();
                                 intent.putExtra("music",url);
+                                intent.putExtra("mid",mid);
                                 setResult(RESULT_OK,intent);
                                 finish();
 //                                MediaPlayUtil.getInstance().start(url);
@@ -188,11 +189,12 @@ public class SelectMusicActivity extends AppCompatActivity {
 
                         musicSingFragment.setMusicString(new MusicSingFragment.MusicString() {
                             @Override
-                            public void Clicklinener(int position, String url) {
+                            public void Clicklinener(int position, String url,String mid) {
 //                                Log.e("-------------1","selectmusic"+position+"  "+url);
 
                                 Intent intent=getIntent();
                                 intent.putExtra("music",url);
+                                intent.putExtra("mid",mid);
                                 setResult(RESULT_OK,intent);
                                 finish();
                             }

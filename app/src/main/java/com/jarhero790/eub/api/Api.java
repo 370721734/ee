@@ -24,14 +24,21 @@ import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.record.bean.MusicBean;
 import com.jarhero790.eub.widget.Music;
 
+import java.util.List;
+import java.util.Map;
+
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 public interface Api {
@@ -367,6 +374,19 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/musicList")
     Call<MusicBean> musicListsoso(@Field("token") String token, @Field("keyword") String keyword);
+
+
+    //上传视频
+//    @Multipart
+//    @POST("web/index/uploadLocal")
+//    Call<ResponseBody> uploadLocal(@PartMap Map<String,RequestBody> params, @Part MultipartBody.Part parts);
+
+
+
+    //上传视频
+    @FormUrlEncoded
+    @POST("web/index/uploadLocal")
+    Call<ResponseBody> uploadmusic(@Field("token") String token, @Field("mid") String mid,@Field("img") String img, @Field("title") String title,@Field("file") String bytes, @Field("address") String address);
 
 
 

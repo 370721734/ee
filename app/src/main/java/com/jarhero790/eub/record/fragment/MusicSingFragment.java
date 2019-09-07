@@ -118,7 +118,7 @@ public class MusicSingFragment extends Fragment {
         public void myClick(int position, View view) {
             //add
             if (musicString!=null){
-                musicString.Clicklinener(position,list.get(position).getUrl());
+                musicString.Clicklinener(position,list.get(position).getUrl(),list.get(position).getId()+"");
             }
         }
     };
@@ -131,7 +131,7 @@ public class MusicSingFragment extends Fragment {
 
 
     public interface MusicString{
-        void Clicklinener(int position,String url);
+        void Clicklinener(int position,String url,String mid);
     }
     private MusicString musicString;
 
