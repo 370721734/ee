@@ -1,6 +1,7 @@
 package com.jarhero790.eub.message.net;
 
 //ok
+
 import android.content.Context;
 
 import com.google.gson.Gson;
@@ -10,22 +11,28 @@ import com.jarhero790.eub.okhttp.CacheInterceptor;
 import com.jarhero790.eub.okhttp.HttpCache;
 import com.jarhero790.eub.okhttp.TrustManager;
 
+import java.io.File;
+import java.io.IOException;
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Type;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
+import okhttp3.RequestBody;
 import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Converter;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitManager {
-//    public static final String SERVER_ADDRESS="http://api.kabaodian.cn";
-    public static final String SERVER_ADDRESS="http://120.79.222.191/zstv/public/index.php/";
+    //    public static final String SERVER_ADDRESS="http://api.kabaodian.cn";
+    public static final String SERVER_ADDRESS = "http://120.79.222.191/zstv/public/index.php/";
     private Retrofit retrofit;
     private Api dataServer;
     private Context context;
     private static RetrofitManager instance;
-
 
 
     private static final int TIMEOUT_READ = 20;
@@ -55,28 +62,50 @@ public class RetrofitManager {
 
     private RetrofitManager() {
     }
-    public void init(Context context){
-        this.context=context;
-        Gson gson=new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
-        retrofit=new Retrofit.Builder()
+
+    public void init(Context context) {
+        this.context = context;
+        Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create();
+        retrofit = new Retrofit.Builder()
                 .baseUrl(Api.HOST)
                 .client(okHttpClient)
 //                .client(new OkHttpClient.Builder().addInterceptor(new MyInterceptor()).build())
                 .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(new FileRequestBodyConverterFactory())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build();
     }
-    public static RetrofitManager getInstance(){
-        if (instance==null){
-            instance=new RetrofitManager();
+
+    public static RetrofitManager getInstance() {
+        if (instance == null) {
+            instance = new RetrofitManager();
         }
         return instance;
     }
 
-    public Api getDataServer(){
-        if (null==dataServer){
-            dataServer=retrofit.create(Api.class);
+    public Api getDataServer() {
+        if (null == dataServer) {
+            dataServer = retrofit.create(Api.class);
         }
         return dataServer;
+    }
+
+
+    class FileRequestBodyConverterFactory extends Converter
+
+            .Factory {
+        public Converter<File, RequestBody> requestBodyConverter(Type type, Annotation[] paramerannotations,
+                                                                 Annotation[] methodannotations, Retrofit retrofit) {
+            return new FileRequestBodyConverter();
+        }
+    }
+
+    class FileRequestBodyConverter implements Converter<File, RequestBody> {
+
+        @Override
+        public RequestBody convert(File value) throws IOException {
+
+            return RequestBody.create(MediaType.parse("video/mp4"), value);
+        }
     }
 }

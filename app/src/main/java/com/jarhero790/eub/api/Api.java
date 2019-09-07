@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
@@ -376,10 +377,14 @@ public interface Api {
     Call<MusicBean> musicListsoso(@Field("token") String token, @Field("keyword") String keyword);
 
 
-    //上传视频
-//    @Multipart
-//    @POST("web/index/uploadLocal")
-//    Call<ResponseBody> uploadLocal(@PartMap Map<String,RequestBody> params, @Part MultipartBody.Part parts);
+//    上传视频
+    @Multipart
+    @POST("web/index/uploadLocal")
+    Call<ResponseBody> uploadLocal(@PartMap Map<String, RequestBody> params, @Part MultipartBody.Part parts);
+//    上传视频
+    @Multipart
+    @POST("web/index/uploadLocal")
+    Call<ResponseBody> uploadLocal2(@Part("description") RequestBody description,@Part MultipartBody.Part prex, @PartMap Map<String,RequestBody> params);
 
 
 
