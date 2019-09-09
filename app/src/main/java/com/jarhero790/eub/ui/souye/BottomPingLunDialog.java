@@ -51,7 +51,7 @@ public class BottomPingLunDialog extends DialogFragment {
     private RecyclerView recyclerView;
     TextView tvnum,fa;
     EditText mcontent;
-    ImageView imageView;
+    ImageView imageView,pinlun_icon;
 
    private String vid;
     private static BottomPingLunDialog instance = null;
@@ -92,20 +92,24 @@ public class BottomPingLunDialog extends DialogFragment {
 //        recyclerView.setLayoutManager(manager);
 
 
-        Log.e("-------------", "go go go" + str);
+//        Log.e("-------------", "go go go" + str);
 
         LinearLayoutManager mPerfectCourse = new LinearLayoutManager(getActivity());
         mPerfectCourse.setOrientation(LinearLayoutManager.VERTICAL);// 设置 recyclerview 布局方式为横向布局lvHotCourse.setLayoutManager(mPerfectCourse);
         recyclerView.setLayoutManager(mPerfectCourse);
         adapter = new PingLenVideoAdapter(getActivity(), listBeans, myclick);
-        Log.e("------------li", "" + listBeans.size());
+//        Log.e("------------li", "" + listBeans.size());
         recyclerView.setAdapter(adapter);
 
 
 
         if (listBeans != null && listBeans.size() > 0) {
+            recyclerView.setVisibility(View.VISIBLE);
+            pinlun_icon.setVisibility(View.GONE);
             tvnum.setText(listBeans.size() + "条评论");
         } else {
+            recyclerView.setVisibility(View.GONE);
+            pinlun_icon.setVisibility(View.VISIBLE);
             tvnum.setText("0条评论");
         }
     }
@@ -121,6 +125,7 @@ public class BottomPingLunDialog extends DialogFragment {
         imageView = frView.findViewById(R.id.iv_exit);
         fa=frView.findViewById(R.id.tv_fa);
         mcontent=frView.findViewById(R.id.et_content);
+        pinlun_icon=frView.findViewById(R.id.pinlun_icon);
 
         //默认展开所有回复
 //        CommentExpandAdapter adapter = new CommentExpandAdapter(inflater);

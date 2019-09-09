@@ -39,9 +39,15 @@
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rlv"
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
+        <ImageView
+            android:id="@+id/pinlun_icon"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/souye_pinlun"/>
     </RelativeLayout>
 
     <RelativeLayout

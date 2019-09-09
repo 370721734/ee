@@ -64,11 +64,10 @@
         android:gravity="center"
         android:visibility="gone">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="没有信息"
+            android:src="@mipmap/message_feisi"
             />
     </RelativeLayout>
 

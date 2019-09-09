@@ -814,6 +814,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             mTXCameraRecord.getPartsManager().deleteLastPart();
             int timeSecond = mTXCameraRecord.getPartsManager().getDuration() / 1000;
             mProgressTime.setText(String.format(Locale.CHINA, "00:%02d", timeSecond));
+            mProgressTime.setTag(timeSecond);
             if (timeSecond < mMinDuration / 1000) {
                 mIvConfirm.setImageResource(R.mipmap.ugc_confirm_disable);
                 mIvConfirm.setEnabled(false);
@@ -1133,6 +1134,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 //        retriever.setDataSource(mTXRecordResult.videoPath);
 //        String duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
 //        fileInfo.setDuration(Integer.valueOf(duration) );
+        int times= (int) mProgressTime.getTag();
+        Log.e("-------","时间"+times);
         if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_LOW) {
             intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_360_640);
             mBiteRate = 2400;
@@ -1150,6 +1153,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
         intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mTXRecordResult.videoPath);
         intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mTXRecordResult.coverPath);
+        intent.putExtra("time",times);
         startActivity(intent);
 
         releaseRecord();
@@ -1180,6 +1184,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         float timeSecondFloat = milliSecond / 1000f;
         int timeSecond = Math.round(timeSecondFloat);
         mProgressTime.setText(String.format(Locale.CHINA, "00:%02d", timeSecond));
+        mProgressTime.setTag(timeSecond);
         if (timeSecondFloat < mMinDuration / 1000f) {
             mIvConfirm.setImageResource(R.mipmap.ugc_confirm_disable);
             mIvConfirm.setEnabled(false);
@@ -1223,6 +1228,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             if (mTXCameraRecord != null) {
                 int timeSecond = mTXCameraRecord.getPartsManager().getDuration() / 1000;
                 mProgressTime.setText(String.format(Locale.CHINA, "00:%02d", timeSecond));
+                mProgressTime.setTag(timeSecond);
             }
             Toast.makeText(TCVideoRecordActivity.this.getApplicationContext(), "录制失败，原因：" + mTXRecordResult.descMsg, Toast.LENGTH_SHORT).show();
         } else {
@@ -1236,12 +1242,12 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 startEditVideo();
                 ///为true 时，显示预览
 
-                Log.e("-------------------",mNeedEditer+"这里是编辑 ");
+//                Log.e("-------------------",mNeedEditer+"这里是编辑 ");
 
             } else {
                 startPreview();
 
-                Log.e("-------------------",mNeedEditer+"这里是预览 ");
+//                Log.e("-------------------",mNeedEditer+"这里是预览 ");
 
             }
         }

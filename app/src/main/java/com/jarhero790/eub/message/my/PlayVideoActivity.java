@@ -365,6 +365,8 @@ public class PlayVideoActivity extends AppCompatActivity {
         mVideoView.start();
 
 
+        /**
+
         //确定高度
         mVideoView.setOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
             @Override
@@ -421,8 +423,10 @@ public class PlayVideoActivity extends AppCompatActivity {
             }
         });
 
+        */
+
         //UI
-        initViewUI();
+//        initViewUI();
     }
 
 

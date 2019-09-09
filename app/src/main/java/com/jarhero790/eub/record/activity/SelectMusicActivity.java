@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -169,7 +170,7 @@ public class SelectMusicActivity extends AppCompatActivity {
                         musicZuangFragment.setMusicString(new MusicZuangFragment.MusicString() {
                             @Override
                             public void Clicklinener(int position, String url,String mid) {
-//                                Log.e("-------------1","selectmusic"+position+"  "+url);
+                                Log.e("-------------1","selectmusic"+position+"  "+url);
 
                                 Intent intent=getIntent();
                                 intent.putExtra("music",url);

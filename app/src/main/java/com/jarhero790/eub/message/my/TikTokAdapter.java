@@ -149,7 +149,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
         holder.circleImageView.startAnimation(rotateAnimation);
 
-        holder.btn_attention.setText("已关注");//自己的
+        holder.btn_attention.setText(video.getIs_like()==1?"已关注":"关注");//自己的
+
 
 //        holder.guanPanView.init();
 //        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());

@@ -380,7 +380,7 @@ public interface Api {
 //    上传视频
     @Multipart
     @POST("web/index/uploadLocal")
-    Call<ResponseBody> uploadLocal(@PartMap Map<String, RequestBody> params, @Part List<MultipartBody.Part> parts);
+    Call<ResponseBody> uploadLocal(@PartMap Map<String, RequestBody> params, @Part MultipartBody.Part parts);
 //    上传视频
     @Multipart
     @POST("web/index/uploadLocal")

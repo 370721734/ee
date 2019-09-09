@@ -45,6 +45,7 @@ import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
+import com.jarhero790.eub.record.bean.FaVBean;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
 import com.jarhero790.eub.ui.souye.BottomShareDialog;
@@ -54,6 +55,7 @@ import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -500,6 +502,41 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         } else {
             Log.e("-------", "souye-onResumeN");
         }
+
+
+//        mPresenter.getVideos();
+//        Intent intentx=getActivity().getIntent();
+//       String isok= intentx.getStringExtra("ok");
+//       if (isok!=null)
+
+
+
+
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void fav(FaVBean faVBean){
+//        Log.e("---------youye=",faVBean.getName());
+        if (faVBean.getName().equals("video")){
+            cate.set(0);
+            page.set(1);
+            mCurrentPosition=0;
+//                //加载数据
+            if (lists.size() > 0) {
+                lists.clear();
+            }
+
+
+            if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                Log.e("-----------","无token");
+            }else {
+                Log.e("-----------","有token");
+                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+            }
+        }
+
 
     }
 

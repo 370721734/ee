@@ -10,11 +10,13 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -36,6 +38,9 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.record.activity.FaBuActivity;
 import com.jarhero790.eub.record.activity.GifUtil;
 import com.jarhero790.eub.record.activity.SelectMusicActivity;
+import com.jarhero790.eub.record.ffem.FFmpegCommands;
+import com.jarhero790.eub.record.ffem.FFmpegRun;
+import com.jarhero790.eub.record.ffem.FileUtilss;
 import com.jarhero790.eub.record.fragment.TCCutterFragment;
 import com.jarhero790.eub.record.view.MediaPlayUtil;
 import com.jarhero790.eub.utils.CommonUtil;
@@ -45,11 +50,15 @@ import com.tencent.ugc.TXVideoEditConstants;
 import com.tencent.ugc.TXVideoEditer;
 import com.tencent.ugc.TXVideoInfoReader;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -140,6 +149,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private Handler mMainHandler;
     private boolean mGifStart;
     ImageView ivmusic, ivtejiao, ivyujin, ivfenthree, ivfentwo, ivfenone, ivxiaoyin;
+    private String mTargetPath;
+    private FileUtilss mFileUtils;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -149,6 +160,9 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mMainHandler = new Handler(Looper.getMainLooper());
         mEditerWrapper = TCVideoEditerWrapper.getInstance();
         mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
+
+        mFileUtils = new FileUtilss(TCVideoEditerActivity.this);
+        mTargetPath = mFileUtils.getStorageDirectory();
 
         mIsPicCombine = getIntent().getBooleanExtra(TCConstants.INTENT_KEY_MULTI_PIC_CHOOSE, false);
         mNeedProcessVideo = getIntent().getBooleanExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
@@ -190,6 +204,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
         // 录制经过预处理的视频路径，在编辑后需要删掉录制源文件
         mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
+
+//        Log.e("---------------------mVideoOutputPath=2",mVideoOutputPath+"   "+mRecordProcessedPath);
 
         initViews();
         initPhoneListener();
@@ -412,9 +428,24 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         } else if (requestCode == REQUESTMUSIC && resultCode == RESULT_OK) {
             music = data.getStringExtra("music");
             mid=data.getStringExtra("mid");
-//            Log.e("-----------music=", music);
+            Log.e("-----------music=", music);
             MediaPlayUtil.getInstance().stop();
             MediaPlayUtil.getInstance().start(music);
+
+//            Log.e("---------------------mVideoOutputPath=3",mVideoOutputPath);null
+
+            final String path = Environment.getExternalStorageDirectory().getPath() + "/AAAAImg/";
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        downLoadFromUrl(music, "123.mp3", path);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
+
         }
     }
 
@@ -541,6 +572,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 File outputVideo = new File(mVideoOutputPath);
                 if (!outputVideo.exists())
                     return null;
+                Log.e("---------------------mVideoOutputPath=4",mVideoOutputPath+"  "+outputVideo.getAbsolutePath());
                 Bitmap bitmap = TXVideoInfoReader.getInstance().getSampleImage(0, mVideoOutputPath);
                 if (bitmap == null)
                     return null;
@@ -585,6 +617,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
                 intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
                 intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+                Log.e("---------------------mVideoOutputPath1=",mVideoOutputPath);
                 intent.putExtra("mid",mid);
                 if (s != null)
                     intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
@@ -1110,4 +1143,225 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     }
 
 
+
+    File filemusic;
+    public  void downLoadFromUrl(String urlStr, String fileName, String savePath) throws IOException {
+        URL url = new URL(urlStr);
+        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+        //设置超时间为3秒
+        conn.setConnectTimeout(3 * 1000);
+        //防止屏蔽程序抓取而返回403错误
+        conn.setRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 5.0; Windows NT; DigExt)");
+        //得到输入流
+        InputStream inputStream = conn.getInputStream();
+        //获取自己数组
+        byte[] getData = readInputStream(inputStream);
+        //文件保存位置
+        File saveDir = new File(savePath);
+        if (!saveDir.exists()) {
+            saveDir.mkdir();
+        }
+//        File file = new File(saveDir + File.separator + fileName);
+        filemusic = new File(saveDir + fileName);
+//
+
+        Log.e("----------ffff=",mRecordProcessedPath+"        "+filemusic.getAbsolutePath());
+
+        cutSelectMusic(filemusic.getAbsolutePath());
+//        composeAudioAndMusic(mRecordProcessedPath,filemusic.getAbsolutePath());
+//        composeVideoAudio();
+        FileOutputStream fos = new FileOutputStream(filemusic);
+        fos.write(getData);
+        if (fos != null) {
+            fos.close();
+        }
+        if (inputStream != null) {
+            inputStream.close();
+        }
+        System.out.println("info:" + url + " download success");
+    }
+
+    /**
+     * 从输入流中获取字节数组
+     *
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    public static byte[] readInputStream(InputStream inputStream) throws IOException {
+        byte[] buffer = new byte[1024];
+        int len = 0;
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        while ((len = inputStream.read(buffer)) != -1) {
+            bos.write(buffer, 0, len);
+        }
+        bos.close();
+        return bos.toByteArray();
+    }
+
+
+
+
+    /**
+     * 合成原声和背景音乐
+     */
+    public void composeAudioAndMusic(String audioUrl, String musicUrl) {
+        if (audioUrl == null) {
+            composeMusicAndAudio(musicUrl);
+        } else {
+            final String musicAudioPath = mTargetPath + "/audioMusic.aac";
+            String[] common = FFmpegCommands.composeAudio(audioUrl, musicUrl, musicAudioPath);
+            FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
+                @Override
+                public void onStart() {
+                    Log.e(TAG,"composeAudioAndMusic ffmpeg start...");
+                    handler.sendEmptyMessage(0);
+                }
+
+                @Override
+                public void onEnd(int result) {
+                    Log.e(TAG,"composeAudioAndMusic ffmpeg end...");
+                    composeMusicAndAudio(musicAudioPath);
+                }
+            });
+        }
+    }
+
+    /**
+     * 视频和背景音乐合成
+     *
+     * @param bgMusicAndAudio
+     */
+    private void composeMusicAndAudio(String bgMusicAndAudio) {
+        final String videoAudioPath = mTargetPath + "/videoMusicAudio.mp4";
+        final String videoUrl = filemusic.getAbsolutePath();   //是音乐地址
+        final int time = getIntent().getIntExtra("time",0) - 1;
+        String[] common = FFmpegCommands.composeVideo(videoUrl, bgMusicAndAudio, videoAudioPath, time);
+        FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
+            @Override
+            public void onStart() {
+                Log.e(TAG,"videoAndAudio ffmpeg start...");
+                handler.sendEmptyMessage(0);
+            }
+
+            @Override
+            public void onEnd(int result) {
+                Log.e(TAG,"videoAndAudio ffmpeg end...");
+                handleVideoNext(videoAudioPath);
+            }
+        });
+    }
+
+
+
+    /**
+     * 适配处理完成，进入下一步
+     */
+    private void handleVideoNext(String videoUrl) {
+        Message message = new Message();
+        message.what = 1;
+        message.obj = videoUrl;
+        handler.sendMessage(message);
+    }
+
+    @SuppressLint("HandlerLeak")
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case 0:
+//                    showProgressLoading();
+                    break;
+                case 1:
+//                    dismissProgress();
+                    String videoPath = (String) msg.obj;
+                    Log.e("-------------video=",videoPath);
+//                    Intent intent = new Intent(TCVideoEditerActivity.this,MakeVideoActivity.class);
+//                    intent.putExtra("path",videoPath);
+//                    intent.putExtra("isPlayer",true);
+//                    startActivity(intent);
+//                    finish();
+                    break;
+                case 2:
+//                    dismissProgress();
+                    break;
+            }
+        }
+    };
+
+
+
+
+    /**
+     * 处理视频原声
+     */
+    private void composeVideoAudio() {
+//        int mAudioVol = mAudioSeekBar.getProgress();
+        String audioUrl = filemusic.getAbsolutePath();
+        Log.e("---------audio=",audioUrl);
+        final String audioOutUrl = mTargetPath + "/tempAudio.aac";
+        String[] common = FFmpegCommands.changeAudioOrMusicVol(audioUrl, 0, audioOutUrl);//o 为无声音
+        FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
+            @Override
+            public void onStart() {
+                Log.e(TAG,"changeAudioVol ffmpeg start...");
+                handler.sendEmptyMessage(0);
+            }
+
+            @Override
+            public void onEnd(int result) {
+                Log.e(TAG,"changeAudioVol ffmpeg end...");
+                composeMusicAndAudio(audioOutUrl);
+//                if (mMediaPath.size() == 3) {
+//                    composeVideoMusic(audioOutUrl);
+//                } else {
+//                    composeMusicAndAudio(audioOutUrl);
+//                }
+            }
+        });
+    }
+
+
+
+
+    private void cutSelectMusic(String musicUrl) {
+        final String musicPath = mTargetPath + "/bgMusic.aac";
+        long time = getIntent().getIntExtra("time",0);//时间没有
+        String[] commands = FFmpegCommands.cutIntoMusic(musicUrl, time, musicPath);
+        Log.e("-------cut",commands[0]+"  "+musicUrl+"   "+time+"");
+        FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
+            @Override
+            public void onStart() {
+                Log.e(TAG,"cutSelectMusic ffmpeg start...");
+            }
+
+            @Override
+            public void onEnd(int result) {
+                Log.e(TAG,"cutSelectMusic ffmpeg end...");
+//                if(mMusicPlayer!=null){//移除上一个选择的音乐背景
+//                    mMediaPath.remove(mMediaPath.size()-1);
+//                }
+//                mMediaPath.add(musicPath);
+                Log.e("-----------music_end=",musicPath);
+//                stopMediaPlayer();
+//                mMusicPlayer = new MediaPlayer();
+//                try {
+//                    mMusicPlayer.setDataSource(musicPath);
+//                    mMusicPlayer.setLooping(true);
+//                    mMusicPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                        @Override
+//                        public void onPrepared(MediaPlayer mediaPlayer) {
+//                            mediaPlayer.setVolume(0.5f, 0.5f);
+//                            mediaPlayer.start();
+//                            mMusicSeekBar.setProgress(50);
+//                        }
+//                    });
+//                    mMusicPlayer.prepareAsync();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+            }
+        });
+    }
 }
