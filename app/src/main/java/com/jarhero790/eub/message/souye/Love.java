@@ -148,7 +148,7 @@ public class Love extends RelativeLayout {
 //                Log.e("----------2", "=" + mHits[0]);
 //                Log.e("----------3", "=" + mHits[1]);
 //                Log.e("----------4", "=" + mHits[2]);
-                mHits[0] = SystemClock.uptimeMillis();
+//                mHits[0] = SystemClock.uptimeMillis();
 
 
 //            if (event.getAction()==MotionEvent.ACTION_DOWN){
@@ -219,6 +219,9 @@ public class Love extends RelativeLayout {
                 imageView.setImageDrawable(getResources().getDrawable(R.mipmap.icon_home_like_after));
                 imageView.setLayoutParams(params);
                 addView(imageView);
+                if (loveTrue!=null){
+                    loveTrue.Onclick(true);
+                }
 
                 AnimatorSet animatorSet = new AnimatorSet();
                 animatorSet.play(scale(imageView, "scaleX", 2f, 0.9f, 100, 0))
@@ -297,6 +300,16 @@ public class Love extends RelativeLayout {
             }
         });
         return rotation;
+    }
+
+
+    public interface LoveTrue{
+        void Onclick(boolean love);
+    }
+    private LoveTrue loveTrue;
+
+    public void setLoveTrue(LoveTrue loveTrue) {
+        this.loveTrue = loveTrue;
     }
 }
 

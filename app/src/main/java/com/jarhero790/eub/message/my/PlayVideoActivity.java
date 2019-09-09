@@ -233,7 +233,7 @@ public class PlayVideoActivity extends AppCompatActivity {
     private void adapterSetOnItemClickListerer() {
         tikTokAdapter.setOnItemClickListerer(new TikTokAdapter.OnItemClickListener() {
             @Override
-            public void onItemClick(int position, String type, View view,View view2) {
+            public void onItemClick(int position, String type, View view,View view2,View view3) {
                 if (type.equals("评论")){
                     TextView pin= (TextView) view2;
                     showPingLun(pin);//ok
@@ -277,6 +277,29 @@ public class PlayVideoActivity extends AppCompatActivity {
                     showGift();
                 }else if (type.equals("关注")){
                     Log.e("-----","5");
+                } else if (type.equals("红红")) {
+
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals(""))
+                        return;
+                    ImageView ivlike= (ImageView) view2;
+                    TextView tvlike= (TextView) view3;
+
+                    if (!ivlike.isSelected()){
+                        zanother(list.get(mCurrentPosition).getVideo_id()+"");
+                        ivlike.setSelected(true);
+                        int b=Integer.parseInt(tvlike.getText().toString())+1;
+                        tvlike.setText(""+b);
+                    }
+                }else if (type.equals("红心")) {
+//                    Log.e("-------------", "you");
+                    if (mVideoView.isPlaying()) {
+                        mVideoView.pause();
+                        tikTokAdapter.setIsshow(true);
+                    } else {
+                        mVideoView.resume();
+                        tikTokAdapter.setIsshow(false);
+                    }
+
                 }
             }
         });

@@ -636,14 +636,24 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals(""))
                         return;
+                    ImageView ivlike= (ImageView) view1;
+                    TextView tvlike= (TextView) view2;
+
+                    if (!ivlike.isSelected()){
+                        likeVideo();
+                        ivlike.setSelected(true);
+                        Log.e("-------------", "you ok" + isIszanle());
+                        int b=Integer.parseInt(tvlike.getText().toString())+1;
+
+                        tvlike.setText(""+b);
+                    }
 
                     if (!isIszanle()) {
-                        likeVideo();
-                        Log.e("-------------", "you ok" + isIszanle());
+//                        Log.e("-------------", "you");
                     }
 
 
-                    Log.e("-------------", "you");
+
 //                    View viewh = layoutManager.findViewByPosition(mCurrentPosition);
 //                    ImageView ivLike = view.findViewById(R.id.iv_like);
 //                    TextView tvLike = view.findViewById(R.id.tv_like);

@@ -9,29 +9,34 @@
         android:id="@+id/videoView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerInParent="true"
-        />
+        android:layout_centerInParent="true" />
 
     <ImageView
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop"/>
+        android:scaleType="centerCrop" />
 
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
         android:id="@+id/rlhead"
-        android:layout_marginBottom="50dp">
+        android:layout_width="90dp"
+        android:layout_height="90dp"
+        android:layout_centerInParent="true">
 
         <ImageView
             android:id="@+id/iv_play_pause"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:src="@mipmap/play_icon"
-            android:visibility="gone"
-            android:layout_centerInParent="true"/>
+            android:visibility="gone" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginBottom="50dp">
 
         <LinearLayout
             android:id="@+id/ll_like"
@@ -56,8 +61,7 @@
                     android:layout_width="33dp"
                     android:layout_height="31dp"
                     android:layout_marginBottom="10dp"
-                    android:background="@drawable/zanselector"
-                      />
+                    android:background="@drawable/zanselector" />
             </LinearLayout>
 
             <TextView
@@ -117,24 +121,23 @@
                 android:src="@mipmap/icon_video_share" />
 
 
-
             <RelativeLayout
                 android:layout_width="70dp"
-                android:orientation="horizontal"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/circleImageView"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    app:civ_border_width="5dp"
-                    android:visibility="visible"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
-                    app:civ_circle_background_color="@color/guangpan"
                     android:layout_marginBottom="13dp"
-                    android:src="@mipmap/music" />
+                    android:src="@mipmap/music"
+                    android:visibility="visible"
+                    app:civ_border_width="5dp"
+                    app:civ_circle_background_color="@color/guangpan" />
 
                 <com.jarhero790.eub.widget.Music
                     android:id="@+id/m"
@@ -155,13 +158,12 @@
                 <com.jarhero790.eub.message.souye.GuanPanView
                     android:id="@+id/guanpan"
                     android:layout_width="50dp"
-                    android:visibility="gone"
-                    android:layout_height="50dp" />
+                    android:layout_height="50dp"
+                    android:visibility="gone" />
             </RelativeLayout>
 
 
         </LinearLayout>
-
 
 
         <RelativeLayout
@@ -178,19 +180,21 @@
                 android:layout_height="40dp"
                 android:layout_marginBottom="@dimen/dp_10"
                 android:orientation="horizontal">
+
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/souye_logo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@mipmap/souye_logo"/>
+                    android:src="@mipmap/souye_logo" />
+
                 <TextView
                     android:id="@+id/tv_uname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_10"
                     android:gravity="top"
                     android:text="遨游"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_gravity="center_vertical"
                     android:textColor="#FFEEEEEE"
                     android:textSize="15sp"
                     android:textStyle="bold" />
@@ -200,8 +204,8 @@
                     android:id="@+id/btn_attention"
                     android:layout_width="60dp"
                     android:layout_height="25dp"
-                    android:layout_marginLeft="@dimen/dp_10"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/dp_10"
                     android:background="@drawable/button_shape3"
                     android:text="+关注"
                     android:textColor="#FFEEEEEE"
@@ -210,21 +214,17 @@
             </LinearLayout>
 
 
-
             <TextView
                 android:id="@+id/tv_content"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/lltext"
+                android:layout_marginBottom="@dimen/dp_10"
                 android:gravity="top"
                 android:lineSpacingExtra="3dp"
                 android:text=""
-                android:layout_marginBottom="@dimen/dp_10"
                 android:textColor="#FFFFFF"
                 android:textSize="13sp" />
-
-
-
 
 
         </RelativeLayout>
@@ -237,34 +237,40 @@
             android:layout_marginBottom="19dp"
 
             android:orientation="horizontal">
+
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scaleType="fitXY"
                 android:adjustViewBounds="true"
-                android:src="@mipmap/goods_bg"/>
+                android:scaleType="fitXY"
+                android:src="@mipmap/goods_bg" />
+
             <TextView
                 android:id="@+id/tvgoodsnum"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="160"
-                android:gravity="center_vertical"
                 android:layout_marginLeft="34dp"
+                android:gravity="center_vertical"
+                android:text="160"
                 android:textColor="#ffffffff"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
+
             <TextView
                 android:id="@+id/tvgoodstext"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:text="#视频同款商品"
                 android:layout_alignParentRight="true"
                 android:layout_marginRight="@dimen/dp_10"
                 android:gravity="center_vertical"
+                android:text="#视频同款商品"
                 android:textColor="#ffffffff"
-                android:textSize="12sp"
-                />
+                android:textSize="12sp" />
         </RelativeLayout>
+
+        <com.jarhero790.eub.message.souye.Love
+            android:id="@+id/love"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></com.jarhero790.eub.message.souye.Love>
     </RelativeLayout>
 
 </RelativeLayout>

@@ -283,12 +283,21 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             }
         });
         //hong
+        holder.love.setLoveTrue(new Love.LoveTrue() {
+            @Override
+            public void Onclick(boolean love) {
+                if (love){
+//                    Log.e("-----","hehe");
+                    mOnItemClickListerer.onItemClick(position, "红红", holder.love, holder.iv_like, holder.tv_like);
+                }
+            }
+        });
 //        holder.love.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
-////                View view=new View(context);
-//                mOnItemClickListerer.onItemClick(position, "红红", view, view, view);
-//                Log.e("-----","hehe");
+////
+//                mOnItemClickListerer.onItemClick(position, "红红", view, holder.iv_like, holder.tv_like);
+////                Log.e("-----","hehe");
 //            }
 //        });
 //        holder.love.setCallback(new Love.ClickCallBack() {
