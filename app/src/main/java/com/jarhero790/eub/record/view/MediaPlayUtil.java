@@ -33,7 +33,7 @@ public class MediaPlayUtil {
     // 缓存路径
     private String cachePath="/mnt/sdcard";
     //进度条
-    private SeekBar mSeek;
+//    private SeekBar mSeek;
     private Surface surface;
 
     public void initCachePath(Context context){
@@ -123,9 +123,9 @@ public class MediaPlayUtil {
     public void start(){
         if (mPlayer!=null && !mPlayer.isPlaying()){
             mPlayer.start();
-            if (mSeek!=null){
-                mHandler.sendEmptyMessageDelayed(MSG_POS,200);
-            }
+//            if (mSeek!=null){
+//                mHandler.sendEmptyMessageDelayed(MSG_POS,200);
+//            }
         }
     }
 
@@ -165,11 +165,11 @@ public class MediaPlayUtil {
                 }
             }
             mPlayer=null;
-            if (mSeek!=null){
-                // 恢复进度值到0
-                mSeek.setProgress(0);
-                mSeek.setSecondaryProgress(0);
-            }
+//            if (mSeek!=null){
+//                // 恢复进度值到0
+//                mSeek.setProgress(0);
+//                mSeek.setSecondaryProgress(0);
+//            }
         }
     }
 
@@ -225,9 +225,9 @@ public class MediaPlayUtil {
                     while ((len=is.read(buf))!=-1){
                         raf.write(buf,0,len);
                         // 统计当前下载的总大小(计算进度)
-                        currentSize+=len;
+//                        currentSize+=len;
                         // 发布更新进度到主线程（百分比，当前下载的总大小）
-                        publishProgress(currentSize*100/total,currentSize);
+//                        publishProgress(currentSize*100/total,currentSize);
                     }
                     raf.close();
                     is.close();
@@ -264,9 +264,9 @@ public class MediaPlayUtil {
 
             Log.e("m_tag", fileProgress + "%");
             //处理文件的缓冲进度
-            if (mSeek!=null){
-                mSeek.setSecondaryProgress(fileProgress);
-            }
+//            if (mSeek!=null){
+//                mSeek.setSecondaryProgress(fileProgress);
+//            }
         }
         public String getSavePath(){
             return savePath;
@@ -340,11 +340,11 @@ public class MediaPlayUtil {
             // mSeek.setMax(total);
             // 开始播放
             mp.start();
-            if (mSeek!=null){
-            // 开始循环获取当前进度
-             mHandler.sendEmptyMessageDelayed(MSG_POS, 200);
-        }
-            Log.e("m_tag", "开始播放");
+//            if (mSeek!=null){
+//            // 开始循环获取当前进度
+//             mHandler.sendEmptyMessageDelayed(MSG_POS, 200);
+//        }
+//            Log.e("m_tag", "开始播放");
         }
     };
 
@@ -378,58 +378,58 @@ public class MediaPlayUtil {
                 // 获取当前的播放位置
                 int current=mPlayer.getCurrentPosition();
                 // 设置到进度的当前进度上
-                mSeek.setProgress(100*current/mPlayer.getDuration());
+//                mSeek.setProgress(100*current/mPlayer.getDuration());
                 // 延迟200ms之后发送MSG_POS
-                mHandler.sendEmptyMessageDelayed(MSG_POS,200);
+//                mHandler.sendEmptyMessageDelayed(MSG_POS,200);
             }
         }
     };
 
-    public SeekBar getSeekBar() {
-        return mSeek;
-    }
+//    public SeekBar getSeekBar() {
+//        return mSeek;
+//    }
 
-    public void setSeekBar(SeekBar mSeek) {
-        this.mSeek = mSeek;
-        if (mSeek!=null){
-            this.mSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-                @Override
-                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
-                }
-
-                @Override
-                public void onStartTrackingTouch(SeekBar seekBar) {
-                    // 如果有程序在更新进度，应该停止程序的更新
-                    if (mPlayer!=null && mPlayer.isPlaying()){
-                        // 停止更新
-                        mHandler.removeMessages(MSG_POS);
-                    }
-
-                }
-
-                @Override
-                public void onStopTrackingTouch(SeekBar seekBar) {
-                         // 确定播放位置
-                    if (mPlayer!=null){
-                        int pos=seekBar.getProgress();
-                        // 30% 3000 -->
-                        // 0.3*3000
-                        // = 900
-                        int current=pos*mPlayer.getDuration()/100;
-                        // 设置播放位置
-                        mPlayer.seekTo(current);
-                        // 如果是播放状态则恢复程序对进度条的更新
-                        if (mPlayer.isPlaying()){
-                            mHandler.sendEmptyMessageDelayed(MSG_POS,200);
-                        }
-                    }
-                }
-            });
-        }else {
-            this.mSeek.setOnSeekBarChangeListener(null);
-        }
-    }
+//    public void setSeekBar(SeekBar mSeek) {
+//        this.mSeek = mSeek;
+//        if (mSeek!=null){
+//            this.mSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+//                @Override
+//                public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+//
+//                }
+//
+//                @Override
+//                public void onStartTrackingTouch(SeekBar seekBar) {
+//                    // 如果有程序在更新进度，应该停止程序的更新
+//                    if (mPlayer!=null && mPlayer.isPlaying()){
+//                        // 停止更新
+//                        mHandler.removeMessages(MSG_POS);
+//                    }
+//
+//                }
+//
+//                @Override
+//                public void onStopTrackingTouch(SeekBar seekBar) {
+//                         // 确定播放位置
+//                    if (mPlayer!=null){
+//                        int pos=seekBar.getProgress();
+//                        // 30% 3000 -->
+//                        // 0.3*3000
+//                        // = 900
+//                        int current=pos*mPlayer.getDuration()/100;
+//                        // 设置播放位置
+//                        mPlayer.seekTo(current);
+//                        // 如果是播放状态则恢复程序对进度条的更新
+//                        if (mPlayer.isPlaying()){
+//                            mHandler.sendEmptyMessageDelayed(MSG_POS,200);
+//                        }
+//                    }
+//                }
+//            });
+//        }else {
+//            this.mSeek.setOnSeekBarChangeListener(null);
+//        }
+//    }
 
     //监听视频大小变化
     private MediaPlayer.OnVideoSizeChangedListener onVideoSizeChangedListener;

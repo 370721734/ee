@@ -25,6 +25,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -51,6 +52,7 @@ import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
 import com.jarhero790.eub.ui.souye.BottomShareDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.LogUtils;
+import com.jarhero790.eub.utils.NetworkConnectionUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -157,13 +159,21 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("------1--",cate.get()+"");
 
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-                    Log.e("-----------","无token");
+                if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                        Log.e("-----------","无token");
+                    }else {
+//                        Log.e("-----------","有token");
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    }
                 }else {
-                    Log.e("-----------","有token");
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
                 }
+
+
+
+
 
 //                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
 
@@ -192,10 +202,16 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 }
                 mVideoView.release();
 //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+
+
+                if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                    }else {
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    }
                 }else {
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
                 }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------2-",cate.get()+"");
@@ -224,10 +240,16 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 }
                 mVideoView.release();
 //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+
+
+                if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                    }else {
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    }
                 }else {
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
                 }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
@@ -271,13 +293,18 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void initData() {
         super.initData();
         //加载数据
-        if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
-            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-            Log.e("-----------","无token");
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+            if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//            Log.e("-----------","无token");
+            }else {
+//            Log.e("-----------","有token");
+                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+            }
         }else {
-            Log.e("-----------","有token");
-            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
         }
+
 
     }
 
@@ -528,12 +555,17 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             }
 
 
-            if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-                Log.e("-----------","无token");
+
+            if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                    Log.e("-----------","无token");
+                }else {
+//                    Log.e("-----------","有token");
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                }
             }else {
-                Log.e("-----------","有token");
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -769,7 +801,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
      * token
      */
     public void likeVideo() {
-        mPresenter.zan(lists.get(mCurrentPosition).getVideo_id(), SharePreferenceUtil.getToken(AppUtils.getContext()));
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+
+            mPresenter.zan(lists.get(mCurrentPosition).getVideo_id(), SharePreferenceUtil.getToken(AppUtils.getContext()));
+        }else {
+            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -781,7 +818,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     @LoginFilter
     public void attention(String build, String token) {
-        mPresenter.attentionUser(build, token);
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+
+            mPresenter.attentionUser(build, token);
+        }else {
+            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+        }
     }
 
 
@@ -972,10 +1014,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             //加载数据
 //            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 
-            if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+
+            if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                }else {
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                }
             }else {
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
             }
         }
 

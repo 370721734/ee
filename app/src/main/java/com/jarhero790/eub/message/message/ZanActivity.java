@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.message;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +10,9 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.ZanAdapter;
 import com.jarhero790.eub.message.bean.ZanBean;
@@ -56,10 +60,21 @@ public class ZanActivity extends AppCompatActivity {
     }
 
 //    CustomProgressDialog dialog = new CustomProgressDialog();
+private Dialog dialog;
 
     private void initDate() {
 //        dialog.createLoadingDialog(this, "正在加载...");
 //        dialog.show();
+        dialog = new Dialog(this, R.style.progress_dialog);
+        View view=View.inflate(this,R.layout.dialog,null);
+        ImageView imageView=view.findViewById(R.id.iv_icon);
+        Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+                .into(imageView);
+        dialog.setContentView(view);
+
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
 
         RetrofitManager.getInstance().getDataServer().myzan(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<ZanBean>() {
@@ -67,7 +82,7 @@ public class ZanActivity extends AppCompatActivity {
                     public void onResponse(Call<ZanBean> call, Response<ZanBean> response) {
 //                        Log.e("-------", "1:" + response.body().getCode());
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             if (response.body().getCode() == 200) {
                                 if (response.body().getData().size() > 0) {
                                     giftBeanList.clear();
@@ -91,7 +106,7 @@ public class ZanActivity extends AppCompatActivity {
                             }
 
                         } else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                             recyclerViewZan.setVisibility(View.GONE);
@@ -100,7 +115,7 @@ public class ZanActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<ZanBean> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                         recyclerViewZan.setVisibility(View.GONE);

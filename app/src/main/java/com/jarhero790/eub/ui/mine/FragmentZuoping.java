@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.mine;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
@@ -102,7 +104,7 @@ public class FragmentZuoping extends SupportFragment {
             @Override
             public void onLoadMore(RefreshLayout refreshLayout) {
 //                page++;
-                page=1;
+                page = 1;
                 initDate();
                 mSwipeLayout.finishLoadMore(1000);
 
@@ -111,47 +113,54 @@ public class FragmentZuoping extends SupportFragment {
 
     }
 
-    //    CustomProgressDialog dialog = new CustomProgressDialog();
+    //        CustomProgressDialog dialog = new CustomProgressDialog();
+    private Dialog dialog;
     Call<MyFaBuBean> calls = null;
 
     private void initDate() {
 //        dialog.createLoadingDialog(getActivity(), "正在加载...");
 //        dialog.show();
 //        Log.e("-------------","page"+page);
-        RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()),page)
+
+        dialog = new Dialog(getActivity(), R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
+        RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()), page)
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         calls = call;
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             if (response.body() != null && response.body().getData() != null) {
-//                                if (response.body().getData().size() > 0) {
-                                    itemlist.clear();
-                                    rlv.setVisibility(View.VISIBLE);
-                                    nodingdan.setVisibility(View.GONE);
-                                    wangluoyichang.setVisibility(View.GONE);
-                                    mSwipeLayout.setVisibility(View.VISIBLE);
-                                    itemlist = response.body().getData();
+                                if (response.body().getData().size() > 0) {
+                                itemlist.clear();
+                                rlv.setVisibility(View.VISIBLE);
+                                nodingdan.setVisibility(View.GONE);
+                                wangluoyichang.setVisibility(View.GONE);
+                                mSwipeLayout.setVisibility(View.VISIBLE);
+                                itemlist = response.body().getData();
 
 //                                    adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
 //                                    rlv.setAdapter(adapter);
 
-                                    if (page == 1) {
-                                        list.clear();
-                                        list.addAll(itemlist);
-                                        adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
-                                        rlv.setAdapter(adapter);
-                                    } else {
-                                        list.addAll(itemlist);
-                                        adapter.notifyDataSetChanged();
-                                    }
-//                                } else {
-//                                    rlv.setVisibility(View.GONE);
-//                                    nodingdan.setVisibility(View.VISIBLE);
-//                                    wangluoyichang.setVisibility(View.GONE);
-//                                    mSwipeLayout.setVisibility(View.GONE);
-//                                }
+                                if (page == 1) {
+                                    list.clear();
+                                    list.addAll(itemlist);
+                                    adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
+                                    rlv.setAdapter(adapter);
+                                } else {
+                                    list.addAll(itemlist);
+                                    adapter.notifyDataSetChanged();
+                                }
+                                } else {
+                                    rlv.setVisibility(View.GONE);
+                                    nodingdan.setVisibility(View.VISIBLE);
+                                    wangluoyichang.setVisibility(View.GONE);
+                                    mSwipeLayout.setVisibility(View.GONE);
+                                }
                             } else {
                                 rlv.setVisibility(View.GONE);
                                 nodingdan.setVisibility(View.VISIBLE);
@@ -160,7 +169,7 @@ public class FragmentZuoping extends SupportFragment {
                             }
 
                         } else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
@@ -170,7 +179,7 @@ public class FragmentZuoping extends SupportFragment {
 
                     @Override
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
@@ -205,7 +214,7 @@ public class FragmentZuoping extends SupportFragment {
 
     @OnClick(R.id.wangluoyichang)
     public void onClick() {
-        page=1;
+        page = 1;
         initDate();
 
     }

@@ -45,6 +45,7 @@ import com.jarhero790.eub.presenter.mine.MineMainPresenter;
 import com.jarhero790.eub.ui.mine.FragmentLike;
 import com.jarhero790.eub.ui.mine.FragmentZuoping;
 import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.NetworkConnectionUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
@@ -171,7 +172,12 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     public void onLazyInitView(@Nullable Bundle savedInstanceState) {
         super.onLazyInitView(savedInstanceState);
 //        mPresenter.getTabList();
-        mPresenter.getuserinfo();
+
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+            mPresenter.getuserinfo();
+        }else {
+            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -478,7 +484,12 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     @Override
     public void onResume() {
         super.onResume();
-        mPresenter.getuserinfo();
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+            mPresenter.getuserinfo();
+        }else {
+            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+        }
+
         Log.e("---", "onResume");
     }
 

@@ -421,7 +421,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        TXCLog.i(TAG, "onActivityResult, request code = " + requestCode);
+//        TXCLog.i(TAG, "onActivityResult, request code = " + requestCode);
         // 如果编辑视频的界面发生变化，需要重新调用initPlayerLayout
         if (requestCode == TCConstants.REQUEST_CODE_PASTER || requestCode == TCConstants.REQUEST_CODE_WORD) {
             initPlayerLayout();
@@ -429,8 +429,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             music = data.getStringExtra("music");
             mid=data.getStringExtra("mid");
             Log.e("-----------music=", music);
-            MediaPlayUtil.getInstance().stop();
-            MediaPlayUtil.getInstance().start(music);
+//            MediaPlayUtil.getInstance().stop();
+//            MediaPlayUtil.getInstance().start(music);
 
 //            Log.e("---------------------mVideoOutputPath=3",mVideoOutputPath);null
 
@@ -1344,6 +1344,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 //                }
 //                mMediaPath.add(musicPath);
                 Log.e("-----------music_end=",musicPath);
+                MediaPlayUtil.getInstance().start(music);
 //                stopMediaPlayer();
 //                mMusicPlayer = new MediaPlayer();
 //                try {
