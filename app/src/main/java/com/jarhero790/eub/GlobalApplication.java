@@ -22,6 +22,8 @@ import com.jarhero790.eub.aop.logincore.ILoginFilter;
 import com.jarhero790.eub.aop.logincore.LoginManger;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
+import io.reactivex.functions.Consumer;
+import io.reactivex.plugins.RxJavaPlugins;
 import io.rong.imkit.RongIM;
 
 import static android.provider.UserDictionary.Words.APP_ID;
@@ -83,7 +85,18 @@ public class GlobalApplication extends Application {
 
         api = WXAPIFactory.createWXAPI(this, APP_ID_Wei, true);
         api.registerApp(APP_ID_Wei);
+
+//        SharePreferenceUtil.setToken("0442062541812d7dfe98bc77155ba5b4",context);
+
+        Consumer<? super Throwable> handlerS=new Consumer<Throwable>() {
+            @Override
+            public void accept(Throwable throwable) throws Exception {
+                Log.e("---------app=",throwable.getMessage());
+            }
+        };
+        RxJavaPlugins.setErrorHandler(handlerS);
     }
+
 
 
 

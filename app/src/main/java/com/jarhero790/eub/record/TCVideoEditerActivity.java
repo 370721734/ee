@@ -35,12 +35,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.ffmpeg.FFmpeg;
 import com.jarhero790.eub.record.activity.FaBuActivity;
 import com.jarhero790.eub.record.activity.GifUtil;
 import com.jarhero790.eub.record.activity.SelectMusicActivity;
 import com.jarhero790.eub.record.ffem.FFmpegCommands;
 import com.jarhero790.eub.record.ffem.FFmpegRun;
 import com.jarhero790.eub.record.ffem.FileUtilss;
+import com.jarhero790.eub.record.ffem.MediaUtil;
 import com.jarhero790.eub.record.fragment.TCCutterFragment;
 import com.jarhero790.eub.record.view.MediaPlayUtil;
 import com.jarhero790.eub.utils.CommonUtil;
@@ -59,8 +61,13 @@ import java.io.InputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+
+import VideoHandle.EpEditor;
+import VideoHandle.OnEditorListener;
 
 
 /**
@@ -101,6 +108,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private int mCurrentState = PlayState.STATE_NONE;       // 播放器当前状态
 
     private String mVideoOutputPath;                        // 视频输出路径
+//    private String outpathvideo;
     private int mVideoResolution = -1;                      // 分辨率类型（如果是从录制过来的话才会有，这参数）
 
     private long mVideoDuration;                            // 视频的总时长
@@ -206,12 +214,31 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
 
 //        Log.e("---------------------mVideoOutputPath=2",mVideoOutputPath+"   "+mRecordProcessedPath);
+        mVideoOutputPath=getCustomVideoOutputPath();
 
         initViews();
         initPhoneListener();
         initVideoProgressLayout();
         prepareVideoView(); // 设置编辑预览参数
         mKeyguardManager = (KeyguardManager) getApplicationContext().getSystemService(Context.KEYGUARD_SERVICE);
+
+
+
+
+
+        final String url="http://aoyouhudongkeji-1259346675.cos.ap-guangzhou.myqcloud.com/a37776dd8e508d1e5444d8b6bc992b6d.mp3";
+
+        final String path = Environment.getExternalStorageDirectory().getPath() + "/AAAAImg/";
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    downLoadFromUrl(url, "123.mp3", path);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private int mRotation;
@@ -269,6 +296,19 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         ivxiaoyin = findViewById(R.id.iv_xiaoyin);
         ivxiaoyin.setOnClickListener(this);
         ivxiaoyin.setSelected(false);
+    }
+    private static final String OUTPUT_DIR_NAME = "TXUGC";
+    private String getCustomVideoOutputPath() {
+        long currentTime = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+        String time = sdf.format(new Date(currentTime));
+        String outputDir = Environment.getExternalStorageDirectory() + File.separator + OUTPUT_DIR_NAME;
+        File outputFolder = new File(outputDir);
+        if (!outputFolder.exists()) {
+            outputFolder.mkdir();
+        }
+        String tempOutputPath = outputDir + File.separator + "TXUGC_" + time + ".mp4";
+        return tempOutputPath;
     }
 
     public void showBgmSetting(boolean isShow) {
@@ -433,6 +473,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 //            MediaPlayUtil.getInstance().start(music);
 
 //            Log.e("---------------------mVideoOutputPath=3",mVideoOutputPath);null
+
+//            final String url="http://aoyouhudongkeji-1259346675.cos.ap-guangzhou.myqcloud.com/a37776dd8e508d1e5444d8b6bc992b6d.mp3";
 
             final String path = Environment.getExternalStorageDirectory().getPath() + "/AAAAImg/";
             new Thread(new Runnable() {
@@ -617,7 +659,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
                 intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
                 intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
-                Log.e("---------------------mVideoOutputPath1=",mVideoOutputPath);
+                Log.e("---------------------mVideoOutputPath1=",mVideoOutputPath+"  "+mVideoOutputPath);
                 intent.putExtra("mid",mid);
                 if (s != null)
                     intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
@@ -1325,44 +1367,94 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
 
 
+    private FFmpeg ffmpeg=new FFmpeg();
+
     private void cutSelectMusic(String musicUrl) {
         final String musicPath = mTargetPath + "/bgMusic.aac";
         long time = getIntent().getIntExtra("time",0);//时间没有
         String[] commands = FFmpegCommands.cutIntoMusic(musicUrl, time, musicPath);
         Log.e("-------cut",commands[0]+"  "+musicUrl+"   "+time+"");
-        FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
-            @Override
-            public void onStart() {
-                Log.e(TAG,"cutSelectMusic ffmpeg start...");
-            }
+//        cut: ffmpeg  /storage/emulated/0/AAAAImg123.mp3   6
 
+
+///storage/emulated/0/ringtones/李志洲 - 一辈子的好兄弟.mp3
+//        /storage/emulated/0/AAAAImg123.mp3
+//        /storage/emulated/0/ffmpeg/bgMusic.aac
+
+        new Thread(new Runnable() {
             @Override
-            public void onEnd(int result) {
-                Log.e(TAG,"cutSelectMusic ffmpeg end...");
-//                if(mMusicPlayer!=null){//移除上一个选择的音乐背景
-//                    mMediaPath.remove(mMediaPath.size()-1);
-//                }
-//                mMediaPath.add(musicPath);
-                Log.e("-----------music_end=",musicPath);
-                MediaPlayUtil.getInstance().start(music);
-//                stopMediaPlayer();
-//                mMusicPlayer = new MediaPlayer();
-//                try {
-//                    mMusicPlayer.setDataSource(musicPath);
-//                    mMusicPlayer.setLooping(true);
-//                    mMusicPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-//                        @Override
-//                        public void onPrepared(MediaPlayer mediaPlayer) {
-//                            mediaPlayer.setVolume(0.5f, 0.5f);
-//                            mediaPlayer.start();
-//                            mMusicSeekBar.setProgress(50);
-//                        }
-//                    });
-//                    mMusicPlayer.prepareAsync();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
+            public void run() {
+                Log.e(TAG,"videoPath === " + mRecordProcessedPath +"   bgmPath === " + musicUrl+" "+mVideoOutputPath);
+//                ffmpeg.addBgm(mRecordProcessedPath,commands[0],mVideoOutputPath);
+//                ffmpeg.addBgm(mRecordProcessedPath,musicUrl,outpathvideo);
+                MediaUtil.getInstance().combineVideo(new File(mRecordProcessedPath),new File(musicUrl),new File(mVideoOutputPath));
+
+
+
             }
-        });
+        }).start();
+
+
+
+
+
+
+//        EpEditor.music(mRecordProcessedPath, commands[0], mVideoOutputPath, 1, 0.7f, new OnEditorListener() {
+//            @Override
+//            public void onSuccess() {
+//                Log.e("---------------","成功"+mRecordProcessedPath+"  "+commands[0]+"  "+mVideoOutputPath);
+//            }
+//
+//            @Override
+//            public void onFailure() {
+//
+//            }
+//
+//            @Override
+//            public void onProgress(float progress) {
+//
+//            }
+//        });
+
+
+
+
+
+
+
+//        FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
+//            @Override
+//            public void onStart() {
+//                Log.e(TAG,"cutSelectMusic ffmpeg start...");
+//            }
+//
+//            @Override
+//            public void onEnd(int result) {
+//                Log.e(TAG,"cutSelectMusic ffmpeg end...");
+////                if(mMusicPlayer!=null){//移除上一个选择的音乐背景
+////                    mMediaPath.remove(mMediaPath.size()-1);
+////                }
+////                mMediaPath.add(musicPath);
+//                Log.e("-----------music_end=",musicPath);
+//                MediaPlayUtil.getInstance().start(music);
+////                stopMediaPlayer();
+////                mMusicPlayer = new MediaPlayer();
+////                try {
+////                    mMusicPlayer.setDataSource(musicPath);
+////                    mMusicPlayer.setLooping(true);
+////                    mMusicPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+////                        @Override
+////                        public void onPrepared(MediaPlayer mediaPlayer) {
+////                            mediaPlayer.setVolume(0.5f, 0.5f);
+////                            mediaPlayer.start();
+////                            mMusicSeekBar.setProgress(50);
+////                        }
+////                    });
+////                    mMusicPlayer.prepareAsync();
+////                } catch (IOException e) {
+////                    e.printStackTrace();
+////                }
+//            }
+//        });
     }
 }

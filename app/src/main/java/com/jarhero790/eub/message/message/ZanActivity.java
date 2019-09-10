@@ -66,11 +66,11 @@ private Dialog dialog;
 //        dialog.createLoadingDialog(this, "正在加载...");
 //        dialog.show();
         dialog = new Dialog(this, R.style.progress_dialog);
-        View view=View.inflate(this,R.layout.dialog,null);
-        ImageView imageView=view.findViewById(R.id.iv_icon);
-        Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
-                .into(imageView);
-        dialog.setContentView(view);
+//        View view=View.inflate(this,R.layout.dialog,null);
+//        ImageView imageView=view.findViewById(R.id.iv_icon);
+//        Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+//                .into(imageView);
+        dialog.setContentView(R.layout.dialog);
 
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);

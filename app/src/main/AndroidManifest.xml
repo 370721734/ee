@@ -24,13 +24,20 @@
     <application
         android:name=".GlobalApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/logo"
+        android:icon="@mipmap/logo_frist"
         android:label="@string/app_name"
         android:networkSecurityConfig="@xml/httpxml"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/logo_frist"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".record.activity.FaBuActivity"></activity>
+        <activity android:name=".message.souye.WelcomeActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".record.activity.FaBuActivity" />
         <activity android:name=".record.activity.SelectMusicActivity" />
         <activity android:name=".message.souye.BindPhoneActivity" />
         <activity android:name=".message.my.PlayVideoActivity" />
@@ -103,11 +110,7 @@
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
             android:screenOrientation="portrait">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity android:name=".activity.AttentionUsersActivity" />
         <activity android:name=".record.TCVideoRecordActivity" />

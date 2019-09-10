@@ -15,6 +15,9 @@ import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.ugc.TXVideoEditConstants;
 import com.tencent.ugc.TXVideoEditer;
 
+import pl.droidsonroids.gif.GifImageButton;
+import pl.droidsonroids.gif.GifImageView;
+
 /**
  * Created by hans on 2017/11/7.
  * <p>
@@ -23,16 +26,16 @@ import com.tencent.ugc.TXVideoEditer;
 public class TCMotionFragment extends Fragment implements View.OnClickListener, View.OnTouchListener {
     private static final String TAG = "TCMotionFragment";
 
-    private Button mBtnSpirit;
-    private Button mBtnSplit;
-    private Button mBtnLightWave;
-    private Button mBtnDark;
-    private Button mBtnWinShaddow;
-    private Button mBtnGhostShaddow;
-    private Button mBtnPhantom;
-    private Button mBtnGhost;
-    private Button mBtnLightning;
-    private Button mBtnMirror;
+    private GifImageButton mBtnSpirit;
+    private GifImageButton mBtnSplit;
+    private GifImageButton mBtnLightWave;
+    private GifImageButton mBtnDark;
+    private GifImageButton mBtnWinShaddow;
+    private GifImageButton mBtnGhostShaddow;
+    private GifImageButton mBtnPhantom;
+    private GifImageButton mBtnGhost;
+    private GifImageButton mBtnLightning;
+    private GifImageButton mBtnMirror;
     private Button mBtnIllusion;
     private RelativeLayout mRlDelete;
 
@@ -72,16 +75,16 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
     }
 
     private void initViews(View view) {
-        mBtnSpirit = (Button) view.findViewById(R.id.btn_soul);
-        mBtnSplit = (Button) view.findViewById(R.id.btn_split);
-        mBtnLightWave = (Button) view.findViewById(R.id.btn_light_wave);
-        mBtnDark = (Button) view.findViewById(R.id.btn_black);
-        mBtnWinShaddow = (Button) view.findViewById(R.id.btn_win_shaddow);
-        mBtnGhostShaddow = (Button) view.findViewById(R.id.btn_ghost_shaddow);
-        mBtnPhantom = (Button) view.findViewById(R.id.btn_phantom);
-        mBtnGhost = (Button) view.findViewById(R.id.btn_ghost);
-        mBtnLightning = (Button) view.findViewById(R.id.btn_lightning);
-        mBtnMirror = (Button) view.findViewById(R.id.btn_mirror);
+        mBtnSpirit =  view.findViewById(R.id.btn_soul);
+        mBtnSplit =  view.findViewById(R.id.btn_split);
+        mBtnLightWave =  view.findViewById(R.id.btn_light_wave);
+        mBtnDark =  view.findViewById(R.id.btn_black);
+        mBtnWinShaddow = view.findViewById(R.id.btn_win_shaddow);
+        mBtnGhostShaddow =  view.findViewById(R.id.btn_ghost_shaddow);
+        mBtnPhantom =  view.findViewById(R.id.btn_phantom);
+        mBtnGhost =  view.findViewById(R.id.btn_ghost);
+        mBtnLightning =  view.findViewById(R.id.btn_lightning);
+        mBtnMirror =  view.findViewById(R.id.btn_mirror);
         mBtnIllusion = (Button) view.findViewById(R.id.btn_illusion);
 
         mBtnSpirit.setOnTouchListener(this);
@@ -291,57 +294,57 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
 
         switch (type) {
             case TXVideoEditConstants.TXEffectType_SOUL_OUT:
-                mBtnSpirit.setBackgroundResource(R.drawable.shape_motion_spirit_press);
+//                mBtnSpirit.setBackgroundResource(R.drawable.shape_motion_spirit_press);
                 // 进度条开始变颜色
                 mColorfulProgress.startMark(getResources().getColor(R.color.spirit_out_color_press));
                 break;
             case TXVideoEditConstants.TXEffectType_SPLIT_SCREEN:
-                mBtnSplit.setBackgroundResource(R.drawable.shape_motion_split_press);
+//                mBtnSplit.setBackgroundResource(R.drawable.shape_motion_split_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.screen_split_press));
                 break;
             case TXVideoEditConstants.TXEffectType_ROCK_LIGHT:
-                mBtnLightWave.setBackgroundResource(R.drawable.shape_motion_light_wave_press);
+//                mBtnLightWave.setBackgroundResource(R.drawable.shape_motion_light_wave_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.light_wave_press));
                 break;
             case TXVideoEditConstants.TXEffectType_DARK_DRAEM:
-                mBtnDark.setBackgroundResource(R.drawable.shape_motion_dark_press);
+//                mBtnDark.setBackgroundResource(R.drawable.shape_motion_dark_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.dark_illusion_press));
                 break;
             case TXVideoEditConstants.TXEffectType_WIN_SHADDOW:
-                mBtnWinShaddow.setBackgroundResource(R.drawable.shape_motion_window_press);
+//                mBtnWinShaddow.setBackgroundResource(R.drawable.shape_motion_window_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.win_shaddow_color_press));
                 break;
             case TXVideoEditConstants.TXEffectType_GHOST_SHADDOW:
-                mBtnGhostShaddow.setBackgroundResource(R.drawable.shape_motion_ghost_shaddow_press);
+//                mBtnGhostShaddow.setBackgroundResource(R.drawable.shape_motion_ghost_shaddow_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.ghost_shaddow_color_press));
                 break;
             case TXVideoEditConstants.TXEffectType_PHANTOM_SHADDOW:
-                mBtnPhantom.setBackgroundResource(R.drawable.shape_motion_phantom_press);
+//                mBtnPhantom.setBackgroundResource(R.drawable.shape_motion_phantom_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.phantom_shaddow_color_press));
                 break;
             case TXVideoEditConstants.TXEffectType_GHOST:
-                mBtnGhost.setBackgroundResource(R.drawable.shape_motion_ghost_press);
+//                mBtnGhost.setBackgroundResource(R.drawable.shape_motion_ghost_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.ghost_color_press));
                 break;
             case TXVideoEditConstants.TXEffectType_LIGHTNING:
-                mBtnLightning.setBackgroundResource(R.drawable.shape_motion_lightning_press);
+//                mBtnLightning.setBackgroundResource(R.drawable.shape_motion_lightning_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.lightning_color_press));
                 break;
             case TXVideoEditConstants.TXEffectType_MIRROR:
-                mBtnMirror.setBackgroundResource(R.drawable.shape_motion_mirror_press);
+//                mBtnMirror.setBackgroundResource(R.drawable.shape_motion_mirror_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.mirror_color_press));
                 break;
             case TXVideoEditConstants.TXEffectType_ILLUSION:
-                mBtnIllusion.setBackgroundResource(R.drawable.shape_motion_illusion_press);
+//                mBtnIllusion.setBackgroundResource(R.drawable.shape_motion_illusion_press);
 
                 mColorfulProgress.startMark(getResources().getColor(R.color.illusion_color_press));
                 break;
@@ -354,37 +357,37 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
         }
         switch (type) {
             case TXVideoEditConstants.TXEffectType_SOUL_OUT:
-                mBtnSpirit.setBackgroundResource(R.drawable.shape_motion_spirit);
+//                mBtnSpirit.setBackgroundResource(R.drawable.shape_motion_spirit);
                 break;
             case TXVideoEditConstants.TXEffectType_SPLIT_SCREEN:
-                mBtnSplit.setBackgroundResource(R.drawable.shape_motion_split);
+//                mBtnSplit.setBackgroundResource(R.drawable.shape_motion_split);
                 break;
             case TXVideoEditConstants.TXEffectType_ROCK_LIGHT:
-                mBtnLightWave.setBackgroundResource(R.drawable.shape_motion_light_wave);
+//                mBtnLightWave.setBackgroundResource(R.drawable.shape_motion_light_wave);
                 break;
             case TXVideoEditConstants.TXEffectType_DARK_DRAEM:
-                mBtnDark.setBackgroundResource(R.drawable.shape_motion_dark);
+//                mBtnDark.setBackgroundResource(R.drawable.shape_motion_dark);
                 break;
             case TXVideoEditConstants.TXEffectType_WIN_SHADDOW:
-                mBtnWinShaddow.setBackgroundResource(R.drawable.shape_motion_window);
+//                mBtnWinShaddow.setBackgroundResource(R.drawable.shape_motion_window);
                 break;
             case TXVideoEditConstants.TXEffectType_GHOST_SHADDOW:
-                mBtnGhostShaddow.setBackgroundResource(R.drawable.shape_motion_ghost_shaddow);
+//                mBtnGhostShaddow.setBackgroundResource(R.drawable.shape_motion_ghost_shaddow);
                 break;
             case TXVideoEditConstants.TXEffectType_PHANTOM_SHADDOW:
-                mBtnPhantom.setBackgroundResource(R.drawable.shape_motion_phantom);
+//                mBtnPhantom.setBackgroundResource(R.drawable.shape_motion_phantom);
                 break;
             case TXVideoEditConstants.TXEffectType_GHOST:
-                mBtnGhost.setBackgroundResource(R.drawable.shape_motion_ghost);
+//                mBtnGhost.setBackgroundResource(R.drawable.shape_motion_ghost);
                 break;
             case TXVideoEditConstants.TXEffectType_LIGHTNING:
-                mBtnLightning.setBackgroundResource(R.drawable.shape_motion_lightning);
+//                mBtnLightning.setBackgroundResource(R.drawable.shape_motion_lightning);
                 break;
             case TXVideoEditConstants.TXEffectType_MIRROR:
-                mBtnMirror.setBackgroundResource(R.drawable.shape_motion_mirror);
+//                mBtnMirror.setBackgroundResource(R.drawable.shape_motion_mirror);
                 break;
             case TXVideoEditConstants.TXEffectType_ILLUSION:
-                mBtnIllusion.setBackgroundResource(R.drawable.shape_motion_illusion);
+//                mBtnIllusion.setBackgroundResource(R.drawable.shape_motion_illusion);
                 break;
         }
 

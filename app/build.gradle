@@ -43,9 +43,13 @@ android {
         multiDexEnabled true
 
         ndk {
+            moduleName "hello_jni"
+            stl "stlport_static"
+            ldLibs "log"
             //abiFilters "armeabi", "armeabi-v7a"
             // 如果您使用的是商业版，只能使用 armeabi 架构，即：
-            abiFilters "armeabi","armeabi-v7a"
+//            abiFilters "armeabi", "armeabi-v7a", "x86"
+            abiFilters "armeabi-v7a"
         }
 
     }
@@ -59,7 +63,19 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
-            jni.srcDirs = []
+//            jni.srcDirs = []
+        }
+    }
+//    externalNativeBuild {
+//        cmake {
+//            cppFlags "-frtti -fexceptions"
+//            abiFilters 'armeabi-v7a'
+//        }
+//    }
+
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
         }
     }
 }
@@ -156,7 +172,8 @@ dependencies {
     implementation 'com.github.silladus:PagerIndicator:1.0.2'
     api project(':IMKit')
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
-
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
+    implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
     //
 
 }

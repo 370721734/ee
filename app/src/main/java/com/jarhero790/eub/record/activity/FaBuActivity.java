@@ -1,6 +1,7 @@
 package com.jarhero790.eub.record.activity;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -20,6 +21,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.MainActivity;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
@@ -179,9 +182,12 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fav(FaVBean faVBean){
+    public void fav(FaVBean faVBean) {
 
     }
+
+    private Dialog dialog;
+
 
     @OnClick({R.id.back, R.id.tv_fabu, R.id.iv_music, R.id.submit, R.id.record_preview})
     public void onViewClicked(View view) {
@@ -198,8 +204,8 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 }
                 address = etContent.getText().toString();
 
-                HttpParameterBuilder builder=HttpParameterBuilder.newBuilder();
-                Map<String, RequestBody> bodyMap =builder.bulider();
+                HttpParameterBuilder builder = HttpParameterBuilder.newBuilder();
+                Map<String, RequestBody> bodyMap = builder.bulider();
 
                 File file = new File(mVideoPath);
 
@@ -230,10 +236,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 bodyMap.put("img", yimg);
                 bodyMap.put("title", ytitle);
                 bodyMap.put("address", yaddress);
-                bodyMap.put("description",description);
-
-
-
+                bodyMap.put("description", description);
 
 
                 RequestBody bo = new MultipartBody.Builder()
@@ -327,31 +330,40 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                    });
 
 
-
-
+                    dialog = new Dialog(this, R.style.progress_dialog);
+//                    View viewp = View.inflate(this, R.layout.dialog, null);
+//                    ImageView imageView = viewp.findViewById(R.id.iv_icon);
+//                    Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+//                            .into(imageView);
+                    dialog.setContentView(R.layout.dialog);
+                    dialog.setCancelable(true);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    dialog.show();
 
 //
-                RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap,part).enqueue(new Callback<ResponseBody>() {
-                    @Override
-                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                        if (response.isSuccessful()) {
-                            try {
-                                String json = response.body().string();
-                                Log.e("--------------333", json);
-                                JSONObject object=new JSONObject(json);
-                                int code=object.optInt("code");
-                                String msg=object.optString("msg");
-                                if (code==200){
-                                    EventBus.getDefault().post(new FaVBean("video"));
-                                    startActivity(new Intent(FaBuActivity.this, MainActivity.class));
+                    RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap, part).enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                dialog.dismiss();
+                                try {
+                                    String json = response.body().string();
+                                    Log.e("--------------333", json);
+                                    JSONObject object = new JSONObject(json);
+                                    int code = object.optInt("code");
+                                    String msg = object.optString("msg");
+                                    if (code == 200) {
+                                        EventBus.getDefault().post(new FaVBean("video"));
+                                        startActivity(new Intent(FaBuActivity.this, MainActivity.class));
 
-                                }else {
-                                    Toast.makeText(FaBuActivity.this,msg,Toast.LENGTH_SHORT).show();
+                                    } else {
+                                        Toast.makeText(FaBuActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
-                            } catch (Exception e) {
-                                e.printStackTrace();
-                            }
-                        } else {
+                            } else {
+                                dialog.dismiss();
 //                            Log.e("--------------333", "fail" + response.message());
 //                            try {
 //                                Log.e("--------------3232","fail"+response.body().string());
@@ -359,14 +371,15 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                                e.printStackTrace();
 //                            }
 
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseBody> call, Throwable t) {
-                        Log.e("--------------333", "fail2");
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+                            Log.e("--------------333", "fail2");
+                            dialog.dismiss();
+                        }
+                    });
 
                 } catch (Exception e) {
                     e.printStackTrace();
