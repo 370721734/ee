@@ -37,7 +37,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
 
     //为RecyclerView的Item添加监听
     public interface OnItemClickListener {
-        void onItemClick(int position, String type, View view);
+        void onItemClick(int position, String type, View view, View view1, View view2);
     }
 
     public void setOnItemClickListerer(TikTokThreeAdapter.OnItemClickListener listerer) {
@@ -155,7 +155,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         holder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "点赞", view);
+                mOnItemClickListerer.onItemClick(position, "点赞", view, holder.tv_like, view);
             }
         });
 
@@ -163,7 +163,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         holder.iv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "评论", view);
+                mOnItemClickListerer.onItemClick(position, "评论", view, holder.tv_pinglun, view);
             }
         });
 
@@ -171,7 +171,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         holder.iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "分享", view);
+                mOnItemClickListerer.onItemClick(position, "分享", view, view, view);
             }
         });
 
@@ -179,7 +179,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         holder.iv_gift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "礼物", view);
+                mOnItemClickListerer.onItemClick(position, "礼物", view, view, view);
             }
         });
 
@@ -187,7 +187,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         holder.btn_attention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "关注", view);
+                mOnItemClickListerer.onItemClick(position, "关注", view, view, view);
             }
         });
 
@@ -196,7 +196,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
             @Override
             public void onClick(View view) {
                 if (mOnItemClickListerer != null) {
-                    mOnItemClickListerer.onItemClick(position, "红心", view);
+                    mOnItemClickListerer.onItemClick(position, "红心", view, view, view);
 
                     if (isIsshow()) {
                         holder.play_pause.setVisibility(View.VISIBLE);
@@ -212,11 +212,22 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         holder.play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "红心", view);
+                mOnItemClickListerer.onItemClick(position, "红心", view, view, view);
                 if (isIsshow()) {
                     holder.play_pause.setVisibility(View.VISIBLE);
                 } else {
                     holder.play_pause.setVisibility(View.GONE);
+                }
+            }
+        });
+
+        //hong
+        holder.love.setLoveTrue(new Love.LoveTrue() {
+            @Override
+            public void Onclick(boolean love) {
+                if (love){
+//                    Log.e("-----","hehe");
+                    mOnItemClickListerer.onItemClick(position, "红红", holder.love, holder.iv_like, holder.tv_like);
                 }
             }
         });
@@ -251,6 +262,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         ImageView play_pause;
 
         TextView caifu;
+        Love love;
 
         VideoHolder(View itemView) {
             super(itemView);
@@ -278,6 +290,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
             rlhead = itemView.findViewById(R.id.rlhead);
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu = itemView.findViewById(R.id.tv_gold_coin);
+            love = itemView.findViewById(R.id.love);
         }
     }
 

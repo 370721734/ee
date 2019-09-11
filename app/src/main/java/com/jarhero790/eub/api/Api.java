@@ -107,6 +107,18 @@ public interface Api {
 
 
     /**
+     * 关注用户
+     * buid	    被关注的用户id
+     token	用户TOKEN
+     *
+     *
+     */
+    @POST("web/index/like")
+    @FormUrlEncoded
+    Call<ResponseBody> attentionUserTwo(@Field("buid") String buidValue,
+                                            @Field("token") String tokenValue);
+
+    /**
      * 消息
      */
     @POST("web/index/messages")

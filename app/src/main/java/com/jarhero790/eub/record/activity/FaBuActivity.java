@@ -31,6 +31,7 @@ import com.jarhero790.eub.message.permission.KbPermission;
 import com.jarhero790.eub.message.permission.KbPermissionListener;
 import com.jarhero790.eub.message.permission.KbPermissionUtils;
 import com.jarhero790.eub.record.TCConstants;
+import com.jarhero790.eub.record.TCVideoEditerActivity;
 import com.jarhero790.eub.record.bean.FaVBean;
 import com.jarhero790.eub.record.view.MediaPlayUtil;
 import com.jarhero790.eub.utils.AppUtils;
@@ -443,6 +444,20 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
             Log.e("-----------music=", music);
             MediaPlayUtil.getInstance().stop();
             MediaPlayUtil.getInstance().start(music);
+
+//            final String path = Environment.getExternalStorageDirectory().getPath() + "/AAAAImg/";
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    try {
+//                       TCVideoEditerActivity.getInstance().downLoadFromUrl(music, "123.mp3", path);
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                }
+//            }).start();
+
+
         }
     }
 
@@ -461,6 +476,9 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     protected void onPause() {
         super.onPause();
         MediaPlayUtil.getInstance().pause();
+        if (mTXVodPlayer!=null){
+            mTXVodPlayer.pause();
+        }
     }
 
     @Override
@@ -468,6 +486,8 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
         super.onStop();
         MediaPlayUtil.getInstance().stop();
         EventBus.getDefault().unregister(this);
+        if (mTXVodPlayer!=null)
+            mTXVodPlayer.stopPlay(true);
     }
 
 
@@ -476,6 +496,8 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
         super.onDestroy();
         MediaPlayUtil.getInstance().release();
         EventBus.getDefault().unregister(this);
+        if (mTXVodPlayer!=null)
+            mTXVodPlayer.stopPlay(true);
     }
 
     @Override

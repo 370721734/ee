@@ -3,11 +3,12 @@ package com.jarhero790.eub.ui.souye.child;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.OrientationHelper;
@@ -29,8 +30,8 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.OnViewPagerListener;
 import com.jarhero790.eub.adapter.TikTokAdapter;
@@ -43,7 +44,6 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
-import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.record.bean.FaVBean;
@@ -51,15 +51,19 @@ import com.jarhero790.eub.ui.souye.BottomGiftDialog;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
 import com.jarhero790.eub.ui.souye.BottomShareDialog;
 import com.jarhero790.eub.utils.AppUtils;
-import com.jarhero790.eub.utils.LogUtils;
 import com.jarhero790.eub.utils.NetworkConnectionUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
+import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
+import com.tencent.mm.opensdk.modelmsg.WXMediaMessage;
+import com.tencent.mm.opensdk.modelmsg.WXWebpageObject;
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -68,10 +72,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import okhttp3.ResponseBody;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 //1.动画旋转问题
 //2分享，
@@ -329,6 +329,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e("-----------", "souye-onActivityCreated");
+        api= WXAPIFactory.createWXAPI(getActivity(),GlobalApplication.APP_ID_Wei,true);
+        api.registerApp(GlobalApplication.APP_ID_Wei);
     }
 
     @Override
@@ -645,9 +647,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
 //                        tvzan= (TextView) view1;//有了
-
-
-
                         ImageView ivlike= (ImageView) view;
                         TextView tv2= (TextView) view1;
 
@@ -853,10 +852,68 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     }
 
+    private int mTargetScene = SendMessageToWX.Req.WXSceneSession;
+    private IWXAPI api;
+    //微信
+    private static final int THUMB_SIZE = 150;
+
+    private String buildTransaction(final String type) {
+        return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
+    }
 
     public void showShare() {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
         bottomShareDialog.show(getChildFragmentManager(), "share");
+        bottomShareDialog.setShareDialog(new BottomShareDialog.ShareDialog() {
+            @Override
+            public void Clicklinear(View view, String type) {
+                if (type.equals("下载")){
+                    Log.e("-------","下载");
+
+
+
+
+                    bottomShareDialog.dismiss();
+                }else if (type.equals("分享")){
+                    Log.e("-------","分享");
+                    WXWebpageObject webpage = new WXWebpageObject();
+                    webpage.webpageUrl = "http://www.qq.com";
+                    WXMediaMessage msg = new WXMediaMessage(webpage);
+                    msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
+                    msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+                    Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
+                    bmp.recycle();
+                    msg.thumbData = bmpToByteArray(thumbBmp, true);
+
+                    SendMessageToWX.Req req = new SendMessageToWX.Req();
+                    req.transaction = buildTransaction("webpage");
+                    req.message = msg;
+                    req.scene = mTargetScene;
+                    api.sendReq(req);
+
+                    bottomShareDialog.dismiss();
+                }else {}
+            }
+        });
+    }
+
+
+    public  byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
+        if (needRecycle) {
+            bmp.recycle();
+        }
+
+        byte[] result = output.toByteArray();
+        try {
+            output.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return result;
     }
 
     //ok

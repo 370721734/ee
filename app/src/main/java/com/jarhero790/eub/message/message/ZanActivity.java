@@ -59,8 +59,8 @@ public class ZanActivity extends AppCompatActivity {
         initDate();
     }
 
-//    CustomProgressDialog dialog = new CustomProgressDialog();
-private Dialog dialog;
+    //    CustomProgressDialog dialog = new CustomProgressDialog();
+    private Dialog dialog;
 
     private void initDate() {
 //        dialog.createLoadingDialog(this, "正在加载...");
@@ -71,7 +71,6 @@ private Dialog dialog;
 //        Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
 //                .into(imageView);
         dialog.setContentView(R.layout.dialog);
-
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.show();

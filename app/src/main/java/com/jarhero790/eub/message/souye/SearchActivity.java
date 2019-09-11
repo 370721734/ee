@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.souye;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -81,14 +82,12 @@ public class SearchActivity extends AppCompatActivity {
         CommonUtil.setStatusBarTransparent(this);
         GridLayoutManager lm = new GridLayoutManager(this, 2);
         recyclerView.setLayoutManager(lm);
-        LinearItemDecoration itemDecoration=new LinearItemDecoration();
+        LinearItemDecoration itemDecoration = new LinearItemDecoration();
         itemDecoration.setColor(Color.parseColor("#3A3A44"));
         itemDecoration.setSpanSpace(20);
         recyclerView.addItemDecoration(itemDecoration);
-        page = 1;
-        initDate();
 
-//        initLike();
+
 
         mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
             @Override
@@ -116,24 +115,31 @@ public class SearchActivity extends AppCompatActivity {
 //        RetrofitManager.getInstance().getDataServer().search()
 //    }
 
-//    CustomProgressDialog dialog = new CustomProgressDialog();
+
     Call<SearchBean> calls = null;
 
+
+    private Dialog dialog;
+
     private void initDate() {
-//        dialog.createLoadingDialog(this, "正在加载...");
-//        dialog.setCancelable(true);
-//        dialog.show();
+
+
+        dialog = new Dialog(this, R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().search(page, SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<SearchBean>() {
                     @Override
                     public void onResponse(Call<SearchBean> call, Response<SearchBean> response) {
                         calls = call;
-//                        dialog.dismiss();
+                        dialog.dismiss();
                         if (response.isSuccessful()) {
-                            if (response.body()!=null && response.body().getCode() == 200) {
+                            if (response.body() != null && response.body().getCode() == 200) {
                                 visitBeans = response.body().getData().getVisit();
                                 itemlikeBeans = response.body().getData().getLike();
-                                if (visitBeans.size()>0){
+                                if (visitBeans.size() > 0) {
                                     int pageCount = MenuPagerAdapter.calculatePageCount(visitBeans);
                                     adapter = new MenuPagerAdapter();
                                     adapter.setReqCode(new int[pageCount]);
@@ -146,10 +152,10 @@ public class SearchActivity extends AppCompatActivity {
                                             //position第几个
                                             //pagerPosition第几个页面
 
-                                            Intent intent=new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
-                                            intent.putExtra("position",position+(pagerPosition*6));
-                                            intent.putExtra("type","visit");
-                                            intent.putExtra("vidlist",visitBeans);
+                                            Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+                                            intent.putExtra("position", position + (pagerPosition * 6));
+                                            intent.putExtra("type", "visit");
+                                            intent.putExtra("vidlist", visitBeans);
                                             startActivity(intent);
 
                                         }
@@ -163,20 +169,16 @@ public class SearchActivity extends AppCompatActivity {
                                             .initDot();
 
 
-
-
                                 }
-
 
 
                                 recyclerView.setNestedScrollingEnabled(false);
 
 
-
-                                if (page==1){
+                                if (page == 1) {
                                     likeBeans.clear();
                                     likeBeans.addAll(itemlikeBeans);
-                                    searchAdapter=new SearchAdapter(SearchActivity.this,likeBeans,myclick);
+                                    searchAdapter = new SearchAdapter(SearchActivity.this, likeBeans, myclick);
                                     recyclerView.setAdapter(searchAdapter);
                                 } else {
                                     likeBeans.addAll(itemlikeBeans);
@@ -184,12 +186,14 @@ public class SearchActivity extends AppCompatActivity {
                                 }
 
                             }
+                        } else {
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<SearchBean> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                     }
                 });
     }
@@ -201,28 +205,28 @@ public class SearchActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.ivsearch:
-                String sear=etSearch.getText().toString();
-                if (TextUtils.isEmpty(sear)){
-                    Toast.makeText(this,"内容不能为空",Toast.LENGTH_SHORT).show();
+                String sear = etSearch.getText().toString();
+                if (TextUtils.isEmpty(sear)) {
+                    Toast.makeText(this, "内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
-                Intent intent=new Intent(this,SearchResultActivity.class);
-                intent.putExtra("word",sear);
+                Intent intent = new Intent(this, SearchResultActivity.class);
+                intent.putExtra("word", sear);
                 startActivity(intent);
 
                 break;
         }
     }
 
-    SearchAdapter.Myclick myclick=new SearchAdapter.Myclick() {
+    SearchAdapter.Myclick myclick = new SearchAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-            Log.e("-----",""+position);
-            Intent intent=new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
-            intent.putExtra("position",position);
-            intent.putExtra("vidlist",likeBeans);
-            intent.putExtra("type","like");
+//            Log.e("-----", "" + position);
+            Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+            intent.putExtra("position", position);
+            intent.putExtra("vidlist", likeBeans);
+            intent.putExtra("type", "like");
             startActivity(intent);
         }
     };
@@ -233,5 +237,12 @@ public class SearchActivity extends AppCompatActivity {
         if (calls != null) {
             calls.cancel();
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        page = 1;
+        initDate();
     }
 }

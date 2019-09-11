@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+
 import com.jarhero790.eub.R;
 
 
@@ -21,6 +23,8 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     private static BottomShareDialog instance=null;
 
     private DialogInterface.OnDismissListener mOnClickListener;
+
+    private LinearLayout ll_down,ll_weixin;
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener){
         this.mOnClickListener = listener;
@@ -57,6 +61,26 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         // 去掉默认的标题
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         view = inflater.inflate(R.layout.souye_share, null);
+        ll_down=view.findViewById(R.id.ll_down);
+        ll_weixin=view.findViewById(R.id.ll_weixin);
+
+        ll_down.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (shareDialog!=null){
+                    shareDialog.Clicklinear(v,"下载");
+                }
+            }
+        });
+        ll_weixin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (shareDialog!=null){
+                    shareDialog.Clicklinear(v,"分享");
+                }
+            }
+        });
+
         return view;
     }
 
@@ -106,4 +130,12 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     }
 
 
+    public interface ShareDialog{
+        void Clicklinear(View view,String type);
+    }
+    private ShareDialog shareDialog;
+
+    public void setShareDialog(ShareDialog shareDialog) {
+        this.shareDialog = shareDialog;
+    }
 }

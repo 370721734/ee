@@ -18,6 +18,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.SearchBean;
 
@@ -39,7 +40,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
 
     //为RecyclerView的Item添加监听
     public interface OnItemClickListener {
-        void onItemClick(int position, String type, View view);
+        void onItemClick(int position, String type, View view, View view1, View view2,String listtype);
     }
 
     public void setOnItemClickListerer(TikTokTwoAdapter.OnItemClickListener listerer) {
@@ -130,13 +131,39 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             holder.tv_pinglun.setText(video.getCommentNum() + "");
             //财富`
             holder.caifu.setText(video.getCaifu() + "");
-            //tou
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                    .error(R.mipmap.souye_logo)).into(holder.userimage);
-            //旋转图
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            if (video.getHeadimgurl().startsWith("http")){
+                //tou
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+                //旋转图
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            }else {
+                //tou
+                Glide.with(context).load(Api.TU+video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+                //旋转图
+                Glide.with(context).load(Api.TU+video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            }
 
+            //zan
+            if (video.getIs_zan()==1){
+//                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.iv_like_selected));
+                holder.iv_like.setSelected(true);
+            }else {
+//                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_video_heart));
+                holder.iv_like.setSelected(false);
+            }
+
+//            关注
+            if (video.getIs_like()==1){
+                holder.btn_attention.setText("已关注");
+            }else {
+                holder.btn_attention.setText("+关注");
+            }
+
+            onClick(holder, position,"like");
 
         } else {
             SearchBean.DataBean.VisitBean video = videos.get(position);
@@ -159,19 +186,41 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             holder.tv_pinglun.setText(video.getCommentNum() + "");
             //财富`
             holder.caifu.setText(video.getCaifu() + "");
-            //tou
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                    .error(R.mipmap.souye_logo)).into(holder.userimage);
-            //旋转图
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+
+            if (video.getHeadimgurl().startsWith("http")){
+                //tou
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+                //旋转图
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            }else {
+                //tou
+                Glide.with(context).load(Api.TU+video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+                //旋转图
+                Glide.with(context).load(Api.TU+video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            }
+
 
             //zan
-            if (video.getIs_like()==1){
-                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.iv_like_selected));
+            if (video.getIs_zan()==1){
+//                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.iv_like_selected));
+                holder.iv_like.setSelected(true);
             }else {
-                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_video_heart));
+//                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_video_heart));
+                holder.iv_like.setSelected(false);
             }
+
+            //            关注
+            if (video.getIs_like()==1){
+                holder.btn_attention.setText("已关注");
+            }else {
+                holder.btn_attention.setText("+关注");
+            }
+
+            onClick(holder, position,"vist");
 
         }
 
@@ -179,23 +228,22 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
         holder.circleImageView.startAnimation(rotateAnimation);
 
-        holder.btn_attention.setText("已关注");
 
 //        holder.guanPanView.init();
 //        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
 //        holder.guanPanView.startAnimation(rotateAnimation);
-        onClick(holder, position);
+
 
 
     }
 
 
-    private void onClick(TikTokTwoAdapter.VideoHolder holder, int position) {
+    private void onClick(TikTokTwoAdapter.VideoHolder holder, int position,String listtype) {
         //点赞
         holder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "点赞", view);
+                mOnItemClickListerer.onItemClick(position, "点赞", view, holder.tv_like, view,listtype);
             }
         });
 
@@ -203,7 +251,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
         holder.iv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "评论", view);
+                mOnItemClickListerer.onItemClick(position, "评论", view, holder.tv_pinglun, view,listtype);
             }
         });
 
@@ -211,7 +259,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
         holder.iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "分享", view);
+                mOnItemClickListerer.onItemClick(position, "分享", view, view, view,listtype);
             }
         });
 
@@ -219,7 +267,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
         holder.iv_gift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "礼物", view);
+                mOnItemClickListerer.onItemClick(position, "礼物", view, view, view,listtype);
             }
         });
 
@@ -227,7 +275,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
         holder.btn_attention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "关注", view);
+                mOnItemClickListerer.onItemClick(position, "关注", holder.btn_attention, view, view,listtype);
             }
         });
 
@@ -236,7 +284,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             @Override
             public void onClick(View view) {
                 if (mOnItemClickListerer != null) {
-                    mOnItemClickListerer.onItemClick(position, "红心", view);
+                    mOnItemClickListerer.onItemClick(position, "红心", view, view, view,listtype);
 
                     if (isIsshow()) {
                         holder.play_pause.setVisibility(View.VISIBLE);
@@ -252,7 +300,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
         holder.play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "红心", view);
+                mOnItemClickListerer.onItemClick(position, "红心", view, view, view,listtype);
                 if (isIsshow()) {
                     holder.play_pause.setVisibility(View.VISIBLE);
                 } else {
@@ -260,6 +308,23 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
                 }
             }
         });
+
+
+        //hong
+        holder.love.setLoveTrue(new Love.LoveTrue() {
+            @Override
+            public void Onclick(boolean love) {
+                if (love){
+//                    Log.e("-----","hehe");
+                    mOnItemClickListerer.onItemClick(position, "红红", holder.love, holder.iv_like, holder.tv_like,listtype);
+                }
+            }
+        });
+
+
+
+
+
     }
 
 
@@ -296,6 +361,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
         ImageView play_pause;
 
         TextView caifu;
+        Love love;
 
         VideoHolder(View itemView) {
             super(itemView);
@@ -323,6 +389,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             rlhead = itemView.findViewById(R.id.rlhead);
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu = itemView.findViewById(R.id.tv_gold_coin);
+            love = itemView.findViewById(R.id.love);
         }
     }
 

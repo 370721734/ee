@@ -30,6 +30,8 @@ import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -229,6 +231,13 @@ public class SearchResultActivity extends AppCompatActivity {
                         if (code == 200) {
                             Log.e("----------jj", "0" + msg);
 //                            initDate(word);//刷新
+                            JSONObject data=object.optJSONObject("data");
+                            String islike=data.optString("is_like");
+                            if (islike.equals("1")){
+                                tvGuanzu.setText("已关注");
+                            }else {
+                                tvGuanzu.setText("关注");
+                            }
                             Toast.makeText(SearchResultActivity.this, msg, Toast.LENGTH_SHORT).show();
 
                         } else {

@@ -159,29 +159,29 @@ public class MakeVideoActivity extends AppCompatActivity implements View.OnClick
 
             @Override
             public void onEnd(int result) {
-                Log.e(TAG,"cutSelectMusic ffmpeg end...");
-                if(mMusicPlayer!=null){//移除上一个选择的音乐背景
-                    mMediaPath.remove(mMediaPath.size()-1);
-                }
-                mMediaPath.add(musicPath);
-                Log.e("-----------music_end=",musicPath);
-                stopMediaPlayer();
-                mMusicPlayer = new MediaPlayer();
-                try {
-                    mMusicPlayer.setDataSource(musicPath);
-                    mMusicPlayer.setLooping(true);
-                    mMusicPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
-                        @Override
-                        public void onPrepared(MediaPlayer mediaPlayer) {
-                            mediaPlayer.setVolume(0.5f, 0.5f);
-                            mediaPlayer.start();
-                            mMusicSeekBar.setProgress(50);
-                        }
-                    });
-                    mMusicPlayer.prepareAsync();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Log.e(TAG,"cutSelectMusic ffmpeg en12d...");
+//                if(mMusicPlayer!=null){//移除上一个选择的音乐背景
+//                    mMediaPath.remove(mMediaPath.size()-1);
+//                }
+//                mMediaPath.add(musicPath);
+//                Log.e("-----------music_end=",musicPath);
+//                stopMediaPlayer();
+//                mMusicPlayer = new MediaPlayer();
+//                try {
+//                    mMusicPlayer.setDataSource(musicPath);
+//                    mMusicPlayer.setLooping(true);
+//                    mMusicPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+//                        @Override
+//                        public void onPrepared(MediaPlayer mediaPlayer) {
+//                            mediaPlayer.setVolume(0.5f, 0.5f);
+//                            mediaPlayer.start();
+//                            mMusicSeekBar.setProgress(50);
+//                        }
+//                    });
+//                    mMusicPlayer.prepareAsync();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
     }
