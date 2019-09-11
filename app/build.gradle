@@ -63,7 +63,7 @@ android {
     sourceSets {
         main {
             jniLibs.srcDirs = ['libs']
-//            jni.srcDirs = []
+            jni.srcDirs = []
         }
     }
 //    externalNativeBuild {
@@ -73,11 +73,11 @@ android {
 //        }
 //    }
 
-    externalNativeBuild {
-        cmake {
-            path "CMakeLists.txt"
-        }
-    }
+//    externalNativeBuild {
+//        cmake {
+//            path "CMakeLists.txt"
+//        }
+//    }
 }
 
 dependencies {
