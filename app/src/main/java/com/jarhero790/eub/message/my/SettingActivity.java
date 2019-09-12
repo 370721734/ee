@@ -33,6 +33,7 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.MainActivity;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.activity.FensiActivity;
@@ -157,6 +158,7 @@ public class SettingActivity extends AppCompatActivity {
     private int themeId = R.style.picture_default_style;
 
 
+
     private static boolean isLoaded = false;
     @SuppressLint("HandlerLeak")
 
@@ -230,6 +232,9 @@ public class SettingActivity extends AppCompatActivity {
         String sex = intent.getStringExtra("sex");
         String headim = intent.getStringExtra("heading");
         String addres = intent.getStringExtra("city");
+
+
+
 
         if (headim != null) {
             ivUserimage.setVisibility(View.VISIBLE);

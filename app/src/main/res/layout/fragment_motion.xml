@@ -72,139 +72,253 @@
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
+
                      >
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_soul"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
                         android:src="@mipmap/te1" />
+                    <TextView
+                        android:layout_below="@id/btn_soul"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="心跳"/>
 
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_split"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
-                        android:src="@mipmap/te2" />
+                        android:src="@mipmap/te4" />
+                    <TextView
+                        android:layout_below="@id/btn_split"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="四九格"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_light_wave"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
                         android:src="@mipmap/te3" />
+                    <TextView
+                        android:layout_below="@id/btn_light_wave"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="重影"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_black"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
-                        android:src="@mipmap/te4" />
+                        android:src="@mipmap/te2" />
+                    <TextView
+                        android:layout_below="@id/btn_black"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="素描"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_win_shaddow"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
                         android:src="@mipmap/te5" />
+                    <TextView
+                        android:layout_below="@id/btn_win_shaddow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="百叶窗"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_ghost_shaddow"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
                         android:src="@mipmap/te6" />
+                    <TextView
+                        android:layout_below="@id/btn_ghost_shaddow"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="晃色"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:visibility="gone"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_phantom"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
-                        android:src="@mipmap/te7" />
+                          />
+                    <TextView
+                        android:layout_below="@id/btn_phantom"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="晃色"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_ghost"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
                         android:src="@mipmap/te8" />
+                    <TextView
+                        android:layout_below="@id/btn_ghost"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="晃动"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_lightning"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
                         android:src="@mipmap/te9" />
+                    <TextView
+                        android:layout_below="@id/btn_lightning"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="闪白"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <pl.droidsonroids.gif.GifImageButton
                         android:id="@+id/btn_mirror"
-                        android:layout_width="74dp"
-                        android:layout_height="74dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@null"
                         android:src="@mipmap/te10" />
+                    <TextView
+                        android:layout_below="@id/btn_mirror"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="镜像"/>
                 </RelativeLayout>
 
                 <RelativeLayout
                     android:layout_width="wrap_content"
+                    android:layout_marginLeft="10dp"
                     android:layout_height="wrap_content">
 
                     <Button
-                        android:id="@+id/btn_illusion"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/shape_motion_illusion"
                         android:text="特效十一"
                         android:textColor="@color/white"
                         android:visibility="gone" />
+                    <pl.droidsonroids.gif.GifImageButton
+                        android:id="@+id/btn_illusion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@null"
+                        android:src="@mipmap/te11" />
+                    <TextView
+                        android:layout_below="@id/btn_illusion"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerHorizontal="true"
+                        android:textColor="@android:color/white"
+                        android:textSize="14dp"
+                        android:layout_marginTop="10dp"
+                        android:text="模糊"/>
                 </RelativeLayout>
             </LinearLayout>
         </HorizontalScrollView>

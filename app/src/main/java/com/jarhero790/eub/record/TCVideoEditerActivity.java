@@ -1229,7 +1229,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         filemusic = new File(saveDir + fileName);
 //
 
-        Log.e("----------ffff=",mRecordProcessedPath+"        "+filemusic.getAbsolutePath());
+//        Log.e("----------ffff=",mRecordProcessedPath+"        "+filemusic.getAbsolutePath());
 //        mMediaPath.add(filemusic.getAbsolutePath());
         cutSelectMusic(filemusic.getAbsolutePath());
 //        composeAudioAndMusic(mRecordProcessedPath,filemusic.getAbsolutePath());
@@ -1607,7 +1607,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             musicUrl = mMediaPath.get(2);
         }
         final String musicOutUrl = mTargetPath + "/tempMusic.aac";
-        final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl,  10000, musicOutUrl);
+        final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl,  90, musicOutUrl);
 //        Log.e("---------vol2=",common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override

@@ -31,9 +31,9 @@ import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
 import com.jarhero790.eub.base.BasePresenter;
 import com.jarhero790.eub.bean.User;
-import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.contract.mine.MineMainContract;
 import com.jarhero790.eub.eventbus.MessageEventUser;
+import com.jarhero790.eub.message.bean.AddressBean;
 import com.jarhero790.eub.message.bean.Conver;
 import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.bean.UserCen;
@@ -44,7 +44,6 @@ import com.jarhero790.eub.message.my.SettingActivity;
 import com.jarhero790.eub.presenter.mine.MineMainPresenter;
 import com.jarhero790.eub.ui.mine.FragmentLike;
 import com.jarhero790.eub.ui.mine.FragmentZuoping;
-import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.NetworkConnectionUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
@@ -65,13 +64,6 @@ import butterknife.Unbinder;
 import io.rong.imkit.RongIM;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.UserInfo;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
@@ -102,6 +94,8 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     TextView tvHuozai;
     @BindView(R.id.tv_memo)
     TextView tvMemo;
+    @BindView(R.id.city)
+    TextView city;
 
     private String money;//签到金币
     private String signtime;//最后签到时间
@@ -173,10 +167,10 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         super.onLazyInitView(savedInstanceState);
 //        mPresenter.getTabList();
 
-        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
             mPresenter.getuserinfo();
-        }else {
-            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -189,17 +183,10 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        app = (GlobalApplication) getActivity().getApplication();
-//        qiandao();
-
-
-        UserBean userBean = app.getUserbean();
-        if (userBean != null) {
-            Log.e("--------2", userBean.data.getId() + "  " + userBean.data.getHeadimgurl());
-        }
 
 
     }
+
 
     @Override
     public void initUI(View view, @Nullable Bundle savedInstanceState) {
@@ -481,13 +468,33 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void city(AddressBean bean) {
+//        Log.e("--------cicici", bean.getCity());
+
+        if (bean != null && bean.getCity() != null) {
+            city.setText(bean.getCity());
+        }else {
+            city.setText("深圳");
+        }
+    }
+
+
     @Override
     public void onResume() {
         super.onResume();
-        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
             mPresenter.getuserinfo();
-        }else {
-            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+            app = (GlobalApplication) getActivity().getApplication();
+//            UserBean userBean = app.getUserbean();
+//            if (userBean != null) {
+//                Log.e("--------2", userBean.data.getId() + "  " + userBean.data.getHeadimgurl());
+//            }
+//            String city = app.getCITY();
+//            Log.e("------------city",city);
+
+        } else {
+            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
         }
 
         Log.e("---", "onResume");
@@ -513,12 +520,16 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 startActivity(intent);
                 break;
             case R.id.iv_edit:
-                if (app.getUserCen().getData().getUser() != null) {
+                if ( app!=null && app.getUserCen()!=null && app.getUserCen().getData()!=null && app.getUserCen().getData().getUser() != null) {
                     Intent intent1 = new Intent(getActivity(), SettingActivity.class);
+                    if (app.getUserCen().getData().getUser().getNickname()!=null)
                     intent1.putExtra("name", app.getUserCen().getData().getUser().getNickname());
+                    if (app.getUserCen().getData().getUser().getSign()!=null)
                     intent1.putExtra("sign", app.getUserCen().getData().getUser().getSign());
                     intent1.putExtra("sex", app.getUserCen().getData().getUser().getSex());
+                    if (app.getUserCen().getData().getUser().getHeadimgurl()!=null)
                     intent1.putExtra("heading", app.getUserCen().getData().getUser().getHeadimgurl());
+                    if (app.getUserCen().getData().getUser().getCity()!=null)
                     intent1.putExtra("city", app.getUserCen().getData().getUser().getCity());
                     startActivity(intent1);
                 }

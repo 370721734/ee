@@ -20,6 +20,12 @@
 
     <uses-feature android:name="android.hardware.Camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
+    <!-- 修改WiFi状态，发起WiFi扫描, 需要WiFi信息用于网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- 访问网络的变化, 需要某些信息用于网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+
 
     <application
         android:name=".GlobalApplication"
@@ -37,14 +43,33 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".record.activity.FaBuActivity" />
-        <activity android:name=".record.activity.SelectMusicActivity" />
-        <activity android:name=".message.souye.BindPhoneActivity" />
-        <activity android:name=".message.my.PlayVideoActivity" />
-        <activity android:name=".message.souye.SearchResultActivity" />
-        <activity android:name=".message.souye.SearchActivity" />
-        <activity android:name=".message.souye.PlayVideoTwoActivity" />
-        <activity android:name=".message.souye.PlayVideoThreeActivity" />
+        <activity
+            android:name=".record.activity.FaBuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".record.activity.SelectMusicActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.souye.BindPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.my.PlayVideoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.souye.SearchResultActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.souye.SearchActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.souye.PlayVideoTwoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.souye.PlayVideoThreeActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.souye.BusinessWebTwoActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".message.message.ConversationListActivity"
             android:screenOrientation="portrait">
@@ -73,20 +98,48 @@
                     android:scheme="rong" />
             </intent-filter>
         </activity>
-        <activity android:name=".message.my.GuangZuActivity" />
-        <activity android:name=".message.message.PrivateJiuBaoActivity" />
-        <activity android:name=".message.message.JiuBaoActivity" />
-        <activity android:name=".message.message.MoreActivity" />
-        <activity android:name=".message.message.GeRenInfoActivity" />
-        <activity android:name=".message.message.SysMessageActivity" />
-        <activity android:name=".message.my.XieYiActivity" />
-        <activity android:name=".message.message.AboutActivity" />
-        <activity android:name=".message.my.SettingActivity" />
-        <activity android:name=".message.message.JiangLiActivity" />
-        <activity android:name=".message.message.GiftActivity" />
-        <activity android:name=".message.message.PinLenActivity" />
-        <activity android:name=".message.message.ZanActivity" />
-        <activity android:name=".message.my.QianDaoActivity" /> <!-- android 全面屏 -->
+        <activity
+            android:name=".message.my.GuangZuActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.PrivateJiuBaoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.JiuBaoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.MoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.GeRenInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.SysMessageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.my.XieYiActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.AboutActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.my.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.JiangLiActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.GiftActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.PinLenActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.message.ZanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.my.QianDaoActivity"
+            android:screenOrientation="portrait" /> <!-- android 全面屏 -->
         <meta-data
             android:name="android.max_aspect"
             android:value="2.1" /> <!-- 融 -->
@@ -98,7 +151,7 @@
 
         <meta-data
             android:name="TencentMapSDK"
-            android:value="UCMBZ-AG53F-SQVJX-JVY4Z-ZO47Q-PZFUA" />
+            android:value="UJFBZ-N4HCP-ZPID2-L3NBC-5MVN5-NWBXN" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -117,15 +170,33 @@
             android:screenOrientation="portrait">
 
         </activity>
-        <activity android:name=".activity.AttentionUsersActivity" />
-        <activity android:name=".record.TCVideoRecordActivity" />
-        <activity android:name=".activity.LoginActivity" />
-        <activity android:name=".activity.UserNameLoginActivity" />
-        <activity android:name=".activity.PhoneLoginActivity" />
-        <activity android:name=".activity.RegisterActivity" />
-        <activity android:name=".activity.RegisterByPhoneActivity" />
-        <activity android:name=".activity.RegisterByUsernameActivity" />
-        <activity android:name=".activity.FensiActivity" />
+        <activity
+            android:name=".activity.AttentionUsersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".record.TCVideoRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.UserNameLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.PhoneLoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RegisterByPhoneActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.RegisterByUsernameActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.FensiActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".message.LoginNewActivity"
             android:launchMode="singleTask"
@@ -160,7 +231,9 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".record.TCVideoEditerActivity" />
+        <activity
+            android:name=".record.TCVideoEditerActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

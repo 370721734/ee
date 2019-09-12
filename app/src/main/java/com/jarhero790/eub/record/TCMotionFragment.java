@@ -36,7 +36,7 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
     private GifImageButton mBtnGhost;
     private GifImageButton mBtnLightning;
     private GifImageButton mBtnMirror;
-    private Button mBtnIllusion;
+    private GifImageButton mBtnIllusion;
     private RelativeLayout mRlDelete;
 
 
@@ -85,7 +85,7 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
         mBtnGhost =  view.findViewById(R.id.btn_ghost);
         mBtnLightning =  view.findViewById(R.id.btn_lightning);
         mBtnMirror =  view.findViewById(R.id.btn_mirror);
-        mBtnIllusion = (Button) view.findViewById(R.id.btn_illusion);
+        mBtnIllusion =  view.findViewById(R.id.btn_illusion);
 
         mBtnSpirit.setOnTouchListener(this);
         mBtnSplit.setOnTouchListener(this);
@@ -152,7 +152,7 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
         if (mIsOnTouch && action == MotionEvent.ACTION_DOWN) {
             return false;
         }
-        if (view.getId() == R.id.btn_soul) {
+        if (view.getId() == R.id.btn_soul) {//心跳
             if (action == MotionEvent.ACTION_DOWN) {
                 pressMotion(TXVideoEditConstants.TXEffectType_SOUL_OUT);
                 mIsOnTouch = true;
@@ -164,7 +164,7 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
             return false;
         }
 
-        if (view.getId() == R.id.btn_split) {
+        if (view.getId() == R.id.btn_split) {//四九格
             if (action == MotionEvent.ACTION_DOWN) {
                 pressMotion(TXVideoEditConstants.TXEffectType_SPLIT_SCREEN);
                 mIsOnTouch = true;
@@ -188,7 +188,7 @@ public class TCMotionFragment extends Fragment implements View.OnClickListener, 
             return false;
         }
 
-        if (view.getId() == R.id.btn_black) {
+        if (view.getId() == R.id.btn_black) {//素描
             if (action == MotionEvent.ACTION_DOWN) {
                 pressMotion(TXVideoEditConstants.TXEffectType_DARK_DRAEM);
                 mIsOnTouch = true;

@@ -37,12 +37,14 @@ public class Video implements Serializable {
      */
 
     private String id;
-    private String video_id;
     private String uid;
     private String mid;
+    private String good_id;
     private String time;
     private String title;
+    private String describe;
     private String url;
+    private String income;
     private String addtime;
     private String state;
     private String sh_time;
@@ -55,8 +57,8 @@ public class Video implements Serializable {
     private String address;
     private String lng;
     private String lat;
+    private String video_id;
     private String wurl;
-
     private String collect;
     private String headimgurl;
     private String nickname;
@@ -282,16 +284,43 @@ public class Video implements Serializable {
     }
 
 
+    public String getGood_id() {
+        return good_id;
+    }
+
+    public void setGood_id(String good_id) {
+        this.good_id = good_id;
+    }
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public String getIncome() {
+        return income;
+    }
+
+    public void setIncome(String income) {
+        this.income = income;
+    }
+
+
     @Override
     public String toString() {
         return "Video{" +
                 "id='" + id + '\'' +
-                ", video_id='" + video_id + '\'' +
                 ", uid='" + uid + '\'' +
                 ", mid='" + mid + '\'' +
+                ", good_id='" + good_id + '\'' +
                 ", time='" + time + '\'' +
                 ", title='" + title + '\'' +
+                ", describe='" + describe + '\'' +
                 ", url='" + url + '\'' +
+                ", income='" + income + '\'' +
                 ", addtime='" + addtime + '\'' +
                 ", state='" + state + '\'' +
                 ", sh_time='" + sh_time + '\'' +
@@ -304,12 +333,13 @@ public class Video implements Serializable {
                 ", address='" + address + '\'' +
                 ", lng='" + lng + '\'' +
                 ", lat='" + lat + '\'' +
+                ", video_id='" + video_id + '\'' +
                 ", wurl='" + wurl + '\'' +
                 ", collect='" + collect + '\'' +
                 ", headimgurl='" + headimgurl + '\'' +
                 ", nickname='" + nickname + '\'' +
                 ", is_zan='" + is_zan + '\'' +
-                ", commentNum='" + commentNum + '\'' +
+                ", commentNum=" + commentNum +
                 ", is_like='" + is_like + '\'' +
                 '}';
     }

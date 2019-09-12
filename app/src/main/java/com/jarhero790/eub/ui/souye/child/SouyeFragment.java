@@ -44,6 +44,7 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.record.bean.FaVBean;
@@ -716,9 +717,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         tvlike.setText(""+b);
                     }
 
-                    if (!isIszanle()) {
-//                        Log.e("-------------", "you");
-                    }
+//                    if (!isIszanle()) {
+////                        Log.e("-------------", "you");
+//                    }
 
 
 
@@ -733,6 +734,18 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                    } else {
 //                        ivLike.setImageResource(R.drawable.iv_like_unselected);
 //                    }
+                }else if (type.equals("商城")){
+                    Log.e("-------------","商城");
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                        startActivity(new Intent(getActivity(), LoginNewActivity.class));
+                    } else {
+
+                        Intent intentx=new Intent(getActivity(), BusinessWebTwoActivity.class);
+                        intentx.putExtra("url","http://www.51ayhd.com/web/Shopping/#/shopindex/token/"+SharePreferenceUtil.getToken(AppUtils.getContext())+"/good_id/"+lists.get(mCurrentPosition).getGood_id());
+                        intentx.putExtra("good_id",lists.get(mCurrentPosition).getGood_id());
+                        startActivity(intentx);
+                    }
+
                 }
             }
         });

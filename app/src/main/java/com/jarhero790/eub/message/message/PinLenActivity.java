@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.message;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -90,17 +91,23 @@ public class PinLenActivity extends AppCompatActivity {
 
 //    CustomProgressDialog dialog = new CustomProgressDialog();
     retrofit2.Call<MyPL> calls=null;
+    private Dialog dialog;
 
     private void initDate() {
 //        dialog.createLoadingDialog(this, "正在加载...");
 //        dialog.show();
+        dialog = new Dialog(this, R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().mypinlen(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<MyPL>() {
                     @Override
                     public void onResponse(Call<MyPL> call, Response<MyPL> response) {
                         calls=call;
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
+                            dialog.dismiss();
 
                             if (response.body()!=null && response.body().getData().size() > 0) {
                                 mSwipeLayout.setVisibility(View.VISIBLE);
@@ -108,8 +115,8 @@ public class PinLenActivity extends AppCompatActivity {
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
                                 itemlist.clear();
-                                MyPL.DataBean body = (MyPL.DataBean) response.body().getData();
-                                itemlist.add(body);
+                                MyPL body = response.body();
+                                itemlist.addAll(body.getData());
 //                                Log.e("---------1", itemlist.size() + "");
                                 if (page == 1) {
                                     list.clear();
@@ -133,7 +140,7 @@ public class PinLenActivity extends AppCompatActivity {
                             }
 
                         } else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             recyclerViewPinLen.setVisibility(View.GONE);
                             mSwipeLayout.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
@@ -143,7 +150,7 @@ public class PinLenActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<MyPL> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                         recyclerViewPinLen.setVisibility(View.GONE);
                         mSwipeLayout.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);

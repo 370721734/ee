@@ -139,7 +139,20 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
         holder.circleImageView.startAnimation(rotateAnimation);
 
-        holder.btn_attention.setText("已关注");
+
+        //关注
+        if (video.getIs_like().equals("1")){
+            holder.btn_attention.setText("已关注");
+        }else {
+            holder.btn_attention.setText("+关注");
+        }
+
+
+        if (video.getGood_id().equals("0")){
+            holder.bussiness.setVisibility(View.INVISIBLE);
+        }else {
+            holder.bussiness.setVisibility(View.VISIBLE);
+        }
 
 //        holder.guanPanView.init();
 //        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
@@ -231,6 +244,17 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
                 }
             }
         });
+
+        //business
+        holder.bussiness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+                mOnItemClickListerer.onItemClick(position, "商城", view, holder.bussiness, view);
+//                Log.e("-----","hehe");
+            }
+        });
+
     }
 
 
@@ -263,6 +287,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
 
         TextView caifu;
         Love love;
+        RelativeLayout bussiness;
 
         VideoHolder(View itemView) {
             super(itemView);
@@ -291,6 +316,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
+            bussiness=itemView.findViewById(R.id.bussiness);
         }
     }
 

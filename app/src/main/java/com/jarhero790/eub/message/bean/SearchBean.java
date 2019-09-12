@@ -118,6 +118,7 @@ public class SearchBean implements Serializable {
             private int is_zan;
             private int commentNum;
             private int is_like;
+            private String good_id;
 
             public int getId() {
                 return id;
@@ -333,6 +334,15 @@ public class SearchBean implements Serializable {
 
             public void setIs_like(int is_like) {
                 this.is_like = is_like;
+            }
+
+
+            public String getGood_id() {
+                return good_id;
+            }
+
+            public void setGood_id(String good_id) {
+                this.good_id = good_id;
             }
         }
 
@@ -394,6 +404,7 @@ public class SearchBean implements Serializable {
             private int is_zan;
             private int commentNum;
             private int is_like;
+            private String good_id;
 
             public int getId() {
                 return id;
@@ -609,6 +620,14 @@ public class SearchBean implements Serializable {
 
             public void setIs_like(int is_like) {
                 this.is_like = is_like;
+            }
+
+            public String getGood_id() {
+                return good_id;
+            }
+
+            public void setGood_id(String good_id) {
+                this.good_id = good_id;
             }
         }
     }

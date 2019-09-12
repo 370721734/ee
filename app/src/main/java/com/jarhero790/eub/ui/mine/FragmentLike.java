@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.mine;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -134,18 +135,24 @@ public class FragmentLike extends SupportFragment {
     }
 
 //    CustomProgressDialog dialog = new CustomProgressDialog();
+private Dialog dialog;
     retrofit2.Call<MyFaBuBean> calls=null;
     private void initDate() {
 //        dialog.createLoadingDialog(getActivity(), "正在加载...");
 //        dialog.show();
-        Log.e("------------------page=",""+page);
+//        Log.e("------------------page=",""+page);
+        dialog = new Dialog(getActivity(), R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().zanvideo(SharePreferenceUtil.getToken(AppUtils.getContext()),page)
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         calls=call;
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             if (response.body()!=null && response.body().getData()!=null){
                                 Log.e("--------------","size="+response.body().getData().size());
                                 itemlist.clear();
@@ -184,7 +191,7 @@ public class FragmentLike extends SupportFragment {
 
                             }
                         } else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
@@ -194,7 +201,7 @@ public class FragmentLike extends SupportFragment {
 
                     @Override
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);

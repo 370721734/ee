@@ -163,6 +163,12 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
                 holder.btn_attention.setText("+关注");
             }
 
+            if (video.getGood_id().equals("0")){
+                holder.bussiness.setVisibility(View.INVISIBLE);
+            }else {
+                holder.bussiness.setVisibility(View.VISIBLE);
+            }
+
             onClick(holder, position,"like");
 
         } else {
@@ -218,6 +224,13 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
                 holder.btn_attention.setText("已关注");
             }else {
                 holder.btn_attention.setText("+关注");
+            }
+
+
+            if (video.getGood_id().equals("0")){
+                holder.bussiness.setVisibility(View.INVISIBLE);
+            }else {
+                holder.bussiness.setVisibility(View.VISIBLE);
             }
 
             onClick(holder, position,"vist");
@@ -321,7 +334,15 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             }
         });
 
-
+        //business
+        holder.bussiness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+                mOnItemClickListerer.onItemClick(position, "商城", view, holder.bussiness, view,listtype);
+//                Log.e("-----","hehe");
+            }
+        });
 
 
 
@@ -362,6 +383,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
 
         TextView caifu;
         Love love;
+        RelativeLayout bussiness;
 
         VideoHolder(View itemView) {
             super(itemView);
@@ -390,6 +412,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
+            bussiness=itemView.findViewById(R.id.bussiness);
         }
     }
 

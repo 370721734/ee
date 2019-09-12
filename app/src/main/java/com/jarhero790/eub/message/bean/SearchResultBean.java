@@ -393,6 +393,8 @@ public class SearchResultBean implements Serializable {
             private String headimgurl;
             private String nickname;
             private int is_zan;
+            private String is_like;
+            private String good_id;
 
             public int getId() {
                 return id;
@@ -584,6 +586,23 @@ public class SearchResultBean implements Serializable {
 
             public void setIs_zan(int is_zan) {
                 this.is_zan = is_zan;
+            }
+
+
+            public String getIs_like() {
+                return is_like;
+            }
+
+            public void setIs_like(String is_like) {
+                this.is_like = is_like;
+            }
+
+            public String getGood_id() {
+                return good_id;
+            }
+
+            public void setGood_id(String good_id) {
+                this.good_id = good_id;
             }
         }
     }

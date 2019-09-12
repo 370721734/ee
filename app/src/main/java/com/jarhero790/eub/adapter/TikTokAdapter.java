@@ -138,7 +138,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public void onBindViewHolder(final VideoHolder holder, int position) {
 
-        Log.e("------------------", "??????" + position);
+//        Log.e("------------------", "??????" + position);
         Video video = videos.get(position);
         /** Fresco方式加载
          Uri uri = Uri.parse(video.getVideo_img());
@@ -198,6 +198,12 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             holder.btn_attention.setText("已关注");
         }else {
             holder.btn_attention.setText("+关注");
+        }
+
+        if (video.getGood_id().equals("0")){
+            holder.bussiness.setVisibility(View.INVISIBLE);
+        }else {
+            holder.bussiness.setVisibility(View.VISIBLE);
         }
 
 
@@ -292,14 +298,17 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
                 }
             }
         });
-//        holder.love.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-////
-//                mOnItemClickListerer.onItemClick(position, "红红", view, holder.iv_like, holder.tv_like);
-////                Log.e("-----","hehe");
-//            }
-//        });
+
+
+        //business
+        holder.bussiness.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+                mOnItemClickListerer.onItemClick(position, "商城", view, holder.bussiness, view);
+//                Log.e("-----","hehe");
+            }
+        });
 //        holder.love.setCallback(new Love.ClickCallBack() {
 //            @Override
 //            public void onClick() {
@@ -378,6 +387,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         TextView caifu;
         Love love;
+        RelativeLayout bussiness;
 
 
         VideoHolder(View itemView) {
@@ -406,6 +416,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
+            bussiness=itemView.findViewById(R.id.bussiness);
         }
     }
 

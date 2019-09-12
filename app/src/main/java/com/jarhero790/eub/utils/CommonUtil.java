@@ -142,9 +142,9 @@ public class CommonUtil {
         rongIM.refreshUserInfoCache(new UserInfo("userId", "啊明", Uri.parse("http://rongcloud-web.qiniudn.com/docs_demo_rongcloud_logo.png")));
     }
 
-    public static void callphone(Context context){
+    public static void callphone(Context context,String phone){
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        Uri data = Uri.parse("tel:" + "phone");
+        Uri data = Uri.parse("tel:" + phone);
         intent.setData(data);
         context.startActivity(intent);
     }

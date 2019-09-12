@@ -48,22 +48,13 @@
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/linearLayout_heart"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:clickable="true"
-                android:gravity="center">
-
-                <!-- 点赞-->
-                <ImageView
-                    android:id="@+id/iv_like"
-                    android:layout_width="33dp"
-                    android:layout_height="31dp"
-                    android:layout_marginBottom="10dp"
-                    android:background="@drawable/zanselector" />
-            </LinearLayout>
-
+            <!-- 点赞-->
+            <ImageView
+                android:id="@+id/iv_like"
+                android:layout_width="33dp"
+                android:layout_height="31dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/zanselector" />
             <TextView
                 android:id="@+id/tv_like"
                 android:layout_width="wrap_content"
@@ -230,12 +221,12 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/bussiness"
             android:layout_width="162dp"
             android:layout_height="27dp"
             android:layout_above="@id/rl_user"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="19dp"
-
             android:orientation="horizontal">
 
             <ImageView

@@ -9,31 +9,27 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewParent;
-import android.widget.FrameLayout;
+import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.OnViewPagerListener;
 import com.jarhero790.eub.adapter.TikTokController;
 import com.jarhero790.eub.adapter.ViewPagerLayoutManager;
 import com.jarhero790.eub.message.LoginNewActivity;
-import com.jarhero790.eub.message.adapter.TikTokTwoAdapter;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.model.bean.souye.VideoBean;
+import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
 import com.jarhero790.eub.ui.souye.BottomShareDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
-import com.jarhero790.eub.utils.DataUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.json.JSONObject;
@@ -277,6 +273,13 @@ public class PlayVideoActivity extends AppCompatActivity {
                     showGift();
                 }else if (type.equals("关注")){
                     Log.e("-----","5");
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                        startActivity(new Intent(PlayVideoActivity.this, LoginNewActivity.class));
+                    } else {
+                        Button button= (Button) view;
+                        attentions(button);
+                    }
+
                 } else if (type.equals("红红")) {
 
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals(""))
@@ -298,6 +301,18 @@ public class PlayVideoActivity extends AppCompatActivity {
                     } else {
                         mVideoView.resume();
                         tikTokAdapter.setIsshow(false);
+                    }
+
+                }else if (type.equals("商城")){
+                    Log.e("-------------","商城");
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                        startActivity(new Intent(PlayVideoActivity.this, LoginNewActivity.class));
+                    } else {
+
+                        Intent intentx=new Intent(PlayVideoActivity.this, BusinessWebTwoActivity.class);
+                        intentx.putExtra("url","http://www.51ayhd.com/web/Shopping/#/shopindex/token/"+SharePreferenceUtil.getToken(AppUtils.getContext())+"/good_id/"+list.get(mCurrentPosition).getGood_id());
+                        intentx.putExtra("good_id",list.get(mCurrentPosition).getGood_id());
+                        startActivity(intentx);
                     }
 
                 }
@@ -594,5 +609,38 @@ public class PlayVideoActivity extends AppCompatActivity {
     public void showShare() {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
         bottomShareDialog.show(getSupportFragmentManager(), "share");
+    }
+
+
+    private void attentions(Button button) {
+
+        RetrofitManager.getInstance().getDataServer().attentionUserTwo(list.get(mCurrentPosition).getId()+"",SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        String json=response.body().string();
+                        JSONObject object=new JSONObject(json);
+                        int code=object.optInt("code");
+                        if (code==200){
+                            JSONObject data=object.optJSONObject("data");
+                            String islike=data.optString("is_like");
+                            if (islike.equals("1")){
+                                button.setText("已关注");
+                            }else {
+                                button.setText("+关注");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 }

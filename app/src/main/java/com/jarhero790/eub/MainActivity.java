@@ -19,19 +19,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.jarhero790.eub.message.bean.AddressBean;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
 import com.tencent.map.geolocation.TencentLocationManager;
 import com.tencent.map.geolocation.TencentLocationRequest;
 import com.tencent.rtmp.TXLiveBase;
 
-import com.jarhero790.eub.aop.logincore.LoginManger;
 import com.jarhero790.eub.base.AppManager;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.Conver;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
-import com.jarhero790.eub.aop.annotation.LoginFilter;
 import com.jarhero790.eub.base.BaseCompatActivity;
 import com.jarhero790.eub.record.TCVideoRecordActivity;
 import com.jarhero790.eub.ui.attention.child.AttentionFragment;
@@ -87,6 +86,8 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     @BindView(R.id.mine)
     LinearLayout mine;
 
+    GlobalApplication app;
+
     private SupportFragment[] mFragments = new SupportFragment[4];
     public static final int FIRST = 0;
     public static final int SECOND = 1;
@@ -97,6 +98,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     TencentLocationListener listener;
     TencentLocationRequest request;
     public static boolean isdingweiok=false;//开始没有定位到
+    TencentLocationManager locationManager;
 
     private String islogin="ddd";
     public String getSHA1Signature(Context context){
@@ -247,10 +249,29 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         EventBus.getDefault().register(this);
         setStatusBarTransparent();
         requestPermissions(this);
-        String sdkVersionStr = TXLiveBase.getSDKVersionStr();
-        Log.e("---------sdk",sdkVersionStr);//3.0.1185
+//        String sdkVersionStr = TXLiveBase.getSDKVersionStr();
+//        Log.e("---------sdk",sdkVersionStr);//3.0.1185
+        locationManager=TencentLocationManager.getInstance(this);
+        app= (GlobalApplication) getApplication();
 
-        initdate();
+        if (Build.VERSION.SDK_INT >= 23) {
+            String[] permissions = {
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.READ_PHONE_STATE,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+            };
+
+            if (checkSelfPermission(permissions[0]) != PackageManager.PERMISSION_GRANTED)
+            {
+                requestPermissions(permissions, 0);
+            }else {
+                initdate();
+            }
+        }else {
+            initdate();
+        }
+
+
     }
 
 
@@ -268,12 +289,18 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        if (locationManager!=null)
+        locationManager.removeUpdates(listener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
         islogin="33333333";
+        if (isdingweiok){
+            locationManager.removeUpdates(listener);
+        }
+
     }
 
     public void clickHome(){
@@ -507,7 +534,8 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
                 if (TencentLocation.ERROR_OK == error) {
                     isdingweiok=true;
                     Log.e("------", "成1功"+location.getCity());
-                    GlobalApplication.getInstance().setCITY(location.getCity());
+                    app.setCITY(location.getCity());
+                    EventBus.getDefault().post(new AddressBean((location.getCity()).replace("市","")));
 //                    MyApplication.getInstance().setCITY("天津市");
 //
 //
@@ -531,7 +559,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //                        Log.e("------", "mmmmmm");
 //                    }
                 } else {
-//                    Log.e("------", "失1败");
+                    Log.e("------", "失1败"+error+"   "+reason);
                     isdingweiok=false;
 
                 }
@@ -558,7 +586,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
             }
         };
 
-        TencentLocationManager locationManager = TencentLocationManager.getInstance(this);
+//        TencentLocationManager locationManager = TencentLocationManager.getInstance(this);
 
 
         int error = locationManager.requestLocationUpdates(request, listener);
@@ -568,4 +596,15 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
             Log.e("------", "失败" + error);
         }
     }
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        //可在此继续其他操作。
+        initdate();
+    }
+
+
 }

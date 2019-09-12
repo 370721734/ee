@@ -83,8 +83,8 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
 
         tikTokAdapter = new TikTokThreeAdapter(list, this);
 
-        Log.e("-----------", "a=" + position);
-        Log.e("-----------", "b=" + list.size());
+//        Log.e("-----------", "a=" + position);
+//        Log.e("-----------", "b=" + list.size());
 
 
         layoutManager = new ViewPagerLayoutManager(this, OrientationHelper.VERTICAL);
@@ -276,6 +276,18 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
                         int b=Integer.parseInt(tvlike.getText().toString())+1;
                         tvlike.setText(""+b);
                     }
+                }else if (itemtype.equals("商城")){
+//                    Log.e("-------------","商城");
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                        startActivity(new Intent(PlayVideoThreeActivity.this, LoginNewActivity.class));
+                    } else {
+
+                        Intent intentx=new Intent(PlayVideoThreeActivity.this, BusinessWebTwoActivity.class);
+                        intentx.putExtra("url","http://www.51ayhd.com/web/Shopping/#/shopindex/token/"+SharePreferenceUtil.getToken(AppUtils.getContext())+"/good_id/"+list.get(mCurrentPosition).getGood_id());
+                        intentx.putExtra("good_id",list.get(mCurrentPosition).getGood_id());
+                        startActivity(intentx);
+                    }
+
                 }
             }
         });
