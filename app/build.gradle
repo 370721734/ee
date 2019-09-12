@@ -46,10 +46,10 @@ android {
             moduleName "hello_jni"
             stl "stlport_static"
             ldLibs "log"
-            //abiFilters "armeabi", "armeabi-v7a"
+            abiFilters "armeabi", "armeabi-v7a"
             // 如果您使用的是商业版，只能使用 armeabi 架构，即：
 //            abiFilters "armeabi", "armeabi-v7a", "x86"
-            abiFilters "armeabi-v7a"
+//            abiFilters "armeabi-v7a"
         }
 
     }
@@ -152,7 +152,7 @@ dependencies {
     //    implementation files('libs/aspectjrt.jar')
 
     /**
-     *         融云sdk
+     *          融云sdk
      */
 
     //    implementation 'cn.rongcloud.sdk:im_kit:2.9.18'
@@ -174,6 +174,7 @@ dependencies {
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.7'
     implementation 'com.github.yangjie10930:EpMedia:v0.9.5'
-    //
 
+    //
+    implementation files('libs/TencentLocationSdk_v7.1.6.1_r67ba7298_20190409_142648.jar')
 }

@@ -95,6 +95,11 @@
             android:value="82hegw5u8d8dx"
             tools:replace="android:value" />
 
+
+        <meta-data
+            android:name="TencentMapSDK"
+            android:value="UCMBZ-AG53F-SQVJX-JVY4Z-ZO47Q-PZFUA" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.jarhero790.eub.FileProvider"

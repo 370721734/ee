@@ -2,6 +2,7 @@ package com.jarhero790.eub.utils;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
@@ -139,6 +140,13 @@ public class CommonUtil {
          */
         RongIM rongIM=RongIM.getInstance();
         rongIM.refreshUserInfoCache(new UserInfo("userId", "啊明", Uri.parse("http://rongcloud-web.qiniudn.com/docs_demo_rongcloud_logo.png")));
+    }
+
+    public static void callphone(Context context){
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        Uri data = Uri.parse("tel:" + "phone");
+        intent.setData(data);
+        context.startActivity(intent);
     }
 
 }

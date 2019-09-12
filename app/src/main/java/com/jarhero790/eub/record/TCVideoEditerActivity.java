@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Point;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -35,7 +34,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.ffmpeg.FFmpeg;
 import com.jarhero790.eub.record.activity.FaBuActivity;
 import com.jarhero790.eub.record.activity.GifUtil;
 import com.jarhero790.eub.record.activity.SelectMusicActivity;
@@ -1399,6 +1397,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         Log.e("---------audio=",audioUrl);
         final String audioOutUrl = mTargetPath + "/tempAudio.aac";
         String[] common = FFmpegCommands.changeAudioOrMusicVol(audioUrl, mAudioVol * 100, audioOutUrl);
+        Log.e("---------vol1=",common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -1608,7 +1607,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             musicUrl = mMediaPath.get(2);
         }
         final String musicOutUrl = mTargetPath + "/tempMusic.aac";
-        final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl,  100, musicOutUrl);
+        final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl,  10000, musicOutUrl);
+//        Log.e("---------vol2=",common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {

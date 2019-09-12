@@ -46,6 +46,7 @@ public class GlobalApplication extends Application {
     public  String TOKEN;
 
     public IWXAPI api;
+    private  String CITY="";//定位城市
 
     public static synchronized GlobalApplication getInstance() {
         return mApp;
@@ -209,5 +210,14 @@ public class GlobalApplication extends Application {
 
     public void setUserzhong(UserCen.DataBean.UserBean userzhong) {
         this.userzhong = userzhong;
+    }
+
+
+    public String getCITY() {
+        return CITY;
+    }
+
+    public void setCITY(String CITY) {
+        this.CITY = CITY;
     }
 }

@@ -102,7 +102,7 @@ public class FFmpegCommands {
      * @return
      */
     public static String[] changeAudioOrMusicVol(String audioOrMusicUrl, int vol, String outUrl) {
-        Log.w("SLog","audioOrMusicUrl:" + audioOrMusicUrl + "\nvol:" + vol + "\noutUrl:" + outUrl);
+        Log.e("SLog","audioOrMusicUrl:" + audioOrMusicUrl + "\nvol:" + vol + "\noutUrl:" + outUrl);
         String[] commands = new String[8];
         commands[0] = "ffmpeg";
         commands[1] = "-i";

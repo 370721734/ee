@@ -18,6 +18,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import com.tencent.map.geolocation.TencentLocation;
+import com.tencent.map.geolocation.TencentLocationListener;
+import com.tencent.map.geolocation.TencentLocationManager;
+import com.tencent.map.geolocation.TencentLocationRequest;
 import com.tencent.rtmp.TXLiveBase;
 
 import com.jarhero790.eub.aop.logincore.LoginManger;
@@ -88,6 +93,10 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     public static final int THIRD = 2;
     public static final int FOURTH = 3;
 
+    //    注册位置监听器
+    TencentLocationListener listener;
+    TencentLocationRequest request;
+    public static boolean isdingweiok=false;//开始没有定位到
 
     private String islogin="ddd";
     public String getSHA1Signature(Context context){
@@ -240,6 +249,8 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         requestPermissions(this);
         String sdkVersionStr = TXLiveBase.getSDKVersionStr();
         Log.e("---------sdk",sdkVersionStr);//3.0.1185
+
+        initdate();
     }
 
 
@@ -444,5 +455,117 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+
+
+    //定位
+    private void initdate() {
+
+        //腾讯
+//        tencentMap = mMapView.getMap();
+//        tencentMap.setMapType(TencentMap.MAP_TYPE_NORMAL);//普通地图
+
+//        UiSettings类 对地图手势及SDK提供的控件的控制
+//        UiSettings mapUiSettings = tencentMap.getUiSettings();
+//        mapUiSettings.setCompassEnabled(true);//指南针
+//        mapUiSettings.setScrollGesturesEnabled(true);//平移
+
+
+        //定位
+//        setInterval	设置定位周期(位置监听器回调周期), 单位为 ms (毫秒)
+//        setRequestLevel	设置定位的 request level
+//        setAllowCache	设置是否允许使用缓存, 连续多次定位时建议允许缓存
+//        setQQ	设置 QQ 号
+//        Request level 决定定位结果中包含哪些信息，分为以下几类：
+//
+//        Request Level	值	含义
+//        REQ_LEVEL_GEO	0	包含经纬度
+//        REQ_LEVEL_NAME	1	包含经纬度, 位置名称, 位置地址
+//        REQ_LEVEL_ADMIN_AREA	3	包含经纬度，位置所处的中国大陆行政区划
+//        REQ_LEVEL_POI	4	包含经纬度，位置所处的中国大陆行政区划及周边POI列表
+        request = TencentLocationRequest.create();
+        request.setAllowCache(false);
+        request.setAllowGPS(true);
+        request.setInterval(100000);
+
+
+
+        request.setRequestLevel(TencentLocationRequest.REQUEST_LEVEL_ADMIN_AREA);
+
+
+
+//
+        listener = new TencentLocationListener() {
+            @Override
+            public void onLocationChanged(TencentLocation location, int error, String reason) {
+//                Log.e("---location:1", location.getAddress() + "," + error + "," + reason + "," + location.getLatitude());
+
+
+                Log.e("---location:2",location.getCity()+location.getProvince());//深圳市
+                if (TencentLocation.ERROR_OK == error) {
+                    isdingweiok=true;
+                    Log.e("------", "成1功"+location.getCity());
+                    GlobalApplication.getInstance().setCITY(location.getCity());
+//                    MyApplication.getInstance().setCITY("天津市");
+//
+//
+//
+//
+//                    //-: 成1功
+//                    //location:: 广东省深圳市宝安区沙井镇上星村河宾南路上星大厦正东方向196米,0,OK
+//
+//                    //新的缩放级别 ,//俯仰角 0~45° (垂直地图时为0),//偏航角 0~360° (正北方为0)   new LatLng(39.977290,116.337000
+//                    CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(new CameraPosition(new LatLng(location.getLatitude(), location.getLongitude()), 15, 0, 0));
+//                    tencentMap.moveCamera(cameraUpdate);//移动地图
+//
+//                    //标注坐标
+//                    LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+//                    if (marker == null) {
+//                        marker = tencentMap.addMarker(new MarkerOptions().position(latLng)
+//                                .title("我的位置").snippet("DefaultMarker"));
+//
+//                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.dingweijing));
+//                    } else {
+//                        Log.e("------", "mmmmmm");
+//                    }
+                } else {
+//                    Log.e("------", "失1败");
+                    isdingweiok=false;
+
+                }
+
+
+            }
+
+            @Override
+            public void onStatusUpdate(String name, int status, String desc) {
+                Log.e("-----name,", name + "," + status + "," + desc);
+                if (status == STATUS_DISABLED) {
+                    /* 检测到定位权限被内置或第三方的权限管理或安全软件禁用, 导致当前应用**很可能无法定位**
+                     * 必要时可对这种情况进行特殊处理, 比如弹出提示或引导
+                     */
+//                    Toast.makeText(CheDetailsActivity.this, "定位权限被禁用!", Toast.LENGTH_SHORT).show();
+//                    premissiongo();
+                    requestPermissions(MainActivity.this);
+                }
+//                if (name.equals("wifi")){
+//
+//                }
+
+
+            }
+        };
+
+        TencentLocationManager locationManager = TencentLocationManager.getInstance(this);
+
+
+        int error = locationManager.requestLocationUpdates(request, listener);
+        if (error == 0) {
+            Log.e("------", "成功");
+        } else {
+            Log.e("------", "失败" + error);
+        }
     }
 }
