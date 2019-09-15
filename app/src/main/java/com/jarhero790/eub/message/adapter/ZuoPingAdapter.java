@@ -56,8 +56,8 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
         holder.rll.setTag(position);
         holder.rll.setOnClickListener(myclick_tu);
 
-        holder.ivDel.setTag(position);
-        holder.ivDel.setOnClickListener(myclick_delete);
+        holder.rldelete.setTag(position);
+        holder.rldelete.setOnClickListener(myclick_delete);
     }
 
 
@@ -91,6 +91,8 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
         TextView tvGo;
         @BindView(R.id.rlll)
         RelativeLayout rll;
+        @BindView(R.id.rl_delete)
+        RelativeLayout rldelete;
 
         MyHolder(View view) {
             super(view);

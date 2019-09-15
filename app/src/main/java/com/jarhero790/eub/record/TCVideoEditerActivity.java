@@ -680,7 +680,32 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 mresult=result;
                 ms=s;
 
-                composeVideoAudio();//1
+
+
+                if (music!=null && music.length()>0){
+                    composeVideoAudio();//1
+                    Log.e("---------------","有音乐");
+                }else {
+                    //直接发布
+                    Log.e("---------------","无音乐");
+                    Intent intent=new Intent(TCVideoEditerActivity.this, FaBuActivity.class);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+                    Log.e("---------------------mVideoOutputPath11=","  "+mVideoOutputPath);
+                    intent.putExtra("mid",mid);
+                    if (s != null)
+                        intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
+                    startActivity(intent);
+                    finish();
+                }
+
+
 
 
 
@@ -941,101 +966,101 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mTXVideoEditer.cancel(); // 注意：生成时，停止输出缩略图
 
         mIbPlay.setImageResource(R.mipmap.ic_play);
-        if (mIsPicCombine) {
-            startGenerateVideo();//生成视频
-            return;
-        }
-
-        AlertDialog.Builder normalDialog = new AlertDialog.Builder(TCVideoEditerActivity.this, R.style.ConfirmDialogStyle);
-        normalDialog.setMessage("生成模式");
-        normalDialog.setCancelable(true);
-        normalDialog.setNegativeButton("生成视频", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                startGenerateVideo();
-            }
-        });
+//        if (mIsPicCombine) {
+//            startGenerateVideo();//生成视频
+//            return;
+//        }
+        startGenerateVideo();
+//        AlertDialog.Builder normalDialog = new AlertDialog.Builder(TCVideoEditerActivity.this, R.style.ConfirmDialogStyle);
+//        normalDialog.setMessage("生成模式");
+//        normalDialog.setCancelable(true);
+//        normalDialog.setNegativeButton("生成视频", new DialogInterface.OnClickListener() {
+//            @Override
+//            public void onClick(DialogInterface dialogInterface, int i) {
+//
+//            }
+//        });
 //        normalDialog.setPositiveButton("原视频转换为gif", new DialogInterface.OnClickListener() {
 //            @Override
 //            public void onClick(DialogInterface dialogInterface, int i) {
 //                startGenerateGif();
 //            }
 //        });
-        normalDialog.show();
+//        normalDialog.show();
     }
 
-    private void startGenerateGif() {
-        if (mGifStart) {
-            Toast.makeText(TCVideoEditerActivity.this, "正在生成gif，请稍后", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        Toast.makeText(TCVideoEditerActivity.this, "开始生成gif", Toast.LENGTH_SHORT).show();
-        mGifStart = true;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    List<Bitmap> thumbnailList = TCVideoEditerWrapper.getInstance().getAllThumbnails();
-                    String gifPath = GifUtil.createGifByBitmaps(getGifFilePath(), thumbnailList, 200, 100, 100);
-                    Log.e("--------","来否"+gifPath);
-                    notifyGifFinish(gifPath);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                } finally {
-                    mGifStart = false;
-                }
-            }
+//    private void startGenerateGif() {
+//        if (mGifStart) {
+//            Toast.makeText(TCVideoEditerActivity.this, "正在生成gif，请稍后", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//        Toast.makeText(TCVideoEditerActivity.this, "开始生成gif", Toast.LENGTH_SHORT).show();
+//        mGifStart = true;
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    List<Bitmap> thumbnailList = TCVideoEditerWrapper.getInstance().getAllThumbnails();
+//                    String gifPath = GifUtil.createGifByBitmaps(getGifFilePath(), thumbnailList, 200, 100, 100);
+//                    Log.e("--------","来否"+gifPath);
+//                    notifyGifFinish(gifPath);
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                } finally {
+//                    mGifStart = false;
+//                }
+//            }
+//
+//            private void notifyGifFinish(final String gifPath) {
+//                mMainHandler.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        Toast.makeText(TCVideoEditerActivity.this, "gif生成成功，存放位置：" + gifPath, Toast.LENGTH_SHORT).show();
+////                        ---: finish make gif
+////                        2019-09-06 17:58:57.333 17964-18391/com.jarhero790.eub E/--------: 来否/sdcard/TXUGC/GifExample.gif
+//                        //发布界面了gif        gif gif   gif   gif
+//                        //到发布界面，如何显示gif  ，与音乐合成
+//
+////                        Intent intent=new Intent(TCVideoEditerActivity.this, FaBuActivity.class);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+////                        intent.putExtra("mid",mid);
+////                        if (s != null)
+////                            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
+////                        startActivity(intent);
+////                        finish();
+//
+//
+//
+//                    }
+//                });
+//            }
+//        }).start();
+//    }
 
-            private void notifyGifFinish(final String gifPath) {
-                mMainHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(TCVideoEditerActivity.this, "gif生成成功，存放位置：" + gifPath, Toast.LENGTH_SHORT).show();
-//                        ---: finish make gif
-//                        2019-09-06 17:58:57.333 17964-18391/com.jarhero790.eub E/--------: 来否/sdcard/TXUGC/GifExample.gif
-                        //发布界面了gif        gif gif   gif   gif
-                        //到发布界面，如何显示gif  ，与音乐合成
-
-//                        Intent intent=new Intent(TCVideoEditerActivity.this, FaBuActivity.class);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
-//                        intent.putExtra("mid",mid);
-//                        if (s != null)
-//                            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
-//                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
-//                        startActivity(intent);
-//                        finish();
-
-
-
-                    }
-                });
-            }
-        }).start();
-    }
-
-    private String getGifFilePath() {
-        File dir = new File("/sdcard/TXUGC/");
-        if (!dir.exists()) {
-            dir.mkdirs();
-        }
-        File f = new File(dir, "GifExample.gif");
-        if (f.exists()) {
-            f.delete();
-        }
-        return f.getAbsolutePath();
-    }
+//    private String getGifFilePath() {
+//        File dir = new File("/sdcard/TXUGC/");
+//        if (!dir.exists()) {
+//            dir.mkdirs();
+//        }
+//        File f = new File(dir, "GifExample.gif");
+//        if (f.exists()) {
+//            f.delete();
+//        }
+//        return f.getAbsolutePath();
+//    }
 
     private void startGenerateVideo() {
-        if (mGifStart) {
-            Toast.makeText(TCVideoEditerActivity.this, "正在生成gif，请稍后", Toast.LENGTH_SHORT).show();
-            return;
-        }
+//        if (mGifStart) {
+//            Toast.makeText(TCVideoEditerActivity.this, "正在生成gif，请稍后", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
         // 处于生成状态
         mCurrentState = PlayState.STATE_GENERATE;
         // 防止

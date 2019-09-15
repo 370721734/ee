@@ -177,7 +177,8 @@ dependencies {
 
     implementation 'com.github.lzyzsd:jsbridge:1.0.4'
     implementation files('libs/TencentLocationSdk_v7.1.6.1_r67ba7298_20190409_142648.jar')
-
+    //视频缓存
+    implementation 'com.danikula:videocache:2.7.1'
 
 //
 

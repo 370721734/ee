@@ -30,6 +30,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
@@ -1007,6 +1008,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
          Uri uri = Uri.parse(vedio.getVideo_img());
          mTikTokController.getThumb().setImageURI(uri);
          */
+
+//        Log.e("-----------------url=",vedio.getUrl());
         viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
         if (viewplaypause != null) {
             viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
@@ -1019,8 +1022,18 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 .into(mTikTokController.getThumb());
 
         View itemView = recyclerView.getChildAt(0);
-        //设置播放的url
-        mVideoView.setUrl(vedio.getUrl());
+
+        HttpProxyCacheServer proxy = GlobalApplication.getProxy(getActivity());
+        String proxyUrl = proxy.getProxyUrl(vedio.getUrl());
+//        Log.e("----------------hurl=",proxyUrl);
+//        Log.e("----------------vurl=",vedio.getUrl());
+        if (proxyUrl.length()>0){
+            mVideoView.setUrl(proxyUrl);
+        }else {
+            //设置播放的url
+            mVideoView.setUrl(vedio.getUrl());
+        }
+
         //重要
         mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         //获取视频宽高,其中width: mVideoSize[0], height: mVideoSize[1]

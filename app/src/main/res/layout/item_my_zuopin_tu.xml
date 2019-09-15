@@ -23,14 +23,20 @@
             android:visibility="visible" />
     </FrameLayout>
 
-    <ImageView
-        android:id="@+id/iv_del"
-        android:layout_width="16dp"
-        android:layout_height="16dp"
+    <RelativeLayout
+        android:id="@+id/rl_delete"
+        android:layout_width="20dp"
         android:layout_alignParentRight="true"
-        android:layout_marginTop="7dp"
-        android:layout_marginRight="@dimen/dp_10"
-        android:src="@mipmap/my_del" />
+        android:layout_height="20dp">
+        <ImageView
+            android:id="@+id/iv_del"
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginTop="7dp"
+            android:layout_marginRight="@dimen/dp_10"
+            android:src="@mipmap/my_del" />
+    </RelativeLayout>
+
 
     <ImageView
         android:id="@+id/iv_xin"

@@ -407,4 +407,9 @@ public interface Api {
 
 
 
+    //删除视频
+    @FormUrlEncoded
+    @POST("web/index/delvideo")
+    Call<ResponseBody> delvideo(@Field("token") String token,@Field("id") Integer id);
+
 }

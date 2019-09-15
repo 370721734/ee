@@ -291,6 +291,8 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         }
         if (locationManager!=null)
         locationManager.removeUpdates(listener);
+
+
     }
 
     @Override
@@ -530,16 +532,14 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //                Log.e("---location:1", location.getAddress() + "," + error + "," + reason + "," + location.getLatitude());
 
 
-                Log.e("---location:2",location.getCity()+location.getProvince());//深圳市
+//                Log.e("---location:2",location.getCity()+location.getProvince());//深圳市
                 if (TencentLocation.ERROR_OK == error) {
                     isdingweiok=true;
-                    Log.e("------", "成1功"+location.getCity());
-                    app.setCITY(location.getCity());
-                    EventBus.getDefault().post(new AddressBean((location.getCity()).replace("市","")));
-//                    MyApplication.getInstance().setCITY("天津市");
-//
-//
-//
+//                    Log.e("------", "成1功"+location.getCity());
+                    if (location!=null && location.getCity()!=null && location.getCity().length()>0){
+                        app.setCITY(location.getCity());
+                        EventBus.getDefault().post(new AddressBean((location.getCity()).replace("市","")));
+                    }
 //
 //                    //-: 成1功
 //                    //location:: 广东省深圳市宝安区沙井镇上星村河宾南路上星大厦正东方向196米,0,OK
@@ -559,7 +559,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //                        Log.e("------", "mmmmmm");
 //                    }
                 } else {
-                    Log.e("------", "失1败"+error+"   "+reason);
+//                    Log.e("------", "失1败"+error+"   "+reason);
                     isdingweiok=false;
 
                 }

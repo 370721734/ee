@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
@@ -28,6 +30,9 @@ import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
+import org.json.JSONObject;
+
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +41,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import me.yokeyword.fragmentation.SupportFragment;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -78,6 +84,24 @@ public class FragmentZuoping extends SupportFragment {
     }
 
     @Override
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if (!hidden){
+//            page = 1;
+//            initDate();
+            Log.e("----------zuoping","onHiddenChanged");
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.e("----------zuoping","onResume");
+        page = 1;
+        initDate();
+    }
+
+    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
@@ -87,8 +111,7 @@ public class FragmentZuoping extends SupportFragment {
         linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
         rlv.addItemDecoration(linearItemDecoration);
 
-        page = 1;
-        initDate();
+
 
 
         mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -113,15 +136,9 @@ public class FragmentZuoping extends SupportFragment {
 
     }
 
-    //        CustomProgressDialog dialog = new CustomProgressDialog();
     private Dialog dialog;
     Call<MyFaBuBean> calls = null;
-
     private void initDate() {
-//        dialog.createLoadingDialog(getActivity(), "正在加载...");
-//        dialog.show();
-//        Log.e("-------------","page"+page);
-
         dialog = new Dialog(getActivity(), R.style.progress_dialog);
         dialog.setContentView(R.layout.dialog);
         dialog.setCancelable(true);
@@ -142,10 +159,6 @@ public class FragmentZuoping extends SupportFragment {
                                 wangluoyichang.setVisibility(View.GONE);
                                 mSwipeLayout.setVisibility(View.VISIBLE);
                                 itemlist = response.body().getData();
-
-//                                    adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
-//                                    rlv.setAdapter(adapter);
-
                                 if (page == 1) {
                                     list.clear();
                                     list.addAll(itemlist);
@@ -190,9 +203,61 @@ public class FragmentZuoping extends SupportFragment {
     ZuoPingAdapter.Myclick myclickdele = new ZuoPingAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------1", "" + position);
+//            Log.e("-------1", "" + position);
+            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity(),R.style.loading_dialog);
+            View layout=View.inflate(getActivity(),R.layout.item_delete_video,null);
+            builder.setView(layout);
+            Dialog dialog=builder.create();
+            TextView cancle=layout.findViewById(R.id.cancle);
+            TextView submit=layout.findViewById(R.id.submit);
+            cancle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dialog.dismiss();
+                }
+            });
+            submit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deletevideo(list.get(position).getVideo_id());
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
         }
     };
+
+    private void deletevideo(int video_id) {
+        RetrofitManager.getInstance().getDataServer().delvideo(SharePreferenceUtil.getToken(AppUtils.getContext()),video_id).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        String json=response.body().string();
+//                        Log.e("--------",json);
+                        JSONObject object=new JSONObject(json);
+                        int code=object.optInt("code");
+                        String msg=object.optString("msg");
+                        if (code==200){
+                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                            initDate();
+                            adapter.notifyDataSetChanged();//??
+                        }else {
+                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
 
     ZuoPingAdapter.Myclick myclicktu = new ZuoPingAdapter.Myclick() {
         @Override

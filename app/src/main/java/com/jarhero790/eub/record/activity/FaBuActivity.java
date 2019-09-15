@@ -240,15 +240,15 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 bodyMap.put("description", description);
 
 
-                RequestBody bo = new MultipartBody.Builder()
-                        .addFormDataPart("token", "d2bb986529ba01f3d42d676dfb63ac4f")
-                        .addFormDataPart("mid", "229")
-                        .addFormDataPart("img", img)
-                        .addFormDataPart("title", "title")
-
-//                        .addFormDataPart("file", file.getName(), traceBody)
-                        .build();
-                MultipartBody.Part myBody = MultipartBody.Part.createFormData("file", file.getName(), bo);
+//                RequestBody bo = new MultipartBody.Builder()
+//                        .addFormDataPart("token", "d2bb986529ba01f3d42d676dfb63ac4f")
+//                        .addFormDataPart("mid", "229")
+//                        .addFormDataPart("img", img)
+//                        .addFormDataPart("title", "title")
+//
+////                        .addFormDataPart("file", file.getName(), traceBody)
+//                        .build();
+//                MultipartBody.Part myBody = MultipartBody.Part.createFormData("file", file.getName(), bo);
 
 //                bodyMap.put("file",yfile);
 

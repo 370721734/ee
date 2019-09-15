@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.os.Handler;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
+import com.dueeeke.videoplayer.player.AndroidMediaPlayerFactory;
+import com.dueeeke.videoplayer.player.PlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
 import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -15,6 +19,7 @@ import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.UserCen;
 import com.jarhero790.eub.message.net.RetrofitManager;
+import com.jarhero790.eub.message.souye.MyFileNameGenerator;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.ugc.TXUGCBase;
@@ -30,6 +35,27 @@ import static android.provider.UserDictionary.Words.APP_ID;
 
 
 public class GlobalApplication extends Application {
+
+    private HttpProxyCacheServer proxy;
+
+    public static HttpProxyCacheServer getProxy(Context context) {
+        GlobalApplication app = (GlobalApplication) context.getApplicationContext();
+        return app.proxy == null ? (app.proxy = app.newProxy()) : app.proxy;
+    }
+
+    private HttpProxyCacheServer newProxy() {
+        return new HttpProxyCacheServer.Builder(this)
+                .maxCacheSize(1024 * 1024 * 1024)       // 1 Gb for cache
+                .fileNameGenerator(new MyFileNameGenerator())
+                .build();
+    }
+
+
+
+
+
+
+
     protected static Context context;
     protected static Handler handler;
     protected static int mainThreadId;
@@ -61,10 +87,12 @@ public class GlobalApplication extends Application {
         RetrofitManager.getInstance().init(context);
 
         LoginManger.getInstance().init(this,iLoginFilter);
-        IjkPlayerFactory ijkPlayerFactory=IjkPlayerFactory.create(this);
+//        IjkPlayerFactory ijkPlayerFactory=IjkPlayerFactory.create(this);
+        PlayerFactory playerFactory;
+        playerFactory= AndroidMediaPlayerFactory.create(this);
         VideoViewManager.setConfig(VideoViewConfig.newBuilder()
                 //使用使用IjkPlayer解码
-                .setPlayerFactory(ijkPlayerFactory)
+                .setPlayerFactory(playerFactory)
                 //.setPlayerFactory(ExoMediaPlayerFactory.create(this))
                 //.setEnableMediaCodec(true)
                 //.setUsingSurfaceView(true)
@@ -220,4 +248,6 @@ public class GlobalApplication extends Application {
     public void setCITY(String CITY) {
         this.CITY = CITY;
     }
+
+
 }
