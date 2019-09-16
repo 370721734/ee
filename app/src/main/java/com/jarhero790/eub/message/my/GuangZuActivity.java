@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.my;
 
+import android.app.Dialog;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
@@ -50,13 +51,14 @@ public class GuangZuActivity extends AppCompatActivity {
     RelativeLayout wangluoyichang;
 
     LinearLayoutManager layoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_guang_zu);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
-        layoutManager=new LinearLayoutManager(this);
+        layoutManager = new LinearLayoutManager(this);
         rlv.setLayoutManager(layoutManager);
         LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
         linearItemDecoration.setSpanSpace(20);
@@ -66,37 +68,41 @@ public class GuangZuActivity extends AppCompatActivity {
         initDate();
     }
 
-//    CustomProgressDialog dialog = new CustomProgressDialog();
-    retrofit2.Call<GuangZuBean> calls=null;
+    private Dialog dialog;
+    retrofit2.Call<GuangZuBean> calls = null;
+
     private void initDate() {
-//        dialog.createLoadingDialog(this, "正在加载...");
-//        dialog.show();
+        dialog = new Dialog(this, R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().mylike(SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<GuangZuBean>() {
                     @Override
                     public void onResponse(Call<GuangZuBean> call, Response<GuangZuBean> response) {
-                        calls=call;
+                        calls = call;
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
-                            if (response.body().getCode() == 200) {
-                                Log.e("---?",response.body().getData().size()+"");
-                                    list.clear();
-                                    nodingdan.setVisibility(View.GONE);
-                                    wangluoyichang.setVisibility(View.GONE);
-                                    rlv.setVisibility(View.VISIBLE);
-                                    list = response.body().getData();
+                            dialog.dismiss();
+                            if (response.body() != null && response.body().getCode() == 200) {
+//                                Log.e("---?",response.body().getData().size()+"");
+                                list.clear();
+                                nodingdan.setVisibility(View.GONE);
+                                wangluoyichang.setVisibility(View.GONE);
+                                rlv.setVisibility(View.VISIBLE);
+                                list = response.body().getData();
 //                                    GridLayoutManager manager = new GridLayoutManager(GuangZuActivity.this, 1);
 //                                    rlv.setLayoutManager(manager);
-                                    adapter = new GuangZuAdapter(GuangZuActivity.this, list, myclick, touclick, speak);
-                                    rlv.setAdapter(adapter);
+                                adapter = new GuangZuAdapter(GuangZuActivity.this, list, myclick, touclick, speak);
+                                rlv.setAdapter(adapter);
 
-                            }else {
+                            } else {
                                 nodingdan.setVisibility(View.VISIBLE);
                                 wangluoyichang.setVisibility(View.GONE);
                                 rlv.setVisibility(View.GONE);
                             }
                         } else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                             rlv.setVisibility(View.GONE);
@@ -105,14 +111,13 @@ public class GuangZuActivity extends AppCompatActivity {
 
                     @Override
                     public void onFailure(Call<GuangZuBean> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                         rlv.setVisibility(View.GONE);
                     }
                 });
     }
-
 
 
     GuangZuAdapter.Myclick myclick = new GuangZuAdapter.Myclick() {
@@ -141,7 +146,6 @@ public class GuangZuActivity extends AppCompatActivity {
             }
         }
     };
-
 
 
     @OnClick({R.id.back, R.id.wangluoyichang})
@@ -196,7 +200,7 @@ public class GuangZuActivity extends AppCompatActivity {
     @Override
     protected void onStop() {
         super.onStop();
-        if (calls!=null){
+        if (calls != null) {
             calls.cancel();
         }
     }

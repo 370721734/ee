@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-class AttentionUsersAdapter extends RecyclerView.Adapter<AttentionUsersAdapter.CustomViewHolder> {
+public class AttentionUsersAdapter extends RecyclerView.Adapter<AttentionUsersAdapter.CustomViewHolder> {
     private ArrayList<AttentionUser> attentionUsers;
 
     private Context mcontext;
@@ -30,7 +30,7 @@ class AttentionUsersAdapter extends RecyclerView.Adapter<AttentionUsersAdapter.C
 
     @Override
     public CustomViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        CustomViewHolder holder = new CustomViewHolder(LayoutInflater.from(AppUtils.getContext()).inflate(R.layout.item_attention_users, parent,
+        CustomViewHolder holder = new CustomViewHolder(LayoutInflater.from(mcontext).inflate(R.layout.item_attention_users, parent,
                 false));
         return holder;
     }
@@ -38,10 +38,13 @@ class AttentionUsersAdapter extends RecyclerView.Adapter<AttentionUsersAdapter.C
     @Override
     public void onBindViewHolder(CustomViewHolder holder, int position) {
         holder.attentionsUserName.setText(attentionUsers.get(position).getNickname());
-        if (attentionUsers.get(position).getHeadimgurl().startsWith("http")){
+
+        if (attentionUsers!=null && attentionUsers.get(position).getHeadimgurl()!=null && attentionUsers.get(position).getHeadimgurl().startsWith("http")){
+            Log.e("-------------------headimgurl=",attentionUsers.get(position).getHeadimgurl());
             Glide.with(AppUtils.getContext()).load(attentionUsers.get(position).getHeadimgurl()).apply(new RequestOptions()
                     .placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(holder.attentionsUserIcon);
         }else {
+
             Glide.with(AppUtils.getContext()).load(Api.TU+attentionUsers.get(position).getHeadimgurl()).apply(new RequestOptions()
                     .placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(holder.attentionsUserIcon);
         }

@@ -2,6 +2,7 @@ package com.jarhero790.eub.message.my;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.database.Cursor;
@@ -242,10 +243,14 @@ public class SettingActivity extends AppCompatActivity {
             Glide.with(this).load(Api.TU + headim).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(ivUserimage);
         }
 
-        if (addres != null)
+        if (addres != null){
             tvAddress.setText(addres);
+        }else {
+            tvAddress.setText("深圳市龙岗区");
+        }
 
-        Log.e("--------", name + sign + sex);
+
+//        Log.e("--------", name + sign + sex);
 
         if (name != null)
             tvName.setText(name);
@@ -392,7 +397,7 @@ public class SettingActivity extends AppCompatActivity {
 
     private void exitmeth() {
         if (!SharePreferenceUtil.getUserid(AppUtils.getContext()).equals("")){
-            Log.e("---------------exit-",SharePreferenceUtil.getUserid(AppUtils.getContext()));
+//            Log.e("---------------exit-",SharePreferenceUtil.getUserid(AppUtils.getContext()));
             RetrofitManager.getInstance().getDataServer().logout(SharePreferenceUtil.getUserid(AppUtils.getContext()))
                     .enqueue(new Callback<ResponseBody>() {
                         @Override
@@ -400,7 +405,7 @@ public class SettingActivity extends AppCompatActivity {
                             if (response.isSuccessful()){
                                 try {
                                     String json=response.body().string();
-                                    Log.e("----------",json);
+//                                    Log.e("----------",json);
                                     JSONObject object=new JSONObject(json);
                                     int code=object.optInt("code");
                                     String msg=object.optString("msg");
@@ -505,9 +510,9 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    private Uri imageUri;
-    private String photoPath;
-    Bitmap bitmaptu;
+//    private Uri imageUri;
+//    private String photoPath;
+//    Bitmap bitmaptu;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -619,9 +624,9 @@ public class SettingActivity extends AppCompatActivity {
             // 图片选择结果回调
             selectList = PictureSelector.obtainMultipleResult(data);
             if (selectList.size() > 0) {
-                for (int i = 0; i < selectList.size(); i++) {
-                    Log.e("----compresspath12:--", selectList.get(i).getCompressPath());
-                }
+//                for (int i = 0; i < selectList.size(); i++) {
+//                    Log.e("----compresspath12:--", selectList.get(i).getCompressPath());
+//                }
 
                 Bitmap bitmap=BitmapFactory.decodeFile(selectList.get(0).getCompressPath());
                 headimgurls = CommonUtil.convertIconToString(bitmap);
@@ -633,13 +638,13 @@ public class SettingActivity extends AppCompatActivity {
     }
 
     @SuppressWarnings("deprecation")
-    public String getRealPathFromURI(Uri contentUri) {
-        String[] proj = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        return cursor.getString(column_index);
-    }
+//    public String getRealPathFromURI(Uri contentUri) {
+//        String[] proj = {MediaStore.Images.Media.DATA};
+//        Cursor cursor = managedQuery(contentUri, proj, null, null, null);
+//        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+//        cursor.moveToFirst();
+//        return cursor.getString(column_index);
+//    }
 
 //    private void setImageBitmap() {
 //        //获取imageview的宽和高
@@ -793,19 +798,22 @@ public class SettingActivity extends AppCompatActivity {
 
 
     }
-//    CustomProgressDialog dialog=new CustomProgressDialog();
+private Dialog dialog;
     private void editinfo(String sign, String nickname, String sex, String city, String headimg) {
-//        dialog.createLoadingDialog(this,"正在加载...");
-//        dialog.show();
+        dialog = new Dialog(this, R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().editinfo(SharePreferenceUtil.getToken(AppUtils.getContext()), sign, nickname, sex, city, headimg)
                 .enqueue(new Callback<ResponseBody>() {
                     @Override
                     public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             try {
                                 String json = response.body().string();
-                                Log.e("--------a=>", json);
+//                                Log.e("--------a=>", json);
 //                                {"code":200,"data":null,"msg":"\u6210\u529f"}
                                 JSONObject object = new JSONObject(json);
                                 int code = object.optInt("code");
@@ -820,14 +828,14 @@ public class SettingActivity extends AppCompatActivity {
                                 e.printStackTrace();
                             }
                         }else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseBody> call, Throwable t) {
 //                        Toast.makeText(SettingActivity.this,"网络请求异常",Toast.LENGTH_SHORT).show();
-//                        dialog.dismiss();
+                        dialog.dismiss();
                     }
                 });
     }

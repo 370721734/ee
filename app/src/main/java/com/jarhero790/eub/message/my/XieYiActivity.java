@@ -46,7 +46,8 @@ public class XieYiActivity extends AppCompatActivity {
 //        settings.setDefaultTextEncodingName("utf-8");
         webView.setWebViewClient(new WebViewClient());
 
-        webView.loadUrl("http://120.79.222.191/zstv/public/index.php/user/index/index.html");
+//        webView.loadUrl("http://120.79.222.191/zstv/public/index.php/user/index/index.html");
+        webView.loadUrl("http://www.51ayhd.com/user/index/index.html");
 
     }
 

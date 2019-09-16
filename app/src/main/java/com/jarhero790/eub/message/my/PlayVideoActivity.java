@@ -614,7 +614,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 
     private void attentions(Button button) {
 
-        RetrofitManager.getInstance().getDataServer().attentionUserTwo(list.get(mCurrentPosition).getId()+"",SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+        RetrofitManager.getInstance().getDataServer().attentionUserTwo(list.get(mCurrentPosition).getUid()+"",SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()){

@@ -9,7 +9,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.danikula.videocache.HttpProxyCacheServer;
-import com.dueeeke.videoplayer.ijk.IjkPlayerFactory;
 import com.dueeeke.videoplayer.player.AndroidMediaPlayerFactory;
 import com.dueeeke.videoplayer.player.PlayerFactory;
 import com.dueeeke.videoplayer.player.VideoViewConfig;
@@ -31,7 +30,6 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.plugins.RxJavaPlugins;
 import io.rong.imkit.RongIM;
 
-import static android.provider.UserDictionary.Words.APP_ID;
 
 
 public class GlobalApplication extends Application {

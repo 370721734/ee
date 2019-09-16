@@ -134,7 +134,7 @@
             android:id="@+id/submit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="99dp"
+            android:layout_marginTop="59dp"
             android:background="@drawable/login_text_bg"
             android:gravity="center"
             android:text="登陆"
@@ -143,6 +143,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_xieyi"
             android:layout_width="wrap_content"
             android:layout_height="15dp"
             android:layout_marginTop="12dp"
@@ -152,7 +153,6 @@
             <ImageView
                 android:layout_width="11dp"
                 android:layout_height="11dp"
-
                 android:src="@mipmap/userface_icon" />
 
             <TextView

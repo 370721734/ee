@@ -45,6 +45,7 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
@@ -64,6 +65,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -74,6 +76,10 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 //1.动画旋转问题
 //2分享，
@@ -468,9 +474,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
      */
     @Override
     public void updateAttentionUser() {
-        View view = layoutManager.findViewByPosition(mCurrentPosition);
-        Button btnAttention = view.findViewById(R.id.btn_attention);
-        btnAttention.setText("已关注");
+//        View view = layoutManager.findViewByPosition(mCurrentPosition);
+//        Button btnAttention = view.findViewById(R.id.btn_attention);
+//        btnAttention.setText("已关注");
     }
 
 
@@ -689,7 +695,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
-                        attention(lists.get(position).getUid(), SharePreferenceUtil.getToken(AppUtils.getContext()));
+//                        attention(lists.get(position).getUid(), SharePreferenceUtil.getToken(AppUtils.getContext()));
+
+                        Button button= (Button) view;
+                        attentions(button);
+
                     }
 
                 } else if (type.equals("红心")) {
@@ -831,12 +841,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     @LoginFilter
     public void attention(String build, String token) {
-        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
-
-            mPresenter.attentionUser(build, token);
-        }else {
-            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
-        }
+//        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+//
+//            mPresenter.attentionUser(build, token);
+//        }else {
+//            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+//        }
     }
 
 
@@ -1261,6 +1271,40 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     public void setIszanle(boolean iszanle) {
         this.iszanle = iszanle;
+    }
+
+
+
+    private void attentions(Button button) {
+
+        RetrofitManager.getInstance().getDataServer().attentionUserTwo(lists.get(mCurrentPosition).getUid()+"",SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        String json=response.body().string();
+                        JSONObject object=new JSONObject(json);
+                        int code=object.optInt("code");
+                        if (code==200){
+                            JSONObject data=object.optJSONObject("data");
+                            String islike=data.optString("is_like");
+                            if (islike.equals("1")){
+                                button.setText("已关注");
+                            }else {
+                                button.setText("+关注");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 
 

@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,7 +21,7 @@ import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.base.AppManager;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.eventbus.MessageEventUser;
-import com.jarhero790.eub.message.bean.Userbean;
+import com.jarhero790.eub.message.my.XieYiActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
@@ -58,6 +59,8 @@ public class LoginPhoneActivity extends AppCompatActivity {
     EditText etPassword;
     @BindView(R.id.submit)
     TextView submit;
+    @BindView(R.id.ll_xieyi)
+    LinearLayout llXieyi;
 
     private TimeCount time;//定时
 
@@ -73,11 +76,11 @@ public class LoginPhoneActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         AppManager.getAppManager().addActivity(this);
         time = new TimeCount(60000, 1000);
-        app= (GlobalApplication) getApplication();
+        app = (GlobalApplication) getApplication();
 
     }
 
-    @OnClick({R.id.back, R.id.tv_ma, R.id.submit})
+    @OnClick({R.id.back, R.id.tv_ma, R.id.submit,R.id.ll_xieyi})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -99,7 +102,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
 
                         try {
-                          //{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
+                            //{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
                             String result = response.body().string();
                             Log.e("-----1:", result);
                             JSONObject jsonObject = new JSONObject(result);
@@ -108,7 +111,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
                             Log.e("注册结果msg值", msg);
                             if (code == 200) {
                                 JSONObject data = jsonObject.optJSONObject("data");
-                                msgid=data.optString("msgId");
+                                msgid = data.optString("msgId");
 //                                Log.e("----------2:",msgid);//ok
 
                                 Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
@@ -160,18 +163,18 @@ public class LoginPhoneActivity extends AppCompatActivity {
                     Toast.makeText(this, "验证码不能为空", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (msgid==null || msgid.equals("")){
+                if (msgid == null || msgid.equals("")) {
                     Toast.makeText(this, "验证码不能为空", Toast.LENGTH_LONG).show();
                     return;
                 }
 
-                Log.e("---------3",userphone2+"  "+ma+"  "+ msgid);
+                Log.e("---------3", userphone2 + "  " + ma + "  " + msgid);
                 //通过RequestBody.create 创建requestBody对象
                 RequestBody requestBody2 = new MultipartBody.Builder()
                         .setType(MultipartBody.FORM)
                         .addFormDataPart("mobile", etPhone.getEditableText().toString())
-                        .addFormDataPart("msgId",msgid)
-                        .addFormDataPart("smg_code",etPassword.getEditableText().toString())
+                        .addFormDataPart("msgId", msgid)
+                        .addFormDataPart("smg_code", etPassword.getEditableText().toString())
                         .build();
                 OkHttpClient okHttpClient2 = new OkHttpClient();
                 Request request2 = new Request.Builder().url(Api.HOST + "user/Login/login").post(requestBody2).build();
@@ -243,16 +246,19 @@ public class LoginPhoneActivity extends AppCompatActivity {
                 });
 
                 break;
+            case R.id.ll_xieyi:
+                startActivity(new Intent(this, XieYiActivity.class));
+                break;
         }
 
 
     }
 
     private void successBusinese(String data) {
-        Gson gson=new Gson();
+        Gson gson = new Gson();
         UserBean userBean = gson.fromJson(data, UserBean.class);
         //把token保存在SharePreference
-        SharePreferenceUtil.setToken(userBean.getData().getToken(),AppUtils.getContext());
+        SharePreferenceUtil.setToken(userBean.getData().getToken(), AppUtils.getContext());
         app.setUserbean(userBean);
         //发送  在MineFragment中接收
         EventBus.getDefault().post(new MessageEventUser(userBean));

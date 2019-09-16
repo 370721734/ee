@@ -58,7 +58,7 @@
             android:id="@+id/phoneLogin"
             android:layout_width="230dp"
             android:layout_height="40dp"
-            android:layout_marginTop="196dp"
+            android:layout_marginTop="156dp"
             android:background="@drawable/button_shape4"
             android:text="手机号码登录"
             android:textColor="#ffffff"
@@ -77,7 +77,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="67dp"
+            android:layout_marginTop="57dp"
             >
 
 

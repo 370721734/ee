@@ -154,7 +154,7 @@ private Dialog dialog;
                         if (response.isSuccessful()) {
                             dialog.dismiss();
                             if (response.body()!=null && response.body().getData()!=null){
-                                Log.e("--------------","size="+response.body().getData().size());
+//                                Log.e("--------------","size="+response.body().getData().size());
                                 itemlist.clear();
                                 mSwipeLayout.setVisibility(View.VISIBLE);
                                 rlv.setVisibility(View.VISIBLE);

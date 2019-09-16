@@ -24,7 +24,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder> {
 
 
-
     private Context context;
     private List<GuangZuBean.DataBean> list;
     private Myclick myclick;
@@ -49,8 +48,23 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         GuangZuBean.DataBean bean = list.get(position);
-        Glide.with(context).load(Api.TU + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
-        myHolder.tvName.setText(bean.getNickname());
+
+        if (bean.getId()!=0){
+//            myHolder.speak.setVisibility(View.VISIBLE);
+            myHolder.tvName.setText(bean.getNickname());
+            myHolder.tvmemo.setText(bean.getSign());
+            if (bean.getHeadimgurl().startsWith("http")){
+                Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+            }else{
+                Glide.with(context).load(Api.TU + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+            }
+
+        }
+//        else {
+//            myHolder.speak.setVisibility(View.GONE);
+//        }
+
+
 
 //        if (bean.getAddtime().length() > 10) {
 //            myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));
@@ -70,8 +84,6 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
         myHolder.speak.setOnClickListener(speak);
 
 
-
-
     }
 
 
@@ -87,7 +99,23 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
 
     @Override
     public int getItemCount() {
-        return list.size();
+//        if (list==null){
+//            return list.size()=0;
+//        }else {
+//
+//        }
+//        if (list==null)
+//            return 0;
+//        if (list.size()>0){
+//            for (int i = 0; i < list.size(); i++) {
+//                if (list.get(i).getId()!=0){
+//
+//                }
+//            }
+//        }
+
+
+        return list==null?0:list.size();
     }
 
     class MyHolder extends RecyclerView.ViewHolder {
@@ -95,6 +123,8 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
         CircleImageView touImage;
         @BindView(R.id.tv_name)
         TextView tvName;
+        @BindView(R.id.tv_memo)
+        TextView tvmemo;
         @BindView(R.id.tv_time)
         TextView tvTime;
         @BindView(R.id.tv_guanzu)
@@ -103,6 +133,7 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
         RelativeLayout rlAll;
         @BindView(R.id.speak)
         RelativeLayout speak;
+
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);

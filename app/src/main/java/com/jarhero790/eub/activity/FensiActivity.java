@@ -1,6 +1,7 @@
 package com.jarhero790.eub.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -77,6 +78,11 @@ public class FensiActivity extends Activity {
 //        EventBus.getDefault().register(this);
         recyclerViewFensi = findViewById(R.id.recyclerViewFensi);
         CommonUtil.setStatusBarTransparent(this);
+        GridLayoutManager manager = new GridLayoutManager(FensiActivity.this, 1);
+        recyclerViewFensi.setLayoutManager(manager);
+        LinearItemDecoration itemDecoration = new LinearItemDecoration();
+        itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+        recyclerViewFensi.addItemDecoration(itemDecoration);
 //        getfensi();
         getfensitwo();
 
@@ -103,18 +109,21 @@ public class FensiActivity extends Activity {
 
     }
 
-//    CustomProgressDialog dialog = new CustomProgressDialog();
+private Dialog dialog;
     retrofit2.Call<FenSiTBean> calls=null;
 
     private void getfensitwo() {
-//        dialog.createLoadingDialog(this, "正在加载...");
-//        dialog.show();
+        dialog = new Dialog(this, R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().getfensi(SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new retrofit2.Callback<FenSiTBean>() {
             @Override
             public void onResponse(retrofit2.Call<FenSiTBean> call, retrofit2.Response<FenSiTBean> response) {
                 calls=call;
                 if (response.isSuccessful()) {
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     int code = response.body().getCode();
                     if (code == 200) {
                         arrayList.clear();
@@ -124,11 +133,7 @@ public class FensiActivity extends Activity {
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.GONE);
                             recyclerViewFensi.setVisibility(View.VISIBLE);
-                            GridLayoutManager manager = new GridLayoutManager(FensiActivity.this, 1);
-                            recyclerViewFensi.setLayoutManager(manager);
-                            LinearItemDecoration itemDecoration = new LinearItemDecoration();
-                            itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                            recyclerViewFensi.addItemDecoration(itemDecoration);
+
                             feiSiAdapter = new FeiSiAdapter(FensiActivity.this, arrayList, myclick, touclick, speak);
                             recyclerViewFensi.setAdapter(feiSiAdapter);
                         } else {
@@ -139,7 +144,7 @@ public class FensiActivity extends Activity {
 
                     }
                 } else {
-//                    dialog.dismiss();
+                    dialog.dismiss();
                     nodingdan.setVisibility(View.GONE);
                     wangluoyichang.setVisibility(View.VISIBLE);
                     recyclerViewFensi.setVisibility(View.GONE);
@@ -148,7 +153,7 @@ public class FensiActivity extends Activity {
 
             @Override
             public void onFailure(retrofit2.Call<FenSiTBean> call, Throwable t) {
-//                dialog.dismiss();
+                dialog.dismiss();
                 nodingdan.setVisibility(View.GONE);
                 wangluoyichang.setVisibility(View.VISIBLE);
                 recyclerViewFensi.setVisibility(View.GONE);

@@ -53,13 +53,13 @@
                 android:id="@+id/iv_like"
                 android:layout_width="33dp"
                 android:layout_height="31dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:background="@drawable/zanselector" />
             <TextView
                 android:id="@+id/tv_like"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="20dp"
                 android:text="0"
                 android:textColor="#F4F0F0"
                 android:textSize="12sp" />
@@ -68,14 +68,14 @@
                 android:id="@+id/iv_gold_coin"
                 android:layout_width="23dp"
                 android:layout_height="35dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:src="@mipmap/iv_gold_coin" />
 
             <TextView
                 android:id="@+id/tv_gold_coin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="20dp"
                 android:text="0"
                 android:textColor="#F4F0F0"
                 android:textSize="12sp" />
@@ -84,14 +84,14 @@
                 android:id="@+id/iv_commit"
                 android:layout_width="30dp"
                 android:layout_height="29dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:src="@mipmap/icon_video_commit" />
 
             <TextView
                 android:id="@+id/tv_pinglun"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="20dp"
                 android:text="0"
                 android:textColor="#F4F0F0"
                 android:textSize="12sp" />
@@ -100,7 +100,7 @@
                 android:id="@+id/iv_gift"
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:layout_marginBottom="25dp"
+                android:layout_marginBottom="20dp"
                 android:src="@mipmap/gift" />
 
 
@@ -108,27 +108,27 @@
                 android:id="@+id/iv_share"
                 android:layout_width="25dp"
                 android:layout_height="24dp"
-                android:layout_marginBottom="55dp"
+                android:layout_marginBottom="25dp"
                 android:src="@mipmap/icon_video_share" />
 
 
             <RelativeLayout
-                android:layout_width="70dp"
+                android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/circleImageView"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
                     android:layout_marginBottom="13dp"
+                    android:background="@mipmap/guangpan_icon"
+                    android:padding="12dp"
                     android:src="@mipmap/music"
-                    android:visibility="visible"
-                    app:civ_border_width="5dp"
-                    app:civ_circle_background_color="@color/guangpan" />
+                    android:visibility="visible" />
 
                 <com.jarhero790.eub.widget.Music
                     android:id="@+id/m"

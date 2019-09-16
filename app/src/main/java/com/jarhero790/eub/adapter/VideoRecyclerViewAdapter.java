@@ -3,6 +3,7 @@ package com.jarhero790.eub.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.dueeeke.videocontroller.StandardVideoController;
+import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.AttentionUserVideosComment;
@@ -104,10 +108,31 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         AttPinLAdapter attPinLAdapter=new AttPinLAdapter(mcontext,comment);
         holder.listView.setAdapter(attPinLAdapter);
 
+        holder.ivdeault.setVisibility(View.VISIBLE);
+        HttpProxyCacheServer proxy = GlobalApplication.getProxy(mcontext);
+        String proxyUrl = proxy.getProxyUrl(attentionVideo.getUrl());
+//        Log.e("-------p1=",proxyUrl);
+//        Log.e("-------p2=",attentionVideo.getUrl());
+        if (proxyUrl.length()>0){
+            holder.videoPlayer.setUrl(proxyUrl);
+        }else {
+            holder.videoPlayer.setUrl(attentionVideo.getUrl());
+        }
 
-        holder.videoPlayer.setUrl(attentionVideo.getUrl());
         holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         holder.videoPlayer.start();
+        holder.videoPlayer.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
+            @Override
+            public void onPlayerStateChanged(int playerState) {
+
+            }
+
+            @Override
+            public void onPlayStateChanged(int playState) {
+                holder.ivdeault.setVisibility(View.GONE);
+//                Log.e("-------------","播放来了没有");
+            }
+        });
 
 
         onClick(holder,position);

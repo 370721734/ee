@@ -4,34 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@color/backgroudcolor"
-    >
+    android:orientation="vertical">
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="38dp"
-        android:text="关 注"
         android:layout_marginTop="20dp"
         android:gravity="center"
-        android:textSize="18sp"
+        android:text="关 注"
         android:textColor="#ffffff"
-        />
+        android:textSize="18sp" />
 
 
     <View
         android:layout_width="match_parent"
         android:layout_height="0.3dp"
-        android:background="#A0A0A0"
         android:alpha="0.5"
-        />
+        android:background="#A0A0A0" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/attentionuser_recyclerview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        android:scrollbars="none" />
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:alpha="0.5"
+        android:background="#A0A0A0" />
 
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerViewAttentionUsers"
         android:layout_width="match_parent"
-        android:background="@color/backgroudcolor"
-        android:layout_height="match_parent"/>
+        android:layout_height="match_parent"
+        android:background="@color/backgroudcolor" />
 
 
 </LinearLayout>

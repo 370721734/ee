@@ -23,7 +23,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="张清河"
+            android:text=""
             android:textColor="#ffffffff"
             android:textSize="16sp"
             android:layout_toRightOf="@id/tou_image"
@@ -33,9 +33,10 @@
             />
 
         <TextView
+            android:id="@+id/tv_memo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="关注了你"
+            android:text="钻视tv迭代中，敬请期待更好的..."
             android:layout_toRightOf="@id/tou_image"
             android:layout_below="@id/tv_name"
             android:textColor="#ffa5a4a4"

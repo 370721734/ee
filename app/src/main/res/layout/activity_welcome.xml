@@ -13,11 +13,36 @@
         android:adjustViewBounds="true"/>
 
     <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/gif"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
         android:src="@mipmap/welcometv"
-        android:layout_centerInParent="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="80dp"
         />
+
+    <ImageView
+        android:id="@+id/iv_tv"
+        android:layout_below="@id/gif"
+        android:layout_width="89dp"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="51dp"
+        android:src="@mipmap/tv_weclome"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drilling TV"
+        android:layout_below="@id/iv_tv"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textColor="#ff414141"
+        android:textSize="12sp"
+        />
+
 </RelativeLayout>
