@@ -214,9 +214,84 @@
             android:background="@color/backgroudcolor"
             app:tabGravity="fill"
             app:tabMode="fixed"
+            android:visibility="gone"
             app:tabIndicatorColor="#353BFD"
             app:tabSelectedTextColor="#EFEDED"
             app:tabTextColor="#EFEDED" />
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/backgroudcolor"
+            android:gravity="center_horizontal"
+            android:visibility="visible"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="15dp"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:text="作品"
+                    android:textColor="#EFEDED"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/iv_bot1"
+                    android:layout_width="30dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#353BFD" />
+            </LinearLayout>
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:background="#FFFFFF" />
+
+            <LinearLayout
+                android:id="@+id/ll2"
+                android:layout_width="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="15dp"
+                android:layout_weight="1"
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="25dp"
+                    android:text="喜欢"
+                    android:textColor="#EFEDED"
+                    android:textSize="15sp" />
+
+                <View
+                    android:id="@+id/iv_bot2"
+                    android:layout_width="30dp"
+                    android:layout_height="3dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#353BFD"
+                    android:visibility="invisible" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="#A0A0A0"/>
 
 
     </android.support.design.widget.AppBarLayout>

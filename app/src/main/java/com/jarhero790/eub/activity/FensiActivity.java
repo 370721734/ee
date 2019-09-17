@@ -109,8 +109,8 @@ public class FensiActivity extends Activity {
 
     }
 
-private Dialog dialog;
-    retrofit2.Call<FenSiTBean> calls=null;
+    private Dialog dialog;
+    retrofit2.Call<FenSiTBean> calls = null;
 
     private void getfensitwo() {
         dialog = new Dialog(this, R.style.progress_dialog);
@@ -121,7 +121,7 @@ private Dialog dialog;
         RetrofitManager.getInstance().getDataServer().getfensi(SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new retrofit2.Callback<FenSiTBean>() {
             @Override
             public void onResponse(retrofit2.Call<FenSiTBean> call, retrofit2.Response<FenSiTBean> response) {
-                calls=call;
+                calls = call;
                 if (response.isSuccessful()) {
                     dialog.dismiss();
                     int code = response.body().getCode();
@@ -237,9 +237,9 @@ private Dialog dialog;
         @Override
         public void myClick(int position, View view) {
 //            Log.e("--------2", "" + position + "  " + arrayList.get(position).getUser_id());
-            if (arrayList.get(position).getUser_id()>0){
+            if (arrayList.get(position).getUser_id() > 0) {
                 Intent intent = new Intent(FensiActivity.this, GeRenInfoActivity.class);
-                intent.putExtra("userid", ""+arrayList.get(position).getUser_id()+"");
+                intent.putExtra("userid", "" + arrayList.get(position).getUser_id() + "");
                 startActivity(intent);
             }
 
@@ -330,7 +330,7 @@ private Dialog dialog;
     @Override
     protected void onStop() {
         super.onStop();
-        if (calls!=null){
+        if (calls != null) {
             calls.cancel();
         }
     }

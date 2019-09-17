@@ -132,6 +132,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/tongkuang"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">

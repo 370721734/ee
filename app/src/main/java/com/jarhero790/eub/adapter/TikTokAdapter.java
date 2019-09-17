@@ -309,6 +309,15 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //                Log.e("-----","hehe");
             }
         });
+        //tong
+        holder.tongkuang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+                mOnItemClickListerer.onItemClick(position, "同款", view, view, view);
+//                Log.e("-----","hehe");
+            }
+        });
 //        holder.love.setCallback(new Love.ClickCallBack() {
 //            @Override
 //            public void onClick() {
@@ -388,6 +397,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         TextView caifu;
         Love love;
         RelativeLayout bussiness;
+        RelativeLayout tongkuang;
 
 
         VideoHolder(View itemView) {
@@ -417,6 +427,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
             bussiness=itemView.findViewById(R.id.bussiness);
+            tongkuang=itemView.findViewById(R.id.tongkuang);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.jarhero790.eub.message.message;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -8,9 +9,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.SupportActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -18,17 +17,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.GeRenBean;
-import com.jarhero790.eub.message.contract.ISupp;
 import com.jarhero790.eub.message.net.RetrofitManager;
-
-import com.jarhero790.eub.ui.mine.FragmentLike;
-import com.jarhero790.eub.ui.mine.FragmentZuoping;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -38,7 +32,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
 import java.lang.reflect.Field;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -82,8 +75,20 @@ public class GeRenInfoActivity extends AppCompatActivity {
     FrameLayout container;
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinatorLayout;
+    @BindView(R.id.tv_1)
+    TextView tv1;
+    @BindView(R.id.iv_bot1)
+    View ivBot1;
+    @BindView(R.id.ll1)
+    LinearLayout ll1;
+    @BindView(R.id.tv_2)
+    TextView tv2;
+    @BindView(R.id.iv_bot2)
+    View ivBot2;
+    @BindView(R.id.ll2)
+    LinearLayout ll2;
 
-//    private int uid;
+    //    private int uid;
     private String userid;
 
     @Override
@@ -101,7 +106,7 @@ public class GeRenInfoActivity extends AppCompatActivity {
         if (beans != null) {
             setBean(beans);
 
-            Log.e("-----------", "什么" + beans.getFensi());//有了
+//            Log.e("-----------", "什么" + beans.getFensi());//有了
         }
 
 
@@ -117,7 +122,7 @@ public class GeRenInfoActivity extends AppCompatActivity {
         Intent intent = getIntent();
 //        uid = intent.getIntExtra("userid", 5044);
         userid = intent.getStringExtra("userid");
-        Log.e("----------","eee"+userid);
+//        Log.e("----------","eee"+userid);
 //        GeRenBean bean=intent.getParcelableExtra("bean");
 //        Log.e("---------1", bean.toString());
 //        if (getBean()!=null && getBean().getData()!=null && getBean().getCode() == 200) {
@@ -191,19 +196,23 @@ public class GeRenInfoActivity extends AppCompatActivity {
 
     }
 
+    private Dialog dialog;
+
     private void initDate(String userid) {
-//        dialog.createLoadingDialog(this, "正在加载...");
-//        dialog.show();
+        dialog = new Dialog(this, R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
         RetrofitManager.getInstance().getDataServer().getgerenuserinfos(SharePreferenceUtil.getToken(AppUtils.getContext()), userid)
                 .enqueue(new Callback<GeRenBean>() {
                     @Override
                     public void onResponse(Call<GeRenBean> call, Response<GeRenBean> response) {
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
-
-                            if (response.body().getCode() == 200) {
+                            dialog.dismiss();
+                            if (response.body() != null && response.body().getCode() == 200) {
                                 GeRenBean bean = response.body();
-                                Log.e("---------1", bean.toString());
+//                                Log.e("---------1", bean.toString());
                                 if (bean.getData() != null && bean.getData().getUser() != null) {
 //                                    Log.e("-----2", bean.getData().getFensi() + " " + bean.getData().getUser().getNickname());
 //                                    Log.e("---------3", bean.getData().toString());
@@ -211,8 +220,14 @@ public class GeRenInfoActivity extends AppCompatActivity {
 
                                     textViewNickName.setText(bean.getData().getUser().getNickname());
                                     tvTvhao.setText("钻视TV号:" + bean.getData().getUser().getId());
-                                    Glide.with(GeRenInfoActivity.this).load(Api.TU + bean.getData().getUser().getHeadimgurl())
-                                            .apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(ivUserimage);
+                                    if (bean.getData().getUser().getHeadimgurl().startsWith("http")) {
+                                        Glide.with(GeRenInfoActivity.this).load(bean.getData().getUser().getHeadimgurl())
+                                                .apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
+                                    } else {
+                                        Glide.with(GeRenInfoActivity.this).load(Api.TU + bean.getData().getUser().getHeadimgurl())
+                                                .apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
+                                    }
+
 
                                     tvGuanzhu.setText("" + bean.getData().getLike());
                                     fensi.setText("" + bean.getData().getFensi());
@@ -221,22 +236,18 @@ public class GeRenInfoActivity extends AppCompatActivity {
                                 }
                             }
                         } else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                         }
                     }
 
                     @Override
                     public void onFailure(Call<GeRenBean> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                     }
                 });
 
     }
 
-    @OnClick(R.id.back)
-    public void onViewClicked() {
-        finish();
-    }
 
     public static void setIndicator(TabLayout tabs, int leftDip, int rightDip) {
         Class<?> tabLayout = tabs.getClass();
@@ -280,5 +291,35 @@ public class GeRenInfoActivity extends AppCompatActivity {
 
     public void setBean(GeRenBean.DataBean bean) {
         this.bean = bean;
+    }
+
+    @OnClick({R.id.back, R.id.ll1, R.id.ll2})
+    public void onViewClicked(View view) {
+        FragmentManager fm = getSupportFragmentManager();
+        //开启事务
+        FragmentTransaction transaction;
+        switch (view.getId()) {
+            case R.id.back:
+                finish();
+                break;
+            case R.id.ll1:
+                ivBot1.setVisibility(View.VISIBLE);
+                ivBot2.setVisibility(View.INVISIBLE);
+//                vp.setCurrentItem(0);
+
+                transaction = fm.beginTransaction();
+                transaction.replace(R.id.container, FragmentZuopingGeRen.newInstance()); //连接TabLayout下的Fragment需要放置的位置
+                transaction.commit();
+                break;
+            case R.id.ll2:
+                ivBot1.setVisibility(View.INVISIBLE);
+                ivBot2.setVisibility(View.VISIBLE);
+//                vp.setCurrentItem(1);
+
+                transaction = fm.beginTransaction();
+                transaction.replace(R.id.container, FragmentLikeGeRen.newInstance()); //连接TabLayout下的Fragment需要放置的位置
+                transaction.commit();
+                break;
+        }
     }
 }

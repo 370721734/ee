@@ -9,11 +9,11 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
@@ -30,6 +30,8 @@ import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.contract.attention.AttentionContract;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.attention.OnItemClickear;
+import com.jarhero790.eub.message.message.GeRenInfoActivity;
+import com.jarhero790.eub.message.my.GuangZuActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.presenter.attention.AttentionPresenter;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
@@ -58,6 +60,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     @BindView(R.id.attentionuser_recyclerview)
     RecyclerView attentionuserRecyclerview;
     Unbinder unbinder;
+    @BindView(R.id.framelayout_container)
+    LinearLayout framelayoutContainer;
     private int mCurrentPosition;//当前播放的第几个视频 ，
 
     @BindView(R.id.recyclerViewAttentionUsers)
@@ -105,6 +109,17 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     }
 
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        framelayoutContainer.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), GuangZuActivity.class));
+            }
+        });
+    }
+
     private ArrayList<AttentionVideo> attentionUsersVideos = new ArrayList<>();
 
 
@@ -128,10 +143,25 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         recyclerViewAttentionUsers.setAdapter(adapter);
 
 
-        AttentionUsersAdapter attentionUsersAdapter=new AttentionUsersAdapter(attentionUsers,getActivity());
-        LinearLayoutManager linearLayoutManager=new LinearLayoutManager(AppUtils.getContext(),LinearLayoutManager.HORIZONTAL,false);
+        AttentionUsersAdapter attentionUsersAdapter = new AttentionUsersAdapter(attentionUsers, getActivity());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AppUtils.getContext(), LinearLayoutManager.HORIZONTAL, false);
         attentionuserRecyclerview.setLayoutManager(linearLayoutManager);
         attentionuserRecyclerview.setAdapter(attentionUsersAdapter);
+
+        attentionUsersAdapter.setOnItem(new AttentionUsersAdapter.OnItem() {
+            @Override
+            public void Clicklinear(View view, int position) {
+//                Log.e("------------",""+position);
+                Intent intent = new Intent(getActivity(), GeRenInfoActivity.class);
+                intent.putExtra("userid", attentionUsers.get(position).getId());
+                startActivity(intent);
+//                if (position == 4) {
+//
+//                } else {
+//
+//                }
+            }
+        });
 
 
 //        attentionUsersAndVideosAdapter = new AttentionUsersAndVideosAdapter(attentionUserAndVideoBen,getActivity(),this);
@@ -148,7 +178,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             @Override
             public void onChildViewDetachedFromWindow(@NonNull View view) {
                 VideoView videoView = view.findViewById(R.id.video_player);
-                ImageView ivdeault=view.findViewById(R.id.iv_deault);
+                ImageView ivdeault = view.findViewById(R.id.iv_deault);
 //                Log.e("------------", "窗口消失了");
                 if (videoView != null && !videoView.isFullScreen()) {
                     videoView.release();
@@ -195,8 +225,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                     }
 
                     VideoView videoView = recyclerView.getChildAt(i).findViewById(R.id.video_player);
-                    ImageView ivdeault=recyclerView.getChildAt(i).findViewById(R.id.iv_deault);
-                    if (videoView != null && ivdeault!=null) {
+                    ImageView ivdeault = recyclerView.getChildAt(i).findViewById(R.id.iv_deault);
+                    if (videoView != null && ivdeault != null) {
 //                        Log.e("----------", "2");
                         Rect rect = new Rect();
                         videoView.getLocalVisibleRect(rect);
@@ -252,7 +282,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
             View view = recyclerViewAttentionUsers.getChildAt(0);
             if (view != null) {
-                ImageView ivdeault=view.findViewById(R.id.iv_deault);
+                ImageView ivdeault = view.findViewById(R.id.iv_deault);
                 ivdeault.setVisibility(View.VISIBLE);
                 VideoView videoView = view.findViewById(R.id.video_player);
 
@@ -261,18 +291,18 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                 if (videoView.isPlaying()){
 //                     Log.e("----------","true");
 //                 }
-                 videoView.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
-                     @Override
-                     public void onPlayerStateChanged(int playerState) {
+                videoView.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
+                    @Override
+                    public void onPlayerStateChanged(int playerState) {
 //                         Log.e("----------","true1"+playerState);
-                     }
+                    }
 
-                     @Override
-                     public void onPlayStateChanged(int playState) {
+                    @Override
+                    public void onPlayStateChanged(int playState) {
 //                         Log.e("----------","true2"+playState);
-                         ivdeault.setVisibility(View.GONE);
-                     }
-                 });
+                        ivdeault.setVisibility(View.GONE);
+                    }
+                });
 
 //                viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
                 viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);

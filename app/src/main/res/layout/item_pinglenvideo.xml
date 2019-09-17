@@ -1,76 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="#151517"
-    android:layout_height="wrap_content">
-
-    <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/tou_image"
-        android:layout_width="34dp"
-        android:layout_height="34dp"
-        android:layout_marginLeft="15dp"
-        android:layout_marginTop="10dp"
-        android:src="@mipmap/edit_tou_icon"/>
-
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="张清河"
-        android:layout_toRightOf="@id/tou_image"
-        android:layout_alignTop="@id/tou_image"
-        android:layout_marginLeft="12dp"
-        android:textColor="#ff8a8a8a"
-        android:textSize="13sp"
-        />
+    android:layout_height="wrap_content"
+    android:background="#151517">
 
     <RelativeLayout
-        android:id="@+id/rl"
-        android:layout_width="45dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginTop="10dp"
-        android:layout_marginRight="10dp"
+        android:id="@+id/rl_tou"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <ImageView
-            android:id="@+id/iv_xin"
-            android:layout_width="18dp"
-            android:layout_height="17dp"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/pinlen_icon"
-            />
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/tou_image"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/edit_tou_icon" />
 
         <TextView
-            android:id="@+id/tv_zan"
+            android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text=""
-            android:textColor="#ff444444"
-            android:textSize="13sp"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/iv_xin"
-            android:layout_marginTop="6dp"
-            />
+            android:layout_alignTop="@id/tou_image"
+            android:layout_marginLeft="12dp"
+            android:layout_toRightOf="@id/tou_image"
+            android:text="张清河"
+            android:textColor="#ff8a8a8a"
+            android:textSize="13sp" />
 
+        <RelativeLayout
+            android:id="@+id/rl"
+            android:layout_width="45dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="10dp"
+            android:layout_marginRight="10dp">
+
+            <ImageView
+                android:id="@+id/iv_xin"
+                android:layout_width="18dp"
+                android:layout_height="17dp"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/pinlen_icon" />
+
+            <TextView
+                android:id="@+id/tv_zan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/iv_xin"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="6dp"
+                android:text=""
+                android:textColor="#ff444444"
+                android:textSize="13sp" />
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_name"
+            android:layout_marginLeft="12dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="17dp"
+            android:layout_toLeftOf="@id/rl"
+            android:layout_toRightOf="@id/tou_image"
+            android:text="钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒"
+            android:textColor="#ffdcdcdc"
+            android:textSize="15sp" />
     </RelativeLayout>
 
 
 
-    <TextView
-        android:id="@+id/content"
+    <ListView
+        android:id="@+id/lv"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:layout_below="@id/rl_tou"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="16dp"
+         ></ListView>
+
+    <RelativeLayout
+        android:id="@+id/rl_zhankan"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒"
-        android:textColor="#ffdcdcdc"
-        android:textSize="15sp"
-        android:layout_toLeftOf="@id/rl"
-        android:layout_marginRight="17dp"
-        android:layout_toRightOf="@id/tou_image"
-        android:layout_marginLeft="12dp"
-        android:layout_below="@id/tv_name"
-        android:layout_marginTop="5dp"
-        />
+        android:layout_height="20dp"
+        android:layout_below="@id/lv"
+        android:layout_marginLeft="62dp"
+        android:layout_marginTop="16dp"
+        >
 
+        <View
+            android:id="@+id/view"
+            android:layout_width="20dp"
+            android:layout_height="2dp"
+            android:layout_centerVertical="true"
+            android:background="#2F2F2F" />
 
+        <TextView
+            android:id="@+id/tv_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_toRightOf="@id/view"
+            android:text="展开11条回复"
+            android:textColor="#ff8a8a8a"
+            android:textSize="13sp" />
+
+        <ImageView
+            android:layout_width="9dp"
+            android:layout_height="6dp"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@id/tv_text"
+            android:src="@mipmap/sanjiao" />
+    </RelativeLayout>
 
 </RelativeLayout>

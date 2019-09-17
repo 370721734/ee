@@ -19,13 +19,9 @@
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.Camera" />
-    <uses-feature android:name="android.hardware.camera.autofocus" />
-    <!-- 修改WiFi状态，发起WiFi扫描, 需要WiFi信息用于网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-    <!-- 访问网络的变化, 需要某些信息用于网络定位 -->
+    <uses-feature android:name="android.hardware.camera.autofocus" /> <!-- 修改WiFi状态，发起WiFi扫描, 需要WiFi信息用于网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 访问网络的变化, 需要某些信息用于网络定位 -->
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
-
 
     <application
         android:name=".GlobalApplication"
@@ -36,6 +32,7 @@
         android:roundIcon="@mipmap/logo_frist"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".message.souye.TongKuanActivity"></activity>
         <activity android:name=".message.souye.WelcomeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -147,8 +144,6 @@
             android:name="RONG_CLOUD_APP_KEY"
             android:value="82hegw5u8d8dx"
             tools:replace="android:value" />
-
-
         <meta-data
             android:name="TencentMapSDK"
             android:value="UJFBZ-N4HCP-ZPID2-L3NBC-5MVN5-NWBXN" />
@@ -167,9 +162,7 @@
             android:name=".MainActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait">
-
-        </activity>
+            android:screenOrientation="portrait"></activity>
         <activity
             android:name=".activity.AttentionUsersActivity"
             android:screenOrientation="portrait" />

@@ -23,13 +23,44 @@
         android:alpha="0.5"
         android:background="#A0A0A0" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/attentionuser_recyclerview"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
-        android:scrollbars="none" />
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/framelayout_container"
+            android:layout_width="70dp"
+            android:layout_height="95dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="10dp"
+            android:background="@color/backgroudcolor"
+            >
+
+            <de.hdodenhof.circleimageview.CircleImageView
+                xmlns:circleimageview="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/attentionsUserIcon"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@mipmap/atention_more_icon"
+                circleimageview:civ_border_overlay="false"
+                />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/attentionuser_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@id/framelayout_container"
+            android:scrollbars="none" />
+
+    </RelativeLayout>
+
 
 
     <View

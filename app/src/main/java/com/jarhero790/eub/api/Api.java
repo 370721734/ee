@@ -20,6 +20,7 @@ import com.jarhero790.eub.message.bean.PinLenBean;
 import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.bean.SearchResultBean;
 import com.jarhero790.eub.message.bean.SysMessageBean;
+import com.jarhero790.eub.message.bean.TongKuanBean;
 import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.record.bean.MusicBean;
 import com.jarhero790.eub.widget.Music;
@@ -353,6 +354,10 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/comment")
     Call<ResponseBody> attention_pinlen(@Field("comment") String comment, @Field("vid") String v, @Field("token") String token);
+    //发布的视频进行评论
+    @FormUrlEncoded
+    @POST("web/index/comment")
+    Call<ResponseBody> attention_pinlen_item(@Field("comment") String comment, @Field("vid") String v,@Field("cid") String c, @Field("token") String token);
 
 
 
@@ -411,5 +416,13 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/delvideo")
     Call<ResponseBody> delvideo(@Field("token") String token,@Field("id") Integer id);
+
+
+
+
+    //同款视频
+    @FormUrlEncoded
+    @POST("web/index/identical")
+    Call<TongKuanBean> getidentical(@Field("page") Integer page, @Field("video_id") String v, @Field("token") String token);
 
 }

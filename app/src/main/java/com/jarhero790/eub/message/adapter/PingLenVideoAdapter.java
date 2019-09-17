@@ -52,6 +52,8 @@ public class PingLenVideoAdapter extends RecyclerView.Adapter<PingLenVideoAdapte
         myHolder.tvZan.setText(CommonUtil.showzannum(bean.getZan()));
 
 
+        myHolder.rltou.setTag(position);
+        myHolder.rltou.setOnLongClickListener(myclick);
 
 //
 //        if (bean.getAddtime().length() > 9) {
@@ -126,13 +128,19 @@ public class PingLenVideoAdapter extends RecyclerView.Adapter<PingLenVideoAdapte
     }
 
 
-    public static abstract class Myclick implements View.OnClickListener {
+    public static abstract class Myclick implements View.OnLongClickListener {
         public abstract void myClick(int position, View view);
 
         @Override
-        public void onClick(View v) {
+        public boolean onLongClick(View v) {
             myClick((Integer) v.getTag(), v);
+            return true;
         }
+
+//        @Override
+//        public void onClick(View v) {
+//
+//        }
     }
 
 
@@ -150,10 +158,11 @@ public class PingLenVideoAdapter extends RecyclerView.Adapter<PingLenVideoAdapte
         ImageView ivXin;
         @BindView(R.id.tv_zan)
         TextView tvZan;
-        @BindView(R.id.rl)
-        RelativeLayout rl;
+        @BindView(R.id.rl_tou)
+        RelativeLayout rltou;
         @BindView(R.id.content)
         TextView content;
+
 
         public MyHolder(@NonNull View itemView) {
             super(itemView);

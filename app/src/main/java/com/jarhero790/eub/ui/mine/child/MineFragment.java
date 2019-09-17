@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.mine.child;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -15,6 +16,7 @@ import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -96,6 +98,20 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     TextView tvMemo;
     @BindView(R.id.city)
     TextView city;
+    @BindView(R.id.tv_1)
+    TextView tv1;
+    @BindView(R.id.iv_bot1)
+    View ivBot1;
+    @BindView(R.id.ll1)
+    LinearLayout ll1;
+    @BindView(R.id.tv_2)
+    TextView tv2;
+    @BindView(R.id.iv_bot2)
+    View ivBot2;
+    @BindView(R.id.ll2)
+    LinearLayout ll2;
+    @BindView(R.id.container)
+    FrameLayout container;
 
     private String money;//签到金币
     private String signtime;//最后签到时间
@@ -196,6 +212,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             @Override
             public void run() {
                 setIndicator(tabLayout, 80, 80);
+
             }
         });
 
@@ -474,7 +491,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
         if (bean != null && bean.getCity() != null) {
             city.setText(bean.getCity());
-        }else {
+        } else {
             city.setText("深圳");
         }
     }
@@ -507,8 +524,22 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         return rootView;
     }
 
-    @OnClick({R.id.dingwei, R.id.tv_qiandao, R.id.iv_edit, R.id.myguanzu, R.id.myfensi, R.id.myzan})
+
+
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        if (!isAdded())
+            return;
+    }
+
+    @OnClick({R.id.dingwei, R.id.tv_qiandao, R.id.iv_edit, R.id.myguanzu, R.id.myfensi, R.id.myzan, R.id.ll1, R.id.ll2})
     public void onViewClicked(View view) {
+        FragmentManager fm = getChildFragmentManager();
+        //开启事务
+        FragmentTransaction transaction;
+
         switch (view.getId()) {
             case R.id.dingwei:
                 break;
@@ -520,17 +551,17 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 startActivity(intent);
                 break;
             case R.id.iv_edit:
-                if ( app!=null && app.getUserCen()!=null && app.getUserCen().getData()!=null && app.getUserCen().getData().getUser() != null) {
+                if (app != null && app.getUserCen() != null && app.getUserCen().getData() != null && app.getUserCen().getData().getUser() != null) {
                     Intent intent1 = new Intent(getActivity(), SettingActivity.class);
-                    if (app.getUserCen().getData().getUser().getNickname()!=null)
-                    intent1.putExtra("name", app.getUserCen().getData().getUser().getNickname());
-                    if (app.getUserCen().getData().getUser().getSign()!=null)
-                    intent1.putExtra("sign", app.getUserCen().getData().getUser().getSign());
+                    if (app.getUserCen().getData().getUser().getNickname() != null)
+                        intent1.putExtra("name", app.getUserCen().getData().getUser().getNickname());
+                    if (app.getUserCen().getData().getUser().getSign() != null)
+                        intent1.putExtra("sign", app.getUserCen().getData().getUser().getSign());
                     intent1.putExtra("sex", app.getUserCen().getData().getUser().getSex());
-                    if (app.getUserCen().getData().getUser().getHeadimgurl()!=null)
-                    intent1.putExtra("heading", app.getUserCen().getData().getUser().getHeadimgurl());
-                    if (app.getUserCen().getData().getUser().getCity()!=null)
-                    intent1.putExtra("city", app.getUserCen().getData().getUser().getCity());
+                    if (app.getUserCen().getData().getUser().getHeadimgurl() != null)
+                        intent1.putExtra("heading", app.getUserCen().getData().getUser().getHeadimgurl());
+                    if (app.getUserCen().getData().getUser().getCity() != null)
+                        intent1.putExtra("city", app.getUserCen().getData().getUser().getCity());
                     startActivity(intent1);
                 }
 
@@ -544,6 +575,24 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 break;
             case R.id.myzan:
                 startActivity(new Intent(getActivity(), ZanActivity.class));
+                break;
+            case R.id.ll1:
+                ivBot1.setVisibility(View.VISIBLE);
+                ivBot2.setVisibility(View.INVISIBLE);
+//                vp.setCurrentItem(0);
+
+                transaction = fm.beginTransaction();
+                transaction.replace(R.id.container, FragmentZuoping.newInstance()); //连接TabLayout下的Fragment需要放置的位置
+                transaction.commit();
+                break;
+            case R.id.ll2:
+                ivBot1.setVisibility(View.INVISIBLE);
+                ivBot2.setVisibility(View.VISIBLE);
+//                vp.setCurrentItem(1);
+
+                transaction = fm.beginTransaction();
+                transaction.replace(R.id.container, FragmentLike.newInstance()); //连接TabLayout下的Fragment需要放置的位置
+                transaction.commit();
                 break;
         }
     }

@@ -53,7 +53,8 @@ public class BottomPingLunDialog extends DialogFragment {
     EditText mcontent;
     ImageView imageView,pinlun_icon;
 
-   private String vid;
+   private String vid;//视频ID
+   private String cid;//被评论的评语id
     private static BottomPingLunDialog instance = null;
 
     private DialogInterface.OnDismissListener mOnClickListener;
@@ -199,6 +200,11 @@ public class BottomPingLunDialog extends DialogFragment {
     List<OtherPingLBean.DataBean.CommentListBean> itemlistBeans = new ArrayList<>();
     LinearLayoutManager layoutManager;
 
+
+
+    List<OtherPingLBean.DataBean.CommentListBean.UcommentBean> ucommentBeanList=new ArrayList<>();
+
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -225,7 +231,17 @@ public class BottomPingLunDialog extends DialogFragment {
                 }
 
                 fa.setEnabled(false);
-                fatext(etcontent);
+
+                Log.e("----------------vid",vid);
+                if (etcontent.startsWith("@")){
+                    if (cid==null)
+                        return;
+                    fatextitem(etcontent);
+
+                }else {
+                    fatext(etcontent);
+                }
+
             }
         });
 
@@ -273,6 +289,51 @@ public class BottomPingLunDialog extends DialogFragment {
         });
     }
 
+
+    private void fatextitem(String str) {
+
+        if (vid==null){
+            fa.setEnabled(true);
+            return;
+        }
+        Log.e("----------------vid",cid);
+        RetrofitManager.getInstance().getDataServer().attention_pinlen_item(str,vid,cid,SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()){
+                    try {
+                        String json=response.body().string();
+                        Log.e("---------",json);
+                        JSONObject object=new JSONObject(json);
+                        int code=object.optInt("code");
+                        String msg=object.optString("msg");
+                        if (code==200){
+                            requestdate(vid);
+                            fa.setEnabled(true);
+                        }else {
+                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                            fa.setEnabled(true);
+                        }
+
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }else {
+                    fa.setEnabled(true);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+                fa.setEnabled(true);
+            }
+        });
+    }
+
+
+
 //    CustomProgressDialog dialog = new CustomProgressDialog();
 
     private void requestdate(String curposition) {
@@ -287,6 +348,11 @@ public class BottomPingLunDialog extends DialogFragment {
                             if (response.body() != null && response.body().getCode() == 200) {
                                 itemlistBeans = response.body().getData().getCommentList();
 //                                Log.e("----------k", "=" + itemlistBeans.size());
+
+                                ucommentBeanList=response.body().getData().getCommentList().get(0).getUcomment();
+
+
+
                                 if (pinNum!=null){
                                     pinNum.Clicker(itemlistBeans.size());
                                 }
@@ -320,6 +386,10 @@ public class BottomPingLunDialog extends DialogFragment {
     PingLenVideoAdapter.Myclick myclick = new PingLenVideoAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
+//           Log.e("---------------",listBeans.get(position).getNickname());
+            mcontent.setText("@"+listBeans.get(position).getNickname()+"  ");
+            cid=listBeans.get(position).getId()+"";
+
 
         }
     };

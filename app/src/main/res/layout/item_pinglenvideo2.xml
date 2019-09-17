@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:background="#151517"
+    android:layout_height="wrap_content">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/tou_image_two"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginLeft="15dp"
+        android:layout_marginTop="10dp"
+        android:src="@mipmap/edit_tou_icon"/>
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="张清河"
+        android:layout_toRightOf="@id/tou_image_two"
+        android:layout_alignTop="@id/tou_image_two"
+        android:layout_marginLeft="12dp"
+        android:textColor="#ff8a8a8a"
+        android:textSize="13sp"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl"
+        android:layout_width="45dp"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:id="@+id/iv_xin"
+            android:layout_width="18dp"
+            android:layout_height="17dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/pinlen_icon"
+            />
+
+        <TextView
+            android:id="@+id/tv_zan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="#ff444444"
+            android:textSize="13sp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/iv_xin"
+            android:layout_marginTop="6dp"
+            />
+
+    </RelativeLayout>
+
+
+
+    <TextView
+        android:id="@+id/content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒钻视真棒"
+        android:textColor="#ffdcdcdc"
+        android:textSize="15sp"
+        android:layout_toLeftOf="@id/rl"
+        android:layout_marginRight="17dp"
+        android:layout_toRightOf="@id/tou_image_two"
+        android:layout_marginLeft="12dp"
+        android:layout_below="@id/tv_name"
+        android:layout_marginTop="5dp"
+        />
+
+</RelativeLayout>

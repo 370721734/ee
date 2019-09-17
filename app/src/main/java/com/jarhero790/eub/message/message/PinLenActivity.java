@@ -89,13 +89,10 @@ public class PinLenActivity extends AppCompatActivity {
         });
     }
 
-//    CustomProgressDialog dialog = new CustomProgressDialog();
     retrofit2.Call<MyPL> calls=null;
     private Dialog dialog;
 
     private void initDate() {
-//        dialog.createLoadingDialog(this, "正在加载...");
-//        dialog.show();
         dialog = new Dialog(this, R.style.progress_dialog);
         dialog.setContentView(R.layout.dialog);
         dialog.setCancelable(true);

@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.message;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -106,46 +107,48 @@ public class FragmentLikeGeRen extends Fragment {
         linearItemDecoration.setSpanSpace(10);
         linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
         rlv.addItemDecoration(linearItemDecoration);
-        page=1;
+        page = 1;
         initDate(userid);
 
-
-        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                page = 1;
-                initDate(userid);
-                mSwipeLayout.finishRefresh(1000);
-
-            }
-        });
-        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-//                page++;
-                page = 1;
-                initDate(userid);
-                mSwipeLayout.finishLoadMore(1000);
-
-            }
-        });
+//        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshLayout) {
+//                page = 1;
+//                initDate(userid);
+//                mSwipeLayout.finishRefresh(1000);
+//
+//            }
+//        });
+//        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore(RefreshLayout refreshLayout) {
+////                page++;
+//                page = 1;
+//                initDate(userid);
+//                mSwipeLayout.finishLoadMore(1000);
+//
+//            }
+//        });
 
     }
 
-    //    CustomProgressDialog dialog = new CustomProgressDialog();
     Call<MyFaBuBean> calls = null;
+    private Dialog dialog;
 
     private void initDate(String s) {
-//        dialog.createLoadingDialog(getActivity(), "正在加载...");
-//        dialog.show();
-        RetrofitManager.getInstance().getDataServer().zanvideoother(SharePreferenceUtil.getToken(AppUtils.getContext()), s,page)
+        dialog = new Dialog(getActivity(), R.style.progress_dialog);
+        dialog.setContentView(R.layout.dialog);
+        dialog.setCancelable(true);
+        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.show();
+        RetrofitManager.getInstance().getDataServer().zanvideoother(SharePreferenceUtil.getToken(AppUtils.getContext()), s, page)
                 .enqueue(new Callback<MyFaBuBean>() {
                     @Override
                     public void onResponse(Call<MyFaBuBean> call, Response<MyFaBuBean> response) {
                         calls = call;
                         if (response.isSuccessful()) {
-//                            dialog.dismiss();
-                            if (response.body()!=null && response.body().getData().size() > 0) {
+                            dialog.dismiss();
+                            if (response.body() != null && response.body().getData().size() > 0) {
                                 itemlist.clear();
                                 rlv.setVisibility(View.VISIBLE);
                                 mSwipeLayout.setVisibility(View.VISIBLE);
@@ -153,18 +156,18 @@ public class FragmentLikeGeRen extends Fragment {
                                 wangluoyichang.setVisibility(View.GONE);
                                 itemlist = response.body().getData();
 
-                                if (page==1){
+                                if (page == 1) {
                                     list.clear();
                                     list.addAll(itemlist);
                                     adapter = new LikeAdapter(getActivity(), list, myclickdele, myclicktu);
                                     rlv.setAdapter(adapter);
-                                }else {
+                                } else {
                                     list.addAll(itemlist);
                                     adapter.notifyDataSetChanged();
                                 }
 
                             } else {
-                                if (page==1){
+                                if (page == 1) {
                                     rlv.setVisibility(View.GONE);
                                     mSwipeLayout.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
@@ -173,7 +176,7 @@ public class FragmentLikeGeRen extends Fragment {
 
                             }
                         } else {
-//                            dialog.dismiss();
+                            dialog.dismiss();
                             rlv.setVisibility(View.GONE);
                             mSwipeLayout.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
@@ -183,7 +186,7 @@ public class FragmentLikeGeRen extends Fragment {
 
                     @Override
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
-//                        dialog.dismiss();
+                        dialog.dismiss();
                         rlv.setVisibility(View.GONE);
                         mSwipeLayout.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
@@ -202,7 +205,7 @@ public class FragmentLikeGeRen extends Fragment {
     LikeAdapter.Myclick myclicktu = new LikeAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------2", "" + position);
+//            Log.e("-------2", "" + position);
             Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", list);
@@ -220,8 +223,8 @@ public class FragmentLikeGeRen extends Fragment {
     @OnClick(R.id.wangluoyichang)
     public void onClick() {
         if (userid != null)
-            page=1;
-            initDate(userid);
+            page = 1;
+        initDate(userid);
     }
 
     @Override

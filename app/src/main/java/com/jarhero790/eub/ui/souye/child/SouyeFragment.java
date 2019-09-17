@@ -48,6 +48,7 @@ import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.message.souye.SearchActivity;
+import com.jarhero790.eub.message.souye.TongKuanActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.record.bean.FaVBean;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
@@ -757,6 +758,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         startActivity(intentx);
                     }
 
+                }else if (type.equals("同款")){
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                        startActivity(new Intent(getActivity(), LoginNewActivity.class));
+                    } else {
+                        Intent intentt=new Intent(getActivity(), TongKuanActivity.class);
+                        intentt.putExtra("video_id",lists.get(mCurrentPosition).getVideo_id());
+                        startActivity(intentt);
+                    }
                 }
             }
         });
