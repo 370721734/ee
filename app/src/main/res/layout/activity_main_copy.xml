@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black"
-    >
+    android:background="@android:color/black">
 
 
     <FrameLayout
@@ -14,91 +13,81 @@
         android:layout_height="match_parent"
 
         >
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent" />
     </FrameLayout>
-
-
-
 
 
     <View
         android:id="@+id/line_bottom"
         android:layout_width="match_parent"
         android:layout_height="1px"
-        android:visibility="gone"
         android:background="@android:color/white"
-        />
+        android:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/bottomNavigator"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="55dp"
         android:layout_alignParentBottom="true"
         android:gravity="center_vertical"
-        android:orientation="horizontal"
-        >
+        android:orientation="horizontal">
 
         <LinearLayout
             android:id="@+id/home"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_vertical"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <TextView
+                android:id="@+id/souye_home"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="首页"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="normal" />
 
             <View
                 android:id="@+id/indicator_home"
                 android:layout_width="40dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
-                android:background="@android:color/holo_blue_dark"
-                android:visibility="visible"
-                />
+                android:background="@color/souye_title"
+                android:visibility="visible" />
         </LinearLayout>
-
-
-
 
 
         <LinearLayout
             android:id="@+id/attention"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <TextView
+                android:id="@+id/souye_attion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="关注"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="normal" />
 
             <View
                 android:id="@+id/indicator_attention"
                 android:layout_width="40dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
-                android:background="#0000ff"
-                android:visibility="invisible"
-                />
+                android:background="@color/souye_title"
+                android:visibility="invisible" />
         </LinearLayout>
 
 
@@ -107,66 +96,60 @@
             android:layout_width="0dp"
             android:layout_height="30dp"
             android:layout_weight="1"
-            android:src="@mipmap/rec"
-            />
-
+            android:src="@mipmap/souye_record_add" />
 
 
         <LinearLayout
             android:id="@+id/message"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <TextView
+                android:id="@+id/souye_message"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="消息"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="normal" />
 
             <View
                 android:id="@+id/indicator_message"
                 android:layout_width="40dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
-                android:background="#0000ff"
-                android:visibility="invisible"
-                />
+                android:background="@color/souye_title"
+                android:visibility="invisible" />
         </LinearLayout>
 
 
         <LinearLayout
             android:id="@+id/mine"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:layout_marginTop="5dp"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
+
             <TextView
+                android:id="@+id/souye_my"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="我"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                />
+                android:textStyle="normal" />
 
             <View
                 android:id="@+id/indicator_mine"
                 android:layout_width="40dp"
                 android:layout_height="1dp"
                 android:layout_marginTop="5dp"
-                android:background="#0000ff"
-                android:visibility="invisible"
-                />
+                android:background="@color/souye_title"
+                android:visibility="invisible" />
         </LinearLayout>
 
     </LinearLayout>

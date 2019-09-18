@@ -147,7 +147,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         /**Glide方式*/
         Glide.with(context).load(video.getVideo_img())
-                .apply(new RequestOptions().placeholder(android.R.color.white))
+                .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
                 .into(holder.video_thumb);
 
         if (video.getIs_zan().equals("1")) {
@@ -175,6 +175,10 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //        Log.e("-----------ping=",video.getCommentNum());//????
         //财富`
         holder.caifu.setText(video.getCaifu());
+
+        //商品浏览数量
+        holder.tvgoodsnum.setText(video.getClick_num());
+
         //tou
         if (video.getHeadimgurl().startsWith("http")) {
             Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
@@ -394,7 +398,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         RelativeLayout rlhead;
         ImageView play_pause;
 
-        TextView caifu;
+        TextView caifu,tvgoodsnum;
         Love love;
         RelativeLayout bussiness;
         RelativeLayout tongkuang;
@@ -428,6 +432,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             love = itemView.findViewById(R.id.love);
             bussiness=itemView.findViewById(R.id.bussiness);
             tongkuang=itemView.findViewById(R.id.tongkuang);
+            tvgoodsnum=itemView.findViewById(R.id.tvgoodsnum);
         }
     }
 

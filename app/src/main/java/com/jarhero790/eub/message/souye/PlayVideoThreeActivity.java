@@ -288,6 +288,8 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
                         startActivity(intentx);
                     }
 
+                }else if (itemtype.equals("返回")){
+                    finish();
                 }
             }
         });

@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.GlobalApplication;
@@ -29,6 +30,7 @@ import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.SearchBean;
+import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.my.TikTokAdapter;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
@@ -335,6 +337,8 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
                         int b = Integer.parseInt(tvlike.getText().toString()) + 1;
                         tvlike.setText("" + b);
                     }
+                } else if (itemtype.equals("返回")) {
+                    finish();
                 }
             }
         });
@@ -431,13 +435,29 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
                     .load(likeBeans.get(position).getVideo_img())
                     .apply(new RequestOptions().placeholder(android.R.color.white))
                     .into(mTikTokController.getThumb());
-            mVideoView.setUrl(likeBeans.get(position).getUrl());
+
+            HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoTwoActivity.this);
+            String proxyUrl = proxy.getProxyUrl(likeBeans.get(position).getUrl());
+            if (proxyUrl.length() > 0) {
+                mVideoView.setUrl(proxyUrl);
+            } else {
+                mVideoView.setUrl(likeBeans.get(position).getUrl());
+            }
+
         } else {
             Glide.with(this)
                     .load(list.get(position).getVideo_img())
                     .apply(new RequestOptions().placeholder(android.R.color.white))
                     .into(mTikTokController.getThumb());
-            mVideoView.setUrl(list.get(position).getUrl());
+
+            HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoTwoActivity.this);
+            String proxyUrl = proxy.getProxyUrl(list.get(position).getUrl());
+            if (proxyUrl.length() > 0) {
+                mVideoView.setUrl(proxyUrl);
+            } else {
+                mVideoView.setUrl(list.get(position).getUrl());
+            }
+
         }
 
 

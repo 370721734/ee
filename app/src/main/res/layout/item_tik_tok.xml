@@ -15,7 +15,8 @@
         android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:scaleType="centerCrop"
+        android:src="@mipmap/welcon_de"/>
 
 
     <RelativeLayout
@@ -36,7 +37,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginBottom="50dp">
+        android:layout_marginBottom="55dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="31dp"
+            android:layout_height="40dp"
+            android:padding="8dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:src="@mipmap/back"/>
 
         <LinearLayout
             android:id="@+id/ll_like"
@@ -242,7 +252,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="34dp"
                 android:gravity="center_vertical"
-                android:text="160"
+                android:text=""
                 android:textColor="#ffffffff"
                 android:textSize="12sp" />
 

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.PingLenVideoAdapter;
 import com.jarhero790.eub.message.bean.OtherPingLBean;
+import com.jarhero790.eub.message.bean.pinglunchange;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
 import com.jarhero790.eub.utils.AppUtils;
@@ -49,15 +50,17 @@ public class BottomPingLunDialog extends DialogFragment {
     private Window window;
 
     private RecyclerView recyclerView;
-    TextView tvnum,fa;
+    TextView tvnum, fa;
     EditText mcontent;
-    ImageView imageView,pinlun_icon;
+    ImageView imageView, pinlun_icon;
 
-   private String vid;//视频ID
-   private String cid;//被评论的评语id
+    private String vid;//视频ID
+    private String cid;//被评论的评语id
     private static BottomPingLunDialog instance = null;
 
     private DialogInterface.OnDismissListener mOnClickListener;
+
+    private int mcurrposition = 0;
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
         this.mOnClickListener = listener;
@@ -76,12 +79,14 @@ public class BottomPingLunDialog extends DialogFragment {
     @Override
     public void onPause() {
         super.onPause();
+
         //Toast.makeText(getContext(),"BottomPingLunDialog onPause",Toast.LENGTH_LONG).show();
     }
 
     @Override
     public void onResume() {
         super.onResume();
+
 
         //Toast.makeText(getContext(),"BottomPingLunDialog onResume",Toast.LENGTH_LONG).show();
     }
@@ -101,7 +106,6 @@ public class BottomPingLunDialog extends DialogFragment {
         adapter = new PingLenVideoAdapter(getActivity(), listBeans, myclick);
 //        Log.e("------------li", "" + listBeans.size());
         recyclerView.setAdapter(adapter);
-
 
 
         if (listBeans != null && listBeans.size() > 0) {
@@ -124,9 +128,9 @@ public class BottomPingLunDialog extends DialogFragment {
         recyclerView = frView.findViewById(R.id.rlv);
         tvnum = frView.findViewById(R.id.tv_num);
         imageView = frView.findViewById(R.id.iv_exit);
-        fa=frView.findViewById(R.id.tv_fa);
-        mcontent=frView.findViewById(R.id.et_content);
-        pinlun_icon=frView.findViewById(R.id.pinlun_icon);
+        fa = frView.findViewById(R.id.tv_fa);
+        mcontent = frView.findViewById(R.id.et_content);
+        pinlun_icon = frView.findViewById(R.id.pinlun_icon);
 
         //默认展开所有回复
 //        CommentExpandAdapter adapter = new CommentExpandAdapter(inflater);
@@ -149,7 +153,7 @@ public class BottomPingLunDialog extends DialogFragment {
         EventBus.getDefault().register(this);
         Bundle bundle = getArguments();
         if (bundle != null) {
-             vid = bundle.getString("vid");
+            vid = bundle.getString("vid");
             Log.e("------------vid=>", vid);
             page = 1;
             requestdate(vid);
@@ -201,15 +205,9 @@ public class BottomPingLunDialog extends DialogFragment {
     LinearLayoutManager layoutManager;
 
 
-
-    List<OtherPingLBean.DataBean.CommentListBean.UcommentBean> ucommentBeanList=new ArrayList<>();
-
-
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
-
 
 
         imageView.setOnClickListener(new View.OnClickListener() {
@@ -224,21 +222,24 @@ public class BottomPingLunDialog extends DialogFragment {
         fa.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String etcontent=mcontent.getText().toString();
-                if (TextUtils.isEmpty(etcontent)){
-                    Toast.makeText(getActivity(),"不能发送空消息",Toast.LENGTH_SHORT).show();
+                String etcontent = mcontent.getText().toString();
+                if (TextUtils.isEmpty(etcontent)) {
+                    Toast.makeText(getActivity(), "不能发送空消息", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
                 fa.setEnabled(false);
 
-                Log.e("----------------vid",vid);
-                if (etcontent.startsWith("@")){
-                    if (cid==null)
+//                Log.e("----------------vid",vid);
+                if (etcontent.startsWith("@")) {
+                    if (cid == null)
                         return;
-                    fatextitem(etcontent);
+                    String newet = etcontent.replace(("@" + listBeans.get(mcurrposition).getNickname()), "");
+                    if (newet.length() == 0)
+                        return;
+                    fatextitem(newet);
 
-                }else {
+                } else {
                     fatext(etcontent);
                 }
 
@@ -249,35 +250,36 @@ public class BottomPingLunDialog extends DialogFragment {
 
     private void fatext(String str) {
 
-        if (vid==null){
+        if (vid == null) {
             fa.setEnabled(true);
             return;
         }
 
-        RetrofitManager.getInstance().getDataServer().attention_pinlen(str,vid,SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+        RetrofitManager.getInstance().getDataServer().attention_pinlen(str, vid, SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
-                        String json=response.body().string();
-                        Log.e("---------",json);
-                        JSONObject object=new JSONObject(json);
-                        int code=object.optInt("code");
-                        String msg=object.optString("msg");
-                        if (code==200){
+                        String json = response.body().string();
+//                        Log.e("---------",json);
+                        JSONObject object = new JSONObject(json);
+                        int code = object.optInt("code");
+                        String msg = object.optString("msg");
+                        if (code == 200) {
                             requestdate(vid);
                             fa.setEnabled(true);
-                        }else {
-                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+
+
+                        } else {
+                            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                             fa.setEnabled(true);
                         }
-
 
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     fa.setEnabled(true);
                 }
             }
@@ -292,35 +294,34 @@ public class BottomPingLunDialog extends DialogFragment {
 
     private void fatextitem(String str) {
 
-        if (vid==null){
+        if (vid == null) {
             fa.setEnabled(true);
             return;
         }
-        Log.e("----------------vid",cid);
-        RetrofitManager.getInstance().getDataServer().attention_pinlen_item(str,vid,cid,SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+//        Log.e("----------------cid",cid);
+        RetrofitManager.getInstance().getDataServer().attention_pinlen_item(str, vid, cid, SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
-                        String json=response.body().string();
-                        Log.e("---------",json);
-                        JSONObject object=new JSONObject(json);
-                        int code=object.optInt("code");
-                        String msg=object.optString("msg");
-                        if (code==200){
+                        String json = response.body().string();
+                        Log.e("---------", json);
+                        JSONObject object = new JSONObject(json);
+                        int code = object.optInt("code");
+                        String msg = object.optString("msg");
+                        if (code == 200) {
                             requestdate(vid);
                             fa.setEnabled(true);
-                        }else {
-                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                             fa.setEnabled(true);
                         }
-
 
 
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
-                }else {
+                } else {
                     fa.setEnabled(true);
                 }
             }
@@ -331,7 +332,6 @@ public class BottomPingLunDialog extends DialogFragment {
             }
         });
     }
-
 
 
 //    CustomProgressDialog dialog = new CustomProgressDialog();
@@ -349,11 +349,10 @@ public class BottomPingLunDialog extends DialogFragment {
                                 itemlistBeans = response.body().getData().getCommentList();
 //                                Log.e("----------k", "=" + itemlistBeans.size());
 
-                                ucommentBeanList=response.body().getData().getCommentList().get(0).getUcomment();
+//                                ucommentBeanList=response.body().getData().getCommentList().get(0).getUcomment();
 
 
-
-                                if (pinNum!=null){
+                                if (pinNum != null) {
                                     pinNum.Clicker(itemlistBeans.size());
                                 }
 
@@ -369,9 +368,10 @@ public class BottomPingLunDialog extends DialogFragment {
                                     adapter.notifyDataSetChanged();
                                 }
                                 EventBus.getDefault().post("ok");
+                                EventBus.getDefault().post(new pinglunchange("评论"));
 
                             }
-                        }else {
+                        } else {
 //                            dialog.dismiss();
                         }
                     }
@@ -386,9 +386,10 @@ public class BottomPingLunDialog extends DialogFragment {
     PingLenVideoAdapter.Myclick myclick = new PingLenVideoAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
+            mcurrposition = position;
 //           Log.e("---------------",listBeans.get(position).getNickname());
-            mcontent.setText("@"+listBeans.get(position).getNickname()+"  ");
-            cid=listBeans.get(position).getId()+"";
+            mcontent.setText("@" + listBeans.get(position).getNickname() + "  ");
+            cid = listBeans.get(position).getId() + "";
 
 
         }
@@ -411,12 +412,15 @@ public class BottomPingLunDialog extends DialogFragment {
     }
 
 
-    public interface  PinNum{
+    public interface PinNum {
         void Clicker(int num);
     }
+
     private PinNum pinNum;
 
     public void setPinNum(PinNum pinNum) {
         this.pinNum = pinNum;
     }
+
+
 }

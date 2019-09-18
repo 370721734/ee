@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.danikula.videocache.HttpProxyCacheServer;
 import com.dueeeke.videoplayer.player.VideoView;
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.adapter.OnViewPagerListener;
 import com.jarhero790.eub.adapter.TikTokController;
@@ -304,7 +306,7 @@ public class PlayVideoActivity extends AppCompatActivity {
                     }
 
                 }else if (type.equals("商城")){
-                    Log.e("-------------","商城");
+//                    Log.e("-------------","商城");
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         startActivity(new Intent(PlayVideoActivity.this, LoginNewActivity.class));
                     } else {
@@ -315,6 +317,8 @@ public class PlayVideoActivity extends AppCompatActivity {
                         startActivity(intentx);
                     }
 
+                }else if (type.equals("返回")){
+                    finish();
                 }
             }
         });
@@ -375,7 +379,14 @@ public class PlayVideoActivity extends AppCompatActivity {
             ((RelativeLayout) parent).removeView(mVideoView);
         }
         relativeLayout.addView(mVideoView,2);
-        mVideoView.setUrl(list.get(position).getUrl());
+        HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoActivity.this);
+        String proxyUrl = proxy.getProxyUrl(list.get(position).getUrl());
+        if (proxyUrl.length()>0){
+            mVideoView.setUrl(proxyUrl);
+        }else {
+            mVideoView.setUrl(list.get(position).getUrl());
+        }
+
         mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         mVideoView.start();
 

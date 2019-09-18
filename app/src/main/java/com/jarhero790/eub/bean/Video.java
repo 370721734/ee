@@ -62,6 +62,7 @@ public class Video implements Serializable {
     private String collect;
     private String headimgurl;
     private String nickname;
+    private String click_num;
     private String is_zan;
     private int commentNum;
     private String is_like;
@@ -308,6 +309,13 @@ public class Video implements Serializable {
         this.income = income;
     }
 
+    public String getClick_num() {
+        return click_num;
+    }
+
+    public void setClick_num(String click_num) {
+        this.click_num = click_num;
+    }
 
     @Override
     public String toString() {

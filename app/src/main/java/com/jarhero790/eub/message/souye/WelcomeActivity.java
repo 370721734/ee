@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.souye;
 
+import android.app.Activity;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
@@ -16,8 +17,7 @@ import android.os.Handler;
 import android.os.Message;
 
 
-
-public class WelcomeActivity extends AppCompatActivity {
+public class WelcomeActivity extends Activity {
 
 
     @Override
@@ -25,23 +25,39 @@ public class WelcomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
-        CommonUtil.setStatusBarTransparent(this);
-        AppManager.getAppManager().addActivity(this);
-        Handler handler = new Handler(new Handler.Callback() {
-
+        Thread myThread = new Thread() {
             @Override
-
-            public boolean handleMessage(Message msg) {
-                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
-                finish();
-                startActivity(intent);
-                return true;
-
+            public void run() {
+                try {
+                    sleep(2000);
+                    Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+                    startActivity(intent);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+        };
+        myThread.start();
 
-        });
 
-        handler.sendEmptyMessageDelayed(0,2000);
+//        setContentView(R.layout.activity_welcome);
+//        CommonUtil.setStatusBarTransparent(this);
+//        AppManager.getAppManager().addActivity(this);
+//        Handler handler = new Handler(new Handler.Callback() {
+//
+//            @Override
+//
+//            public boolean handleMessage(Message msg) {
+//                Intent intent = new Intent(WelcomeActivity.this, MainActivity.class);
+//                finish();
+//                startActivity(intent);
+//                return true;
+//
+//            }
+//
+//        });
+//
+//        handler.sendEmptyMessageDelayed(0,2000);
 
     }
 

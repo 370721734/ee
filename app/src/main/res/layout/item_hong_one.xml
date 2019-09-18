@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:gravity="center"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="278dp"
+        android:layout_height="378dp">
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        android:src="@mipmap/hong_bg"/>
+
+
+        <ImageView
+            android:id="@+id/iv_close"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@mipmap/hong_close"
+            android:layout_margin="15dp"
+            android:padding="5dp"
+            android:layout_alignParentRight="true"/>
+
+        
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civ"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:src="@mipmap/edit_tou_icon"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="62dp"/>
+
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="遨游互动的红包"
+            android:textColor="#ffc6c2c2"
+            android:textSize="10sp"
+            android:layout_below="@id/civ"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            />
+
+        
+        <ImageView
+            android:id="@+id/iv_ka"
+            android:layout_width="59dp"
+            android:layout_height="59dp"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="71dp"
+            android:src="@mipmap/hong_ka"/>
+    </RelativeLayout>
+</RelativeLayout>

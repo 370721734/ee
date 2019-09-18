@@ -73,20 +73,21 @@
 
 
 
-    <ListView
+    <com.jarhero790.eub.message.souye.NoScrollListView
         android:id="@+id/lv"
         android:layout_width="match_parent"
         android:layout_height="70dp"
         android:layout_below="@id/rl_tou"
         android:layout_marginLeft="62dp"
         android:layout_marginTop="16dp"
-         ></ListView>
+         ></com.jarhero790.eub.message.souye.NoScrollListView>
 
     <RelativeLayout
         android:id="@+id/rl_zhankan"
         android:layout_width="wrap_content"
         android:layout_height="20dp"
         android:layout_below="@id/lv"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="62dp"
         android:layout_marginTop="16dp"
         >
@@ -106,7 +107,7 @@
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_toRightOf="@id/view"
-            android:text="展开11条回复"
+            android:text=""
             android:textColor="#ff8a8a8a"
             android:textSize="13sp" />
 

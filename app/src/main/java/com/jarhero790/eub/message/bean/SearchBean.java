@@ -115,6 +115,7 @@ public class SearchBean implements Serializable {
             private Object collect;
             private String headimgurl;
             private String nickname;
+            private String click_num;
             private int is_zan;
             private int commentNum;
             private int is_like;
@@ -343,6 +344,14 @@ public class SearchBean implements Serializable {
 
             public void setGood_id(String good_id) {
                 this.good_id = good_id;
+            }
+
+            public String getClick_num() {
+                return click_num;
+            }
+
+            public void setClick_num(String click_num) {
+                this.click_num = click_num;
             }
         }
 
@@ -401,6 +410,7 @@ public class SearchBean implements Serializable {
             private Object collect;
             private String headimgurl;
             private String nickname;
+            private String click_num;
             private int is_zan;
             private int commentNum;
             private int is_like;
@@ -628,6 +638,14 @@ public class SearchBean implements Serializable {
 
             public void setGood_id(String good_id) {
                 this.good_id = good_id;
+            }
+
+            public String getClick_num() {
+                return click_num;
+            }
+
+            public void setClick_num(String click_num) {
+                this.click_num = click_num;
             }
         }
     }

@@ -7,11 +7,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.danikula.videocache.HttpProxyCacheServer;
@@ -26,6 +28,7 @@ import com.jarhero790.eub.bean.AttentionVideo;
 import com.jarhero790.eub.message.attention.AttPinLAdapter;
 import com.jarhero790.eub.message.attention.OnItemClickear;
 import com.jarhero790.eub.model.bean.souye.VideoBean;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +36,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecyclerViewAdapter.VideoHolder> {
 
-//    private List<VideoBean> videos = new ArrayList<>();
+    //    private List<VideoBean> videos = new ArrayList<>();
     private List<AttentionVideo> videos = new ArrayList<>();
     private Context mcontext;
 
@@ -43,9 +46,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
 //    private PlayerFactory mPlayerFactory = ExoMediaPlayerFactory.create(MyApplication.getInstance());
 
-    public VideoRecyclerViewAdapter(List<AttentionVideo> videos,Context context,OnItemClickear onItemClickear) {
+    public VideoRecyclerViewAdapter(List<AttentionVideo> videos, Context context, OnItemClickear onItemClickear) {
         this.videos.addAll(videos);
-        mcontext=context;
+        mcontext = context;
         this.onItemClickear = onItemClickear;
     }
 
@@ -63,52 +66,52 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         AttentionVideo attentionVideo = videos.get(position);
 //        ImageView thumb = holder.controller.getThumb();
 
-        if (getP!=null){
-            getP.ostion(holder.userimage,position);
+        if (getP != null) {
+            getP.ostion(holder.userimage, position);
         }
-        if (attentionVideo.getHeadimgurl().startsWith("http")){
+        if (attentionVideo.getHeadimgurl().startsWith("http")) {
             Glide.with(mcontext).load(attentionVideo.getHeadimgurl()).apply(new RequestOptions()
                     .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
-        }else {
-            Glide.with(mcontext).load(Api.TU+attentionVideo.getHeadimgurl()).apply(new RequestOptions()
+        } else {
+            Glide.with(mcontext).load(Api.TU + attentionVideo.getHeadimgurl()).apply(new RequestOptions()
                     .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
         }
-        String videoImg=attentionVideo.getVideo_img();
-        if (videoImg.startsWith("http")){
+        String videoImg = attentionVideo.getVideo_img();
+        if (videoImg.startsWith("http")) {
             Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
                     .into(holder.ivdeault);
-        }else {
-            Glide.with(mcontext).load(Api.TU+videoImg).apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+        } else {
+            Glide.with(mcontext).load(Api.TU + videoImg).apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
                     .into(holder.ivdeault);
         }
-        holder.zan.setText(attentionVideo.getZan()+"人赞过");
+        holder.zan.setText(attentionVideo.getZan() + "人赞过");
 
-        if (attentionVideo.getIs_zan().equals("1")){
+        if (attentionVideo.getIs_zan().equals("1")) {
             holder.videolike.setImageResource(R.drawable.iv_like_selected);
-        }else {
+        } else {
             holder.videolike.setImageResource(R.drawable.iv_like_unselected);
         }
 
         holder.title.setText(attentionVideo.getTitle());
         holder.attentionsUserName.setText(attentionVideo.getNickname());
-        String time=attentionVideo.getAddtime();
-        if (time.length()>9){
-            holder.date.setText(time.substring(5,10));
-        }else {
+        String time = attentionVideo.getAddtime();
+        if (time.length() > 9) {
+            holder.date.setText(time.substring(5, 10));
+        } else {
             holder.date.setText(time);
         }
 
 
         ArrayList<AttentionUserVideosComment> comment = attentionVideo.getComment();
-        if (comment.size()>0){
-            holder.tvmore.setText("查看全部"+comment.size()+"条评论");
+        if (comment.size() > 0) {
+            holder.tvmore.setText("查看全部" + comment.size() + "条评论");
             holder.tvmore.setEnabled(true);
-        }else {
+        } else {
             holder.tvmore.setText("暂无评论");
             holder.tvmore.setEnabled(false);
         }
 
-        AttPinLAdapter attPinLAdapter=new AttPinLAdapter(mcontext,comment);
+        AttPinLAdapter attPinLAdapter = new AttPinLAdapter(mcontext, comment);
         holder.listView.setAdapter(attPinLAdapter);
 
         holder.ivdeault.setVisibility(View.VISIBLE);
@@ -116,9 +119,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         String proxyUrl = proxy.getProxyUrl(attentionVideo.getUrl());
 //        Log.e("-------p1=",proxyUrl);
 //        Log.e("-------p2=",attentionVideo.getUrl());
-        if (proxyUrl.length()>0){
+        if (proxyUrl.length() > 0) {
             holder.videoPlayer.setUrl(proxyUrl);
-        }else {
+        } else {
             holder.videoPlayer.setUrl(attentionVideo.getUrl());
         }
 
@@ -132,13 +135,15 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
             @Override
             public void onPlayStateChanged(int playState) {
+//                Log.e("-------------","播放来了没有"+playState+"  "+position);
                 holder.ivdeault.setVisibility(View.GONE);
-//                Log.e("-------------","播放来了没有");
+                holder.ivplay.setImageDrawable(mcontext.getDrawable(R.mipmap.play_pause_icon));
+//
             }
         });
 
 
-        onClick(holder,position);
+        onClick(holder, position);
 
 //        holder.mVideoView.setUrl(attentionVideo.getUrl());
 
@@ -157,32 +162,32 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         holder.share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onItemClickear!=null){
-                    onItemClickear.linerck(position,"分享",view,view);
+                if (onItemClickear != null) {
+                    onItemClickear.linerck(position, "分享", view, view);
                 }
             }
         });
         holder.pinglun.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onItemClickear!=null){
-                    onItemClickear.linerck(position,"评论",view,view);
+                if (onItemClickear != null) {
+                    onItemClickear.linerck(position, "评论", view, view);
                 }
             }
         });
         holder.videolike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onItemClickear!=null){
-                    onItemClickear.linerck(position,"点赞",view,view);
+                if (onItemClickear != null) {
+                    onItemClickear.linerck(position, "点赞", view, view);
                 }
             }
         });
         holder.ivplay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onItemClickear!=null){
-                    onItemClickear.linerck(position,"播放",view,holder.videoPlayer);
+                if (onItemClickear != null) {
+                    onItemClickear.linerck(position, "播放", view, holder.videoPlayer);
                 }
             }
         });
@@ -190,22 +195,26 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         holder.tvmore.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (onItemClickear!=null){
-                    onItemClickear.linerck(position,"更多",view,view);
+                if (onItemClickear != null) {
+                    onItemClickear.linerck(position, "更多", view, view);
                 }
             }
         });
+        holder.attentionsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (onItemClickear != null) {
+                    onItemClickear.linerck(position, "关注", view, view);
+                }
+            }
+        });
+
     }
 
     @Override
     public int getItemCount() {
         return videos.size();
     }
-
-
-
-
-
 
 
     public void addData(List<AttentionVideo> videoList) {
@@ -218,8 +227,8 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     public class VideoHolder extends RecyclerView.ViewHolder {
 
         private VideoView videoPlayer;
-//        private StandardVideoController controller; 控制器
-       private TextView date,attentionsUserName,zan,title,tvmore;
+        //        private StandardVideoController controller; 控制器
+        private TextView date, attentionsUserName, zan, title, tvmore;
         private ImageView share;
         private ImageView pinglun;
         private ImageView videolike;
@@ -231,21 +240,24 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
         ListView listView;
 
+        Button attentionsButton;
+
         VideoHolder(View itemView) {
             super(itemView);
             videoPlayer = itemView.findViewById(R.id.video_player);
-            share=itemView.findViewById(R.id.share);
-            pinglun=itemView.findViewById(R.id.pinglun);
-            videolike=itemView.findViewById(R.id.videolike);
-            date=itemView.findViewById(R.id.date);
-            attentionsUserName=itemView.findViewById(R.id.attentionsUserName);
-            userimage=itemView.findViewById(R.id.attentionsUserIcon);
-            ivdeault=itemView.findViewById(R.id.iv_deault);
-            zan=itemView.findViewById(R.id.zanshu);
-            ivplay=itemView.findViewById(R.id.iv_play);
-            title=itemView.findViewById(R.id.tv_text);
-            listView=itemView.findViewById(R.id.lv);
-            tvmore=itemView.findViewById(R.id.tv_more);
+            share = itemView.findViewById(R.id.share);
+            pinglun = itemView.findViewById(R.id.pinglun);
+            videolike = itemView.findViewById(R.id.videolike);
+            date = itemView.findViewById(R.id.date);
+            attentionsUserName = itemView.findViewById(R.id.attentionsUserName);
+            userimage = itemView.findViewById(R.id.attentionsUserIcon);
+            ivdeault = itemView.findViewById(R.id.iv_deault);
+            zan = itemView.findViewById(R.id.zanshu);
+            ivplay = itemView.findViewById(R.id.iv_play);
+            title = itemView.findViewById(R.id.tv_text);
+            listView = itemView.findViewById(R.id.lv);
+            tvmore = itemView.findViewById(R.id.tv_more);
+            attentionsButton = itemView.findViewById(R.id.attentionsButton);
 
             //循环播放
             videoPlayer.setLooping(true);
@@ -253,7 +265,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
 
             int widthPixels = itemView.getContext().getResources().getDisplayMetrics().widthPixels;
-            int heightPixels= itemView.getContext().getResources().getDisplayMetrics().heightPixels;
+            int heightPixels = itemView.getContext().getResources().getDisplayMetrics().heightPixels;
             //mVideoView.setLayoutParams(new LinearLayout.LayoutParams(widthPixels, widthPixels * 9 / 16 + 1));
 
 //            mVideoView.setLayoutParams(new RelativeLayout.LayoutParams(widthPixels/10*8,
@@ -264,16 +276,15 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 //            controller = new StandardVideoController(itemView.getContext());
 
 
-
             title = itemView.findViewById(R.id.tv_text);
         }
     }
 
 
-
-    public interface GetP{
-        void ostion(View view,int po);
+    public interface GetP {
+        void ostion(View view, int po);
     }
+
     private GetP getP;
 
     public void setGetP(GetP getP) {

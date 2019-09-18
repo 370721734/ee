@@ -120,6 +120,9 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
 //            holder.tv_pinglun.setText(video.getCommentNum() + "");
             //财富`
             holder.caifu.setText(video.getCaifu() + "");
+
+        //商品浏览数量
+        holder.tvgoodsnum.setText(video.getClick_num());
             //tou
             Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
                     .error(R.mipmap.souye_logo)).into(holder.userimage);
@@ -255,6 +258,13 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
             }
         });
 
+        //back
+        holder.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListerer.onItemClick(position, "返回", view, view, view);
+            }
+        });
     }
 
 
@@ -283,9 +293,9 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
 
         GuanPanView guanPanView;
         RelativeLayout rlhead;
-        ImageView play_pause;
+        ImageView play_pause,back;
 
-        TextView caifu;
+        TextView caifu,tvgoodsnum;
         Love love;
         RelativeLayout bussiness;
 
@@ -317,6 +327,8 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
             bussiness=itemView.findViewById(R.id.bussiness);
+            tvgoodsnum=itemView.findViewById(R.id.tvgoodsnum);
+            back=itemView.findViewById(R.id.back);
         }
     }
 

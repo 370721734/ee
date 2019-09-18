@@ -114,25 +114,25 @@ public class FragmentZuoping extends SupportFragment {
 
 
 
-        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                page = 1;
-                initDate();
-                mSwipeLayout.finishRefresh(1000);
-
-            }
-        });
-        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-//                page++;
-                page = 1;
-                initDate();
-                mSwipeLayout.finishLoadMore(1000);
-
-            }
-        });
+//        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshLayout) {
+//                page = 1;
+//                initDate();
+//                mSwipeLayout.finishRefresh(1000);
+//
+//            }
+//        });
+//        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore(RefreshLayout refreshLayout) {
+////                page++;
+//                page = 1;
+//                initDate();
+//                mSwipeLayout.finishLoadMore(1000);
+//
+//            }
+//        });
 
     }
 

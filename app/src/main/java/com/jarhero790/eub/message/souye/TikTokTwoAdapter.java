@@ -114,7 +114,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             SearchBean.DataBean.LikeBean video = likeBeans.get(position);
             Glide.with(context)
                     .load(video.getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.white))
+                    .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
                     .into(holder.thumb);
             //标题
             if (video.getTitle() != null && video.getTitle().length() > 0) {
@@ -175,7 +175,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             SearchBean.DataBean.VisitBean video = videos.get(position);
             Glide.with(context)
                     .load(video.getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.white))
+                    .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
                     .into(holder.thumb);
             //标题
             if (video.getTitle() != null && video.getTitle().length() > 0) {
@@ -192,6 +192,9 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             holder.tv_pinglun.setText(video.getCommentNum() + "");
             //财富`
             holder.caifu.setText(video.getCaifu() + "");
+
+            //商品浏览数量
+            holder.tvgoodsnum.setText(video.getClick_num());
 
             if (video.getHeadimgurl().startsWith("http")){
                 //tou
@@ -344,6 +347,14 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             }
         });
 
+        //back
+        holder.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListerer.onItemClick(position, "返回", view, view, view,listtype);
+            }
+        });
+
 
 
     }
@@ -379,9 +390,9 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
 
         GuanPanView guanPanView;
         RelativeLayout rlhead;
-        ImageView play_pause;
+        ImageView play_pause,back;
 
-        TextView caifu;
+        TextView caifu,tvgoodsnum;
         Love love;
         RelativeLayout bussiness;
 
@@ -413,6 +424,8 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
             bussiness=itemView.findViewById(R.id.bussiness);
+            tvgoodsnum=itemView.findViewById(R.id.tvgoodsnum);
+            back=itemView.findViewById(R.id.back);
         }
     }
 

@@ -99,7 +99,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         MyFaBuBean.DataBean video = videos.get(position);
         Glide.with(context)
                 .load(video.getVideo_img())
-                .apply(new RequestOptions().placeholder(android.R.color.white))
+                .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
                 .into(holder.thumb);
 
 
@@ -259,6 +259,13 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //                Log.e("-----","hehe");
             }
         });
+        //back
+        holder.back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemClickListerer.onItemClick(position, "返回", view, view, view);
+            }
+        });
 //        holder.love.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View view) {
@@ -295,7 +302,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         GuanPanView guanPanView;
         RelativeLayout rlhead;
-        ImageView play_pause;
+        ImageView play_pause,back;
 
         TextView caifu;
         Love love;
@@ -329,6 +336,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
             bussiness=itemView.findViewById(R.id.bussiness);
+            back=itemView.findViewById(R.id.back);
         }
     }
 

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -33,6 +34,8 @@ import com.jarhero790.eub.contract.attention.AttentionContract;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.attention.MyScrollViewScroll;
 import com.jarhero790.eub.message.attention.OnItemClickear;
+import com.jarhero790.eub.message.bean.attentionchange;
+import com.jarhero790.eub.message.bean.pinglunchange;
 import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.my.GuangZuActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
@@ -42,12 +45,18 @@ import com.jarhero790.eub.ui.souye.BottomShareDialog;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -68,8 +77,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     LinearLayout framelayoutContainer;
     @BindView(R.id.rl_user)
     RelativeLayout rlUser;
-    @BindView(R.id.myscroll)
-    MyScrollViewScroll myscroll;
+    //    @BindView(R.id.myscroll)
+//    MyScrollViewScroll myscroll;
     private int mCurrentPosition;//当前播放的第几个视频 ，
 
     @BindView(R.id.recyclerViewAttentionUsers)
@@ -102,6 +111,14 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     @Override
     public void initData() {
         super.initData();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
     }
 
     @NonNull
@@ -199,11 +216,12 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                 VideoView videoView = view.findViewById(R.id.video_player);
                 ImageView ivdeault = view.findViewById(R.id.iv_deault);
                 ImageView ivplay = view.findViewById(R.id.iv_play);
+                ivdeault.setVisibility(View.VISIBLE);
+                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
 //                Log.e("------------", "窗口消失了");
                 if (videoView != null && !videoView.isFullScreen()) {
                     videoView.release();
-                    ivdeault.setVisibility(View.GONE);
-                    ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
+
 //                    viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                    viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                    if (viewivdeault != null && viewivdeault.findViewById(R.id.iv_deault) != null)
@@ -269,7 +287,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                         autoPlayVideo(recyclerView);//滚动停止
 //                        View vieew=recyclerView.getChildAt(0).findViewById(R.id.attentionsUserIcon);
 //                        Log.e("--------------1", "滚动停止"+mCurrentPosition);
-                        if (mCurrentPosition==0){
+                        if (mCurrentPosition == 0) {
                             rlUser.setVisibility(View.VISIBLE);
                         }
 //
@@ -308,12 +326,6 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                }
 
 
-
-
-
-
-
-
                 RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
                 //判断是当前layoutManager是否为LinearLayoutManager
                 // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
@@ -325,7 +337,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                     int firstItemPosition = linearManager.findFirstVisibleItemPosition();
 
 
-                 int   visibleCount = lastItemPosition - firstItemPosition;//记录可视区域item个数
+                    int visibleCount = lastItemPosition - firstItemPosition;//记录可视区域item个数
 //                    if (foodsArrayList.get(firstItemPosition) instanceof Foods) {
 //                        int foodTypePosion = ((Foods) foodsArrayList.get(firstItemPosition)).getFood_stc_posion();
 //                        FoodsTypeListview.getChildAt(foodTypePosion).setBackgroundResource(R.drawable.choose_item_selected);
@@ -334,12 +346,6 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                     mCurrentPosition = lastItemPosition;
 //                    Log.e("--------------ggg", firstItemPosition + "  " + lastItemPosition + "  " + visibleCount);
                 }
-
-
-
-
-
-
 
 
             }
@@ -397,8 +403,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                            viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                            if (viewivdeault != null && viewivdeault.findViewById(R.id.iv_deault) != null)
 //                                viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
-//                            if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
-//                                ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+                            if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
+                                ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
                             return;
                         }
                     }
@@ -432,10 +438,10 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
             View view = recyclerViewAttentionUsers.getChildAt(0);
             if (view != null) {
-                ImageView ivdeault = view.findViewById(R.id.iv_deault);
-                ImageView iv_play = view.findViewById(R.id.iv_play);
-                iv_play.setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
-                ivdeault.setVisibility(View.VISIBLE);
+//                ImageView ivdeault = view.findViewById(R.id.iv_deault);
+//                ImageView iv_play = view.findViewById(R.id.iv_play);
+//                iv_play.setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+//                ivdeault.setVisibility(View.VISIBLE);
                 VideoView videoView = view.findViewById(R.id.video_player);
 
                 videoView.start();
@@ -443,18 +449,18 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                 if (videoView.isPlaying()){
 //                     Log.e("----------","true");
 //                 }
-                videoView.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
-                    @Override
-                    public void onPlayerStateChanged(int playerState) {
-//                         Log.e("----------","true1"+playerState);
-                    }
-
-                    @Override
-                    public void onPlayStateChanged(int playState) {
-//                         Log.e("----------","true2"+playState);
-                        ivdeault.setVisibility(View.GONE);
-                    }
-                });
+//                videoView.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
+//                    @Override
+//                    public void onPlayerStateChanged(int playerState) {
+////                         Log.e("----------","true1"+playerState);
+//                    }
+//
+//                    @Override
+//                    public void onPlayStateChanged(int playState) {
+////                         Log.e("----------","true2"+playState);
+//                        ivdeault.setVisibility(View.GONE);
+//                    }
+//                });
 
 //                viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
@@ -483,6 +489,20 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         }
         });
          **/
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void attentionname(attentionchange name) {
+//        Log.e("-------------name=",name.getName());
+        mPresenter.requestMyAttentionUsersAndUsersVideos();
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void pinglunname(pinglunchange name) {
+//        Log.e("-------------name=",name.getName());
+        mPresenter.requestMyAttentionUsersAndUsersVideos();
+
     }
 
 
@@ -519,13 +539,16 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                Log.e("------------", "a1=" + hidden);
             }
 //            else {
-//                Log.e("------------","a2="+hidden);
+//                Log.e("------------","不可见="+hidden);
 //                mVideoView = new VideoView(AppUtils.getContext());
 //                mVideoView.pause();
 //            }
         } else {
             //可见
-//            Log.e("------------","b="+hidden);
+//            Log.e("------------","可见="+hidden);
+            //刷新关注
+//            mPresenter.requestMyAttentionUsersAndUsersVideos();   //用evbus
+
             setLook(true);
             if (mVideoView != null) {
                 mVideoView.resume();
@@ -566,6 +589,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         super.onLazyInitView(savedInstanceState);
         linearLayoutManager = new LinearLayoutManager(AppUtils.getContext());
         linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+//        Log.e("-----------------","加了吗");
         //加载数据
         mPresenter.requestMyAttentionUsersAndUsersVideos();
         viewvideo = linearLayoutManager.findViewByPosition(mCurrentPosition);
@@ -627,8 +651,9 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
             if (videoView.isPlaying()) {
 //                Log.e("------------","暂停");
-                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
                 videoView.pause();
+                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
+
             } else {
                 videoView.start();
                 ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
@@ -669,9 +694,19 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
         } else if (type.equals("更多")) {
             showPingLun(position);
+        } else if (type.equals("关注")) {
+            Button button = (Button) view;
+            attentions(button);
         }
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
     @Override
     public void onResume() {
@@ -714,6 +749,40 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+
+    private void attentions(Button button) {
+
+        RetrofitManager.getInstance().getDataServer().attentionUserTwo(attentionUsersVideos.get(mCurrentPosition).getUid() + "", SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                if (response.isSuccessful()) {
+                    try {
+                        String json = response.body().string();
+                        JSONObject object = new JSONObject(json);
+                        int code = object.optInt("code");
+                        if (code == 200) {
+                            JSONObject data = object.optJSONObject("data");
+                            String islike = data.optString("is_like");
+                            EventBus.getDefault().post(new attentionchange("关注"));
+                            if (islike.equals("1")) {
+                                button.setText("已关注");
+                            } else {
+                                button.setText("+关注");
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
     }
 }
 

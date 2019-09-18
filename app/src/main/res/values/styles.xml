@@ -125,4 +125,8 @@
         <item name="progress_unreached_bar_height">0.75dp</item>
     </style>
 
+    <style name="SplashActivityTheme" parent="android:Theme.Holo.Light.NoActionBar">
+        <item name="android:windowBackground">@mipmap/welcon_de</item>
+    </style>
+
 </resources>

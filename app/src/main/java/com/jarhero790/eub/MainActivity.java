@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
@@ -17,27 +18,26 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.jarhero790.eub.message.bean.AddressBean;
-import com.tencent.map.geolocation.TencentLocation;
-import com.tencent.map.geolocation.TencentLocationListener;
-import com.tencent.map.geolocation.TencentLocationManager;
-import com.tencent.map.geolocation.TencentLocationRequest;
-import com.tencent.rtmp.TXLiveBase;
-
 import com.jarhero790.eub.base.AppManager;
-import com.jarhero790.eub.message.LoginNewActivity;
-import com.jarhero790.eub.message.bean.Conver;
-import com.jarhero790.eub.utils.SharePreferenceUtil;
-import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.jarhero790.eub.base.BaseCompatActivity;
+import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.bean.AddressBean;
+import com.jarhero790.eub.message.bean.Conver;
 import com.jarhero790.eub.record.TCVideoRecordActivity;
 import com.jarhero790.eub.ui.attention.child.AttentionFragment;
 import com.jarhero790.eub.ui.message.child.MessageFragment;
 import com.jarhero790.eub.ui.mine.child.MineFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFragment;
 import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
+import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.tencent.map.geolocation.TencentLocation;
+import com.tencent.map.geolocation.TencentLocationListener;
+import com.tencent.map.geolocation.TencentLocationManager;
+import com.tencent.map.geolocation.TencentLocationRequest;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -51,7 +51,7 @@ import butterknife.BindView;
 import io.reactivex.functions.Consumer;
 import me.yokeyword.fragmentation.SupportFragment;
 
-public class MainActivity extends BaseCompatActivity implements  View.OnClickListener {
+public class MainActivity extends BaseCompatActivity implements View.OnClickListener {
 
     @BindView(R.id.frameLayoutContainer)
     FrameLayout frameLayout;
@@ -87,6 +87,14 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     LinearLayout mine;
 
     GlobalApplication app;
+    @BindView(R.id.souye_home)
+    TextView souyeHome;
+    @BindView(R.id.souye_attion)
+    TextView souyeAttion;
+    @BindView(R.id.souye_message)
+    TextView souyeMessage;
+    @BindView(R.id.souye_my)
+    TextView souyeMy;
 
     private SupportFragment[] mFragments = new SupportFragment[4];
     public static final int FIRST = 0;
@@ -97,11 +105,12 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     //    注册位置监听器
     TencentLocationListener listener;
     TencentLocationRequest request;
-    public static boolean isdingweiok=false;//开始没有定位到
+    public static boolean isdingweiok = false;//开始没有定位到
     TencentLocationManager locationManager;
 
-    private String islogin="ddd";
-    public String getSHA1Signature(Context context){
+    private String islogin = "ddd";
+
+    public String getSHA1Signature(Context context) {
         try {
             PackageInfo info = context.getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
 
@@ -185,8 +194,6 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     }
 
 
-
-
     /**
      * 把状态栏设成透明
      */
@@ -251,8 +258,8 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         requestPermissions(this);
 //        String sdkVersionStr = TXLiveBase.getSDKVersionStr();
 //        Log.e("---------sdk",sdkVersionStr);//3.0.1185
-        locationManager=TencentLocationManager.getInstance(this);
-        app= (GlobalApplication) getApplication();
+        locationManager = TencentLocationManager.getInstance(this);
+        app = (GlobalApplication) getApplication();
 
         if (Build.VERSION.SDK_INT >= 23) {
             String[] permissions = {
@@ -261,13 +268,12 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
             };
 
-            if (checkSelfPermission(permissions[0]) != PackageManager.PERMISSION_GRANTED)
-            {
+            if (checkSelfPermission(permissions[0]) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(permissions, 0);
-            }else {
+            } else {
                 initdate();
             }
-        }else {
+        } else {
             initdate();
         }
 
@@ -275,22 +281,22 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     }
 
 
-    @Subscribe(threadMode=ThreadMode.MAIN)
-    public void event(Conver bean){
-        Log.e("--------ksksk=>",bean.getName());
-        islogin=bean.getName();
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void event(Conver bean) {
+        Log.e("--------ksksk=>", bean.getName());
+        islogin = bean.getName();
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, GlobalApplication.getContext());
-        Log.e("---------","onDestroy");
+        Log.e("---------", "onDestroy");
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        if (locationManager!=null)
-        locationManager.removeUpdates(listener);
+        if (locationManager != null)
+            locationManager.removeUpdates(listener);
 
 
     }
@@ -298,16 +304,16 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     @Override
     protected void onStop() {
         super.onStop();
-        islogin="33333333";
-        if (isdingweiok){
+        islogin = "33333333";
+        if (isdingweiok) {
             locationManager.removeUpdates(listener);
         }
 
     }
 
-    public void clickHome(){
-        int[] widthHeight=AppUtils.getScreenWidthHeight(this);
-        frameLayout.getLayoutParams().height=widthHeight[1];
+    public void clickHome() {
+        int[] widthHeight = AppUtils.getScreenWidthHeight(this);
+        frameLayout.getLayoutParams().height = widthHeight[1];
         indicatorHome.setVisibility(View.VISIBLE);
         indicatorAttention.setVisibility(View.INVISIBLE);
         indicatorMessage.setVisibility(View.INVISIBLE);
@@ -316,17 +322,16 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     }
 
 
-
-//    @LoginFilter(loginDefine = 0)
-    public void clickAttention(){
-        int[] widthHeight=AppUtils.getScreenWidthHeight(this);
-        int screenHeight=widthHeight[1];
+    //    @LoginFilter(loginDefine = 0)
+    public void clickAttention() {
+        int[] widthHeight = AppUtils.getScreenWidthHeight(this);
+        int screenHeight = widthHeight[1];
         /**
          * android 动态设置Framelayout,view,imageView,Layout高度
          */
         RelativeLayout.LayoutParams params = new
                 RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT
-                ,screenHeight-(bottomNavigator.getHeight()+40));
+                , screenHeight - (bottomNavigator.getHeight() + 40));
         frameLayout.setLayoutParams(params);
         indicatorHome.setVisibility(View.INVISIBLE);
         indicatorAttention.setVisibility(View.VISIBLE);
@@ -335,16 +340,16 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         showHideFragment(mFragments[SECOND]);
     }
 
-//    @LoginFilter(loginDefine = 0)
-    public void clickMessage(){
-        int[] widthHeight=AppUtils.getScreenWidthHeight(this);
-        int screenHeight=widthHeight[1];
+    //    @LoginFilter(loginDefine = 0)
+    public void clickMessage() {
+        int[] widthHeight = AppUtils.getScreenWidthHeight(this);
+        int screenHeight = widthHeight[1];
         /**
          * android 动态设置Framelayout,view,imageView,Layout高度
          */
         RelativeLayout.LayoutParams params = new
                 RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT
-                ,screenHeight-(bottomNavigator.getHeight()+40));
+                , screenHeight - (bottomNavigator.getHeight() + 40));
         frameLayout.setLayoutParams(params);
         indicatorHome.setVisibility(View.INVISIBLE);
         indicatorAttention.setVisibility(View.INVISIBLE);
@@ -353,16 +358,16 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         showHideFragment(mFragments[THIRD]);
     }
 
-//    @LoginFilter(loginDefine = 0)
-    public void clickMine(){
-        int[] widthHeight=AppUtils.getScreenWidthHeight(this);
-        int screenHeight=widthHeight[1];
+    //    @LoginFilter(loginDefine = 0)
+    public void clickMine() {
+        int[] widthHeight = AppUtils.getScreenWidthHeight(this);
+        int screenHeight = widthHeight[1];
         /**
          * android 动态设置Framelayout,view,imageView,Layout高度
          */
         RelativeLayout.LayoutParams params = new
                 RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT
-                ,screenHeight-(bottomNavigator.getHeight()+40));
+                , screenHeight - (bottomNavigator.getHeight() + 40));
 
         frameLayout.setLayoutParams(params);
         indicatorHome.setVisibility(View.INVISIBLE);
@@ -373,14 +378,19 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
     }
 
 
-
     @Override
     public void onClick(View v) {
-      switch (v.getId()){
-          case R.id.home:
-              clickHome();
-              break;
-          case R.id.attention:
+        switch (v.getId()) {
+            case R.id.home:
+
+                souyeHome.setTextColor(Color.parseColor("#FFFFFF"));
+                souyeAttion.setTextColor(Color.parseColor("#A5A2A2"));
+                souyeMessage.setTextColor(Color.parseColor("#A5A2A2"));
+                souyeMy.setTextColor(Color.parseColor("#A5A2A2"));
+
+                clickHome();
+                break;
+            case R.id.attention:
 
 //              if (islogin.equals("ddd")){
 //                  return;
@@ -392,17 +402,30 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //              }
 
 
-              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
-                  Intent intent = new Intent(this, LoginNewActivity.class);
-                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-                  startActivity(intent);
-              }else {
-                  clickAttention();
-              }
+
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")) {
+                    Intent intent = new Intent(this, LoginNewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+
+                    souyeHome.setTextColor(Color.parseColor("#A5A2A2"));
+                    souyeAttion.setTextColor(Color.parseColor("#FFFFFF"));
+                    souyeMessage.setTextColor(Color.parseColor("#A5A2A2"));
+                    souyeMy.setTextColor(Color.parseColor("#A5A2A2"));
 
 
-              break;
-          case R.id.record:
+
+                    clickAttention();
+
+
+
+
+                }
+
+
+                break;
+            case R.id.record:
 //              if (islogin.equals("ddd")){
 //                  return;
 //              }
@@ -412,19 +435,18 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //
 //              }
 
-              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
-                  Intent intent = new Intent(this, LoginNewActivity.class);
-                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-                  startActivity(intent);
-              }else {
-                  Intent intent=new Intent(MainActivity.this,TCVideoRecordActivity.class);
-                  startActivity(intent);
-              }
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")) {
+                    Intent intent = new Intent(this, LoginNewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    Intent intent = new Intent(MainActivity.this, TCVideoRecordActivity.class);
+                    startActivity(intent);
+                }
 
 
-
-              break;
-          case R.id.message:
+                break;
+            case R.id.message:
 //              if (islogin.equals("ddd")){
 //                  Log.e("-------------","ddd");
 //                  return;
@@ -435,16 +457,22 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //
 //              }
 
-              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
-                  Intent intent = new Intent(this, LoginNewActivity.class);
-                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-                  startActivity(intent);
-              }else {
-                  clickMessage();
-              }
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")) {
+                    Intent intent = new Intent(this, LoginNewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
 
-              break;
-          case R.id.mine:
+                    souyeHome.setTextColor(Color.parseColor("#A5A2A2"));
+                    souyeAttion.setTextColor(Color.parseColor("#A5A2A2"));
+                    souyeMessage.setTextColor(Color.parseColor("#FFFFFF"));
+                    souyeMy.setTextColor(Color.parseColor("#A5A2A2"));
+
+                    clickMessage();
+                }
+
+                break;
+            case R.id.mine:
 //              if (islogin.equals("ddd")){
 //                  return;
 //              }
@@ -455,16 +483,20 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //              }
 
 
-              if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")){
-                  Intent intent = new Intent(this, LoginNewActivity.class);
-                  intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
-                  startActivity(intent);
-              }else {
-                  clickMine();
-              }
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")) {
+                    Intent intent = new Intent(this, LoginNewActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                } else {
+                    souyeHome.setTextColor(Color.parseColor("#A5A2A2"));
+                    souyeAttion.setTextColor(Color.parseColor("#A5A2A2"));
+                    souyeMessage.setTextColor(Color.parseColor("#A5A2A2"));
+                    souyeMy.setTextColor(Color.parseColor("#FFFFFF"));
+                    clickMine();
+                }
 
-              break;
-       }
+                break;
+        }
     }
 
 
@@ -485,8 +517,6 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
 
 
     //定位
@@ -520,9 +550,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
         request.setInterval(100000);
 
 
-
         request.setRequestLevel(TencentLocationRequest.REQUEST_LEVEL_ADMIN_AREA);
-
 
 
 //
@@ -534,11 +562,11 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 
 //                Log.e("---location:2",location.getCity()+location.getProvince());//深圳市
                 if (TencentLocation.ERROR_OK == error) {
-                    isdingweiok=true;
+                    isdingweiok = true;
 //                    Log.e("------", "成1功"+location.getCity());
-                    if (location!=null && location.getCity()!=null && location.getCity().length()>0){
+                    if (location != null && location.getCity() != null && location.getCity().length() > 0) {
                         app.setCITY(location.getCity());
-                        EventBus.getDefault().post(new AddressBean((location.getCity()).replace("市","")));
+                        EventBus.getDefault().post(new AddressBean((location.getCity()).replace("市", "")));
                     }
 //
 //                    //-: 成1功
@@ -560,7 +588,7 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
 //                    }
                 } else {
 //                    Log.e("------", "失1败"+error+"   "+reason);
-                    isdingweiok=false;
+                    isdingweiok = false;
 
                 }
 
@@ -596,7 +624,6 @@ public class MainActivity extends BaseCompatActivity implements  View.OnClickLis
             Log.e("------", "失败" + error);
         }
     }
-
 
 
     @Override

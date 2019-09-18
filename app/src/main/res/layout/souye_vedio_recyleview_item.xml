@@ -6,6 +6,7 @@
     android:id="@+id/souye_page_video_relativeLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/backgroudcolor"
     android:clickable="true">
 
 
@@ -261,7 +262,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="34dp"
                 android:gravity="center_vertical"
-                android:text="160"
+                android:text=""
                 android:textColor="#ffffffff"
                 android:textSize="12sp" />
 

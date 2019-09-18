@@ -1,6 +1,7 @@
 package com.jarhero790.eub.ui.souye.child;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -11,6 +12,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -31,6 +33,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.danikula.videocache.HttpProxyCacheServer;
+import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
@@ -45,6 +48,7 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.bean.attentionchange;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.message.souye.SearchActivity;
@@ -77,6 +81,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -135,6 +140,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
 //    private TextView tvzan;//点赞
 
+
+    private boolean isnext = false;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -157,7 +165,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(0);
                 page.set(1);
-                mCurrentPosition=0;
+                mCurrentPosition = 0;
 //                //加载数据
                 if (lists.size() > 0) {
                     lists.clear();
@@ -168,20 +176,17 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("------1--",cate.get()+"");
 
-                if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
-                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                        Log.e("-----------","无token");
-                    }else {
+                    } else {
 //                        Log.e("-----------","有token");
-                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                     }
-                }else {
-                    Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
                 }
-
-
-
 
 
 //                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
@@ -198,7 +203,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(1);
                 page.set(1);
-                mCurrentPosition=0;
+                mCurrentPosition = 0;
                 //加载数据
                 if (lists.size() > 0) {
                     lists.clear();
@@ -213,14 +218,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 
 
-                if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
-                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-                    }else {
-                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    } else {
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                     }
-                }else {
-                    Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
                 }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------2-",cate.get()+"");
@@ -236,7 +241,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(2);
                 page.set(1);
-                mCurrentPosition=0;
+                mCurrentPosition = 0;
                 //加载数据
                 if (lists.size() > 0) {
                     lists.clear();
@@ -251,14 +256,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 
 
-                if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
-                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+                if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-                    }else {
-                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    } else {
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                     }
-                }else {
-                    Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
                 }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
@@ -302,16 +307,16 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void initData() {
         super.initData();
         //加载数据
-        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
-            if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+            if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //            Log.e("-----------","无token");
-            }else {
+            } else {
 //            Log.e("-----------","有token");
-                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
             }
-        }else {
-            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
         }
 
 
@@ -338,7 +343,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         Log.e("-----------", "souye-onActivityCreated");
-        api= WXAPIFactory.createWXAPI(getActivity(),GlobalApplication.APP_ID_Wei,true);
+        api = WXAPIFactory.createWXAPI(getActivity(), GlobalApplication.APP_ID_Wei, true);
         api.registerApp(GlobalApplication.APP_ID_Wei);
     }
 
@@ -505,6 +510,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        if (!isnext) {
+            if (handler != null) {
+                handler.removeMessages(22);
+            }
+        }
+
     }
 
     @Override
@@ -548,35 +559,31 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //       if (isok!=null)
 
 
-
-
-
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void fav(FaVBean faVBean){
+    public void fav(FaVBean faVBean) {
 //        Log.e("---------youye=",faVBean.getName());
-        if (faVBean.getName().equals("video")){
+        if (faVBean.getName().equals("video")) {
             cate.set(0);
             page.set(1);
-            mCurrentPosition=0;
+            mCurrentPosition = 0;
 //                //加载数据
             if (lists.size() > 0) {
                 lists.clear();
             }
 
 
-
-            if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+            if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                     mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                    Log.e("-----------","无token");
-                }else {
+                } else {
 //                    Log.e("-----------","有token");
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                 }
-            }else {
-                Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -656,15 +663,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
 //                        tvzan= (TextView) view1;//有了
-                        ImageView ivlike= (ImageView) view;
-                        TextView tv2= (TextView) view1;
+                        ImageView ivlike = (ImageView) view;
+                        TextView tv2 = (TextView) view1;
 
-                        if (ivlike.isSelected()){
+                        if (ivlike.isSelected()) {
                             ivlike.setSelected(false);
                             likeVideo();
-                            String string=tv2.getText().toString();
-                            int text=(Integer.parseInt(string)-1);
-                            tv2.setText(""+text);
+                            String string = tv2.getText().toString();
+                            int text = (Integer.parseInt(string) - 1);
+                            tv2.setText("" + text);
 //                            if (list!=null && list.size()>0){
 //                                zanother(list.get(mCurrentPosition).getVideo_id()+"");
 //
@@ -672,12 +679,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                            }
 
 //                        Log.e("-----------str=",""+(Integer.parseInt(string)-1));
-                        }else {
+                        } else {
                             ivlike.setSelected(true);
                             likeVideo();
-                            String string=tv2.getText().toString();
-                            int text=(Integer.parseInt(string)+1);
-                            tv2.setText(""+text);
+                            String string = tv2.getText().toString();
+                            int text = (Integer.parseInt(string) + 1);
+                            tv2.setText("" + text);
 //                            if (lists!=null && lists.size()>0){
 //                                zanother(lists.get(mCurrentPosition).getVideo_id()+"");
 //
@@ -698,7 +705,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     } else {
 //                        attention(lists.get(position).getUid(), SharePreferenceUtil.getToken(AppUtils.getContext()));
 
-                        Button button= (Button) view;
+                        Button button = (Button) view;
                         attentions(button);
 
                     }
@@ -717,22 +724,21 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals(""))
                         return;
-                    ImageView ivlike= (ImageView) view1;
-                    TextView tvlike= (TextView) view2;
+                    ImageView ivlike = (ImageView) view1;
+                    TextView tvlike = (TextView) view2;
 
-                    if (!ivlike.isSelected()){
+                    if (!ivlike.isSelected()) {
                         likeVideo();
                         ivlike.setSelected(true);
-                        Log.e("-------------", "you ok" + isIszanle());
-                        int b=Integer.parseInt(tvlike.getText().toString())+1;
+//                        Log.e("-------------", "you ok" + isIszanle());
+                        int b = Integer.parseInt(tvlike.getText().toString()) + 1;
 
-                        tvlike.setText(""+b);
+                        tvlike.setText("" + b);
                     }
 
 //                    if (!isIszanle()) {
 ////                        Log.e("-------------", "you");
 //                    }
-
 
 
 //                    View viewh = layoutManager.findViewByPosition(mCurrentPosition);
@@ -746,24 +752,24 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                    } else {
 //                        ivLike.setImageResource(R.drawable.iv_like_unselected);
 //                    }
-                }else if (type.equals("商城")){
-                    Log.e("-------------","商城");
+                } else if (type.equals("商城")) {
+//                    Log.e("-------------", "商城");
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
 
-                        Intent intentx=new Intent(getActivity(), BusinessWebTwoActivity.class);
-                        intentx.putExtra("url","http://www.51ayhd.com/web/Shopping/#/shopindex/token/"+SharePreferenceUtil.getToken(AppUtils.getContext())+"/good_id/"+lists.get(mCurrentPosition).getGood_id());
-                        intentx.putExtra("good_id",lists.get(mCurrentPosition).getGood_id());
+                        Intent intentx = new Intent(getActivity(), BusinessWebTwoActivity.class);
+                        intentx.putExtra("url", "http://www.51ayhd.com/web/Shopping/#/shopindex/token/" + SharePreferenceUtil.getToken(AppUtils.getContext()) + "/good_id/" + lists.get(mCurrentPosition).getGood_id());
+                        intentx.putExtra("good_id", lists.get(mCurrentPosition).getGood_id());
                         startActivity(intentx);
                     }
 
-                }else if (type.equals("同款")){
+                } else if (type.equals("同款")) {
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
-                        Intent intentt=new Intent(getActivity(), TongKuanActivity.class);
-                        intentt.putExtra("video_id",lists.get(mCurrentPosition).getVideo_id());
+                        Intent intentt = new Intent(getActivity(), TongKuanActivity.class);
+                        intentt.putExtra("video_id", lists.get(mCurrentPosition).getVideo_id());
                         startActivity(intentt);
                     }
                 }
@@ -782,7 +788,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-                Log.e("----------", "onPageRelease=" + isNext + "  " + position);
+//                Log.e("----------", "onPageRelease=" + isNext + "  " + position);
                 if (mCurrentPosition == position) {
                     mVideoView.release();
                 }
@@ -790,7 +796,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
-                Log.e("----------", "onPageSelected选择位置:" + position + " 下一页:" + isBottom);
+//                Log.e("----------", "onPageSelected选择位置:" + position + " 下一页:" + isBottom);
                 if (mCurrentPosition == position) return;
                 startPlay(position);
                 mCurrentPosition = position;
@@ -833,11 +839,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
      * token
      */
     public void likeVideo() {
-        if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
+        if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
 
             mPresenter.zan(lists.get(mCurrentPosition).getVideo_id(), SharePreferenceUtil.getToken(AppUtils.getContext()));
-        }else {
-            Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -900,15 +906,13 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         bottomShareDialog.setShareDialog(new BottomShareDialog.ShareDialog() {
             @Override
             public void Clicklinear(View view, String type) {
-                if (type.equals("下载")){
-                    Log.e("-------","下载");
-
-
+                if (type.equals("下载")) {
+                    Log.e("-------", "下载");
 
 
                     bottomShareDialog.dismiss();
-                }else if (type.equals("分享")){
-                    Log.e("-------","分享");
+                } else if (type.equals("分享")) {
+                    Log.e("-------", "分享");
                     WXWebpageObject webpage = new WXWebpageObject();
                     webpage.webpageUrl = "http://www.qq.com";
                     WXMediaMessage msg = new WXMediaMessage(webpage);
@@ -926,13 +930,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     api.sendReq(req);
 
                     bottomShareDialog.dismiss();
-                }else {}
+                } else {
+                }
             }
         });
     }
 
 
-    public  byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
+    public byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
         if (needRecycle) {
@@ -963,9 +968,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 @Override
                 public void Clicker(int num) {
                     View view = layoutManager.findViewByPosition(mCurrentPosition);
-                    if (view!=null){
+                    if (view != null) {
                         TextView tvLike = view.findViewById(R.id.tv_pinglun);
-                        tvLike.setText(""+num);
+                        tvLike.setText("" + num);
                     }
 
                 }
@@ -1046,9 +1051,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         String proxyUrl = proxy.getProxyUrl(vedio.getUrl());
 //        Log.e("----------------hurl=",proxyUrl);
 //        Log.e("----------------vurl=",vedio.getUrl());
-        if (proxyUrl.length()>0){
+        if (proxyUrl.length() > 0) {
             mVideoView.setUrl(proxyUrl);
-        }else {
+        } else {
             //设置播放的url
             mVideoView.setUrl(vedio.getUrl());
         }
@@ -1117,14 +1122,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 
 
-            if (NetworkConnectionUtils.isNetworkConnected(getActivity())){
-                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")){
+            if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                     mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-                }else {
-                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()),SharePreferenceUtil.getToken(AppUtils.getContext()));
+                } else {
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                 }
-            }else {
-                Toast.makeText(getActivity(),"网络不可用",Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
             }
         }
 
@@ -1139,20 +1144,19 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
 
         //确定高度
-       /**
-        mVideoView.setOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
-            @Override
-            public void onPlayerStateChanged(int playerState) {
+/**
+
+ mVideoView.setOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
+@Override public void onPlayerStateChanged(int playerState) {
 //                Log.e("---Player",""+playerState);
 //                int[] size= mVideoView.getVideoSize();
 //                String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
 //                Log.e("Android短视频5",value);
 
 
-            }
+}
 
-            @Override
-            public void onPlayStateChanged(int playState) {
+@Override public void onPlayStateChanged(int playState) {
 
 //                isplay=mVideoView.isPlaying();
 //                if (mVideoView.isPlaying()){
@@ -1165,70 +1169,78 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
 
 //                Log.e("---Play",""+playState);
-                int[] size = mVideoView.getVideoSize();
+//                int[] size = mVideoView.getVideoSize();
 //                String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
 //                Log.e("Android短视频6",value);
 //
 //                Log.e("-------------s------",""+size[1]);
-                //高度OK
-                if (size[1] < 640) {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT, 700);//RelativeLayout.LayoutParams.MATCH_PARENT 500
-                    params.addRule(RelativeLayout.CENTER_VERTICAL);
-                    params.setMargins(0, 0, 0, 0);//top 400
-                    mVideoView.setLayoutParams(params);
-                    View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
-                    if (view != null)
-                        view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.INVISIBLE);
-                } else {
-                    RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT,
-                            RelativeLayout.LayoutParams.MATCH_PARENT);
-                    params.setMargins(0, 0, 0, 0);
-                    mVideoView.setLayoutParams(params);
-                    View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置
-                    if (view != null)
-                        view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
-                }
+//高度OK
+//        if (size[1] < 640) {
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//        RelativeLayout.LayoutParams.MATCH_PARENT, 700);//RelativeLayout.LayoutParams.MATCH_PARENT 500
+//        params.addRule(RelativeLayout.CENTER_VERTICAL);
+//        params.setMargins(0, 0, 0, 0);//top 400
+//        mVideoView.setLayoutParams(params);
+//        View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
+//        if (view != null)
+//        view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.INVISIBLE);
+//        } else {
+//        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+//        RelativeLayout.LayoutParams.MATCH_PARENT,
+//        RelativeLayout.LayoutParams.MATCH_PARENT);
+//        params.setMargins(0, 0, 0, 0);
+//        mVideoView.setLayoutParams(params);
+//        View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置
+//        if (view != null)
+//        view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
+//        }
 
 
-                //进度//ok
+//进度//ok
 
-                int duration = (int) mVideoView.getDuration();
+int duration = (int) mVideoView.getDuration();
 //                Log.e("---------max-", "" + duration + "  " + mVideoView.getDuration());
-                if (proPercent != null)
-                    proPercent.setMax(duration);
-                if (duration != 0) {
-                    new Thread() {
-                        @Override
-                        public void run() {
-                            super.run();
-                            if (mVideoView == null)
-                                return;
-                            while (mVideoView.isPlaying()) {
-                                int currentPosition = (int) mVideoView.getCurrentPosition();
+//                if (proPercent != null)
+//                    proPercent.setMax(duration);
+if (duration != 0) {
+new Thread() {
+@Override public void run() {
+super.run();
+if (mVideoView == null)
+return;
+while (mVideoView.isPlaying()) {
+int currentPosition = (int) mVideoView.getCurrentPosition();
 //                                    Log.e("-----pro",""+currentPosition+"  "+mVideoView.getCurrentPosition());
-                                if (proPercent != null)
-                                    proPercent.setProgress(currentPosition);
-                                try {
-                                    Thread.sleep(500);
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
-                                }
-                            }
-                        }
-                    }.start();
-                }
 
 
+//                                if (proPercent != null)
+//                                    proPercent.setProgress(currentPosition);
 
-            }
-        });
+//                                Log.e("-------------走完了=",currentPosition+"     "+duration);
+//                                if (currentPosition==duration){
+//                                    Log.e("----------------","走完了");
+//                                }
+if (currentPosition >= (duration - 200)) {
+//                                    Log.e("----------------","走完了2");
+handler.sendEmptyMessage(22);
+}
+
+try {
+Thread.sleep(100);
+} catch (InterruptedException e) {
+e.printStackTrace();
+}
+}
+}
+}.start();
+}
 
 
-        */
+}
+});
 
 
+ */
     }
 
 
@@ -1256,14 +1268,64 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             super.handleMessage(msg);
             switch (msg.what) {
                 case 11:
-                    int curr = (int) msg.obj;
-                    Log.e("-----pro11", "" + curr + "  " + mVideoView.getCurrentPosition());
-                    proPercent.setProgress(curr);
+//                    int curr = (int) msg.obj;
+//                    Log.e("-----pro11", "" + curr + "  " + mVideoView.getCurrentPosition());
+//                    proPercent.setProgress(curr);
+                    break;
+                case 22:
+
+                    isnext = true;
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.loading_dialog);
+                    View layout = View.inflate(getActivity(), R.layout.item_hong_one, null);
+                    ImageView iv_close = layout.findViewById(R.id.iv_close);
+                    CircleImageView civ = layout.findViewById(R.id.civ);
+                    TextView tv = layout.findViewById(R.id.tv_name);
+                    ImageView iv_ka = layout.findViewById(R.id.iv_ka);
+
+                    builder.setView(layout);
+                    Dialog dialog = builder.create();
+                    iv_close.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            dialog.dismiss();
+                        }
+                    });
+                    iv_ka.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            kaimoney();
+                            dialog.dismiss();
+                        }
+                    });
+
+                    dialog.show();
                     break;
             }
 
         }
     };
+
+    private void kaimoney() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.loading_dialog);
+        View layout = View.inflate(getActivity(), R.layout.item_hong_two, null);
+        ImageView iv_close = layout.findViewById(R.id.iv_close);
+        TextView tv_name = layout.findViewById(R.id.tv_text2);
+        TextView tv_money = layout.findViewById(R.id.tv_money);
+
+
+        builder.setView(layout);
+        Dialog dialog = builder.create();
+        iv_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+
+        dialog.show();
+    }
 
 
     public boolean isLook() {
@@ -1283,23 +1345,23 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     }
 
 
-
     private void attentions(Button button) {
 
-        RetrofitManager.getInstance().getDataServer().attentionUserTwo(lists.get(mCurrentPosition).getUid()+"",SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
+        RetrofitManager.getInstance().getDataServer().attentionUserTwo(lists.get(mCurrentPosition).getUid() + "", SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
-                        String json=response.body().string();
-                        JSONObject object=new JSONObject(json);
-                        int code=object.optInt("code");
-                        if (code==200){
-                            JSONObject data=object.optJSONObject("data");
-                            String islike=data.optString("is_like");
-                            if (islike.equals("1")){
+                        String json = response.body().string();
+                        JSONObject object = new JSONObject(json);
+                        int code = object.optInt("code");
+                        if (code == 200) {
+                            JSONObject data = object.optJSONObject("data");
+                            String islike = data.optString("is_like");
+                            EventBus.getDefault().post(new attentionchange("关注"));
+                            if (islike.equals("1")) {
                                 button.setText("已关注");
-                            }else {
+                            } else {
                                 button.setText("+关注");
                             }
                         }
