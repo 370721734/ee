@@ -63,6 +63,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         AttentionVideo attentionVideo = videos.get(position);
 //        ImageView thumb = holder.controller.getThumb();
 
+        if (getP!=null){
+            getP.ostion(holder.userimage,position);
+        }
         if (attentionVideo.getHeadimgurl().startsWith("http")){
             Glide.with(mcontext).load(attentionVideo.getHeadimgurl()).apply(new RequestOptions()
                     .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
@@ -264,5 +267,16 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
             title = itemView.findViewById(R.id.tv_text);
         }
+    }
+
+
+
+    public interface GetP{
+        void ostion(View view,int po);
+    }
+    private GetP getP;
+
+    public void setGetP(GetP getP) {
+        this.getP = getP;
     }
 }

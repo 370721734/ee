@@ -9,11 +9,13 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
@@ -29,6 +31,7 @@ import com.jarhero790.eub.bean.AttentionVideo;
 import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.contract.attention.AttentionContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.attention.MyScrollViewScroll;
 import com.jarhero790.eub.message.attention.OnItemClickear;
 import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.my.GuangZuActivity;
@@ -44,6 +47,7 @@ import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import de.hdodenhof.circleimageview.CircleImageView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -62,6 +66,10 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     Unbinder unbinder;
     @BindView(R.id.framelayout_container)
     LinearLayout framelayoutContainer;
+    @BindView(R.id.rl_user)
+    RelativeLayout rlUser;
+    @BindView(R.id.myscroll)
+    MyScrollViewScroll myscroll;
     private int mCurrentPosition;//当前播放的第几个视频 ，
 
     @BindView(R.id.recyclerViewAttentionUsers)
@@ -141,6 +149,17 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         adapter = new VideoRecyclerViewAdapter(attentionUsersVideos, getActivity(), this);
         recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
         recyclerViewAttentionUsers.setAdapter(adapter);
+//        adapter.setGetP(new VideoRecyclerViewAdapter.GetP() {
+//            @Override
+//            public void ostion(View view, int po) {
+//                Log.e("------------jjjj",view.getTop()+"    "+po);
+//                if (po==0){
+//                    rlUser.setVisibility(View.VISIBLE);
+//                }else {
+//                    rlUser.setVisibility(View.GONE);
+//                }
+//            }
+//        });
 
 
         AttentionUsersAdapter attentionUsersAdapter = new AttentionUsersAdapter(attentionUsers, getActivity());
@@ -179,40 +198,150 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             public void onChildViewDetachedFromWindow(@NonNull View view) {
                 VideoView videoView = view.findViewById(R.id.video_player);
                 ImageView ivdeault = view.findViewById(R.id.iv_deault);
+                ImageView ivplay = view.findViewById(R.id.iv_play);
 //                Log.e("------------", "窗口消失了");
                 if (videoView != null && !videoView.isFullScreen()) {
                     videoView.release();
                     ivdeault.setVisibility(View.GONE);
+                    ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
 //                    viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
-                    viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
+//                    viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                    if (viewivdeault != null && viewivdeault.findViewById(R.id.iv_deault) != null)
 //                        viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.VISIBLE);
-                    if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
-                        ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
+//                    if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
+//                        ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
                 }
             }
         });
 
+//        myscroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View view, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//                Log.e("-----------------","");
+//                VideoView videoView = view.findViewById(R.id.video_player);
+//                int height = videoView.getHeight();
+//                Log.e("--------",height+"    "+scrollY+"    "+oldScrollY);
+//
+//
+//
+//
+//                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                visibleCount = lastVisibleItem - firstVisibleItem;//记录可视区域item个数
+//                Log.e("--------------1", firstVisibleItem + "  " + lastVisibleItem + "  " + visibleCount);
+//                mCurrentPosition = lastVisibleItem;
+//            }
+//
+//        });
+//
+//        myscroll.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+//            @Override
+//            public void onViewAttachedToWindow(View v) {
+//
+//            }
+//
+//            @Override
+//            public void onViewDetachedFromWindow(View view) {
+//                VideoView videoView = view.findViewById(R.id.video_player);
+//                ImageView ivdeault = view.findViewById(R.id.iv_deault);
+////                Log.e("------------", "窗口消失了");
+//                if (videoView != null && !videoView.isFullScreen()) {
+//                    videoView.release();
+//                    ivdeault.setVisibility(View.GONE);
+////                    viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+//                    viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
+////                    if (viewivdeault != null && viewivdeault.findViewById(R.id.iv_deault) != null)
+////                        viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.VISIBLE);
+//                    if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
+//                        ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
+//                }
+//            }
+//        });
+
+//        recyclerViewAttentionUsers.setHasFixedSize(true);
+//        recyclerViewAttentionUsers.setNestedScrollingEnabled(false);
+
         recyclerViewAttentionUsers.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
                 switch (newState) {
                     case RecyclerView.SCROLL_STATE_IDLE:
                         autoPlayVideo(recyclerView);//滚动停止
-//                        Log.e("--------------1", "滚动停止");
+//                        View vieew=recyclerView.getChildAt(0).findViewById(R.id.attentionsUserIcon);
+//                        Log.e("--------------1", "滚动停止"+mCurrentPosition);
+                        if (mCurrentPosition==0){
+                            rlUser.setVisibility(View.VISIBLE);
+                        }
+//
                         break;
                 }
+                super.onScrollStateChanged(recyclerView, newState);
             }
 
             @Override
             public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+
+//                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
+//                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+//                visibleCount = lastVisibleItem - firstVisibleItem;//记录可视区域item个数
+//                Log.e("--------------ggg", firstVisibleItem + "  " + lastVisibleItem + "  " + visibleCount);
+//                mCurrentPosition = lastVisibleItem;
                 super.onScrolled(recyclerView, dx, dy);
-                firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition();
-                lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                visibleCount = lastVisibleItem - firstVisibleItem;//记录可视区域item个数
-//                Log.e("--------------1", firstVisibleItem + "  " + lastVisibleItem + "  " + visibleCount);
-                mCurrentPosition = lastVisibleItem;
+
+                if (RecyclerView.SCROLL_STATE_IDLE != recyclerView.getScrollState()) {
+//                    Log.e("----------", "来了没有,滑动");
+////                    attentionuserRecyclerview.scrollBy(dx, dy);
+//                    rlUser.scrollBy(dx, dy);
+//                    rlUser.setBackgroundColor(Color.TRANSPARENT);
+                    rlUser.setVisibility(View.GONE);
+                }
+//                else {
+//                    Log.e("----------", "来了没有，静止");
+//
+//                }
+
+//                Log.e("-------",dx+"       "+dy);
+
+
+//                else {
+//                    rlUser.setVisibility(View.VISIBLE);
+//                }
+
+
+
+
+
+
+
+
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                //判断是当前layoutManager是否为LinearLayoutManager
+                // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+                if (layoutManager instanceof LinearLayoutManager) {
+                    LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+                    //获取最后一个可见view的位置
+                    int lastItemPosition = linearManager.findLastVisibleItemPosition();
+                    //获取第一个可见view的位置
+                    int firstItemPosition = linearManager.findFirstVisibleItemPosition();
+
+
+                 int   visibleCount = lastItemPosition - firstItemPosition;//记录可视区域item个数
+//                    if (foodsArrayList.get(firstItemPosition) instanceof Foods) {
+//                        int foodTypePosion = ((Foods) foodsArrayList.get(firstItemPosition)).getFood_stc_posion();
+//                        FoodsTypeListview.getChildAt(foodTypePosion).setBackgroundResource(R.drawable.choose_item_selected);
+//                    }
+//                    System.out.println(lastItemPosition + "   " + firstItemPosition);
+                    mCurrentPosition = lastItemPosition;
+//                    Log.e("--------------ggg", firstItemPosition + "  " + lastItemPosition + "  " + visibleCount);
+                }
+
+
+
+
+
+
+
+
             }
 
 
@@ -226,6 +355,10 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
                     VideoView videoView = recyclerView.getChildAt(i).findViewById(R.id.video_player);
                     ImageView ivdeault = recyclerView.getChildAt(i).findViewById(R.id.iv_deault);
+//                    CircleImageView civ=recyclerView.getChildAt(0).findViewById(R.id.attentionsUserIcon);
+
+//                    Log.e("----------","高度="+civ.getTop()+"当前="+civ.getMeasuredHeight()+civ.getPivotY()+" "+civ.getScrollY());
+
                     if (videoView != null && ivdeault != null) {
 //                        Log.e("----------", "2");
                         Rect rect = new Rect();
@@ -275,6 +408,23 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         });
 
 
+//        attentionuserRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//            }
+//
+//            @Override
+//            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                if (RecyclerView.SCROLL_STATE_IDLE != recyclerView.getScrollState()) {
+//                    Log.e("----------", "来了没有");
+//                    recyclerViewAttentionUsers.scrollBy(dx, dy);
+//                }
+//            }
+//        });
+
+
         //ok
 //        startPlay(0);
         recyclerViewAttentionUsers.post(() -> {
@@ -283,6 +433,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             View view = recyclerViewAttentionUsers.getChildAt(0);
             if (view != null) {
                 ImageView ivdeault = view.findViewById(R.id.iv_deault);
+                ImageView iv_play = view.findViewById(R.id.iv_play);
+                iv_play.setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
                 ivdeault.setVisibility(View.VISIBLE);
                 VideoView videoView = view.findViewById(R.id.video_player);
 
@@ -305,11 +457,11 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                 });
 
 //                viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
-                viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
+//                viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                if (viewivdeault != null && viewivdeault.findViewById(R.id.iv_deault) != null)
 //                    viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
-                if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
-                    ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+//                if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
+//                    ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
             }
 
         });
