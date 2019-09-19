@@ -78,7 +78,7 @@
             android:layout_marginRight="12dp"
             android:layout_marginBottom="19dp"
             android:padding="12dp"
-            android:src="@mipmap/play_pause_icon" />
+            android:src="@mipmap/play_icon" />
 
         <TextView
             android:id="@+id/tv_text"

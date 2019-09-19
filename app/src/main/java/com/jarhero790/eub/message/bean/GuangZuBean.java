@@ -71,7 +71,7 @@ public class GuangZuBean {
         private String token;
         private String nickname;
         private int sex;
-        private Object addr;
+        private String addr;
         private String country;
         private String province;
         private String city;
@@ -80,15 +80,15 @@ public class GuangZuBean {
         private int money;
         private int state;
         private String sign;
-        private Object age;
+        private String age;
         private String freemoney;
         private int is_admin;
         private int type;
         private int rong_id;
         private String rong_token;
         private String username;
-        private Object pwd;
-        private Object signtime;
+        private String pwd;
+        private String signtime;
         private int is_likeEach;
 
         public int getId() {
@@ -131,11 +131,11 @@ public class GuangZuBean {
             this.sex = sex;
         }
 
-        public Object getAddr() {
+        public String getAddr() {
             return addr;
         }
 
-        public void setAddr(Object addr) {
+        public void setAddr(String addr) {
             this.addr = addr;
         }
 
@@ -203,11 +203,11 @@ public class GuangZuBean {
             this.sign = sign;
         }
 
-        public Object getAge() {
+        public String getAge() {
             return age;
         }
 
-        public void setAge(Object age) {
+        public void setAge(String age) {
             this.age = age;
         }
 
@@ -259,19 +259,19 @@ public class GuangZuBean {
             this.username = username;
         }
 
-        public Object getPwd() {
+        public String getPwd() {
             return pwd;
         }
 
-        public void setPwd(Object pwd) {
+        public void setPwd(String pwd) {
             this.pwd = pwd;
         }
 
-        public Object getSigntime() {
+        public String getSigntime() {
             return signtime;
         }
 
-        public void setSigntime(Object signtime) {
+        public void setSigntime(String signtime) {
             this.signtime = signtime;
         }
 

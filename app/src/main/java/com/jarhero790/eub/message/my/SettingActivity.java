@@ -41,6 +41,7 @@ import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.JsonBean;
+import com.jarhero790.eub.message.message.AboutActivity;
 import com.jarhero790.eub.message.message.PrivateJiuBaoActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
@@ -240,7 +241,7 @@ public class SettingActivity extends AppCompatActivity {
         if (headim != null) {
             ivUserimage.setVisibility(View.VISIBLE);
             ivUserimagetwo.setVisibility(View.GONE);
-            Glide.with(this).load(Api.TU + headim).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(ivUserimage);
+            Glide.with(this).load(headim).apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
         }
 
         if (addres != null){
@@ -319,7 +320,7 @@ public class SettingActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.back, R.id.save, R.id.iv_pho, R.id.iv_edit_name, R.id.iv_edit_sign, R.id.iv_edit_address, R.id.tv_exit, R.id.tv_xieyi, R.id.tv_address, R.id.man, R.id.woman})
+    @OnClick({R.id.back, R.id.save, R.id.iv_pho, R.id.iv_edit_name, R.id.iv_edit_sign, R.id.iv_edit_address, R.id.tv_exit, R.id.tv_xieyi, R.id.tv_address, R.id.man, R.id.woman,R.id.tv_lixi})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -329,7 +330,7 @@ public class SettingActivity extends AppCompatActivity {
                 nicknames = tvName.getText().toString();
                 signs = tvSign.getText().toString();
                 citys = tvAddress.getText().toString();
-                Log.e("-------------img:", headimgurls);
+//                Log.e("-------------img:", headimgurls);
                 String newhead = "data:image/png;base64," + headimgurls;
                 editinfo(signs, nicknames, sexs, citys, newhead);
 
@@ -390,6 +391,9 @@ public class SettingActivity extends AppCompatActivity {
                 break;
             case R.id.woman:
                 sexs = "2";
+                break;
+            case R.id.tv_lixi:
+                startActivity(new Intent(SettingActivity.this, AboutActivity.class));
                 break;
 
         }
@@ -538,7 +542,7 @@ public class SettingActivity extends AppCompatActivity {
 
 //            ImageCutUtils.cropImage(SettingActivity.this,imageUri);
 //            ContentResolver contentResolver = this.getContentResolver();
-            try {
+//            try {
 //                Bitmap bitmaptu = BitmapFactory.decodeStream(contentResolver.openInputStream(ImageCutUtils.cropImageUri));
 //
 //                ivUserimagetwo.setImageBitmap(bitmaptu);
@@ -557,9 +561,9 @@ public class SettingActivity extends AppCompatActivity {
 //                outputStream.flush();
 //                outputStream.close();
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
 
 
 //            String[] filePathColumn={MediaStore.Audio.Media.DATA};

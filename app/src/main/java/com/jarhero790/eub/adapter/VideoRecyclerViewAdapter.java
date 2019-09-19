@@ -27,6 +27,7 @@ import com.jarhero790.eub.bean.AttentionUserVideosComment;
 import com.jarhero790.eub.bean.AttentionVideo;
 import com.jarhero790.eub.message.attention.AttPinLAdapter;
 import com.jarhero790.eub.message.attention.OnItemClickear;
+import com.jarhero790.eub.message.attention.StandardVideo;
 import com.jarhero790.eub.model.bean.souye.VideoBean;
 
 import java.util.ArrayList;
@@ -45,6 +46,8 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 //    private ProgressManagerImpl mProgressManager;
 
 //    private PlayerFactory mPlayerFactory = ExoMediaPlayerFactory.create(MyApplication.getInstance());
+
+    private int mCurrentPosition;
 
     public VideoRecyclerViewAdapter(List<AttentionVideo> videos, Context context, OnItemClickear onItemClickear) {
         this.videos.addAll(videos);
@@ -138,26 +141,36 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
 //        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
 //        holder.videoPlayer.start();
-        holder.controller.setTitle(videos.get(position).getTitle());
+//        holder.controller.setTitle(videos.get(position).getTitle());
         holder.videoPlayer.setVideoController(holder.controller);
-       holder.controller.hide();
+
+
+
+//       holder.controller.hide();
 //       holder.controller.setOnClickListener(null);
 //       holder.videoPlayer.setOnClickListener(null);
 //       holder.videoPlayer.setLock(true);
 //       holder.videoPlayer.setEnabled(false);
-//        holder.videoPlayer.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
-//            @Override
-//            public void onPlayerStateChanged(int playerState) {
-//
-//            }
-//
-//            @Override
-//            public void onPlayStateChanged(int playState) {
-////                Log.e("-------------","播放来了没有"+playState+"  "+position);
+        holder.videoPlayer.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
+            @Override
+            public void onPlayerStateChanged(int playerState) {
+
+            }
+
+            @Override
+            public void onPlayStateChanged(int playState) {
+//                Log.e("-------------","播放来了没有"+playState+"  "+position);
 //                holder.ivdeault.setVisibility(View.GONE);
-//                holder.ivplay.setImageDrawable(mcontext.getDrawable(R.mipmap.play_pause_icon));
-//            }
-//        });
+                holder.ivplay.setImageDrawable(mcontext.getDrawable(R.mipmap.play_pause_icon));
+
+
+                if (mCurrentPosition== position){
+                    holder.ivplay.setImageDrawable(mcontext.getDrawable(R.mipmap.play_pause_icon));
+                }else {
+                    holder.ivplay.setImageDrawable(mcontext.getDrawable(R.mipmap.play_icon));
+                }
+            }
+        });
 
 
         onClick(holder, position);
@@ -244,7 +257,8 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     public class VideoHolder extends RecyclerView.ViewHolder {
 
         private VideoView videoPlayer;
-        private StandardVideoController controller; //控制器
+//        private StandardVideoController controller2; //控制器
+        private StandardVideo controller;
         private TextView date, attentionsUserName, zan, title, tvmore;
         private ImageView share;
         private ImageView pinglun;
@@ -290,7 +304,8 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
 //            mVideoView.setPadding(15,20,0,5);
 
-            controller = new StandardVideoController(itemView.getContext());
+            controller = new StandardVideo(itemView.getContext());
+//            controller2 = new StandardVideoController(itemView.getContext());
 
 
             title = itemView.findViewById(R.id.tv_text);
@@ -306,5 +321,11 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
     public void setGetP(GetP getP) {
         this.getP = getP;
+    }
+
+
+    public void setmCurrentPosition(int mCurrentPosition) {
+        this.mCurrentPosition = mCurrentPosition;
+//        notifyDataSetChanged();
     }
 }

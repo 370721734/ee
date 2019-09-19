@@ -185,6 +185,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
         if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
             mPresenter.getuserinfo();
+            mPresenter.getmyguangzu();
         } else {
             Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
         }
@@ -323,7 +324,14 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             JSONObject js = JSONObject.parseObject(data);
             UserCen userInfo = JSON.toJavaObject(js, UserCen.class);
             app.setUserCen(userInfo);
-            Log.e("qawe", userInfo.getData().getUser().getHeadimgurl());//有了
+            if (userInfo.getData().getUser().getHeadimgurl().equals("")){
+                Log.e("-----------","来了1");
+                userInfo.getData().getUser().setHeadimgurl("http://www.51ayhd.com/static/images/usertouxiang.png");
+            }
+//            if (userInfo.getData().getUser().getHeadimgurl()==null){
+//                Log.e("-----------","来了");
+//            }
+//            Log.e("qawe", userInfo.getData().getUser().getHeadimgurl());//有了
             if (code == 200) {
 
                 JSONObject jsonObject1 = object.getJSONObject("data");
@@ -341,7 +349,10 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 tvGuanzhu.setText(like);
                 fensi.setText(fens);
                 //先添加自己的
-                userInfoList.add(new UserInfo(userInfo.getData().getUser().getRong_id() + "", userInfo.getData().getUser().getNickname(), Uri.parse(Api.TU + userInfo.getData().getUser().getHeadimgurl())));//"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"
+                userInfoList.add(new UserInfo(userInfo.getData().getUser().getRong_id() + "", userInfo.getData().getUser().getNickname(), Uri.parse(userInfo.getData().getUser().getHeadimgurl())));//"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"
+//                Log.e("----------ddata=",userInfo.getData().getUser().getRong_id()+"      "+userInfo.getData().getUser().getHeadimgurl());
+
+
             }
             if (userInfo.getCode() == 200) {
                 app.setUserzhong(userInfo.getData().getUser());
@@ -380,8 +391,12 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                         return new UserInfo(userInfo.getData().getUser().getId()+"",userInfo.getData().getUser().getUsername(), Uri.parse("https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"));//Api.TU+userInfo.getData().getUser().getHeadimgurl()
 
                         if (userInfoList != null && userInfoList.size() > 0) {
+
                             for (UserInfo info : userInfoList) {
                                 if (info.getUserId().equals(userid)) {
+//                                    Log.e("---------------",userInfoList.size()+" =  "+info.getPortraitUri()+"   ="+info);
+
+
                                     return new UserInfo(info.getUserId(), info.getName(), info.getPortraitUri());
                                 }
                             }
@@ -430,6 +445,8 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         if (dataBeanList != null && dataBeanList.size() > 0) {
             for (int i = 0; i < dataBeanList.size(); i++) {
                 userInfoList.add(new UserInfo(dataBeanList.get(i).getRong_id() + "", dataBeanList.get(i).getNickname(), Uri.parse(dataBeanList.get(i).getHeadimgurl())));
+//                Log.e("---------------data=",dataBeanList.get(i).getHeadimgurl());
+
             }
         }
     }
@@ -502,6 +519,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         super.onResume();
         if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
             mPresenter.getuserinfo();
+            mPresenter.getmyguangzu();
             app = (GlobalApplication) getActivity().getApplication();
 //            UserBean userBean = app.getUserbean();
 //            if (userBean != null) {
@@ -514,7 +532,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
         }
 
-        Log.e("---", "onResume");
+//        Log.e("---", "onResume");
     }
 
     @Override
@@ -523,8 +541,6 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         unbinder = ButterKnife.bind(this, rootView);
         return rootView;
     }
-
-
 
 
     @Override
@@ -732,7 +748,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                    eb.setMessage("success");
 //                    eb.setFrom("connect");
 //                    EventBus.getDefault().post(eb);
-                    Log.e("LoginActivity", "--onSuccess" + userid);
+//                    Log.e("LoginActivity", "--onSuccess" + userid);
 //                    LoginActivity: --onSuccess5044
                 }
 
@@ -745,7 +761,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                  */
                 @Override
                 public void onError(RongIMClient.ErrorCode errorCode) {
-                    Log.e("LoginActivity", "--onError" + errorCode.getMessage());
+//                    Log.e("LoginActivity", "--onError" + errorCode.getMessage());
                 }
             });
         }

@@ -3,83 +3,94 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
-    android:background="#151517"
     android:layout_height="wrap_content"
-    >
+    android:background="#151517"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="60dp">
+
         <TextView
             android:id="@+id/tv_num"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text=""
             android:textColor="#ffffffff"
-            android:textSize="13sp"
-            android:layout_centerInParent="true"
-            />
+            android:textSize="13sp" />
+
         <ImageView
             android:id="@+id/iv_exit"
             android:layout_width="21dp"
             android:layout_height="21dp"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="19dp"
             android:padding="5dp"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/pinlenexit"/>
+            android:src="@mipmap/pinlenexit" />
     </RelativeLayout>
-    
 
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="300dp">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rlv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </android.support.v7.widget.RecyclerView>
+            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+
         <ImageView
             android:id="@+id/pinlun_icon"
-            android:layout_centerInParent="true"
             android:layout_width="wrap_content"
-            android:visibility="gone"
             android:layout_height="wrap_content"
-            android:src="@mipmap/souye_pinlun"/>
+            android:layout_centerInParent="true"
+            android:src="@mipmap/souye_pinlun"
+            android:visibility="gone" />
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:gravity="center_vertical"
-        android:layout_height="52dp">
+        android:layout_height="52dp"
+        android:gravity="center_vertical">
 
         <TextView
             android:id="@+id/tv_fa"
-            android:layout_width="55dp"
-            android:layout_height="28dp"
-            android:text="发送"
-            android:background="@drawable/atten_fa_butt"
-            android:textColor="#ff3f3f3f"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:textSize="15sp"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"
             android:gravity="center"
-            android:layout_marginRight="15dp"
-            />
+            android:text="发送"
+            android:textColor="#A5A2A2"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/tv_hao"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/tv_fa"
+            android:text="@string/apphao"
+            android:layout_marginRight="10dp"
+            android:textColor="#ff7e7e7e"
+            android:textSize="30sp" />
 
         <EditText
             android:id="@+id/et_content"
-            android:layout_toLeftOf="@id/tv_fa"
             android:layout_width="match_parent"
-            android:hint="发送消息..."
-            android:paddingLeft="10dp"
-            android:textColorHint="#676A73"
-            android:textColor="@android:color/white"
-            android:background="@drawable/atten_fa"
+            android:layout_height="match_parent"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginRight="20dp"
-            android:layout_height="34dp" />
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@id/tv_hao"
+            android:hint="输入评论,说点好听点～"
+            android:paddingLeft="5dp"
+            android:background="@null"
+            android:textColor="@android:color/white"
+            android:textColorHint="#676A73" />
     </RelativeLayout>
 
 </LinearLayout>

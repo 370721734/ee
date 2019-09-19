@@ -321,9 +321,21 @@
         android:background="@drawable/exit_bg"
         android:gravity="center"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="50dp"
         android:textColor="#ffdddada"
         android:textSize="18sp"
+        />
+
+
+    <TextView
+        android:id="@+id/tv_lixi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="联系我们"
+        android:textColor="#ff7c7b7e"
+        android:textSize="15sp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
         />
 
     <TextView
@@ -333,7 +345,7 @@
         android:text="用户协议"
         android:textColor="#ff7c7b7e"
         android:textSize="15sp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:layout_gravity="center_horizontal"
         />
 

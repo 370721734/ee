@@ -344,7 +344,12 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                    }
 //                    System.out.println(lastItemPosition + "   " + firstItemPosition);
                     mCurrentPosition = lastItemPosition;
+                    adapter.setmCurrentPosition(lastItemPosition);
 //                    Log.e("--------------ggg", firstItemPosition + "  " + lastItemPosition + "  " + visibleCount);
+
+
+
+
                 }
 
 
@@ -361,6 +366,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
                     VideoView videoView = recyclerView.getChildAt(i).findViewById(R.id.video_player);
                     ImageView ivdeault = recyclerView.getChildAt(i).findViewById(R.id.iv_deault);
+                    ImageView ivplay = recyclerView.getChildAt(i).findViewById(R.id.iv_play);
+
 //                    CircleImageView civ=recyclerView.getChildAt(0).findViewById(R.id.attentionsUserIcon);
 
 //                    Log.e("----------","高度="+civ.getTop()+"当前="+civ.getMeasuredHeight()+civ.getPivotY()+" "+civ.getScrollY());
@@ -394,6 +401,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                            videoView.setFocusable(false);
 //                            videoView.setEnabled(false);
 
+//                            int finalI = i;
 //                            videoView.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
 //                                @Override
 //                                public void onPlayerStateChanged(int playerState) {
@@ -401,7 +409,13 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //
 //                                @Override
 //                                public void onPlayStateChanged(int playState) {
-//                                    ivdeault.setVisibility(View.GONE);
+////                                    ivdeault.setVisibility(View.GONE);
+//
+//                                    if (mCurrentPosition== finalI){
+//                                        ivplay.setImageDrawable(getActivity().getDrawable(R.mipmap.play_pause_icon));
+//                                    }else {
+//                                        ivplay.setImageDrawable(getActivity().getDrawable(R.mipmap.play_icon));
+//                                    }
 //                                }
 //                            });
 //                            ivdeault.setVisibility(View.GONE);

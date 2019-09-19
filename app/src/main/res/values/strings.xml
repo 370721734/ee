@@ -1,6 +1,7 @@
-<resources>
-    <string name="app_name">钻视TV</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name" tools:ignore="MissingTranslation">钻视TV</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment" tools:ignore="MissingTranslation">Hello blank fragment</string>
+    <string name="apphao" tools:ignore="MissingTranslation">&#064;</string>//@
 </resources>
