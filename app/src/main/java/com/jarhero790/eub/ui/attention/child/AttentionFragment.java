@@ -214,10 +214,10 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             @Override
             public void onChildViewDetachedFromWindow(@NonNull View view) {
                 VideoView videoView = view.findViewById(R.id.video_player);
-                ImageView ivdeault = view.findViewById(R.id.iv_deault);
-                ImageView ivplay = view.findViewById(R.id.iv_play);
-                ivdeault.setVisibility(View.VISIBLE);
-                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
+//                ImageView ivdeault = view.findViewById(R.id.iv_deault);
+//                ImageView ivplay = view.findViewById(R.id.iv_play);
+//                ivdeault.setVisibility(View.VISIBLE);
+//                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
 //                Log.e("------------", "窗口消失了");
                 if (videoView != null && !videoView.isFullScreen()) {
                     videoView.release();
@@ -370,6 +370,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                         Rect rect = new Rect();
                         videoView.getLocalVisibleRect(rect);
 
+
+
                         int videoHeight = videoView.getHeight();
 //                        Log.e("-----------height=",videoHeight+" "+rect.top+"  "+rect.bottom);
 
@@ -387,6 +389,11 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                            Log.e("----------", "3");
                             videoView.start();
 
+//                            videoView.setLock(true);
+//                            videoView.setOnClickListener(null);
+//                            videoView.setFocusable(false);
+//                            videoView.setEnabled(false);
+
 //                            videoView.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
 //                                @Override
 //                                public void onPlayerStateChanged(int playerState) {
@@ -397,14 +404,14 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                                    ivdeault.setVisibility(View.GONE);
 //                                }
 //                            });
-                            ivdeault.setVisibility(View.GONE);
+//                            ivdeault.setVisibility(View.GONE);
 
 //                            viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                            viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //                            if (viewivdeault != null && viewivdeault.findViewById(R.id.iv_deault) != null)
 //                                viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
-                            if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
-                                ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+//                            if (viewplaypause != null && viewplaypause.findViewById(R.id.iv_play) != null)
+//                                ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
                             return;
                         }
                     }
@@ -516,12 +523,12 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         mVideoView.setUrl(attentionUsersVideos.get(position).getUrl());
         mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         mVideoView.start();
-        viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
-        viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
-        if (viewivdeault != null)
-            viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
-        if (viewplaypause != null)
-            ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+//        viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
+//        viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
+//        if (viewivdeault != null)
+//            viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
+//        if (viewplaypause != null)
+//            ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
     }
 
     @Override
@@ -579,6 +586,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         super.onPause();
         VideoViewManager.instance().release();
     }
+
+
 
 
     /**

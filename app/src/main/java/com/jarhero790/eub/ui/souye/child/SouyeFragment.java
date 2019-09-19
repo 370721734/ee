@@ -1059,7 +1059,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         }
 
         //重要
-        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);//中心载剪
+//        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_ORIGINAL);//中心 小屏
+//        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+//        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
         //获取视频宽高,其中width: mVideoSize[0], height: mVideoSize[1]
 //        int width1 = mVideoView.getWidth();
 //        int height1 = mVideoView.getHeight();

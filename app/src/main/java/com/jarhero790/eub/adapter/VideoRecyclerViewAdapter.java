@@ -64,7 +64,18 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     public void onBindViewHolder(@NonNull VideoHolder holder, int position) {
 
         AttentionVideo attentionVideo = videos.get(position);
-//        ImageView thumb = holder.controller.getThumb();
+        ImageView thumb = holder.controller.getThumb();
+        String videoImg = attentionVideo.getVideo_img();
+        Glide.with(thumb.getContext())
+                .load(videoImg)
+                .apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+                .into(thumb);
+
+//        LinearLayout bottom=holder.controller.getChildAt(position).findViewById(R.id.bottom_container);
+//        if (bottom!=null){
+//            bottom.setVisibility(View.GONE);
+//        }
+
 
         if (getP != null) {
             getP.ostion(holder.userimage, position);
@@ -76,12 +87,12 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             Glide.with(mcontext).load(Api.TU + attentionVideo.getHeadimgurl()).apply(new RequestOptions()
                     .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
         }
-        String videoImg = attentionVideo.getVideo_img();
+
         if (videoImg.startsWith("http")) {
-            Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+            Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
                     .into(holder.ivdeault);
         } else {
-            Glide.with(mcontext).load(Api.TU + videoImg).apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+            Glide.with(mcontext).load(Api.TU + videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
                     .into(holder.ivdeault);
         }
         holder.zan.setText(attentionVideo.getZan() + "人赞过");
@@ -114,7 +125,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         AttPinLAdapter attPinLAdapter = new AttPinLAdapter(mcontext, comment);
         holder.listView.setAdapter(attPinLAdapter);
 
-        holder.ivdeault.setVisibility(View.VISIBLE);
+//        holder.ivdeault.setVisibility(View.VISIBLE);
         HttpProxyCacheServer proxy = GlobalApplication.getProxy(mcontext);
         String proxyUrl = proxy.getProxyUrl(attentionVideo.getUrl());
 //        Log.e("-------p1=",proxyUrl);
@@ -125,22 +136,28 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             holder.videoPlayer.setUrl(attentionVideo.getUrl());
         }
 
-        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
-        holder.videoPlayer.start();
-        holder.videoPlayer.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
-            @Override
-            public void onPlayerStateChanged(int playerState) {
-
-            }
-
-            @Override
-            public void onPlayStateChanged(int playState) {
-//                Log.e("-------------","播放来了没有"+playState+"  "+position);
-                holder.ivdeault.setVisibility(View.GONE);
-                holder.ivplay.setImageDrawable(mcontext.getDrawable(R.mipmap.play_pause_icon));
+//        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+//        holder.videoPlayer.start();
+        holder.controller.setTitle(videos.get(position).getTitle());
+        holder.videoPlayer.setVideoController(holder.controller);
+       holder.controller.hide();
+//       holder.controller.setOnClickListener(null);
+//       holder.videoPlayer.setOnClickListener(null);
+//       holder.videoPlayer.setLock(true);
+//       holder.videoPlayer.setEnabled(false);
+//        holder.videoPlayer.addOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
+//            @Override
+//            public void onPlayerStateChanged(int playerState) {
 //
-            }
-        });
+//            }
+//
+//            @Override
+//            public void onPlayStateChanged(int playState) {
+////                Log.e("-------------","播放来了没有"+playState+"  "+position);
+//                holder.ivdeault.setVisibility(View.GONE);
+//                holder.ivplay.setImageDrawable(mcontext.getDrawable(R.mipmap.play_pause_icon));
+//            }
+//        });
 
 
         onClick(holder, position);
@@ -227,7 +244,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
     public class VideoHolder extends RecyclerView.ViewHolder {
 
         private VideoView videoPlayer;
-        //        private StandardVideoController controller; 控制器
+        private StandardVideoController controller; //控制器
         private TextView date, attentionsUserName, zan, title, tvmore;
         private ImageView share;
         private ImageView pinglun;
@@ -264,8 +281,8 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             //非常重要
             videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
 
-            int widthPixels = itemView.getContext().getResources().getDisplayMetrics().widthPixels;
-            int heightPixels = itemView.getContext().getResources().getDisplayMetrics().heightPixels;
+//            int widthPixels = itemView.getContext().getResources().getDisplayMetrics().widthPixels;
+//            int heightPixels = itemView.getContext().getResources().getDisplayMetrics().heightPixels;
             //mVideoView.setLayoutParams(new LinearLayout.LayoutParams(widthPixels, widthPixels * 9 / 16 + 1));
 
 //            mVideoView.setLayoutParams(new RelativeLayout.LayoutParams(widthPixels/10*8,
@@ -273,7 +290,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
 //            mVideoView.setPadding(15,20,0,5);
 
-//            controller = new StandardVideoController(itemView.getContext());
+            controller = new StandardVideoController(itemView.getContext());
 
 
             title = itemView.findViewById(R.id.tv_text);
