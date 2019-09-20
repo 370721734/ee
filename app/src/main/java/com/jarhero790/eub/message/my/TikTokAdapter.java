@@ -21,10 +21,12 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
+import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.message.souye.GuanPanView;
 import com.jarhero790.eub.message.souye.Love;
 import com.jarhero790.eub.model.bean.souye.VideoBean;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,9 +38,12 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     RotateAnimation rotateAnimation;//旋转动画
     private TikTokAdapter.OnItemClickListener mOnItemClickListerer;
 
+    ArrayList<ZanBean.DataBean> zanBeanList = new ArrayList<>();
+    private String type = "";
+
     //为RecyclerView的Item添加监听
     public interface OnItemClickListener {
-        void onItemClick(int position, String type, View view,View view2,View view3);
+        void onItemClick(int position, String type, View view, View view2, View view3, String videotype);
     }
 
     public void setOnItemClickListerer(TikTokAdapter.OnItemClickListener listerer) {
@@ -50,12 +55,22 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     public TikTokAdapter(List<MyFaBuBean.DataBean> videos, Context context) {
         this.videos = videos;
         this.context = context;
-
         rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
         rotateAnimation.setInterpolator(new LinearInterpolator());
         rotateAnimation.setDuration(4000);
         rotateAnimation.setRepeatCount(Animation.INFINITE);
     }
+
+    public TikTokAdapter(ArrayList<ZanBean.DataBean> videos, Context context, String mtype) {
+        this.zanBeanList = videos;
+        this.context = context;
+        type = mtype;
+        rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
+        rotateAnimation.setInterpolator(new LinearInterpolator());
+        rotateAnimation.setDuration(4000);
+        rotateAnimation.setRepeatCount(Animation.INFINITE);
+    }
+
 
     @Override
     public VideoHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -96,85 +111,152 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public void onBindViewHolder(final VideoHolder holder, int position) {
 
-        MyFaBuBean.DataBean video = videos.get(position);
-        Glide.with(context)
-                .load(video.getVideo_img())
-                .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
-                .into(holder.thumb);
+        if (type.equals("zan")) {
+            ZanBean.DataBean video = zanBeanList.get(position);
+            Glide.with(context)
+                    .load(video.getVideo_img())
+                    .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
+                    .into(holder.thumb);
 
 
-        //标题
-        if (video.getTitle() != null && video.getTitle().length() > 0) {
-            holder.tv_content.setVisibility(View.VISIBLE);
-            holder.tv_content.setText(video.getTitle());
-        } else {
-            holder.tv_content.setVisibility(View.GONE);
-        }
+            //标题
+            if (video.getTitle() != null && video.getTitle().length() > 0) {
+                holder.tv_content.setVisibility(View.VISIBLE);
+                holder.tv_content.setText(video.getTitle());
+            } else {
+                holder.tv_content.setVisibility(View.GONE);
+            }
 
 //        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
-        holder.tv_uname.setText("@" + video.getNickname());
+            holder.tv_uname.setText("@" + video.getNickname());
 
 
-        if (video.getIs_zan() == 1) {
-            holder.iv_like.setSelected(true);
-        } else {
-            holder.iv_like.setSelected(false);
-        }
+            if (video.getIs_zan() == 1) {
+                holder.iv_like.setSelected(true);
+            } else {
+                holder.iv_like.setSelected(false);
+            }
 
-        //点赞数量
-        holder.tv_like.setText(video.getZan() + "");
-        //评论数量
-        holder.tv_pinglun.setText(video.getCommentNum() + "");
-        //财富`
-        holder.caifu.setText(video.getCaifu() + "");
-        //tou
-        if (video.getHeadimgurl().startsWith("http")) {
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                    .error(R.mipmap.souye_logo)).into(holder.userimage);
-        } else {
-            Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                    .error(R.mipmap.souye_logo)).into(holder.userimage);
-        }
+            //点赞数量
+            holder.tv_like.setText(video.getZan() + "");
+            //评论数量
+            holder.tv_pinglun.setText(video.getCommentNum() + "");
+            //财富`
+            holder.caifu.setText(video.getCaifu() + "");
+            //tou
+            if (video.getHeadimgurl().startsWith("http")) {
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+            } else {
+                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+            }
 
-        //旋转图
-        if (video.getHeadimgurl().startsWith("http")) {
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-        } else {
-            Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-        }
-
-
+            //旋转图
+            if (video.getHeadimgurl().startsWith("http")) {
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            } else {
+                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            }
 
 
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
-        holder.circleImageView.startAnimation(rotateAnimation);
+            holder.circleImageView.startAnimation(rotateAnimation);
 
-        holder.btn_attention.setText(video.getIs_like()==1?"已关注":"关注");//自己的
+            holder.btn_attention.setText(video.getIs_like() == 1 ? "已关注" : "关注");//自己的
 
-        if (video.getGood_id().equals("0")){
-            holder.bussiness.setVisibility(View.INVISIBLE);
-        }else {
-            holder.bussiness.setVisibility(View.VISIBLE);
-        }
+            if (video.getGood_id().equals("0")) {
+                holder.bussiness.setVisibility(View.INVISIBLE);
+            } else {
+                holder.bussiness.setVisibility(View.VISIBLE);
+            }
 
 
 //        holder.guanPanView.init();
 //        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
 //        holder.guanPanView.startAnimation(rotateAnimation);
-        onClick(holder, position);
+            onClick(holder, position, "zan");
+        } else {
+            MyFaBuBean.DataBean video = videos.get(position);
+            Glide.with(context)
+                    .load(video.getVideo_img())
+                    .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
+                    .into(holder.thumb);
+
+
+            //标题
+            if (video.getTitle() != null && video.getTitle().length() > 0) {
+                holder.tv_content.setVisibility(View.VISIBLE);
+                holder.tv_content.setText(video.getTitle());
+            } else {
+                holder.tv_content.setVisibility(View.GONE);
+            }
+
+//        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
+            holder.tv_uname.setText("@" + video.getNickname());
+
+
+            if (video.getIs_zan() == 1) {
+                holder.iv_like.setSelected(true);
+            } else {
+                holder.iv_like.setSelected(false);
+            }
+
+            //点赞数量
+            holder.tv_like.setText(video.getZan() + "");
+            //评论数量
+            holder.tv_pinglun.setText(video.getCommentNum() + "");
+            //财富`
+            holder.caifu.setText(video.getCaifu() + "");
+            //tou
+            if (video.getHeadimgurl().startsWith("http")) {
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+            } else {
+                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+            }
+
+            //旋转图
+            if (video.getHeadimgurl().startsWith("http")) {
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            } else {
+                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            }
+
+
+//        Log.e("--------",Api.GIFT+video.getHeadimgurl());
+            holder.circleImageView.startAnimation(rotateAnimation);
+
+            holder.btn_attention.setText(video.getIs_like() == 1 ? "已关注" : "关注");//自己的
+
+            if (video.getGood_id().equals("0")) {
+                holder.bussiness.setVisibility(View.INVISIBLE);
+            } else {
+                holder.bussiness.setVisibility(View.VISIBLE);
+            }
+
+
+//        holder.guanPanView.init();
+//        holder.guanPanView.mergeThumbnailBitmap(video.getHeadimgurl());
+//        holder.guanPanView.startAnimation(rotateAnimation);
+            onClick(holder, position, "mine");
+        }
 
 
     }
 
 
-    private void onClick(TikTokAdapter.VideoHolder holder, int position) {
+    private void onClick(TikTokAdapter.VideoHolder holder, int position, String type) {
         //点赞
         holder.iv_like.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "点赞", view,holder.tv_like,view);
+                mOnItemClickListerer.onItemClick(position, "点赞", view, holder.tv_like, view, type);
             }
         });
 
@@ -182,7 +264,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_commit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "评论", view,holder.tv_pinglun,view);
+                mOnItemClickListerer.onItemClick(position, "评论", view, holder.tv_pinglun, view, type);
             }
         });
 
@@ -190,7 +272,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_share.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "分享", view,view,view);
+                mOnItemClickListerer.onItemClick(position, "分享", view, view, view, type);
             }
         });
 
@@ -198,7 +280,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.iv_gift.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "礼物", view,view,view);
+                mOnItemClickListerer.onItemClick(position, "礼物", view, view, view, type);
             }
         });
 
@@ -206,7 +288,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.btn_attention.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "关注", view,view,view);
+                mOnItemClickListerer.onItemClick(position, "关注", view, view, view, type);
             }
         });
 
@@ -215,7 +297,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             @Override
             public void onClick(View view) {
                 if (mOnItemClickListerer != null) {
-                    mOnItemClickListerer.onItemClick(position, "红心", view,view,view);
+                    mOnItemClickListerer.onItemClick(position, "红心", view, view, view, type);
 
                     if (isIsshow()) {
                         holder.play_pause.setVisibility(View.VISIBLE);
@@ -231,7 +313,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.play_pause.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "红心", view,view,view);
+                mOnItemClickListerer.onItemClick(position, "红心", view, view, view, type);
                 if (isIsshow()) {
                     holder.play_pause.setVisibility(View.VISIBLE);
                 } else {
@@ -244,9 +326,9 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         holder.love.setLoveTrue(new Love.LoveTrue() {
             @Override
             public void Onclick(boolean love) {
-                if (love){
+                if (love) {
 //                    Log.e("-----","hehe");
-                    mOnItemClickListerer.onItemClick(position, "红红", holder.love, holder.iv_like, holder.tv_like);
+                    mOnItemClickListerer.onItemClick(position, "红红", holder.love, holder.iv_like, holder.tv_like, type);
                 }
             }
         });
@@ -255,15 +337,25 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             @Override
             public void onClick(View view) {
 //
-                mOnItemClickListerer.onItemClick(position, "商城", view, holder.bussiness, view);
+                mOnItemClickListerer.onItemClick(position, "商城", view, holder.bussiness, view, type);
 //                Log.e("-----","hehe");
             }
         });
+        //tong
+        holder.tongkuang.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+//
+                mOnItemClickListerer.onItemClick(position, "同款", view, view, view,type);
+//                Log.e("-----","hehe");
+            }
+        });
+
         //back
         holder.back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mOnItemClickListerer.onItemClick(position, "返回", view, view, view);
+                mOnItemClickListerer.onItemClick(position, "返回", view, view, view, type);
             }
         });
 //        holder.love.setOnClickListener(new View.OnClickListener() {
@@ -279,7 +371,12 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
     @Override
     public int getItemCount() {
-        return videos.size();
+        if (type.equals("zan")) {
+            return zanBeanList == null ? 0 : zanBeanList.size();
+        } else {
+            return videos == null ? 0 : videos.size();
+        }
+
     }
 
     public class VideoHolder extends RecyclerView.ViewHolder {
@@ -302,11 +399,12 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         GuanPanView guanPanView;
         RelativeLayout rlhead;
-        ImageView play_pause,back;
+        ImageView play_pause, back;
 
-        TextView caifu;
+        TextView caifu,tvgoodsnum;
         Love love;
         RelativeLayout bussiness;
+        RelativeLayout tongkuang;
 
         VideoHolder(View itemView) {
             super(itemView);
@@ -335,8 +433,10 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
-            bussiness=itemView.findViewById(R.id.bussiness);
-            back=itemView.findViewById(R.id.back);
+            bussiness = itemView.findViewById(R.id.bussiness);
+            back = itemView.findViewById(R.id.back);
+            tongkuang=itemView.findViewById(R.id.tongkuang);
+            tvgoodsnum=itemView.findViewById(R.id.tvgoodsnum);
         }
     }
 

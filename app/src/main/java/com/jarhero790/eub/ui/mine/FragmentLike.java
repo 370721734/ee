@@ -224,6 +224,7 @@ private Dialog dialog;
             Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
             intent.putExtra("position",position);
             intent.putExtra("vidlist",list);
+            intent.putExtra("videotype","mine");
             startActivity(intent);
         }
     };

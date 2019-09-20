@@ -1,4 +1,4 @@
-package com.jarhero790.eub.message.message;
+package com.jarhero790.eub.message.my;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;

@@ -98,30 +98,32 @@ public class TongKuanActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         video_id = intent.getStringExtra("video_id");
+        if (video_id==null || video_id.equals("0"))
+            video_id="1110";
 
         page = 1;
         initDate();
 
 
-        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
-            @Override
-            public void onRefresh(RefreshLayout refreshLayout) {
-                page = 1;
-                initDate();
-                mSwipeLayout.finishRefresh(100);
-
-            }
-        });
-        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
-            @Override
-            public void onLoadMore(RefreshLayout refreshLayout) {
-//                page++;
-                page = 1;
-                initDate();
-                mSwipeLayout.finishLoadMore(100);
-
-            }
-        });
+//        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
+//            @Override
+//            public void onRefresh(RefreshLayout refreshLayout) {
+//                page = 1;
+//                initDate();
+//                mSwipeLayout.finishRefresh(100);
+//
+//            }
+//        });
+//        mSwipeLayout.setOnLoadMoreListener(new OnLoadMoreListener() {
+//            @Override
+//            public void onLoadMore(RefreshLayout refreshLayout) {
+////                page++;
+//                page = 1;
+//                initDate();
+//                mSwipeLayout.finishLoadMore(100);
+//
+//            }
+//        });
     }
 
     private Dialog dialog;

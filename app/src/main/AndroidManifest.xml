@@ -118,7 +118,7 @@
             android:name=".message.my.XieYiActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".message.message.AboutActivity"
+            android:name=".message.my.AboutActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".message.my.SettingActivity"

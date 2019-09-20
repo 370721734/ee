@@ -3,9 +3,7 @@ package com.jarhero790.eub.message.my;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -14,7 +12,6 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,15 +31,10 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.gson.Gson;
-import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.MainActivity;
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.activity.FensiActivity;
-import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.JsonBean;
-import com.jarhero790.eub.message.message.AboutActivity;
-import com.jarhero790.eub.message.message.PrivateJiuBaoActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
 import com.jarhero790.eub.utils.AppUtils;
@@ -127,7 +119,7 @@ public class SettingActivity extends AppCompatActivity {
     private String nicknames;
     private String sexs;
     private String citys;
-    private String headimgurls;
+    private String headimgurls="";
 
 
     private List<JsonBean> options1Items = new ArrayList<>();
@@ -330,8 +322,18 @@ public class SettingActivity extends AppCompatActivity {
                 nicknames = tvName.getText().toString();
                 signs = tvSign.getText().toString();
                 citys = tvAddress.getText().toString();
-//                Log.e("-------------img:", headimgurls);
-                String newhead = "data:image/png;base64," + headimgurls;
+//
+                String newhead="";
+                if (headimgurls.equals("")){
+                    newhead="";
+//                    Log.e("--------","im饿");
+                }else {
+                     newhead = "data:image/png;base64," + headimgurls;
+//                     Log.e("--------","有");
+                }
+
+
+//                Log.e("-------------img:","x"+ newhead);
                 editinfo(signs, nicknames, sexs, citys, newhead);
 
 
@@ -817,7 +819,7 @@ private Dialog dialog;
                             dialog.dismiss();
                             try {
                                 String json = response.body().string();
-//                                Log.e("--------a=>", json);
+                                Log.e("--------a=>", json);
 //                                {"code":200,"data":null,"msg":"\u6210\u529f"}
                                 JSONObject object = new JSONObject(json);
                                 int code = object.optInt("code");

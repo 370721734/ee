@@ -35,6 +35,17 @@ public class ZanAdapter extends RecyclerView.Adapter<ZanAdapter.MyHolder> {
         this.myclick = myclick;
     }
 
+
+
+    public interface ZanOnclick{
+        void OnCliearck(View view,String type,int position);
+    }
+    private ZanOnclick zanOnclick;
+
+    public void setZanOnclick(ZanOnclick zanOnclick) {
+        this.zanOnclick = zanOnclick;
+    }
+
     @NonNull
     @Override
     public MyHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
@@ -45,14 +56,34 @@ public class ZanAdapter extends RecyclerView.Adapter<ZanAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         ZanBean.DataBean bean = list.get(position);
-        Glide.with(context).load(Api.HOST + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+        Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
         myHolder.tvName.setText(bean.getNickname());
 //
         if (bean.getAddtime().length() > 10) {
             myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));
         }
 
-        Glide.with(context).load(Api.TU + bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.zan_icon).error(R.mipmap.zan_icon)).into(myHolder.ivIcon);
+        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.zan_icon).error(R.mipmap.zan_icon)).into(myHolder.ivIcon);
+
+
+        myHolder.touImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (zanOnclick!=null){
+                    zanOnclick.OnCliearck(v,"tou",position);
+                }
+            }
+        });
+        myHolder.ivIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (zanOnclick!=null){
+                    zanOnclick.OnCliearck(v,"vid",position);
+                }
+            }
+        });
+
+
 //
 //
 //        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "+关注");

@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#000000"
+    android:background="#0d0d0d"
     android:orientation="vertical">
 
     <LinearLayout
@@ -38,7 +38,7 @@
                     android:gravity="center_vertical"
                     android:text="取消"
                     android:textColor="#DCDBD7"
-                    android:textSize="15dp" />
+                    android:textSize="12dp" />
             </LinearLayout>
 
             <TextView
@@ -57,7 +57,7 @@
                 android:layout_marginRight="16dp"
                 android:text="保存"
                 android:textColor="#DCDBD7"
-                android:textSize="15dp" />
+                android:textSize="12dp" />
         </FrameLayout>
 
         <FrameLayout
@@ -66,29 +66,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/black">
-
-
-            <RelativeLayout
-                android:id="@+id/editer_rl_video_progress"
-                android:layout_width="match_parent"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="80dp"
-                android:layout_height="60dp">
-
-                <com.jarhero790.eub.record.VideoProgressView
-                    android:id="@+id/editer_video_progress_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="50dp"
-
-                    android:layout_centerVertical="true" />
-
-                <View
-                    android:layout_width="1dp"
-                    android:layout_height="match_parent"
-                    android:layout_centerHorizontal="true"
-                    android:background="@color/white" />
-            </RelativeLayout>
-
             <!-- 音乐播放界面 -->
             <FrameLayout
                 android:id="@+id/editer_fl_video"
@@ -166,7 +143,7 @@
                     android:layout_below="@id/iv_music"
                     android:layout_marginTop="8dp"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="10sp"
+                    android:textSize="9sp"
                     />
                 <ImageView
                     android:id="@+id/iv_tejiao"
@@ -187,7 +164,7 @@
                     android:layout_below="@id/iv_tejiao"
                     android:layout_marginTop="8dp"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="10sp"
+                    android:textSize="9sp"
                     />
                 <ImageView
                     android:id="@+id/iv_yujin"
@@ -207,7 +184,7 @@
                     android:layout_below="@id/iv_yujin"
                     android:layout_marginTop="8dp"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="10sp"
+                    android:textSize="9sp"
                     />
 
                 <ImageView
@@ -276,22 +253,52 @@
                     android:layout_below="@id/iv_xiaoyin"
                     android:layout_marginTop="8dp"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="10sp"
+                    android:textSize="9sp"
                     />
 
             </RelativeLayout>
 
 
+
+
+
+
+
+
+            <RelativeLayout
+                android:id="@+id/editer_rl_video_progress"
+                android:layout_width="match_parent"
+                android:layout_gravity="center_vertical"
+                android:layout_marginTop="100dp"
+                android:layout_height="60dp">
+
+                <com.jarhero790.eub.record.VideoProgressView
+                    android:id="@+id/editer_video_progress_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_centerVertical="true" />
+
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerHorizontal="true"
+                    android:background="@color/white" />
+            </RelativeLayout>
+
+            <FrameLayout
+                android:id="@+id/editer_fl_container"
+                android:layout_width="match_parent"
+                android:layout_gravity="bottom"
+                android:layout_height="150dp" >
+            </FrameLayout>
+
+
+
+
+
         </FrameLayout>
 
 
-
-        <FrameLayout
-            android:id="@+id/editer_fl_container"
-            android:layout_width="match_parent"
-            android:visibility="gone"
-            android:layout_height="150dp" >
-        </FrameLayout>
 
         <com.jarhero790.eub.record.TCToolsView
             android:id="@+id/editer_tools_view"

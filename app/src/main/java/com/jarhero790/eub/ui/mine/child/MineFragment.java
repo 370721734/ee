@@ -324,8 +324,8 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             JSONObject js = JSONObject.parseObject(data);
             UserCen userInfo = JSON.toJavaObject(js, UserCen.class);
             app.setUserCen(userInfo);
-            if (userInfo.getData().getUser().getHeadimgurl().equals("")){
-                Log.e("-----------","来了1");
+            if (userInfo.getData().getUser().getHeadimgurl().equals("")) {
+                Log.e("-----------", "来了1");
                 userInfo.getData().getUser().setHeadimgurl("http://www.51ayhd.com/static/images/usertouxiang.png");
             }
 //            if (userInfo.getData().getUser().getHeadimgurl()==null){
@@ -350,7 +350,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 fensi.setText(fens);
                 //先添加自己的
                 userInfoList.add(new UserInfo(userInfo.getData().getUser().getRong_id() + "", userInfo.getData().getUser().getNickname(), Uri.parse(userInfo.getData().getUser().getHeadimgurl())));//"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"
-//                Log.e("----------ddata=",userInfo.getData().getUser().getRong_id()+"      "+userInfo.getData().getUser().getHeadimgurl());
+                Log.e("----------ddata=", userInfo.getData().getUser().getRong_id() + "      " + userInfo.getData().getUser().getHeadimgurl());
 
 
             }
@@ -362,7 +362,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 money = userInfo.getData().getUser().getMoney() + "";
                 signtime = userInfo.getData().getUser().getSigntime();
 
-                Log.e("----------token", userInfo.getData().getUser().getRong_token());
+//                Log.e("----------token", userInfo.getData().getUser().getRong_token());
 
 
                 //连接融
@@ -394,9 +394,14 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
                             for (UserInfo info : userInfoList) {
                                 if (info.getUserId().equals(userid)) {
-//                                    Log.e("---------------",userInfoList.size()+" =  "+info.getPortraitUri()+"   ="+info);
+                                    Log.e("--------------zhong-", userInfoList.size() + " =  " + info.getPortraitUri() + "   =" + info);
 
-
+//                                    if (info.getPortraitUri())
+//
+//                                        if (userInfo.getData().getUser().getHeadimgurl().equals("")){
+//                                            Log.e("-----------","来了1");
+//                                            userInfo.getData().getUser().setHeadimgurl("http://www.51ayhd.com/static/images/usertouxiang.png");
+//                                        }
                                     return new UserInfo(info.getUserId(), info.getName(), info.getPortraitUri());
                                 }
                             }
@@ -445,7 +450,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         if (dataBeanList != null && dataBeanList.size() > 0) {
             for (int i = 0; i < dataBeanList.size(); i++) {
                 userInfoList.add(new UserInfo(dataBeanList.get(i).getRong_id() + "", dataBeanList.get(i).getNickname(), Uri.parse(dataBeanList.get(i).getHeadimgurl())));
-//                Log.e("---------------data=",dataBeanList.get(i).getHeadimgurl());
+                Log.e("---------------data=", dataBeanList.get(i).getHeadimgurl());
 
             }
         }

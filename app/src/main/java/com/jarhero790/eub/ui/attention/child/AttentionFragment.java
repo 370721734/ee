@@ -154,13 +154,15 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         attentionUsersVideos = attentionUserAndVideoBen.getData().getVideo();
 
         ArrayList<AttentionUser> attentionUsers = attentionUserAndVideoBen.getData().getMylike();
-//        if (attentionUsers.size() > 0) {
+        if (attentionUsers.size() > 4) {
+            framelayoutContainer.setVisibility(View.VISIBLE);
 //            for (int i = 0; i < attentionUsers.size(); i++) {
 //                Log.e("---------headimgurl=", attentionUsers.get(i).getHeadimgurl());
 //            }
-//        } else {
+        } else {
+            framelayoutContainer.setVisibility(View.GONE);
 //            Log.e("---------headimgurl=", "0");
-//        }
+        }
 
         //
         adapter = new VideoRecyclerViewAdapter(attentionUsersVideos, getActivity(), this);
@@ -183,6 +185,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(AppUtils.getContext(), LinearLayoutManager.HORIZONTAL, false);
         attentionuserRecyclerview.setLayoutManager(linearLayoutManager);
         attentionuserRecyclerview.setAdapter(attentionUsersAdapter);
+
 
         attentionUsersAdapter.setOnItem(new AttentionUsersAdapter.OnItem() {
             @Override
@@ -348,8 +351,6 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                    Log.e("--------------ggg", firstItemPosition + "  " + lastItemPosition + "  " + visibleCount);
 
 
-
-
                 }
 
 
@@ -376,7 +377,6 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                        Log.e("----------", "2");
                         Rect rect = new Rect();
                         videoView.getLocalVisibleRect(rect);
-
 
 
                         int videoHeight = videoView.getHeight();
@@ -600,8 +600,6 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         super.onPause();
         VideoViewManager.instance().release();
     }
-
-
 
 
     /**

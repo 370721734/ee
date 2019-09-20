@@ -1,6 +1,7 @@
 package com.jarhero790.eub.message.message;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,8 +15,10 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.message.adapter.ZanAdapter;
 import com.jarhero790.eub.message.bean.ZanBean;
+import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
@@ -41,7 +44,7 @@ public class ZanActivity extends AppCompatActivity {
     RecyclerView recyclerViewZan;
 
     ZanAdapter zanAdapter;
-    List<ZanBean.DataBean> giftBeanList = new ArrayList<>();
+    ArrayList<ZanBean.DataBean> giftBeanList = new ArrayList<>();
     LinearLayoutManager manager;
     @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
@@ -100,6 +103,33 @@ public class ZanActivity extends AppCompatActivity {
                                     wangluoyichang.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                 }
+
+
+
+                                zanAdapter.setZanOnclick(new ZanAdapter.ZanOnclick() {
+                                    @Override
+                                    public void OnCliearck(View view, String type, int position) {
+                                        if (type.equals("tou")){
+//                                            Log.e("------------","tou");
+                                            if (giftBeanList.get(position).getId() > 0) {
+                                                Intent intent = new Intent(ZanActivity.this, GeRenInfoActivity.class);
+                                                intent.putExtra("userid", "" + giftBeanList.get(position).getUid() + "");
+                                                startActivity(intent);
+                                            }
+
+
+                                        }else {
+                                            Log.e("------------","vid"+giftBeanList.get(position).getUrl());
+                                            Intent intent = new Intent(ZanActivity.this, PlayVideoActivity.class);
+                                            intent.putExtra("position", position);
+                                            intent.putExtra("vidlist", giftBeanList);
+                                            intent.putExtra("videotype","zan");
+                                            startActivity(intent);
+
+
+                                        }
+                                    }
+                                });
 
 
                             }

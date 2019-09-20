@@ -1,8 +1,12 @@
 package com.jarhero790.eub.message.bean;
 
+import android.os.Parcelable;
+
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
-public class ZanBean {
+public class ZanBean implements Serializable{
 
     /**
      * code : 200
@@ -12,7 +16,7 @@ public class ZanBean {
 
     private int code;
     private String msg;
-    private List<DataBean> data;
+    private ArrayList<DataBean> data;
 
     public int getCode() {
         return code;
@@ -30,15 +34,15 @@ public class ZanBean {
         this.msg = msg;
     }
 
-    public List<DataBean> getData() {
+    public ArrayList<DataBean> getData() {
         return data;
     }
 
-    public void setData(List<DataBean> data) {
+    public void setData(ArrayList<DataBean> data) {
         this.data = data;
     }
 
-    public static class DataBean {
+    public static class DataBean implements Serializable {
         /**
          * id : 690
          * uid : 5032
@@ -79,11 +83,16 @@ public class ZanBean {
         private int is_tj;
         private String video_img;
         private String address;
-        private Object lng;
-        private Object lat;
+        private String lng;
+        private String lat;
+        private int video_id;
         private String nickname;
         private String headimgurl;
         private int zid;
+        private int is_zan;
+        private int commentNum;
+        private int is_like;
+        private String good_id;
 
         public int getId() {
             return id;
@@ -213,19 +222,19 @@ public class ZanBean {
             this.address = address;
         }
 
-        public Object getLng() {
+        public String getLng() {
             return lng;
         }
 
-        public void setLng(Object lng) {
+        public void setLng(String lng) {
             this.lng = lng;
         }
 
-        public Object getLat() {
+        public String getLat() {
             return lat;
         }
 
-        public void setLat(Object lat) {
+        public void setLat(String lat) {
             this.lat = lat;
         }
 
@@ -251,6 +260,46 @@ public class ZanBean {
 
         public void setZid(int zid) {
             this.zid = zid;
+        }
+
+        public int getIs_zan() {
+            return is_zan;
+        }
+
+        public void setIs_zan(int is_zan) {
+            this.is_zan = is_zan;
+        }
+
+        public int getCommentNum() {
+            return commentNum;
+        }
+
+        public void setCommentNum(int commentNum) {
+            this.commentNum = commentNum;
+        }
+
+        public int getIs_like() {
+            return is_like;
+        }
+
+        public void setIs_like(int is_like) {
+            this.is_like = is_like;
+        }
+
+        public String getGood_id() {
+            return good_id;
+        }
+
+        public void setGood_id(String good_id) {
+            this.good_id = good_id;
+        }
+
+        public int getVideo_id() {
+            return video_id;
+        }
+
+        public void setVideo_id(int video_id) {
+            this.video_id = video_id;
         }
     }
 }

@@ -17,6 +17,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.UserCen;
+import com.jarhero790.eub.message.message.MyTextMessageItemProvider;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.MyFileNameGenerator;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
@@ -104,9 +105,10 @@ public class GlobalApplication extends Application {
         //腾讯短视频
         TXUGCBase.getInstance().setLicence(context, ugcLicenceUrl, ugcKey);
         String licenceInfo = TXUGCBase.getInstance().getLicenceInfo(this);
-        Log.e("--------------duan=",licenceInfo);
+//        Log.e("--------------duan=",licenceInfo);
         //融云初始化
         RongIM.init(this);
+//        RongIM.registerMessageTemplate(new MyTextMessageItemProvider());
 
 
 

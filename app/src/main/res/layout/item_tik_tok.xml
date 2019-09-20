@@ -54,7 +54,6 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignParentBottom="true"
-            android:layout_marginRight="13dp"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -123,6 +122,7 @@
 
 
             <RelativeLayout
+                android:id="@+id/tongkuang"
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">

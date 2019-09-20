@@ -30,7 +30,7 @@
         android:id="@+id/tv_zanle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="赞了你的作品"
+        android:text="他赞了你的视频，快去关注他吧！"
         android:layout_toRightOf="@id/tou_image"
         android:layout_below="@id/tv_name"
         android:textColor="#ffa5a4a4"
