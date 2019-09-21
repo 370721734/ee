@@ -17,6 +17,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.jarhero790.eub.bean.UserBean;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.UserCen;
+import com.jarhero790.eub.message.message.MyPrivateConversationProvider;
 import com.jarhero790.eub.message.message.MyTextMessageItemProvider;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.MyFileNameGenerator;
@@ -108,7 +109,10 @@ public class GlobalApplication extends Application {
 //        Log.e("--------------duan=",licenceInfo);
         //融云初始化
         RongIM.init(this);
-//        RongIM.registerMessageTemplate(new MyTextMessageItemProvider());
+
+//        RongIM.getInstance().registerConversationTemplate(new MyPrivateConversationProvider());
+
+        RongIM.registerMessageTemplate(new MyTextMessageItemProvider());
 
 
 

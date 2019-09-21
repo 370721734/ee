@@ -113,7 +113,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     private String mid;
     private String img;
     private String address = "";
-
+    private int videotime;//视频时间
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +128,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
         Intent intent = getIntent();
         mid = intent.getStringExtra("mid");
-
+        videotime = intent.getIntExtra("videotime", 0);
 
         if (KbPermissionUtils.needRequestPermission()) {
             KbPermission.with(this)
@@ -394,6 +394,14 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 break;
             case R.id.iv_music:
                 Intent intent = new Intent(this, SelectMusicActivity.class);
+                intent.putExtra("typefabu","fabu");
+                intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mVideoResolution);
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+                intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoPath);
+                intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
+                intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
+//                int times = (int) mProgressTime.getTag();
+                intent.putExtra("videotime",videotime);
                 startActivityForResult(intent, REQUESTMUSIC);
                 break;
             case R.id.submit:

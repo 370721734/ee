@@ -260,6 +260,7 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
 //        Log.e("---------sdk",sdkVersionStr);//3.0.1185
         locationManager = TencentLocationManager.getInstance(this);
         app = (GlobalApplication) getApplication();
+        AppManager.getAppManager().addActivity(this);
 
         if (Build.VERSION.SDK_INT >= 23) {
             String[] permissions = {
@@ -283,7 +284,7 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void event(Conver bean) {
-        Log.e("--------ksksk=>", bean.getName());
+//        Log.e("--------ksksk=>", bean.getName());
         islogin = bean.getName();
     }
 
@@ -402,7 +403,6 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
 //              }
 
 
-
                 if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("") || islogin.equals("400")) {
                     Intent intent = new Intent(this, LoginNewActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -415,10 +415,7 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
                     souyeMy.setTextColor(Color.parseColor("#A5A2A2"));
 
 
-
                     clickAttention();
-
-
 
 
                 }

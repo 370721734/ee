@@ -85,6 +85,7 @@ public class MusicSingFragment extends Fragment {
                     if (response.body() != null && response.body().getCode() == 200) {
                         list = response.body().getData();
                         adapter = new MusicAdapter(getActivity(), list, myclick, touclick, speak);
+                        if (rlv!=null)
                         rlv.setAdapter(adapter);
 
 

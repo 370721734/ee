@@ -104,7 +104,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
                         try {
                             //{"code":200,"data":{"msgId":"19081613443425770"},"msg":"\u77ed\u4fe1\u5df2\u53d1\u9001\uff0c\u8bf7\u6ce8\u610f\u67e5\u6536"}
                             String result = response.body().string();
-                            Log.e("-----1:", result);
+//                            Log.e("-----1:", result);
                             JSONObject jsonObject = new JSONObject(result);
                             int code = jsonObject.optInt("code");
                             String msg = (String) jsonObject.get("msg");

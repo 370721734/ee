@@ -1,6 +1,7 @@
 package com.jarhero790.eub.message.message;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -17,10 +18,18 @@ public class MyTextMessageItemProvider extends TextMessageItemProvider {
     public void bindView(View v, int position, TextMessage content, UIMessage data) {
         super.bindView(v, position, content, data);
         TextView textView = (TextView) v;
-        if (data.getMessageDirection() == Message.MessageDirection.SEND) {
-            textView.setTextColor(Color.parseColor("#3F3F3F"));
-        } else {
-            textView.setTextColor(Color.parseColor("#3F3F3F"));
-        }
+
+//        textView.setBackgroundColor(Color.RED);
+        textView.setTextColor(Color.parseColor("#3F3F3F"));
+
+//        textView.setTextColor(Color.RED);
+
+//        if (data.getMessageDirection() == Message.MessageDirection.SEND) {
+////            Log.e("----------","共吧");
+//
+//
+//        } else {
+//            textView.setTextColor(Color.parseColor("#3F3F3F"));
+//        }
     }
 }

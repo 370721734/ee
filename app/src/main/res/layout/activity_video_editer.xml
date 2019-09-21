@@ -38,7 +38,7 @@
                     android:gravity="center_vertical"
                     android:text="取消"
                     android:textColor="#DCDBD7"
-                    android:textSize="12dp" />
+                    android:textSize="16dp" />
             </LinearLayout>
 
             <TextView
@@ -57,7 +57,7 @@
                 android:layout_marginRight="16dp"
                 android:text="保存"
                 android:textColor="#DCDBD7"
-                android:textSize="12dp" />
+                android:textSize="16dp" />
         </FrameLayout>
 
         <FrameLayout
@@ -129,31 +129,31 @@
                 android:layout_height="wrap_content">
                 <ImageView
                     android:id="@+id/iv_music"
-                    android:layout_width="26dp"
-                    android:layout_height="23dp"
+                    android:layout_width="36dp"
+                    android:layout_height="33dp"
                     android:layout_alignParentRight="true"
-                    android:src="@mipmap/record_music_icon"
-                    />
+                    android:padding="5dp"
+                    android:src="@mipmap/record_music_icon" />
                 <TextView
                     android:id="@+id/tv_music_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="音乐"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@id/iv_music"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="音乐"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="9sp"
-                    />
+                    android:textSize="10sp" />
                 <ImageView
                     android:id="@+id/iv_tejiao"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:layout_marginTop="14dp"
-                    android:layout_alignParentRight="true"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
                     android:layout_below="@id/tv_music_text"
-                    android:src="@mipmap/record_tejiao_icon"
-                    />
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="14dp"
+                    android:padding="5dp"
+                    android:src="@mipmap/record_tejiao_icon" />
 
                 <TextView
                     android:id="@+id/tv_tejiao_text"
@@ -163,29 +163,30 @@
                     android:layout_alignParentRight="true"
                     android:layout_below="@id/iv_tejiao"
                     android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="9sp"
+                    android:textSize="10sp"
                     />
                 <ImageView
                     android:id="@+id/iv_yujin"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:layout_below="@id/tv_tejiao_text"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="14dp"
-                    android:layout_below="@id/tv_tejiao_text"
-                    android:src="@mipmap/record_yujin_icon"
-                    />
+                    android:padding="5dp"
+                    android:src="@mipmap/record_yujin_icon" />
                 <TextView
                     android:id="@+id/tv_yujin_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="滤镜"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@id/iv_yujin"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="滤镜"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="9sp"
-                    />
+                    android:textSize="10sp" />
 
                 <ImageView
                     android:id="@+id/iv_fen_three"
@@ -236,25 +237,26 @@
 
                 <ImageView
                     android:id="@+id/iv_xiaoyin"
-                    android:layout_width="23dp"
-                    android:layout_height="23dp"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:layout_below="@id/tv_yujin_text"
                     android:layout_alignParentRight="true"
                     android:layout_marginTop="14dp"
-                    android:layout_below="@id/tv_yujin_text"
-                   android:background="@drawable/item_xiaoyin"
+                    android:layout_marginRight="4dp"
+                    android:background="@drawable/item_xiaoyin"
                     />
 
                 <TextView
                     android:id="@+id/tv_xiao_text"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="消音"
-                    android:layout_alignParentRight="true"
                     android:layout_below="@id/iv_xiaoyin"
+                    android:layout_alignParentRight="true"
                     android:layout_marginTop="8dp"
+                    android:layout_marginRight="8dp"
+                    android:text="消音"
                     android:textColor="#ffe6e1e1"
-                    android:textSize="9sp"
-                    />
+                    android:textSize="10sp" />
 
             </RelativeLayout>
 

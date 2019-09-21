@@ -285,7 +285,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             int code = object.getInteger("code");
             String msg = object.getString("msg");
             if (code == 400) {
-                Log.e("---------555", "" + code);
+//                Log.e("---------555", "" + code);
                 EventBus.getDefault().post(new Conver("400"));
                 //注意 登录成功之后  一定要写上这句代码
 //                SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, false, AppUtils.getContext());
@@ -325,7 +325,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
             UserCen userInfo = JSON.toJavaObject(js, UserCen.class);
             app.setUserCen(userInfo);
             if (userInfo.getData().getUser().getHeadimgurl().equals("")) {
-                Log.e("-----------", "来了1");
+//                Log.e("-----------", "来了1");
                 userInfo.getData().getUser().setHeadimgurl("http://www.51ayhd.com/static/images/usertouxiang.png");
             }
 //            if (userInfo.getData().getUser().getHeadimgurl()==null){
@@ -370,7 +370,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 RongIM.setUserInfoProvider(new RongIM.UserInfoProvider() {
                     @Override
                     public UserInfo getUserInfo(String userid) {
-                        Log.e("--------who2:", userid);
+//                        Log.e("--------who2:", userid);
                         //用户信息,应该从粉丝一列表中获取
 //                        initUserInfo(userid);
 //                         UserInfo userInfo1=new UserInfo(userid,"名字不一样",Uri.parse("不一样的地址"));

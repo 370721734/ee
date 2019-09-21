@@ -82,6 +82,7 @@
                     android:scheme="rong" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".message.message.ConversationActivity"
             android:screenOrientation="portrait">
