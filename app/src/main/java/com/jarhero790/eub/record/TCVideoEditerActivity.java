@@ -499,6 +499,13 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             mid = data.getStringExtra("mid");
 //            Log.e("-----------music=", music);
 
+            dialog = new Dialog(this, R.style.progress_dialog);
+            dialog.setCancelable(false);
+            if (dialog.getWindow()!=null)
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.setContentView(R.layout.dialog);
+            dialog.show();
+
 //            MediaPlayUtil.getInstance().stop();
 //            MediaPlayUtil.getInstance().start(music);
 
@@ -898,6 +905,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 break;
             case R.id.iv_music:
                 Intent intent = new Intent(this, SelectMusicActivity.class);
+                intent.putExtra("typefabu","edit");
                 startActivityForResult(intent, REQUESTMUSIC);
 
                 break;
@@ -1379,7 +1387,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 case 1:
 //                    dismissProgress();
                     String videoPath = (String) msg.obj;
-                    Log.e("-------------video=3333", videoPath);
+//                    Log.e("-------------video=3333", videoPath);
 //                    Intent intent = new Intent(TCVideoEditerActivity.this,MakeVideoActivity.class);
 //                    intent.putExtra("path",videoPath);
 //                    intent.putExtra("isPlayer",true);
@@ -1424,10 +1432,10 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private void composeVideoAudio() {//2
 
         String audioUrl = mMediaPath.get(1);
-        Log.e("---------audio=", audioUrl);
+//        Log.e("---------audio=", audioUrl);
         final String audioOutUrl = mTargetPath + "/tempAudio.aac";
         String[] common = FFmpegCommands.changeAudioOrMusicVol(audioUrl, mAudioVol * 100, audioOutUrl);
-        Log.e("---------vol1=", common[3]);
+//        Log.e("---------vol1=", common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -1500,16 +1508,18 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
-                Log.e(TAG, "cutSelectMusic ffmpeg start...");
+//                Log.e(TAG, "cutSelectMusic ffmpeg start...");
             }
 
             @Override
             public void onEnd(int result) {
-                Log.e(TAG, "cutSelectMusic ffmpeg end...");
+//                Log.e(TAG, "cutSelectMusic ffmpeg end...");
                 if(mMusicPlayer!=null){//移除上一个选择的音乐背景
                     mMediaPath.remove(mMediaPath.size()-1);
                 }
                 mMediaPath.add(musicPath);
+                if (dialog!=null)
+                    dialog.dismiss();
 //                if (musicUrl != null)
 //                    MediaPlayUtil.getInstance().start(musicPath);
 

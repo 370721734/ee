@@ -6,12 +6,15 @@ import android.animation.Animator;
 import android.animation.ObjectAnimator;
 import android.animation.ValueAnimator;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.net.Uri;
 import android.os.Build;
@@ -19,6 +22,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -78,6 +82,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     private static final String TAG = "TCVideoRecordActivity";
     private static final String OUTPUT_DIR_NAME = "TXUGC";
+    private static final int IMAGE_REQUEST_CODE = 33;
     private boolean mRecording = false;
     private boolean mStartPreview = false;
     private boolean mFront = true;
@@ -100,7 +105,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private RelativeLayout mRlAspectSelect;
     private ImageView mIvAspectSelectFirst;
     private ImageView mIvAspectSelectSecond;
-    private ImageView mIvScaleMask;
+    private ImageView mIvScaleMask, iv_local_tu;
     private boolean mAspectSelectShow = false;
     private TextView mTvFilter;
 
@@ -175,7 +180,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     /**
      * 主线程的Handler 用于处理load 视频信息的完后的动作
      */
-    private  class VideoMainHandler extends Handler {
+    private class VideoMainHandler extends Handler {
         static final int LOAD_VIDEO_SUCCESS = 0;
         static final int LOAD_VIDEO_ERROR = -1;
         private WeakReference<TCVideoRecordActivity> mWefActivity;
@@ -192,9 +197,17 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             if (activity == null) return;
             switch (msg.what) {
                 case LOAD_VIDEO_ERROR:
+                    if (dialog != null)
+                        dialog.dismiss();
+                    mIvConfirm.setImageResource(R.drawable.selector_record_confirm);
+                    mIvConfirm.setEnabled(true);
                     loadVideoFail();
                     break;
                 case LOAD_VIDEO_SUCCESS:
+                    if (dialog != null)
+                        dialog.dismiss();
+                    mIvConfirm.setImageResource(R.drawable.selector_record_confirm);
+                    mIvConfirm.setEnabled(true);
                     loadVideoSuccess();
                     break;
             }
@@ -210,7 +223,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
             intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
             int times = (int) mProgressTime.getTag();
-            intent.putExtra("time",times);
+            intent.putExtra("time", times);
 //        Log.e("--------time","时"+times);
             startActivity(intent);
             releaseRecord();
@@ -433,6 +446,9 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
         mGestureDetector = new GestureDetector(this, this);
         mScaleGestureDetector = new ScaleGestureDetector(this, this);
+
+        iv_local_tu = findViewById(R.id.iv_local_tu);
+        iv_local_tu.setOnClickListener(this);
 
         //自定义进度条的使用
 //        mCustomProgressDialog = new CustomProgressDialog();
@@ -710,6 +726,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         }
     }
 
+    private Dialog dialog;
+
     @Override
     public void onClick(View view) {
         int i = view.getId();
@@ -772,6 +790,15 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
         } else if (i == R.id.btn_confirm) {//                mCompleteProgressDialog.show();
 //            mCustomProgressDialog.show();
+            mIvConfirm.setImageResource(R.mipmap.ugc_confirm_disable);
+            mIvConfirm.setEnabled(false);
+            dialog = new Dialog(this, R.style.progress_dialog);
+            dialog.setContentView(R.layout.dialog);
+            dialog.setCancelable(false);
+            if (dialog.getWindow() != null)
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.show();
+
             //完成   预览
             stopRecord();
 
@@ -800,6 +827,11 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             stopRecord();
             mNeedEditer = false;
 
+        } else if (i == R.id.iv_local_tu) {
+            //本地图片
+            Intent intent_gallery = new Intent(Intent.ACTION_PICK);
+            intent_gallery.setType("image/*");
+            startActivityForResult(intent_gallery, IMAGE_REQUEST_CODE);
         }
     }
 
@@ -1239,54 +1271,45 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mLoadBackgroundThread.start();
 
 
-
-
-
-
-
-
-
     }
 
     /**
-
-    private void startEditVideo() {
-        Intent intent = new Intent();
-        intent.setAction("com.tencent.liteav.demo.videopreprocess");
-//        Intent intent = new Intent(this, TCVideoPreprocessActivity.class);
-//        fileInfo.setThumbPath(mTXRecordResult.coverPath);
-//
-//        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
-//        retriever.setDataSource(mTXRecordResult.videoPath);
-//        String duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
-//        fileInfo.setDuration(Integer.valueOf(duration) );
-        int times = (int) mProgressTime.getTag();
-        Log.e("-------", "时间" + times);
-        if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_LOW) {
-            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_360_640);
-            mBiteRate = 2400;
-        } else if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_MEDIUM) {
-            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);
-            mBiteRate = 6500;
-        } else if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_HIGH) {
-            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_720_1280);
-            mBiteRate = 9600;
-        } else {
-            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mRecordResolution);
-        }
-        FileUtils.deleteFile(mTXRecordResult.coverPath);
-        intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, mBiteRate);
-        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
-        intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mTXRecordResult.videoPath);
-        intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mTXRecordResult.coverPath);
-        intent.putExtra("time", times);
-        startActivity(intent);
-
-        releaseRecord();
-        finish();
-    }
-
-    */
+     * private void startEditVideo() {
+     * Intent intent = new Intent();
+     * intent.setAction("com.tencent.liteav.demo.videopreprocess");
+     * //        Intent intent = new Intent(this, TCVideoPreprocessActivity.class);
+     * //        fileInfo.setThumbPath(mTXRecordResult.coverPath);
+     * //
+     * //        MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+     * //        retriever.setDataSource(mTXRecordResult.videoPath);
+     * //        String duration = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
+     * //        fileInfo.setDuration(Integer.valueOf(duration) );
+     * int times = (int) mProgressTime.getTag();
+     * Log.e("-------", "时间" + times);
+     * if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_LOW) {
+     * intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_360_640);
+     * mBiteRate = 2400;
+     * } else if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_MEDIUM) {
+     * intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);
+     * mBiteRate = 6500;
+     * } else if (mRecommendQuality == TXRecordCommon.VIDEO_QUALITY_HIGH) {
+     * intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_720_1280);
+     * mBiteRate = 9600;
+     * } else {
+     * intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mRecordResolution);
+     * }
+     * FileUtils.deleteFile(mTXRecordResult.coverPath);
+     * intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, mBiteRate);
+     * intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+     * intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mTXRecordResult.videoPath);
+     * intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mTXRecordResult.coverPath);
+     * intent.putExtra("time", times);
+     * startActivity(intent);
+     * <p>
+     * releaseRecord();
+     * finish();
+     * }
+     */
 
     @Override
     public void onRecordEvent(int event, Bundle param) {
@@ -1339,11 +1362,54 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                         TXCLog.e(TAG, "NULL Pointer! Get Music Failed");
                     }
                 }
+            } else if (requestCode == IMAGE_REQUEST_CODE) {
+                Log.e("----------------", "图片地址");
+                Uri imageUri = data.getData();
+                //获取照片路径
+                String[] filePathColumn = {MediaStore.Audio.Media.DATA};
+                Cursor cursor = getContentResolver().query(imageUri, filePathColumn, null, null, null);
+                cursor.moveToFirst();
+                String photoPath = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
+                setImageBitmap(photoPath);
+                cursor.close();
+//                crop(imageUri);
+
             }
         }
     }
 
-    TXRecordCommon.TXRecordResult mresult = null;
+
+    /**
+     * 压缩图片
+     */
+    private void setImageBitmap(String photoPath) {
+        //获取imageview的宽和高
+        int targetWidth = iv_local_tu.getWidth();
+        int targetHeight = iv_local_tu.getHeight();
+
+        //根据图片路径，获取bitmap的宽和高
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(photoPath, options);
+        int photoWidth = options.outWidth;
+        int photoHeight = options.outHeight;
+
+        //获取缩放比例
+        int inSampleSize = 1;
+        if (photoWidth > targetWidth || photoHeight > targetHeight) {
+            int widthRatio = Math.round((float) photoWidth / targetWidth);
+            int heightRatio = Math.round((float) photoHeight / targetHeight);
+            inSampleSize = Math.min(widthRatio, heightRatio);
+        }
+
+        //使用现在的options获取Bitmap
+        options.inSampleSize = inSampleSize;
+        options.inJustDecodeBounds = false;
+        Bitmap bitmap = BitmapFactory.decodeFile(photoPath, options);
+        iv_local_tu.setImageBitmap(bitmap);
+    }
+
+//    TXRecordCommon.TXRecordResult mresult = null;
 
     @Override
     public void onRecordComplete(TXRecordCommon.TXRecordResult result) {
@@ -1351,7 +1417,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
         mTXRecordResult = result;
 
-        TXCLog.i(TAG, "onRecordComplete, result retCode = " + result.retCode + ", descMsg = " + result.descMsg + ", videoPath = " + result.videoPath + ", coverPath = " + result.coverPath);
+//        TXCLog.i(TAG, "onRecordComplete, result retCode = " + result.retCode + ", descMsg = " + result.descMsg + ", videoPath = " + result.videoPath + ", coverPath = " + result.coverPath);
         if (mTXRecordResult.retCode < 0) {
             mRecording = false;
             if (mTXCameraRecord != null) {
@@ -1831,7 +1897,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     /**
      * 加在视频信息的runnable
      */
-    private  class LoadVideoRunnable implements Runnable {
+    private class LoadVideoRunnable implements Runnable {
         private WeakReference<TCVideoRecordActivity> mWekActivity;
 
         LoadVideoRunnable(TCVideoRecordActivity activity) {

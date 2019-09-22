@@ -95,6 +95,8 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     //    @BindView(R.id.video_view)
     TXCloudVideoView mTXCloudVideoView;
 
+    private int mVideoFrom;
+
     private TXVodPlayer mTXVodPlayer = null;
     private TXVodPlayConfig mTXPlayConfig = null;
     private int mVideoSource; // 视频来源
@@ -148,11 +150,13 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
         }
 
 
-        mVideoSource = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+        mVideoSource = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
         mVideoPath = getIntent().getStringExtra(TCConstants.VIDEO_RECORD_VIDEPATH);
         mCoverImagePath = getIntent().getStringExtra(TCConstants.VIDEO_RECORD_COVERPATH);
         mVideoDuration = getIntent().getLongExtra(TCConstants.VIDEO_RECORD_DURATION, 0);
         mVideoResolution = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);
+
+        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
 
 //        Log.e("-------", "onCreate: mVideoPath = " + mVideoPath + ",mVideoDuration = " + mVideoDuration);
 
@@ -396,10 +400,11 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 Intent intent = new Intent(this, SelectMusicActivity.class);
                 intent.putExtra("typefabu","fabu");
                 intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mVideoResolution);
-                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, mVideoFrom);//TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD
                 intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoPath);
                 intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
                 intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
+                intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mCoverImagePath);
 //                int times = (int) mProgressTime.getTag();
                 intent.putExtra("videotime",videotime);
                 startActivityForResult(intent, REQUESTMUSIC);

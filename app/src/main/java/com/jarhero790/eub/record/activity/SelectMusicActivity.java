@@ -67,7 +67,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SelectMusicActivity extends AppCompatActivity implements TXVideoEditer.TXVideoGenerateListener, TCVideoEditerWrapper.TXVideoPreviewListenerWrapper {
+public class SelectMusicActivity extends AppCompatActivity  {
 
     @BindView(R.id.m_ad_pager)
     AdViewPager mAdPager;
@@ -100,10 +100,10 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
     private String mTargetPath;
     private FileUtilss mFileUtils;
     private String mVideoOutputPath;                        // 视频输出路径
-    private TCVideoEditerWrapper mEditerWrapper;
+//    private TCVideoEditerWrapper mEditerWrapper;
     // 短视频SDK获取到的视频信息
-    private TXVideoEditer mTXVideoEditer;                   // SDK接口类
-    private long mVideoDuration;                            // 视频的总时长
+//    private TXVideoEditer mTXVideoEditer;                   // SDK接口类
+//    private long mVideoDuration;                            // 视频的总时长
     private int mVideoResolution = -1;                      // 分辨率类型（如果是从录制过来的话才会有，这参数）
     private int mCustomBitrate;
     private String music;
@@ -111,9 +111,13 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
     private int mVideoFrom;
     public boolean isPreviewFinish;
 
-    private TXVideoEditConstants.TXGenerateResult mresult;
-    private String ms;
+//    private TXVideoEditConstants.TXGenerateResult mresult;
+//    private String ms;
     private String mRecordProcessedPath;
+
+    private String mCoverImagePath;
+
+    private String mVideoPath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,39 +125,77 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
         setContentView(R.layout.activity_select_music);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
-        mEditerWrapper = TCVideoEditerWrapper.getInstance();
-        mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
+//        mEditerWrapper = TCVideoEditerWrapper.getInstance();
+//        mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
         adapter = new VpAdapter(getSupportFragmentManager());
         vp.setAdapter(adapter);
         vp.setScroll(false);
-//        initPlayerLayout();         // 初始化预览视频布局
-        extractVideo();
+
+
+
         Intent intent = getIntent();
 //        videotime = intent.getIntExtra("videotime", 0);
-        mVideoDuration=videotime;
+//        mVideoDuration=videotime;
         videotype = intent.getStringExtra("typefabu");
-        mVideoResolution = intent.getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);
+        if (videotype.equals("fabu")){
+            //发布
+            mFileUtils = new FileUtilss(SelectMusicActivity.this);
+            mTargetPath = mFileUtils.getStorageDirectory();
+            mVideoOutputPath = getCustomVideoOutputPath();
+            mVideoResolution = intent.getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);
 //        Log.e("----select_time=", videotime + "," + videotype);
-        mFileUtils = new FileUtilss(SelectMusicActivity.this);
-        mTargetPath = mFileUtils.getStorageDirectory();
-        mVideoOutputPath = getCustomVideoOutputPath();
+            mCustomBitrate = getIntent().getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 0);
+            videotime = getIntent().getIntExtra("videotime", 0) - 1;
+            mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+            // 录制经过预处理的视频路径，在编辑后需要删掉录制源文件
+            mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
+            mCoverImagePath = getIntent().getStringExtra(TCConstants.VIDEO_RECORD_COVERPATH);
+            mVideoPath = getIntent().getStringExtra(TCConstants.VIDEO_RECORD_VIDEPATH);
+            extractVideo();
+        }else {
+            //编辑
 
-        mTXVideoEditer = mEditerWrapper.getEditer();
-        if (mTXVideoEditer == null || mEditerWrapper.getTXVideoInfo() == null) {
-            Toast.makeText(this, "状态异常，结束编辑", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
         }
-        mVideoDuration = mEditerWrapper.getTXVideoInfo().duration;
 
 
-        mEditerWrapper.setCutterStartTime(0, mVideoDuration);
-        mVideoResolution = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);
-        mCustomBitrate = getIntent().getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 0);
-        videotime = getIntent().getIntExtra("time", 0) - 1;
-        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
-        // 录制经过预处理的视频路径，在编辑后需要删掉录制源文件
-        mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        mTXVideoEditer = new TXVideoEditer(this);
+//        mTXVideoEditer.setVideoPath(mRecordProcessedPath);
+
+//        mEditerWrapper = TCVideoEditerWrapper.getInstance();
+//        mEditerWrapper.setEditer(mTXVideoEditer);
+
+//        mTXVideoEditer = mEditerWrapper.getEditer();
+//        if (mTXVideoEditer == null || mEditerWrapper.getTXVideoInfo() == null) {
+//            Toast.makeText(this, "状态异常，结束编辑", Toast.LENGTH_SHORT).show();
+//            finish();
+//            return;
+//        }
+//        mVideoDuration = mEditerWrapper.getTXVideoInfo().duration;
+//
+//
+//        mEditerWrapper.setCutterStartTime(0, mVideoDuration);
+
+
+
+
+
+
+
+
 
         //轮播图
         initAd();
@@ -169,18 +211,20 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 //                Log.e("-------------","selectmusic"+position+"  "+url);
 //            }
 //        });
+
+
     }
 
-    private void initPlayerLayout() {
-        TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
-//        param.videoView = mVideoPlayerLayout;
-        param.renderMode = TXVideoEditConstants.PREVIEW_RENDER_MODE_FILL_SCREEN;//PREVIEW_RENDER_MODE_FILL_EDGE
-        mTXVideoEditer.initWithPreview(param);
-    }
+//    private void initPlayerLayout() {
+//        TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
+////        param.videoView = mVideoPlayerLayout;
+//        param.renderMode = TXVideoEditConstants.PREVIEW_RENDER_MODE_FILL_SCREEN;//PREVIEW_RENDER_MODE_FILL_EDGE
+//        mTXVideoEditer.initWithPreview(param);
+//    }
     @Override
     protected void onResume() {
         super.onResume();
-        mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
+//        mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
     }
 
     private void initAd() {
@@ -249,30 +293,6 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 
     private Dialog dialog;
 
-    @Override
-    public void onGenerateProgress(float v) {
-
-    }
-
-    @Override
-    public void onGenerateComplete(TXVideoEditConstants.TXGenerateResult txGenerateResult) {
-        if (txGenerateResult.retCode == TXVideoEditConstants.GENERATE_RESULT_OK) {
-            // 生成成功
-            createThumbFile(txGenerateResult);
-        } else {
-            dialog.dismiss();
-        }
-    }
-
-    @Override
-    public void onPreviewProgressWrapper(int time) {
-
-    }
-
-    @Override
-    public void onPreviewFinishedWrapper() {
-
-    }
 
     public class VpAdapter extends FragmentPagerAdapter {
 
@@ -297,13 +317,12 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 
 
                                 Intent intent = getIntent();
-                                String type = intent.getStringExtra("typefabu");
-                                if (type.equals("fabu")) {
+                                if (videotype.equals("fabu")) {
                                     dialog = new Dialog(SelectMusicActivity.this, R.style.progress_dialog);
-                                    dialog.setContentView(R.layout.dialog);
-                                    dialog.setCancelable(true);
                                     if (dialog.getWindow() != null)
                                         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    dialog.setCancelable(true);
+                                    dialog.setContentView(R.layout.dialog);
                                     dialog.show();
 
                                     final String path = Environment.getExternalStorageDirectory().getPath() + "/AAAAImg/";
@@ -321,7 +340,6 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 
 
                                 } else {
-                                    Log.e("----------------type=", type);
                                     intent.putExtra("music", url);
                                     intent.putExtra("mid", mid);
                                     setResult(RESULT_OK, intent);
@@ -345,12 +363,41 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 //                                Log.e("-------------1","selectmusic"+position+"  "+url);
                                 music=url;
                                 middd=mid;
-
                                 Intent intent = getIntent();
-                                intent.putExtra("music", url);
-                                intent.putExtra("mid", mid);
-                                setResult(RESULT_OK, intent);
-                                finish();
+                                if (videotype.equals("fabu")) {
+                                    dialog = new Dialog(SelectMusicActivity.this, R.style.progress_dialog);
+                                    if (dialog.getWindow() != null)
+                                        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                                    dialog.setCancelable(true);
+                                    dialog.setContentView(R.layout.dialog);
+                                    dialog.show();
+
+                                    final String path = Environment.getExternalStorageDirectory().getPath() + "/AAAAImg/";
+                                    new Thread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            try {
+                                                downLoadFromUrl(url, "123.mp3", path);
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    }).start();
+
+
+
+                                } else {
+                                    intent.putExtra("music", url);
+                                    intent.putExtra("mid", mid);
+                                    setResult(RESULT_OK, intent);
+                                    finish();
+                                }
+
+//                                Intent intent = getIntent();
+//                                intent.putExtra("music", url);
+//                                intent.putExtra("mid", mid);
+//                                setResult(RESULT_OK, intent);
+//                                finish();
                             }
                         });
                         return musicSingFragment;
@@ -547,7 +594,7 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 
     private void cutSelectMusic(String musicUrl) {
         final String musicPath = mTargetPath + "/bgMusic.aac";
-        long time = getIntent().getIntExtra("time", 0);//时间没有
+        long time = getIntent().getIntExtra("videotime", 0);//时间没有
         String[] commands = FFmpegCommands.cutIntoMusic(musicUrl, time, musicPath);
 //        Log.e("-------cut", musicUrl + "   " + time + "");
 //        cut: ffmpeg  /storage/emulated/0/AAAAImg123.mp3   6
@@ -564,9 +611,9 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
                 mMediaPath.add(musicPath);
 //                if (musicUrl != null)
 //                    MediaPlayUtil.getInstance().start(musicPath);
-
-
-                startGenerate();
+//                Log.e("-------cut", musicUrl + "   " + time + "");
+                composeVideoAudio();//1
+//                startGenerate();
             }
         });
     }
@@ -591,7 +638,7 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
     private void extractVideo() {
         final String outVideo = mTargetPath + "/video.mp4";
 //        Log.e("----------", "是不是.mp4" + outVideo);
-        String[] commands = FFmpegCommands.extractVideo(getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH), outVideo);
+        String[] commands = FFmpegCommands.extractVideo(mVideoPath, outVideo);
         FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -614,7 +661,7 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
     private void extractAudio() {
         final String outVideo = mTargetPath + "/audio.aac";
 //        Log.e("-----------音频路径对不对", outVideo);
-        String[] commands = FFmpegCommands.extractAudio(getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH), outVideo);
+        String[] commands = FFmpegCommands.extractAudio(mVideoPath, outVideo);
         FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -658,7 +705,7 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 
     private void startGenerate() {
 //        stopPlay(); // 停止播放
-        mTXVideoEditer.cancel(); // 注意：生成时，停止输出缩略图
+//        mTXVideoEditer.cancel(); // 注意：生成时，停止输出缩略图
 
 //        mIbPlay.setImageResource(R.mipmap.ic_play);
 //        if (mIsPicCombine) {
@@ -709,30 +756,30 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
         // 添加片尾水印
 //        addTailWaterMark();  //腾讯云水印
 
-        mTXVideoEditer.setCutFromTime(getCutterStartTime(), getCutterEndTime());
-        mTXVideoEditer.setVideoGenerateListener(this);
+//        mTXVideoEditer.setCutFromTime(getCutterStartTime(), getCutterEndTime());
+//        mTXVideoEditer.setVideoGenerateListener(this);
 
 //        if (mCustomBitrate != 0) { // 是否自定义码率
 //
 //        }
-        mTXVideoEditer.setVideoBitrate(9600);
-        if (mVideoResolution == -1) {// 默认情况下都将输出720的视频
-            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_720P, mVideoOutputPath);
-        } else if (mVideoResolution == TXRecordCommon.VIDEO_RESOLUTION_360_640) {
-            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_360P, mVideoOutputPath);
-        } else if (mVideoResolution == TXRecordCommon.VIDEO_RESOLUTION_540_960) {
-            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_540P, mVideoOutputPath);
-        } else if (mVideoResolution == TXRecordCommon.VIDEO_RESOLUTION_720_1280) {
-            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_720P, mVideoOutputPath);
-        }
+//        mTXVideoEditer.setVideoBitrate(9600);
+//        if (mVideoResolution == -1) {// 默认情况下都将输出720的视频
+//            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_720P, mVideoOutputPath);
+//        } else if (mVideoResolution == TXRecordCommon.VIDEO_RESOLUTION_360_640) {
+//            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_360P, mVideoOutputPath);
+//        } else if (mVideoResolution == TXRecordCommon.VIDEO_RESOLUTION_540_960) {
+//            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_540P, mVideoOutputPath);
+//        } else if (mVideoResolution == TXRecordCommon.VIDEO_RESOLUTION_720_1280) {
+//            mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_720P, mVideoOutputPath);
+//        }
     }
-    private long getCutterStartTime() {
-        return mEditerWrapper.getCutterStartTime();
-    }
-
-    private long getCutterEndTime() {
-        return mEditerWrapper.getCutterEndTime();
-    }
+//    private long getCutterStartTime() {
+//        return mEditerWrapper.getCutterStartTime();
+//    }
+//
+//    private long getCutterEndTime() {
+//        return mEditerWrapper.getCutterEndTime();
+//    }
 
 
 
@@ -785,8 +832,8 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 //                startPreviewActivity(result, s);
                 //现在不是预览界面，是发布界面
 
-                mresult = result;
-                ms = s;
+//                mresult = result;
+//                ms = s;
 
 
                 dialog.dismiss();
@@ -809,7 +856,7 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
                     intent.putExtra("mid", middd);
                     if (s != null)
                         intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, s);
-                    intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
+//                    intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
                     startActivity(intent);
                     finish();
                 }
@@ -859,7 +906,7 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
         String audioUrl = mMediaPath.get(1);
         Log.e("---------audio=", audioUrl);
         final String audioOutUrl = mTargetPath + "/tempAudio.aac";
-        String[] common = FFmpegCommands.changeAudioOrMusicVol(audioUrl, 0, audioOutUrl);
+        String[] common = FFmpegCommands.changeAudioOrMusicVol(audioUrl, 100, audioOutUrl);
         Log.e("---------vol1=", common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
@@ -870,11 +917,15 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
             @Override
             public void onEnd(int result) {
 //                composeMusicAndAudio(audioOutUrl);
-                if (mMediaPath.size() == 3) {
-                    composeVideoMusic(audioOutUrl);
-                } else {
-                    composeMusicAndAudio(audioOutUrl);
-                }
+                composeVideoMusic(audioOutUrl);
+                Log.e("---------","3"+audioOutUrl);
+//                if (mMediaPath.size() == 3) {
+//                    composeVideoMusic(audioOutUrl);
+//                    Log.e("---------","3"+audioOutUrl);
+//                } else {
+//                    composeMusicAndAudio(audioOutUrl);
+//                    Log.e("---------","1");
+//                }
             }
         });
     }
@@ -892,9 +943,10 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
         } else {
             musicUrl = mMediaPath.get(2);
         }
+        Log.e("-------------",musicUrl+"音乐地址对不对");
         final String musicOutUrl = mTargetPath + "/tempMusic.aac";
         final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl, 99, musicOutUrl);
-//        Log.e("---------vol2=",common[3]);
+        Log.e("---------vol2=",common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -903,7 +955,10 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 
             @Override
             public void onEnd(int result) {
-                composeAudioAndMusic(audioUrl, musicOutUrl);
+                Log.e("---------vol3=",common[3]);
+//                composeAudioAndMusic(audioUrl, musicOutUrl);
+
+                composeMusicAndAudio(musicOutUrl);
             }
         });
     }
@@ -935,8 +990,9 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
     private void composeMusicAndAudio(String bgMusicAndAudio) {
         final String videoAudioPath = mTargetPath + "/videoMusicAudio.mp4";
         final String videoUrl = mMediaPath.get(0);   //是视频地址
-        final int time = getIntent().getIntExtra("time", 0) - 1;
-        String[] common = FFmpegCommands.composeVideo(videoUrl, bgMusicAndAudio, videoAudioPath, time);
+//        final int time = getIntent().getIntExtra("time", 0) - 1;
+        String[] common = FFmpegCommands.composeVideo(videoUrl, bgMusicAndAudio, videoAudioPath, videotime);
+        Log.e("--------------",videoAudioPath+"    "+videotime);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -986,24 +1042,25 @@ public class SelectMusicActivity extends AppCompatActivity implements TXVideoEdi
 //                    finish();
 
 
-                    if (mresult != null && ms != null) {
+
                         Intent intent = new Intent(SelectMusicActivity.this, FaBuActivity.class);
                         intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
                         intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
                         intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, videoPath);
+                        intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION,mVideoResolution);
                         intent.putExtra("videotime", videotime);
 //                        Log.e("--mVideoOutputPath11=",videoPath+"  "+mVideoOutputPath);
                         intent.putExtra("mid", middd);
-                        if (ms != null)
-                            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, ms);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
+                        if (mCoverImagePath != null)
+                            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mCoverImagePath);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
                         startActivity(intent);
                         finish();
-                    }
+
 
 
                     break;
