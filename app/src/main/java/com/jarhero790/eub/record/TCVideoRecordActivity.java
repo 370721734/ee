@@ -832,7 +832,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         } else if (i == R.id.iv_local_tu) {
 //            //本地图片
             Intent intent_gallery = new Intent(Intent.ACTION_PICK);
-            intent_gallery.setType("image/*");
+            intent_gallery.setType("video/*");
             startActivityForResult(intent_gallery, IMAGE_REQUEST_CODE);
 
             //本地视频
@@ -1430,15 +1430,26 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                     }
                 }
             } else if (requestCode == IMAGE_REQUEST_CODE) {
-                Log.e("----------------", "图片地址");
+
                 Uri imageUri = data.getData();
+                Log.e("----------------", "视频地址"+imageUri);
+                if (imageUri!=null){
+                    if (imageUri.toString().endsWith("mp4")){
+
+                    }else {
+                        Toast.makeText(TCVideoRecordActivity.this,"请选择视频格式文件",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+
                 //获取照片路径
-                String[] filePathColumn = {MediaStore.Audio.Media.DATA};
-                Cursor cursor = getContentResolver().query(imageUri, filePathColumn, null, null, null);
-                cursor.moveToFirst();
-                String photoPath = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
-                setImageBitmap(photoPath);
-                cursor.close();
+//                String[] filePathColumn = {MediaStore.Audio.Media.DATA};
+//                Cursor cursor = getContentResolver().query(imageUri, filePathColumn, null, null, null);
+//                cursor.moveToFirst();
+//                String photoPath = cursor.getString(cursor.getColumnIndex(filePathColumn[0]));
+//                setImageBitmap(photoPath);
+//                cursor.close();
 //                crop(imageUri);
 
             }
