@@ -26,6 +26,7 @@ import android.provider.MediaStore;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.FileProvider;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -49,6 +50,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jarhero790.eub.BuildConfig;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.rtmp.TXLiveConstants;
@@ -828,12 +830,77 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             mNeedEditer = false;
 
         } else if (i == R.id.iv_local_tu) {
-            //本地图片
+//            //本地图片
             Intent intent_gallery = new Intent(Intent.ACTION_PICK);
             intent_gallery.setType("image/*");
             startActivityForResult(intent_gallery, IMAGE_REQUEST_CODE);
+
+            //本地视频
+//            Intent intent = new Intent(Intent.ACTION_VIEW);
+//            String type = "video/*";
+//            Uri name = Uri.fromFile(new File(path));
+//            intent.setDataAndType(name, type);
+//            startActivity(intent);
+
+//            String vo=Environment.getExternalStorageDirectory().getPath();
+//            Uri uriForFile = FileProvider.getUriForFile(this, BuildConfig.APPLICATION_ID + ".FileProvider", new File(vo));
+//
+//            Intent intent = new Intent(android.content.Intent.ACTION_VIEW);
+//            Uri data = Uri.parse(Environment.getExternalStorageDirectory().getPath() + "");
+//            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+//            intent.setDataAndType(uriForFile, "video/*");
+//            startActivity(intent);
+
+//            File videoDir = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_MOVIES), "USBCameraTest");
+
+
+//
+////            Intent intent = new Intent(Intent.ACTION_VIEW);
+////            String filePath = Environment.getExternalStorageDirectory().getAbsolutePath();//该路径可以自定义
+//            File videoDir = new File(Environment.getExternalStorageDirectory() /*+ "/DCIM"*/ + "/DCIM/Camera");
+//
+//
+////
+////            Uri uriForFile = FileProvider.getUriForFile(this, "com.jarhero790.eub.FileProvider",file);
+//////            Uri uri = Uri.fromFile(file);
+////            intent.setDataAndType(uriForFile, "video/*");
+////            startActivity(intent);
+//
+//            Intent intent = new Intent();
+//            Uri uri=null;
+//            intent.setAction(Intent.ACTION_VIEW);
+//            if (Build.VERSION.SDK_INT>=24){
+//                uri = FileProvider.getUriForFile(getApplicationContext(), "com.jarhero790.eub.fileprovider",videoDir);
+//            }else {
+//                uri = Uri.fromFile(videoDir);
+//
+//            }
+////            openAndroidFile(path);
+//
+////            File file = new File(filepath);
+////        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//设置标记
+//
+//            intent.addFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+////            intent.setAction(Intent.ACTION_VIEW);//动作，查看
+//            intent.setDataAndType(uri, "video/mp4");
+////            intent.setDataAndType(Uri.fromFile(file), CommonUtil.getMIMEType(file));//设置类型
+//            startActivity(intent);
+
+
         }
     }
+
+
+    public  void openAndroidFile(String filepath){
+        Intent intent = new Intent();
+        File file = new File(filepath);
+//        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//设置标记
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        intent.setAction(Intent.ACTION_VIEW);//动作，查看
+        intent.setDataAndType(Uri.fromFile(file), CommonUtil.getMIMEType(file));//设置类型
+         startActivity(intent);
+    }
+
 
     private void snapshot() {
         if (mTXCameraRecord != null) {

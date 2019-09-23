@@ -52,13 +52,16 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="390dp"
+        android:layout_marginStart="10dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginEnd="26dp"
         android:layout_marginRight="26dp">
 
         <com.dueeeke.videoplayer.player.VideoView
             android:id="@+id/video_player"
             android:layout_width="match_parent"
             android:layout_height="390dp"
+            android:layout_marginLeft="10dp"
             android:background="#222222" />
 
         <ImageView
@@ -66,8 +69,8 @@
             android:layout_width="match_parent"
             android:layout_height="390dp"
             android:adjustViewBounds="true"
-            android:visibility="gone"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/iv_play"
@@ -85,11 +88,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginLeft="10dp"
-            android:gravity="left"
-            android:layout_marginRight="33dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginRight="30dp"
             android:layout_marginBottom="16dp"
             android:layout_toLeftOf="@id/iv_play"
+            android:gravity="left"
             android:text="钻视tv迭代开发火热进行中，请耐心等待下一
 个版本的到来"
             android:textColor="#ffffffff"
@@ -100,8 +103,8 @@
         android:layout_width="match_parent"
         android:layout_height="54dp"
         android:layout_marginLeft="10dp"
-        android:layout_marginRight="26dp"
         android:layout_marginTop="5dp"
+        android:layout_marginRight="26dp"
         android:orientation="horizontal">
 
         <TextView
@@ -111,6 +114,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:text="7-18"
+            android:layout_marginLeft="10dp"
             android:textColor="#6D7079"
             android:textSize="12dp" />
 
@@ -154,9 +158,9 @@
         android:layout_width="match_parent"
         android:layout_height="162dp"
         android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
         android:layout_marginRight="10dp"
         android:background="#1D1F2B"
-        android:layout_marginTop="5dp"
         android:orientation="vertical">
 
         <TextView
@@ -181,9 +185,9 @@
             android:layout_height="80dp"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="11dp"
+            android:layout_marginRight="10dp"
             android:divider="#1D1F2B"
-            android:dividerHeight="1dp"
-            android:layout_marginRight="10dp">
+            android:dividerHeight="1dp">
 
         </ListView>
 

@@ -483,9 +483,16 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     @Override
     protected void onResume() {
         super.onResume();
+//        MediaPlayUtil.getInstance().start();
+        if (mTXVodPlayer!=null){
+            mTXVodPlayer.resume();
+            startPlay();
+        }
+
         if (music != null) {
             MediaPlayUtil.getInstance().start(music);
         }
+
     }
 
 

@@ -33,7 +33,8 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".message.souye.TongKuanActivity"></activity>
-        <activity android:name=".message.souye.WelcomeActivity"
+        <activity
+            android:name=".message.souye.WelcomeActivity"
             android:theme="@style/SplashActivityTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -43,6 +44,7 @@
         </activity>
         <activity
             android:name=".record.activity.FaBuActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".record.activity.SelectMusicActivity"
@@ -152,7 +154,7 @@
 
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="com.jarhero790.eub.FileProvider"
+            android:authorities="com.jarhero790.eub.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

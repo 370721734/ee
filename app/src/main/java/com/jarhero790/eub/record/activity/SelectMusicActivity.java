@@ -368,7 +368,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
                                     dialog = new Dialog(SelectMusicActivity.this, R.style.progress_dialog);
                                     if (dialog.getWindow() != null)
                                         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                                    dialog.setCancelable(true);
+                                    dialog.setCancelable(false);
                                     dialog.setContentView(R.layout.dialog);
                                     dialog.show();
 
@@ -422,8 +422,18 @@ public class SelectMusicActivity extends AppCompatActivity  {
         }
     }
 
+    @Override
+    protected void onStop() {
+        if (dialog!=null)
+            dialog.dismiss();
+        if (handler!=null)
+            handler.removeMessages(1);
+        super.onStop();
 
-//    private void loadAd() {
+    }
+
+
+    //    private void loadAd() {
 //        RetrofitManager.getInstance().getDataServer().getlist_lunbo2("1").enqueue(new Callback<ResponseBody>() {
 //            @Override
 //            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
@@ -609,10 +619,17 @@ public class SelectMusicActivity extends AppCompatActivity  {
 //                    mMediaPath.remove(mMediaPath.size()-1);
 //                }
                 mMediaPath.add(musicPath);
+                composeVideoAudio();//1
 //                if (musicUrl != null)
 //                    MediaPlayUtil.getInstance().start(musicPath);
 //                Log.e("-------cut", musicUrl + "   " + time + "");
-                composeVideoAudio();//1
+//               handler.sendEmptyMessage(2);
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        composeVideoAudio();//1
+//                    }
+//                }).start();
 //                startGenerate();
             }
         });
@@ -904,10 +921,10 @@ public class SelectMusicActivity extends AppCompatActivity  {
     private void composeVideoAudio() {//2
 
         String audioUrl = mMediaPath.get(1);
-        Log.e("---------audio=", audioUrl);
+//        Log.e("---------audio=", audioUrl);
         final String audioOutUrl = mTargetPath + "/tempAudio.aac";
         String[] common = FFmpegCommands.changeAudioOrMusicVol(audioUrl, 100, audioOutUrl);
-        Log.e("---------vol1=", common[3]);
+//        Log.e("---------vol1=", common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -943,10 +960,10 @@ public class SelectMusicActivity extends AppCompatActivity  {
         } else {
             musicUrl = mMediaPath.get(2);
         }
-        Log.e("-------------",musicUrl+"音乐地址对不对");
+//        Log.e("-------------",musicUrl+"音乐地址对不对");
         final String musicOutUrl = mTargetPath + "/tempMusic.aac";
         final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl, 99, musicOutUrl);
-        Log.e("---------vol2=",common[3]);
+//        Log.e("---------vol2=",common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -1034,7 +1051,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
                 case 1:
 //                    dismissProgress();
                     String videoPath = (String) msg.obj;
-                    Log.e("-------------video=3333", videoPath);
+//                    Log.e("-------------video=3333", videoPath);
 //                    Intent intent = new Intent(TCVideoEditerActivity.this,MakeVideoActivity.class);
 //                    intent.putExtra("path",videoPath);
 //                    intent.putExtra("isPlayer",true);
@@ -1066,6 +1083,13 @@ public class SelectMusicActivity extends AppCompatActivity  {
                     break;
                 case 2:
 //                    dismissProgress();
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            composeVideoAudio();//1
+                        }
+                    }).start();
+
                     break;
             }
         }
