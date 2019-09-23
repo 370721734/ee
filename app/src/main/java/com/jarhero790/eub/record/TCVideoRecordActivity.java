@@ -89,7 +89,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private boolean mStartPreview = false;
     private boolean mFront = true;
     private TXUGCRecord mTXCameraRecord;
-    private TXRecordCommon.TXRecordResult mTXRecordResult;
+    private TXRecordCommon.TXRecordResult mTXRecordResult = new TXRecordCommon.TXRecordResult();
     private long mDuration; // 视频总时长
 
     private BeautySettingPannel.BeautyParams mBeautyParams = new BeautySettingPannel.BeautyParams();
@@ -152,6 +152,9 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private boolean mPortrait = true;
     private Button mSnapShot;
     private boolean mEnableStop = false;
+
+
+    private int videotime = 0;
     /**
      * ------------------------ 滑动滤镜相关 ------------------------
      */
@@ -224,9 +227,9 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mTXRecordResult.videoPath);
             intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
             intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
-            int times = (int) mProgressTime.getTag();
-            intent.putExtra("time", times);
-//        Log.e("--------time","时"+times);
+//            int times = (int) mProgressTime.getTag();
+            intent.putExtra("time", videotime);///////////////////////////////////////////////////////////
+//            Log.e("--------videotime2", "时" + videotime);
             startActivity(intent);
             releaseRecord();
             finish();
@@ -891,14 +894,14 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     }
 
 
-    public  void openAndroidFile(String filepath){
+    public void openAndroidFile(String filepath) {
         Intent intent = new Intent();
         File file = new File(filepath);
 //        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//设置标记
         intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         intent.setAction(Intent.ACTION_VIEW);//动作，查看
         intent.setDataAndType(Uri.fromFile(file), CommonUtil.getMIMEType(file));//设置类型
-         startActivity(intent);
+        startActivity(intent);
     }
 
 
@@ -1181,6 +1184,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         }
         mRecording = false;
         mPause = false;
+        videotime = (int) mProgressTime.getTag();
         abandonAudioFocus();
 
         mRadioGroup.setVisibility(View.VISIBLE);
@@ -1307,7 +1311,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     //下一个
     private void startEditVideo() {
         mTXVideoEditer = new TXVideoEditer(this);
-        int ret = mTXVideoEditer.setVideoPath(mTXRecordResult.videoPath);
+        int ret = mTXVideoEditer.setVideoPath(mTXRecordResult.videoPath);//
         if (ret != 0) {
             if (ret == TXVideoEditConstants.ERR_SOURCE_NO_TRACK) {
                 DialogUtil.showDialog(this, "视频预处理失败", "不支持的视频格式", new View.OnClickListener() {
@@ -1432,15 +1436,36 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             } else if (requestCode == IMAGE_REQUEST_CODE) {
 
                 Uri imageUri = data.getData();
-                Log.e("----------------", "视频地址"+imageUri);
-                if (imageUri!=null){
-                    if (imageUri.toString().endsWith("mp4")){
+//                Log.e("----------------", "视频地址"+imageUri);
+                File files = CommonUtil.uriToFile(imageUri, TCVideoRecordActivity.this);
+//                Bitmap bitmaps=CommonUtil.getVideoThumbnail(files.getAbsolutePath());
 
-                    }else {
-                        Toast.makeText(TCVideoRecordActivity.this,"请选择视频格式文件",Toast.LENGTH_SHORT).show();
+                if (imageUri != null) {
+                    if (imageUri.toString().endsWith("mp4")) {
+                        //到编辑页面
+//                        Intent intent = new Intent(this, TCVideoEditerActivity.class);
+//                        // 如果是从录制过来的话，需要传递一个分辨率参数下去。
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mRecommendQuality);
+//                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+//                        intent.putExtra(TCConstants.VIDEO_EDITER_PATH, files.getAbsolutePath());
+//                        intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
+//                        intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
+////                        intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mTXRecordResult.coverPath);
+//
+////                        int times = (int) mProgressTime.getTag();//0
+////                        intent.putExtra("time",times);
+////                        Log.e("--------time","时"+times);
+//                        startActivity(intent);
+
+
+                        videotime = CommonUtil.getLocalVideoDuration(files.getAbsolutePath());
+                        Log.e("---videotime=", videotime + "");
+                        mTXRecordResult.videoPath = files.getAbsolutePath();
+                        startEditVideo();
+                    } else {
+                        Toast.makeText(TCVideoRecordActivity.this, "请选择视频格式文件", Toast.LENGTH_SHORT).show();
                     }
                 }
-
 
 
                 //获取照片路径
