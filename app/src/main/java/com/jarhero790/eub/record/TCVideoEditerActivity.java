@@ -46,6 +46,7 @@ import com.jarhero790.eub.utils.CommonUtil;
 import com.tangyx.video.ffmpeg.FFmpegCommands;
 import com.tangyx.video.ffmpeg.FFmpegRun;
 import com.tencent.liteav.basic.log.TXCLog;
+import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.ugc.TXRecordCommon;
 import com.tencent.ugc.TXVideoEditConstants;
 import com.tencent.ugc.TXVideoEditer;
@@ -107,7 +108,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private int mCurrentState = PlayState.STATE_NONE;       // 播放器当前状态
 
     private String mVideoOutputPath;                        // 视频输出路径
-    private String outpathvideo;
+//    private String outpathvideo;
     private int mVideoResolution = -1;                      // 分辨率类型（如果是从录制过来的话才会有，这参数）
 
     private long mVideoDuration;                            // 视频的总时长
@@ -130,6 +131,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
     private int videotime;//时间
     private MediaPlayer mMusicPlayer;
+
+    private int istransverse;
     /**
      * 缩略图进度条相关
      */
@@ -193,6 +196,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
         mIsPicCombine = getIntent().getBooleanExtra(TCConstants.INTENT_KEY_MULTI_PIC_CHOOSE, false);
         mNeedProcessVideo = getIntent().getBooleanExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
+        istransverse=getIntent().getIntExtra(TCConstants.TRANSVERSE,TXLiveConstants.RENDER_ROTATION_0);
         if (mIsPicCombine) {
             picPathList = getIntent().getStringArrayListExtra(TCConstants.INTENT_KEY_MULTI_PIC_LIST);
             decodeFileToBitmap(picPathList);
@@ -228,7 +232,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mVideoResolution = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);
         mCustomBitrate = getIntent().getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 0);
         videotime = getIntent().getIntExtra("time", 0) - 1;
-        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE,TCConstants.VIDEO_RECORD_TYPE_EDIT);
         // 录制经过预处理的视频路径，在编辑后需要删掉录制源文件
         mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
 
@@ -414,10 +418,20 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     };
 
     private void initPlayerLayout() {
-        TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
-        param.videoView = mVideoPlayerLayout;
-        param.renderMode = TXVideoEditConstants.PREVIEW_RENDER_MODE_FILL_SCREEN;//PREVIEW_RENDER_MODE_FILL_EDGE
-        mTXVideoEditer.initWithPreview(param);
+        if (istransverse== TXLiveConstants.RENDER_ROTATION_0){
+            TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
+            param.videoView = mVideoPlayerLayout;
+            param.renderMode = TXVideoEditConstants.PREVIEW_RENDER_MODE_FILL_SCREEN;//PREVIEW_RENDER_MODE_FILL_EDGE
+            mTXVideoEditer.initWithPreview(param);
+        }else {
+            TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
+            param.videoView = mVideoPlayerLayout;
+
+
+            param.renderMode = TXVideoEditConstants.PREVIEW_RENDER_MODE_FILL_EDGE;//PREVIEW_RENDER_MODE_FILL_EDGE
+            mTXVideoEditer.initWithPreview(param);
+        }
+
     }
 
     /**
@@ -714,6 +728,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                     intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                     intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
                     intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+                    intent.putExtra(TCConstants.TRANSVERSE,istransverse);
                     intent.putExtra("videotime", videotime);
 //                    Log.e("---------mVideoOutputPath11=","  "+mVideoOutputPath);
                     intent.putExtra("mid", mid);
@@ -1404,6 +1419,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                         intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                         intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
                         intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, videoPath);
+                        intent.putExtra(TCConstants.TRANSVERSE,istransverse);
                         intent.putExtra("videotime", videotime);
 //                        Log.e("--mVideoOutputPath11=",videoPath+"  "+mVideoOutputPath);
                         intent.putExtra("mid", mid);
@@ -1460,7 +1476,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 //    private FFmpeg ffmpeg=new FFmpeg();
 
     private void cutSelectMusic(String musicUrl) {
-        outpathvideo = getCustomVideoOutputPath();
+//        outpathvideo = getCustomVideoOutputPath();
         final String musicPath = mTargetPath + "/bgMusic.aac";
         long time = getIntent().getIntExtra("time", 0);//时间没有
         String[] commands = FFmpegCommands.cutIntoMusic(musicUrl, time, musicPath);

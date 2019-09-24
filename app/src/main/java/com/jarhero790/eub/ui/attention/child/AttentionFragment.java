@@ -1,9 +1,14 @@
 package com.jarhero790.eub.ui.attention.child;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,6 +22,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
@@ -50,7 +56,16 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -631,22 +646,22 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     }
 
 
-    public void showShare() {
+    public void showShare(int pos) {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
+        Bundle arg=new Bundle();
+        arg.putString("url",attentionUsersVideos.get(pos).getUrl());
+        bottomShareDialog.setArguments(arg);
         bottomShareDialog.show(getChildFragmentManager(), "share");
+
+
     }
 
     //ok
     public void showPingLun(int po) {
-//        Log.e("--------token","token");
-//        Log.e("--------token",SharePreferenceUtil.getToken(AppUtils.getContext()));
-//
 //        if (SharePreferenceUtil.getToken(AppUtils.getContext())==null){
 //            Log.e("--------token","token1");
 //        }
-
         if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
-//            Log.e("--------token","token2");
             startActivity(new Intent(getActivity(), LoginNewActivity.class));
         } else {
             BottomPingLunDialog bottomPingLunDialog = BottomPingLunDialog.newInstance();
@@ -658,7 +673,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
     }
 
-
+    private Dialog dialog;
     @Override
     public void linerck(int position, String type, View view, View view2) {
 //        Log.e("---------", type + "  " + position);
@@ -683,7 +698,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
 
         } else if (type.equals("分享")) {
-            showShare();
+            showShare(position);
         } else if (type.equals("评论")) {
             showPingLun(position);
         } else if (type.equals("点赞")) {
@@ -718,6 +733,82 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         } else if (type.equals("关注")) {
             Button button = (Button) view;
             attentions(button);
+        } else if (type.equals("下载")) {
+            dialog = new Dialog(getActivity(), R.style.progress_dialog);
+            dialog.setContentView(R.layout.dialog);
+            dialog.setCancelable(false);
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            dialog.show();
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    downvideo(position, attentionUsersVideos.get(position).getUrl());
+                }
+            }).start();
+
+        }
+    }
+
+    private int FileLength;
+
+    private void downvideo(int position, String url) {
+        String sd = Environment.getExternalStorageDirectory().getAbsolutePath() + "/video/";
+        File file1 = new File(sd);
+        if (!file1.exists()) {
+            file1.mkdir();
+        }
+        HttpURLConnection con;
+        FileOutputStream fs = null;
+        InputStream is;
+        BufferedInputStream bs = null;
+        File file = new File(sd + new Date().getTime() + ".mp4");
+        Message message = new Message();
+        try {
+            file.createNewFile();
+
+            con = (HttpURLConnection) new URL(url).openConnection();
+            con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36");
+            is = con.getInputStream();
+            bs = new BufferedInputStream(is);
+            fs = new FileOutputStream(file);
+
+            RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
+            randomAccessFile.setLength(FileLength);
+            byte[] bytes = new byte[1024];
+            FileLength = con.getContentLength();
+            message.what = 0;
+            handler.sendMessage(message);
+            int line=0;
+            while ((line = bs.read(bytes)) != -1) {
+                fs.write(bytes, 0, line);
+                fs.flush();
+                Message message1=new Message();
+                message1.what=1;
+                handler.sendMessage(message1);
+            }
+            is.close();
+            randomAccessFile.close();
+            Message message2=new Message();
+            message2.what=2;
+            handler.sendMessage(message2);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (fs != null) {
+                try {
+                    fs.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                if (bs != null) {
+                    try {
+                        bs.close();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
         }
     }
 
@@ -805,5 +896,32 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             }
         });
     }
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        public void handleMessage(Message msg) {
+            if (!Thread.currentThread().isInterrupted()) {
+                switch (msg.what) {
+                    case 0:
+//                        progressBar.setMax(FileLength);
+//                        Log.i("文件长度----------->", progressBar.getMax()+"");
+                        break;
+                    case 1:
+//                            progressBar.setProgress(DownedFileLength);
+//                            int x=DownedFileLength*100/FileLength;
+//                            textView.setText(x+"%");
+                        break;
+                    case 2:
+                        if (dialog!=null)
+                            dialog.dismiss();
+                        Toast.makeText(getActivity(), "下载完成", Toast.LENGTH_LONG).show();
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    };
 }
 

@@ -1,5 +1,7 @@
 package com.jarhero790.eub.record;
 
+import com.tencent.rtmp.TXLiveConstants;
+
 /**
  * 静态函数
  */
@@ -87,5 +89,12 @@ public class TCConstants {
     public static final String ELK_ACTION_HW_DECODE = "hw_decode";
     public static final String ELK_ACTION_IMAGE_SPRITE = "image_sprite";
     public static final String ELK_ACTION_PLAYER_POINT = "player_point";
+
+
+
+    public static final String TRANSVERSE  = TXLiveConstants.RENDER_ROTATION_0+"";
+
+
+
 
 }

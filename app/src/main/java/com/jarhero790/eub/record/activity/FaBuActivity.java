@@ -13,7 +13,9 @@ import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -116,6 +118,8 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     private String img;
     private String address = "";
     private int videotime;//视频时间
+    private Dialog dialog;
+    private int istransverse;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,6 +135,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
         Intent intent = getIntent();
         mid = intent.getStringExtra("mid");
         videotime = intent.getIntExtra("videotime", 0);
+        istransverse=getIntent().getIntExtra(TCConstants.TRANSVERSE,TXLiveConstants.RENDER_ROTATION_0);
 
         if (KbPermissionUtils.needRequestPermission()) {
             KbPermission.with(this)
@@ -195,7 +200,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
     }
 
-    private Dialog dialog;
+
 
 
     @OnClick({R.id.back, R.id.tv_fabu, R.id.iv_music, R.id.submit, R.id.record_preview})
@@ -205,6 +210,17 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 finish();
                 break;
             case R.id.tv_fabu:
+
+                tvFabu.setEnabled(false);
+                dialog = new Dialog(this, R.style.progress_dialog);
+//                    View viewp = View.inflate(this, R.layout.dialog, null);
+//                    ImageView imageView = viewp.findViewById(R.id.iv_icon);
+//                    Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
+//                            .into(imageView);
+                dialog.setContentView(R.layout.dialog);
+                dialog.setCancelable(false);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.show();
 
                 String title = etTitle.getText().toString();
 //                if (TextUtils.isEmpty(title)) {
@@ -339,15 +355,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                    });
 
 
-                    dialog = new Dialog(this, R.style.progress_dialog);
-//                    View viewp = View.inflate(this, R.layout.dialog, null);
-//                    ImageView imageView = viewp.findViewById(R.id.iv_icon);
-//                    Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
-//                            .into(imageView);
-                    dialog.setContentView(R.layout.dialog);
-                    dialog.setCancelable(true);
-                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
-                    dialog.show();
+
 
 //
                     RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap, part).enqueue(new Callback<ResponseBody>() {
@@ -355,9 +363,10 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                         public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                             if (response.isSuccessful()) {
                                 dialog.dismiss();
+                                tvFabu.setEnabled(true);
                                 try {
                                     String json = response.body().string();
-                                    Log.e("--------------333", json);
+//                                    Log.e("--------------333", json);
                                     JSONObject object = new JSONObject(json);
                                     int code = object.optInt("code");
                                     String msg = object.optString("msg");
@@ -373,6 +382,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                                 }
                             } else {
                                 dialog.dismiss();
+                                tvFabu.setEnabled(true);
 //                            Log.e("--------------333", "fail" + response.message());
 //                            try {
 //                                Log.e("--------------3232","fail"+response.body().string());
@@ -385,8 +395,9 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
                         @Override
                         public void onFailure(Call<ResponseBody> call, Throwable t) {
-                            Log.e("--------------333", "fail2");
+//                            Log.e("--------------333", "fail2");
                             dialog.dismiss();
+                            tvFabu.setEnabled(true);
                         }
                     });
 
@@ -437,9 +448,19 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
         mTXVodPlayer.enableHardwareDecode(false);
         mTXVodPlayer.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
-        mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);//RENDER_MODE_ADJUST_RESOLUTION
+
 
         mTXVodPlayer.setConfig(mTXPlayConfig);
+
+        mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);
+//        if (istransverse==TXLiveConstants.RENDER_ROTATION_90){
+////            mTXVodPlayer.setRate(90f);//没有用
+//            Log.e("-------------","旋转了90");
+//            mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION);
+//        }else {
+//            Log.e("-------------","旋转了0");
+//            mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);//RENDER_MODE_ADJUST_RESOLUTION
+//        }
 
         int result = mTXVodPlayer.startPlay(mVideoPath); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
         if (result != 0) {
@@ -568,5 +589,57 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     public void onNetStatus(TXVodPlayer txVodPlayer, Bundle bundle) {
 
     }
+
+
+
+
+
+
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            //当isShouldHideInput(v, ev)为true时，表示的是点击输入框区域，则需要显示键盘，同时显示光标，反之，需要隐藏键盘、光标
+            if (isShouldHideInput(v, ev)) {
+
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    //处理Editext的光标隐藏、显示逻辑
+                    etTitle.clearFocus();
+                    etContent.clearFocus();
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        // 必不可少，否则所有的组件都不会有TouchEvent了
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public  boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = { 0, 0 };
+            //获取输入框当前的location位置
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击的是输入框区域，保留点击EditText的事件
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
 }

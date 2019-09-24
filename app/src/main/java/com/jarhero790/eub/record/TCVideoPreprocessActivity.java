@@ -48,6 +48,7 @@ public class TCVideoPreprocessActivity extends FragmentActivity implements
     private boolean mNeedProcessVideo;
 
     private int times;
+    private int istransverse;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -67,6 +68,7 @@ public class TCVideoPreprocessActivity extends FragmentActivity implements
         mCustomBitrate = getIntent().getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 0);
         mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
         times=getIntent().getIntExtra("time",0);
+        istransverse=getIntent().getIntExtra(TCConstants.TRANSVERSE,0);
         isCancel = new AtomicBoolean(false);
 
         mTXVideoEditer = new TXVideoEditer(this);
@@ -203,8 +205,9 @@ public class TCVideoPreprocessActivity extends FragmentActivity implements
         intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mInVideoPath);
         intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, mCustomBitrate);
         intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, mNeedProcessVideo);
+        intent.putExtra(TCConstants.TRANSVERSE,istransverse);
         intent.putExtra("time",times);
-        Log.e("--------time","时"+times);
+//        Log.e("--------time","时"+times);
         startActivity(intent);
         finish();
     }

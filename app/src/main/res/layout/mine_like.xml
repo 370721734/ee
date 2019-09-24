@@ -38,12 +38,22 @@
         android:orientation="vertical"
         android:visibility="gone">
 
+        <ImageView
+            android:id="@+id/ivtext"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/no_zuoping"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50sp"
+            android:textColor="@android:color/white"
+            android:layout_marginTop="20sp"
+            android:layout_below="@id/ivtext"
             android:text="暂无作品"
-            android:textColor="@android:color/white" />
+            android:layout_centerHorizontal="true"
+            />
     </RelativeLayout>
 
     <RelativeLayout

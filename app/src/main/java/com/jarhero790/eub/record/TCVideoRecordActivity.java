@@ -16,6 +16,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.media.AudioManager;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -51,6 +52,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.BuildConfig;
+import com.jarhero790.eub.record.activity.CustomRoundAngleImageView;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.rtmp.TXLiveConstants;
@@ -107,7 +109,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private RelativeLayout mRlAspectSelect;
     private ImageView mIvAspectSelectFirst;
     private ImageView mIvAspectSelectSecond;
-    private ImageView mIvScaleMask, iv_local_tu;
+    private ImageView mIvScaleMask;
+    private CustomRoundAngleImageView iv_local_tu;
     private boolean mAspectSelectShow = false;
     private TextView mTvFilter;
 
@@ -152,6 +155,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private boolean mPortrait = true;
     private Button mSnapShot;
     private boolean mEnableStop = false;
+    private int istransverse = TXLiveConstants.RENDER_ROTATION_0;//竖
 
 
     private int videotime = 0;
@@ -223,10 +227,17 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             Intent intent = new Intent(TCVideoRecordActivity.this, TCVideoEditerActivity.class);
             // 如果是从录制过来的话，需要传递一个分辨率参数下去。
             intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mRecommendQuality);
-            intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+
             intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mTXRecordResult.videoPath);
             intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
             intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
+            //  mRenderRotation = TXLiveConstants.RENDER_ROTATION_0;
+            intent.putExtra(TCConstants.TRANSVERSE, istransverse);
+            if (istransverse==TXLiveConstants.RENDER_ROTATION_0){
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+            }else {
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+            }
 //            int times = (int) mProgressTime.getTag();
             intent.putExtra("time", videotime);///////////////////////////////////////////////////////////
 //            Log.e("--------videotime2", "时" + videotime);
@@ -1184,7 +1195,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         }
         mRecording = false;
         mPause = false;
-        videotime = (int) mProgressTime.getTag();
+
         abandonAudioFocus();
 
         mRadioGroup.setVisibility(View.VISIBLE);
@@ -1436,12 +1447,12 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             } else if (requestCode == IMAGE_REQUEST_CODE) {
 
                 Uri imageUri = data.getData();
-//                Log.e("----------------", "视频地址"+imageUri);
+                Log.e("----------------", "视频地址"+imageUri);
                 File files = CommonUtil.uriToFile(imageUri, TCVideoRecordActivity.this);
 //                Bitmap bitmaps=CommonUtil.getVideoThumbnail(files.getAbsolutePath());
 
                 if (imageUri != null) {
-                    if (imageUri.toString().endsWith("mp4")) {
+                    if (imageUri.toString().endsWith(".mp4") || imageUri.toString().endsWith(".avi") || imageUri.toString().endsWith(".mov") || imageUri.toString().endsWith(".rmvb") || imageUri.toString().endsWith(".rm") || imageUri.toString().endsWith(".flv") || imageUri.toString().endsWith(".3gp") || imageUri.toString().endsWith(".asf") || imageUri.toString().endsWith(".asx")) {
                         //到编辑页面
 //                        Intent intent = new Intent(this, TCVideoEditerActivity.class);
 //                        // 如果是从录制过来的话，需要传递一个分辨率参数下去。
@@ -1459,8 +1470,34 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
 
                         videotime = CommonUtil.getLocalVideoDuration(files.getAbsolutePath());
-                        Log.e("---videotime=", videotime + "");
+//                        Log.e("---videotime=", videotime + "");
                         mTXRecordResult.videoPath = files.getAbsolutePath();
+
+//                        String width=CommonUtil.getPlayWidth(files.getAbsolutePath());
+//                        String height=CommonUtil.getPlayHeight(files.getAbsolutePath());
+//
+//                        Log.e("-----------","宽度"+width+"    高度"+height);
+
+
+                        MediaMetadataRetriever media = new MediaMetadataRetriever();
+
+                        media.setDataSource(files.getAbsolutePath());// videoPath 本地视频的路径
+
+                        Bitmap bitmap = media.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+
+                        int width1 = bitmap.getWidth();
+                        int height1 = bitmap.getHeight();
+//                        Log.e("-----------", "宽度" + width1 + "    高度" + height1);
+//                        mIvBigShow.setImageBitmap(bitmap);//对应的ImageView赋值图片
+
+                        if (width1 > height1) {
+                            //模
+                            istransverse = TXLiveConstants.RENDER_ROTATION_90;
+                        } else {
+                            istransverse = TXLiveConstants.RENDER_ROTATION_0;
+                        }
+
+
                         startEditVideo();
                     } else {
                         Toast.makeText(TCVideoRecordActivity.this, "请选择视频格式文件", Toast.LENGTH_SHORT).show();
@@ -1537,6 +1574,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
             if (mNeedEditer) {
 
+                istransverse = TXLiveConstants.RENDER_ROTATION_0;
+                videotime = (int) mProgressTime.getTag();
                 startEditVideo();
                 ///为true 时，显示预览
 

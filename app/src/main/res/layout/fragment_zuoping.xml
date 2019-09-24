@@ -10,6 +10,7 @@
         android:id="@+id/m_swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="visible"
          >
 
     <com.scwang.smartrefresh.layout.header.ClassicsHeader
@@ -39,12 +40,21 @@
         android:gravity="center"
         android:visibility="gone">
 
+        <ImageView
+            android:id="@+id/ivtext"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/no_zuoping"/>
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/white"
-            android:layout_marginTop="50sp"
+            android:layout_marginTop="20sp"
+            android:layout_below="@id/ivtext"
             android:text="暂无作品"
+           android:layout_centerHorizontal="true"
             />
     </RelativeLayout>
 

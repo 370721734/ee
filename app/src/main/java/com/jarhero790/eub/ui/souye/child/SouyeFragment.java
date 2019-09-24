@@ -656,7 +656,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                         startActivity(new Intent(getActivity(), LoginNewActivity.class));
                     } else {
-                        showShare();
+                        showShare(position);
                     }
                 } else if (type.equals("点赞")) {
                     if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
@@ -900,24 +900,27 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         return (type == null) ? String.valueOf(System.currentTimeMillis()) : type + System.currentTimeMillis();
     }
 
-    public void showShare() {
+    public void showShare(int po) {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putString("url", lists.get(po).getUrl());
+        bottomShareDialog.setArguments(args);
         bottomShareDialog.show(getChildFragmentManager(), "share");
         bottomShareDialog.setShareDialog(new BottomShareDialog.ShareDialog() {
             @Override
             public void Clicklinear(View view, String type) {
                 if (type.equals("下载")) {
-                    Log.e("-------", "下载");
-
-
-                    bottomShareDialog.dismiss();
+//                    Log.e("-------", "下载");
+//
+//
+//                    bottomShareDialog.dismiss();
                 } else if (type.equals("分享")) {
-                    Log.e("-------", "分享");
+//                    Log.e("-------", "分享");
                     WXWebpageObject webpage = new WXWebpageObject();
-                    webpage.webpageUrl = "http://www.qq.com";
+                    webpage.webpageUrl = "http://www.51ayhd.com/web/Shopping/share.html";
                     WXMediaMessage msg = new WXMediaMessage(webpage);
-                    msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
-                    msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
+                    msg.title = "WebPage Title WebPage";
+                    msg.description = "WebPage Description WebPage Description";
                     Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
                     Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
                     bmp.recycle();

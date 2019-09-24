@@ -45,6 +45,7 @@ import com.jarhero790.eub.record.view.NoScrollViewPager;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tangyx.video.ffmpeg.FFmpegCommands;
 import com.tangyx.video.ffmpeg.FFmpegRun;
+import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.ugc.TXRecordCommon;
 import com.tencent.ugc.TXVideoEditConstants;
 import com.tencent.ugc.TXVideoEditer;
@@ -118,6 +119,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
     private String mCoverImagePath;
 
     private String mVideoPath;
+    private int istransverse= TXLiveConstants.RENDER_ROTATION_0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,6 +138,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
         Intent intent = getIntent();
 //        videotime = intent.getIntExtra("videotime", 0);
 //        mVideoDuration=videotime;
+//        istransverse=getIntent().getIntExtra(TCConstants.TRANSVERSE,0);
         videotype = intent.getStringExtra("typefabu");
         if (videotype.equals("fabu")){
             //发布
@@ -861,13 +864,13 @@ public class SelectMusicActivity extends AppCompatActivity  {
                     //直接发布
 //                    Log.e("---------------","无音乐");
                     Intent intent = new Intent(SelectMusicActivity.this, FaBuActivity.class);
-                    intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
                     intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
                     intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
                     intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
                     intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
                     intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
                     intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+                    intent.putExtra(TCConstants.TRANSVERSE,istransverse);
                     intent.putExtra("videotime", videotime);
 //                    Log.e("---------mVideoOutputPath11=","  "+mVideoOutputPath);
                     intent.putExtra("mid", middd);
