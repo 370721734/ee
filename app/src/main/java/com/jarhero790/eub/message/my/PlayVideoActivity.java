@@ -26,6 +26,7 @@ import com.jarhero790.eub.adapter.ViewPagerLayoutManager;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.ZanBean;
+import com.jarhero790.eub.message.bean.Zanchange;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.message.souye.TongKuanActivity;
@@ -36,6 +37,9 @@ import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.io.IOException;
@@ -66,7 +70,7 @@ public class PlayVideoActivity extends AppCompatActivity {
     //    private VideoView mVideoView;
 //    ViewPagerLayoutManager layoutManager;
 //    private int mCurrentPosition;//当前播放的第几个视频 ，
-    private int position;
+    private int mposition;
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();//作品
 
 
@@ -86,12 +90,20 @@ public class PlayVideoActivity extends AppCompatActivity {
 
     private String videotype = "mine";
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eeee(Zanchange zanchange){
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_play_video);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
         mVideoView = new VideoView(this);
         mVideoView.setLooping(true);
         mTikTokController = new TikTokController(this);
@@ -101,7 +113,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         videotype = intent.getStringExtra("videotype");
-        position = intent.getIntExtra("position", 0);
+        mposition = intent.getIntExtra("position", 0);
 
 
         if (videotype != null && videotype.equals("zan")) {
@@ -145,7 +157,8 @@ public class PlayVideoActivity extends AppCompatActivity {
             @Override
             public void onInitComplete() {
                 //自动播放第一条
-                startPlay(position);
+                startPlay(mposition);
+                mCurrentPosition=mposition;
 //                Log.e("----------", "a=" + mCurrentPosition + " m=" + position);
 
             }
@@ -256,12 +269,13 @@ public class PlayVideoActivity extends AppCompatActivity {
                 } else if (type.equals("点赞")) {
                     ImageView ivlike = (ImageView) view;
                     TextView tv2 = (TextView) view2;
-
+//                    Log.e("-------------mc=","ttt"+mCurrentPosition);
                     if (ivlike.isSelected()) {
                         ivlike.setSelected(false);
                         if (videotype.equals("zan")) {
                             if (zanBeanList != null && zanBeanList.size() > 0) {
                                 zanother(zanBeanList.get(mCurrentPosition).getVideo_id() + "");
+                                Log.e("------------vid0=",zanBeanList.get(mCurrentPosition).getHeadimgurl());
                                 String string = tv2.getText().toString();
                                 int text = (Integer.parseInt(string) - 1);
                                 tv2.setText("" + text);
@@ -269,6 +283,7 @@ public class PlayVideoActivity extends AppCompatActivity {
                         } else {
                             if (list != null && list.size() > 0) {
                                 zanother(list.get(mCurrentPosition).getVideo_id() + "");
+                                Log.e("------------vid1=",list.get(mCurrentPosition).getHeadimgurl());
                                 String string = tv2.getText().toString();
                                 int text = (Integer.parseInt(string) - 1);
                                 tv2.setText("" + text);
@@ -324,8 +339,10 @@ public class PlayVideoActivity extends AppCompatActivity {
                     if (!ivlike.isSelected()) {
                         if (videotype.equals("zan")) {
                             zanother(zanBeanList.get(mCurrentPosition).getVideo_id() + "");
+                            Log.e("------------vid3=",zanBeanList.get(mCurrentPosition).getHeadimgurl());
                         } else {
                             zanother(list.get(mCurrentPosition).getVideo_id() + "");
+                            Log.e("------------vid4=",list.get(mCurrentPosition).getHeadimgurl());
                         }
 
                         ivlike.setSelected(true);
@@ -349,11 +366,13 @@ public class PlayVideoActivity extends AppCompatActivity {
                     } else {
 
                         Intent intentx = new Intent(PlayVideoActivity.this, BusinessWebTwoActivity.class);
-                        intentx.putExtra("url", "http://www.51ayhd.com/web/Shopping/#/shopindex/token/" + SharePreferenceUtil.getToken(AppUtils.getContext()) + "/good_id/" + list.get(mCurrentPosition).getGood_id());
+                        Log.e("---------goodid=",""+mCurrentPosition+"     "+position+"   "+ list.get(mCurrentPosition).getGood_id());//后台没有goodid字段
                         if (videotype.equals("zan")) {
                             intentx.putExtra("good_id", zanBeanList.get(mCurrentPosition).getGood_id());
+                            intentx.putExtra("url", "http://www.51ayhd.com/web/Shopping/#/shopindex/token/" + SharePreferenceUtil.getToken(AppUtils.getContext()) + "/good_id/" + zanBeanList.get(mCurrentPosition).getGood_id());
                         } else {
                             intentx.putExtra("good_id", list.get(mCurrentPosition).getGood_id());
+                            intentx.putExtra("url", "http://www.51ayhd.com/web/Shopping/#/shopindex/token/" + SharePreferenceUtil.getToken(AppUtils.getContext()) + "/good_id/" + list.get(mCurrentPosition).getGood_id());
                         }
 
                         startActivity(intentx);
@@ -380,13 +399,25 @@ public class PlayVideoActivity extends AppCompatActivity {
             }
         });
     }
+    @Override
+    public void onStop() {
+        super.onStop();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
+        }
+    }
 
     private void zanother(String vid) {
+
+
         RetrofitManager.getInstance().getDataServer().zanoter(vid, SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+
 //                tikTokAdapter.notifyItemChanged(mCurrentPosition);
-//                if (response.isSuccessful()){
+                if (response.isSuccessful()){
+                    EventBus.getDefault().post(new Zanchange("zan"));
 //                    try {
 //                        String json=response.body().string();
 //                        Log.e("------",json);
@@ -409,7 +440,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 //                    } catch (Exception e) {
 //                        e.printStackTrace();
 //                    }
-//                }
+                }
             }
 
             @Override
@@ -422,7 +453,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 
     private void startPlay(int position) {
 
-        if (videotype.equals("zan")) {
+        if (videotype!=null && videotype.equals("zan")) {
             if (zanBeanList.size() == 0)
                 return;
             View itemView = mRecyclerView.getChildAt(0);

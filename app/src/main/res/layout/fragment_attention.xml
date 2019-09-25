@@ -26,8 +26,8 @@
     <com.jarhero790.eub.message.attention.MyScrollViewScroll
         android:id="@+id/myscroll"
         android:layout_width="match_parent"
-        android:visibility="gone"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:visibility="gone">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,64 +38,90 @@
         </LinearLayout>
     </com.jarhero790.eub.message.attention.MyScrollViewScroll>
 
-            <RelativeLayout
-                android:id="@+id/rl_user"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+    <RelativeLayout
+        android:id="@+id/rl_user"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:id="@+id/framelayout_container"
-                    android:layout_width="70dp"
-                    android:layout_height="95dp"
-                    android:visibility="gone"
-                    android:layout_alignParentRight="true"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="10dp"
-                    android:background="@color/backgroudcolor"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical">
+        <LinearLayout
+            android:id="@+id/framelayout_container"
+            android:layout_width="70dp"
+            android:layout_height="95dp"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_marginRight="10dp"
+            android:background="@color/backgroudcolor"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            android:visibility="gone">
 
-                    <de.hdodenhof.circleimageview.CircleImageView xmlns:circleimageview="http://schemas.android.com/apk/res-auto"
-                        android:id="@+id/attentionsUserIcon"
-                        android:layout_width="55dp"
-                        android:layout_height="55dp"
-                        android:src="@mipmap/atention_more_icon"
-                        circleimageview:civ_border_overlay="false" />
+            <de.hdodenhof.circleimageview.CircleImageView xmlns:circleimageview="http://schemas.android.com/apk/res-auto"
+                android:id="@+id/attentionsUserIcon"
+                android:layout_width="55dp"
+                android:layout_height="55dp"
+                android:src="@mipmap/atention_more_icon"
+                circleimageview:civ_border_overlay="false" />
 
-                </LinearLayout>
+        </LinearLayout>
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/attentionuser_recyclerview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_10"
-                    android:layout_marginRight="@dimen/dp_10"
-                    android:layout_toLeftOf="@id/framelayout_container"
-                    android:scrollbars="none" />
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/attentionuser_recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginRight="@dimen/dp_10"
+            android:layout_toLeftOf="@id/framelayout_container"
+            android:scrollbars="none" />
 
-            </RelativeLayout>
-
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.3dp"
-                android:alpha="0.5"
-                android:visibility="visible"
-                android:background="#A0A0A0" />
+    </RelativeLayout>
 
 
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:descendantFocusability="blocksDescendants"
-                android:layout_height="wrap_content">
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recyclerViewAttentionUsers"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/backgroudcolor" />
-            </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.3dp"
+        android:alpha="0.5"
+        android:background="#A0A0A0"
+        android:visibility="visible" />
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/rl_rlv"
+        android:descendantFocusability="blocksDescendants"
+        android:visibility="visible">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerViewAttentionUsers"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/backgroudcolor" />
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/rl_no_dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/ivtext"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
+            android:src="@mipmap/no_video_dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/ivtext"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20sp"
+            android:text="暂无数据"
+            android:textColor="@android:color/white" />
+    </RelativeLayout>
 
 
 </LinearLayout>

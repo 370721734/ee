@@ -236,13 +236,19 @@ public class SettingActivity extends AppCompatActivity {
         if (headim != null) {
             ivUserimage.setVisibility(View.VISIBLE);
             ivUserimagetwo.setVisibility(View.GONE);
-            Glide.with(this).load(headim).apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
+            Log.e("-----------heading",headim);
+//            Glide.with(this).load(headim).apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
+
+            LocalMedia localMedia=new LocalMedia();
+            localMedia.setPath(headim);
+
+            selectList.add(localMedia);
         }
 
         if (addres != null){
             tvAddress.setText(addres);
         }else {
-            tvAddress.setText("深圳市龙岗区");
+            tvAddress.setText("广东省-深圳市-龙岗区");
         }
 
 
@@ -358,6 +364,21 @@ public class SettingActivity extends AppCompatActivity {
                  startActivityForResult(intent, REQUEST_IMAGE);
                  */
 
+//
+//                PictureSelector.create(SettingActivity.this)
+//                        .openGallery(PictureMimeType.ofImage())
+//                        .theme(R.style.picture_default_style)
+//                        .imageSpanCount(4)
+//                        .selectionMode(PictureConfig.SINGLE)
+//                        .previewImage(true)
+//                        .isCamera(false)
+//                        .enableCrop(true)
+//                        .compress(true)
+//                        .circleDimmedLayer(true)
+//                        .minimumCompressSize(100)
+//                        .forResult(PictureConfig.CHOOSE_REQUEST);
+//
+
 
                 PictureSelector.create(SettingActivity.this)
                         .openGallery(PictureMimeType.ofImage())
@@ -368,9 +389,18 @@ public class SettingActivity extends AppCompatActivity {
                         .isCamera(false)
                         .enableCrop(true)
                         .compress(true)
+                        .glideOverride(100,100)
+                        .withAspectRatio(1,1)
+                        .hideBottomControls(true)
+                        .rotateEnabled(true)
+                        .scaleEnabled(true)
+                        .isDragFrame(true)
+                        .freeStyleCropEnabled(true)
                         .circleDimmedLayer(true)
                         .minimumCompressSize(100)
                         .forResult(PictureConfig.CHOOSE_REQUEST);
+
+
 
 
                 break;
@@ -479,7 +509,9 @@ public class SettingActivity extends AppCompatActivity {
 
 //                Toast.makeText(SettingActivity.this, tx, Toast.LENGTH_SHORT).show();
 
-                tvAddress.setText(city(opt1tx, opt2tx) + opt3tx);
+
+//                tvAddress.setText(city(opt1tx, opt2tx) + opt3tx);
+                tvAddress.setText(opt1tx.replace("市","")+"-"+opt2tx+"-"+opt3tx);
             }
         })
 
@@ -713,6 +745,8 @@ public class SettingActivity extends AppCompatActivity {
         startActivityForResult(intent, CUT_REQUEST);
 //        startActivityForResult(intent, RESULT_REQUEST_CODE);//同样的在onActivityResult中处理剪裁好的图片
     }
+
+
 
     private String city(String s1, String s2) {
         if (s1.equals(s2)) {
@@ -981,6 +1015,13 @@ private Dialog dialog;
                     .isCamera(false)
                     .enableCrop(true)
                     .compress(true)
+                    .glideOverride(100,100)
+                    .withAspectRatio(1,1)
+                    .hideBottomControls(true)
+                    .rotateEnabled(true)
+                    .scaleEnabled(true)
+                    .freeStyleCropEnabled(true)
+                    .isDragFrame(true)
                     .circleDimmedLayer(true)
                     .minimumCompressSize(100)
                     .forResult(PictureConfig.CHOOSE_REQUEST);

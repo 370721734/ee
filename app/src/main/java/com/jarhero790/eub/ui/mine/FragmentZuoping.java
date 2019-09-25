@@ -54,7 +54,7 @@ public class FragmentZuoping extends SupportFragment {
     RelativeLayout wangluoyichang;
     private View view;
     private static FragmentZuoping instance = null;
-    SmartRefreshLayout mSwipeLayout;
+//    SmartRefreshLayout mSwipeLayout;
 
     ZuoPingAdapter adapter;
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();
@@ -79,7 +79,7 @@ public class FragmentZuoping extends SupportFragment {
         unbinder = ButterKnife.bind(this, view);
         nodingdan = view.findViewById(R.id.nodingdan);
         wangluoyichang = view.findViewById(R.id.wangluoyichang);
-        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
+//        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
         return view;
     }
 
@@ -89,14 +89,14 @@ public class FragmentZuoping extends SupportFragment {
         if (!hidden){
 //            page = 1;
 //            initDate();
-            Log.e("----------zuoping","onHiddenChanged");
+//            Log.e("----------zuoping","onHiddenChanged");
         }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        Log.e("----------zuoping","onResume");
+//        Log.e("----------zuoping","onResume");
         page = 1;
         initDate();
     }
@@ -157,7 +157,7 @@ public class FragmentZuoping extends SupportFragment {
                                 rlv.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
-                                mSwipeLayout.setVisibility(View.VISIBLE);
+//                                mSwipeLayout.setVisibility(View.VISIBLE);
                                 itemlist = response.body().getData();
                                 if (page == 1) {
                                     list.clear();
@@ -172,13 +172,13 @@ public class FragmentZuoping extends SupportFragment {
                                     rlv.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
-                                    mSwipeLayout.setVisibility(View.GONE);
+//                                    mSwipeLayout.setVisibility(View.GONE);
                                 }
                             } else {
                                 rlv.setVisibility(View.GONE);
                                 nodingdan.setVisibility(View.VISIBLE);
                                 wangluoyichang.setVisibility(View.GONE);
-                                mSwipeLayout.setVisibility(View.GONE);
+//                                mSwipeLayout.setVisibility(View.GONE);
                             }
 
                         } else {
@@ -186,7 +186,7 @@ public class FragmentZuoping extends SupportFragment {
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
-                            mSwipeLayout.setVisibility(View.GONE);
+//                            mSwipeLayout.setVisibility(View.GONE);
                         }
                     }
 

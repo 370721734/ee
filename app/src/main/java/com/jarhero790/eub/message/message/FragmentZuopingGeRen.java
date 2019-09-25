@@ -45,7 +45,7 @@ public class FragmentZuopingGeRen extends Fragment {
     //    @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
     //    @BindView(R.id.m_swipe_layout)
-    SmartRefreshLayout mSwipeLayout;
+//    SmartRefreshLayout mSwipeLayout;
     private View view;
     private static FragmentZuopingGeRen instance = null;
 
@@ -71,7 +71,7 @@ public class FragmentZuopingGeRen extends Fragment {
         view = inflater.inflate(R.layout.fragment_zuoping, container, false);
         rlv = view.findViewById(R.id.rlv);
         nodingdan = view.findViewById(R.id.nodingdan);
-        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
+//        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
         wangluoyichang = view.findViewById(R.id.wangluoyichang);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -140,7 +140,7 @@ public class FragmentZuopingGeRen extends Fragment {
                             if (response.body() != null && response.body().getData().size() > 0) {
                                 itemlist.clear();
                                 rlv.setVisibility(View.VISIBLE);
-                                mSwipeLayout.setVisibility(View.VISIBLE);
+//                                mSwipeLayout.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
                                 itemlist = response.body().getData();
@@ -160,7 +160,7 @@ public class FragmentZuopingGeRen extends Fragment {
                                     rlv.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
-                                    mSwipeLayout.setVisibility(View.GONE);
+//                                    mSwipeLayout.setVisibility(View.GONE);
                                 }
 
                             }
@@ -169,7 +169,7 @@ public class FragmentZuopingGeRen extends Fragment {
                         } else {
                             dialog.dismiss();
                             rlv.setVisibility(View.GONE);
-                            mSwipeLayout.setVisibility(View.GONE);
+//                            mSwipeLayout.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                         }
@@ -179,7 +179,7 @@ public class FragmentZuopingGeRen extends Fragment {
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
                         dialog.dismiss();
                         rlv.setVisibility(View.GONE);
-                        mSwipeLayout.setVisibility(View.GONE);
+//                        mSwipeLayout.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                     }
@@ -189,7 +189,7 @@ public class FragmentZuopingGeRen extends Fragment {
     ZuoPingAdapter.Myclick myclickdele = new ZuoPingAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------1", "" + position);
+//            Log.e("-------1", "" + position);
         }
     };
 
@@ -200,6 +200,7 @@ public class FragmentZuopingGeRen extends Fragment {
             Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", list);
+            intent.putExtra("videotype","mine");
             startActivity(intent);
         }
     };
@@ -216,7 +217,7 @@ public class FragmentZuopingGeRen extends Fragment {
             page = 1;
             initDate(userid);
         } else {
-            Log.e("--------", "没有userid");
+//            Log.e("--------", "没有userid");
         }
 
     }

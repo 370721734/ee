@@ -48,6 +48,7 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.bean.Zanchange;
 import com.jarhero790.eub.message.bean.attentionchange;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
@@ -390,6 +391,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        }
 
         //设置首页UI
+        EventBus.getDefault().post(new Zanchange("zan"));
     }
 
 

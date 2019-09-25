@@ -57,7 +57,8 @@ public class SysMessageActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(layoutManager);
         initDate();
     }
-//    CustomProgressDialog dialog=new CustomProgressDialog();
+
+    //    CustomProgressDialog dialog=new CustomProgressDialog();
     private void initDate() {
 //        dialog.createLoadingDialog(this,"正在加载...");
 //        dialog.show();
@@ -67,9 +68,9 @@ public class SysMessageActivity extends AppCompatActivity {
                     public void onResponse(Call<SysMessageBean> call, Response<SysMessageBean> response) {
                         if (response.isSuccessful()) {
 //                            dialog.dismiss();
-                            if (response.body().getCode() == 200) {
+                            if (response.body() != null && response.body().getCode() == 200) {
                                 list.clear();
-                                Log.e("---------", response.toString());
+//                                Log.e("---------", response.toString());
 //                                arrayListMessageSystem=response.body().getData().getSystem();
 //                                arrayListMessageLike=response.body().getData().getLike();
 //                                if (arrayListMessageSystem!=null && arrayListMessageSystem.size()>0){
@@ -86,14 +87,14 @@ public class SysMessageActivity extends AppCompatActivity {
 //                              arrayList.add(messageEntity);
 //
                                 list = response.body().getData().getSystem();
-                                Log.e("---------=>", list.size() + "");
+//                                Log.e("---------=>", list.size() + "");
                                 recyclerView.setLayoutManager(layoutManager);
                                 adapter = new SysMessageAdapter(SysMessageActivity.this, list, myclick);
                                 recyclerView.setAdapter(adapter);
 
 
                             }
-                        }else {
+                        } else {
 //                            dialog.dismiss();
                         }
                     }

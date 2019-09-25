@@ -6,43 +6,32 @@
     android:background="@color/backgroudcolor"
     android:orientation="vertical">
 
-    <com.scwang.smartrefresh.layout.SmartRefreshLayout
-        android:id="@+id/m_swipe_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
-
-        <com.scwang.smartrefresh.layout.header.ClassicsHeader
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rlv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_marginRight="@dimen/dp_10"></android.support.v7.widget.RecyclerView>
-
-        <com.scwang.smartrefresh.layout.footer.ClassicsFooter
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:srlClassicsSpinnerStyle="Translate" />
-    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent">
+      <android.support.v7.widget.RecyclerView
+          android:id="@+id/rlv"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:layout_marginLeft="@dimen/dp_10"
+          android:layout_marginTop="@dimen/dp_10"
+          android:layout_marginRight="@dimen/dp_10">
+      </android.support.v7.widget.RecyclerView>
+  </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/nodingdan"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:gravity="center"
         android:orientation="vertical"
         android:visibility="gone">
 
         <ImageView
             android:id="@+id/ivtext"
-            android:layout_width="150dp"
-            android:layout_height="150dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
             android:src="@mipmap/no_zuoping"/>
 
         <TextView

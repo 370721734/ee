@@ -17,6 +17,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.LikeAdapter;
 import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
+import com.jarhero790.eub.message.bean.Zanchange;
 import com.jarhero790.eub.message.message.PinLenActivity;
 import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
@@ -28,6 +29,10 @@ import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
 import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
 import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,7 +54,7 @@ public class FragmentLike extends SupportFragment {
     RelativeLayout nodingdan;
 //    @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
-    SmartRefreshLayout mSwipeLayout;
+//    SmartRefreshLayout mSwipeLayout;
     private View view;
 
     private static FragmentLike instance = null;
@@ -87,13 +92,15 @@ public class FragmentLike extends SupportFragment {
         }
     }
 
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.mine_like, container, false);
         rlv = view.findViewById(R.id.rlv);
         nodingdan=view.findViewById(R.id.nodingdan);
         wangluoyichang=view.findViewById(R.id.wangluoyichang);
-        mSwipeLayout=view.findViewById(R.id.m_swipe_layout);
+//        mSwipeLayout=view.findViewById(R.id.m_swipe_layout);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -134,6 +141,14 @@ public class FragmentLike extends SupportFragment {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void eee(Zanchange zanchange){
+        if (zanchange!=null && zanchange.getName().equals("zan")){
+//            Log.e("------------------","来了");
+            initDate();
+        }
+    }
+
 //    CustomProgressDialog dialog = new CustomProgressDialog();
 private Dialog dialog;
     retrofit2.Call<MyFaBuBean> calls=null;
@@ -156,7 +171,7 @@ private Dialog dialog;
                             if (response.body()!=null && response.body().getData()!=null){
 //                                Log.e("--------------","size="+response.body().getData().size());
                                 itemlist.clear();
-                                mSwipeLayout.setVisibility(View.VISIBLE);
+//                                mSwipeLayout.setVisibility(View.VISIBLE);
                                 rlv.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
@@ -183,7 +198,7 @@ private Dialog dialog;
                                     rlv.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
-                                    mSwipeLayout.setVisibility(View.GONE);
+//                                    mSwipeLayout.setVisibility(View.GONE);
                                 }else {
 //                                    Toast.makeText(getActivity(), "没有相关数据", Toast.LENGTH_SHORT).show();
                                 }
@@ -195,7 +210,7 @@ private Dialog dialog;
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
-                            mSwipeLayout.setVisibility(View.GONE);
+//                            mSwipeLayout.setVisibility(View.GONE);
                         }
                     }
 
@@ -205,7 +220,7 @@ private Dialog dialog;
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
-                        mSwipeLayout.setVisibility(View.GONE);
+//                        mSwipeLayout.setVisibility(View.GONE);
                     }
                 });
     }
@@ -213,7 +228,7 @@ private Dialog dialog;
     LikeAdapter.Myclick myclickdele = new LikeAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------1", "" + position);
+//            Log.e("-------1", "" + position);
         }
     };
 
@@ -240,12 +255,21 @@ private Dialog dialog;
         page=1;
         initDate();
     }
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().register(this);
+        }
+    }
     @Override
     public void onStop() {
         super.onStop();
         if (calls!=null){
             calls.cancel();
+        }
+        if (!EventBus.getDefault().isRegistered(this)) {
+            EventBus.getDefault().unregister(this);
         }
     }
 }

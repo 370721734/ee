@@ -45,8 +45,8 @@ public class FragmentLikeGeRen extends Fragment {
     RelativeLayout nodingdan;
     @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
-    @BindView(R.id.m_swipe_layout)
-    SmartRefreshLayout mSwipeLayout;
+//    @BindView(R.id.m_swipe_layout)
+//    SmartRefreshLayout mSwipeLayout;
     private View view;
 
     private static FragmentLikeGeRen instance = null;
@@ -151,7 +151,7 @@ public class FragmentLikeGeRen extends Fragment {
                             if (response.body() != null && response.body().getData().size() > 0) {
                                 itemlist.clear();
                                 rlv.setVisibility(View.VISIBLE);
-                                mSwipeLayout.setVisibility(View.VISIBLE);
+//                                mSwipeLayout.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
                                 itemlist = response.body().getData();
@@ -169,7 +169,7 @@ public class FragmentLikeGeRen extends Fragment {
                             } else {
                                 if (page == 1) {
                                     rlv.setVisibility(View.GONE);
-                                    mSwipeLayout.setVisibility(View.GONE);
+//                                    mSwipeLayout.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
                                 }
@@ -178,7 +178,7 @@ public class FragmentLikeGeRen extends Fragment {
                         } else {
                             dialog.dismiss();
                             rlv.setVisibility(View.GONE);
-                            mSwipeLayout.setVisibility(View.GONE);
+//                            mSwipeLayout.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                         }
@@ -188,7 +188,7 @@ public class FragmentLikeGeRen extends Fragment {
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
                         dialog.dismiss();
                         rlv.setVisibility(View.GONE);
-                        mSwipeLayout.setVisibility(View.GONE);
+//                        mSwipeLayout.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                     }
@@ -198,7 +198,7 @@ public class FragmentLikeGeRen extends Fragment {
     LikeAdapter.Myclick myclickdele = new LikeAdapter.Myclick() {
         @Override
         public void myclick(int position, View view) {
-            Log.e("-------1", "" + position);
+//            Log.e("-------1", "" + position);
         }
     };
 
@@ -209,6 +209,7 @@ public class FragmentLikeGeRen extends Fragment {
             Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", list);
+            intent.putExtra("videotype","mine");
             startActivity(intent);
         }
     };

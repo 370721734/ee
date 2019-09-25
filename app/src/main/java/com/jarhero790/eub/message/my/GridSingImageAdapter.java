@@ -26,6 +26,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 /**
  * author：luck
  * project：PictureSelector
@@ -68,13 +70,13 @@ public class GridSingImageAdapter extends
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView mImg;
+        CircleImageView mImg;
         LinearLayout ll_del;
         TextView tv_duration;
 
         public ViewHolder(View view) {
             super(view);
-            mImg = (ImageView) view.findViewById(R.id.fiv);
+            mImg = view.findViewById(R.id.fiv);
             ll_del = (LinearLayout) view.findViewById(R.id.ll_del);
             tv_duration = (TextView) view.findViewById(R.id.tv_duration);
         }

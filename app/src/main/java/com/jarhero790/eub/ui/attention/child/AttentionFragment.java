@@ -24,7 +24,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.dueeeke.videoplayer.listener.OnVideoViewStateChangeListener;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.player.VideoViewManager;
 import com.jarhero790.eub.R;
@@ -38,7 +37,6 @@ import com.jarhero790.eub.bean.AttentionVideo;
 import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.contract.attention.AttentionContract;
 import com.jarhero790.eub.message.LoginNewActivity;
-import com.jarhero790.eub.message.attention.MyScrollViewScroll;
 import com.jarhero790.eub.message.attention.OnItemClickear;
 import com.jarhero790.eub.message.bean.attentionchange;
 import com.jarhero790.eub.message.bean.pinglunchange;
@@ -92,9 +90,17 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     LinearLayout framelayoutContainer;
     @BindView(R.id.rl_user)
     RelativeLayout rlUser;
+    @BindView(R.id.attentionsUserIcon)
+    CircleImageView attentionsUserIcon;
+    @BindView(R.id.rl_rlv)
+    RelativeLayout rlRlv;
+    @BindView(R.id.ivtext)
+    ImageView ivtext;
+    @BindView(R.id.rl_no_dp)
+    RelativeLayout rlNoDp;
     //    @BindView(R.id.myscroll)
 //    MyScrollViewScroll myscroll;
-    private int mCurrentPosition;//当前播放的第几个视频 ，
+    private int mCurrentPosition=0;//当前播放的第几个视频 ，
 
     @BindView(R.id.recyclerViewAttentionUsers)
     RecyclerView recyclerViewAttentionUsers;
@@ -149,6 +155,15 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     }
 
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void Strings(String ss){
+        Log.e("----------ss=",ss);
+//        if (mVideoView != null) {
+//            mVideoView.pause();
+//        }
+//        VideoViewManager.instance().release();
+    }
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -180,9 +195,142 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         }
 
         //
-        adapter = new VideoRecyclerViewAdapter(attentionUsersVideos, getActivity(), this);
-        recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
-        recyclerViewAttentionUsers.setAdapter(adapter);
+        if (attentionUsersVideos.size()>0){
+            rlRlv.setVisibility(View.VISIBLE);
+            rlNoDp.setVisibility(View.GONE);
+            adapter = new VideoRecyclerViewAdapter(attentionUsersVideos, getActivity(), this);
+            recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
+            recyclerViewAttentionUsers.setAdapter(adapter);
+        }else {
+            rlRlv.setVisibility(View.GONE);
+            rlNoDp.setVisibility(View.VISIBLE);
+            rlUser.setVisibility(View.VISIBLE);
+
+
+            if (mVideoView != null) {
+                mVideoView.pause();
+            }
+            onHiddenChanged(true);
+            onPause();
+//            onStop();
+//            onDestroyView();
+            VideoViewManager.instance().release();
+
+//            EventBus.getDefault().post("ok");
+//            EventBus.getDefault().post(new attentionchange("ok"));
+
+
+//            onPause();
+//            onStop();
+//            rlRlv.removeView(recyclerViewAttentionUsers);
+//            rlRlv.removeAllViews();
+
+
+
+//            recyclerViewAttentionUsers.removeAllViews();
+
+//
+//            recyclerViewAttentionUsers.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//                @Override
+//                public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+//                    super.onScrollStateChanged(recyclerView, newState);
+//
+//
+//
+//
+//                }
+//
+//                @Override
+//                public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+//                    super.onScrolled(recyclerView, dx, dy);
+//                    RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+//                    //判断是当前layoutManager是否为LinearLayoutManager
+//                    // 只有LinearLayoutManager才有查找第一个和最后一个可见view位置的方法
+//                    if (layoutManager instanceof LinearLayoutManager) {
+//                        LinearLayoutManager linearManager = (LinearLayoutManager) layoutManager;
+//                        //获取最后一个可见view的位置
+//                        int lastItemPosition = linearManager.findLastVisibleItemPosition();
+//
+//
+//                        View view = recyclerView.getChildAt(lastItemPosition);
+//                        if (view != null) {
+//                            VideoView videoView = view.findViewById(R.id.video_player);
+//                            if (videoView.isPlaying()) {
+//                                videoView.pause();
+//                                Log.e("------------", "a");
+//                                videoView.release();
+//                                videoView.seekTo(0);
+//
+//                            } else {
+//                                Log.e("------------", "b" + mCurrentPosition + "  " + lastItemPosition);
+//                                videoView.pause();
+//                            }
+//
+//                        } else {
+//                            Log.e("------------", "c" + mCurrentPosition + "  " + lastItemPosition);
+//                        }
+//                    }
+//                }
+//            });
+
+
+
+
+
+//            recyclerViewAttentionUsers.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+//                @Override
+//                public void onChildViewAttachedToWindow(@NonNull View view) {
+//                    Log.e("------------","1111111000000");
+//                }
+//
+//                @Override
+//                public void onChildViewDetachedFromWindow(@NonNull View view) {
+//                    Log.e("------------","1111111");
+////                    VideoView videoView = view.findViewById(R.id.video_player);
+////                    videoView.pause();
+//                }
+//            });
+
+
+//            if (mVideoView != null) {
+//                mVideoView.pause();
+//                mVideoView.release();
+//                Log.e("------------","1");
+////
+////
+//                View view = recyclerViewAttentionUsers.getChildAt(mCurrentPosition);
+//                if (view != null) {
+//                    VideoView videoView = view.findViewById(R.id.video_player);
+//                    videoView.pause();
+//                }
+//
+//            }else {
+////                linearLayoutManager = new LinearLayoutManager(AppUtils.getContext());
+////                linearLayoutManager.setOrientation(OrientationHelper.VERTICAL);
+//                if (linearLayoutManager != null)
+//                    viewvideo = linearLayoutManager.findViewByPosition(mCurrentPosition);
+//                if (viewvideo != null){
+//                    mVideoView = viewvideo.findViewById(R.id.video_player);
+//                    mVideoView.pause();
+//                    mVideoView.release();
+//
+//                    Log.e("------------","22"+mCurrentPosition);
+//                    if (mVideoView.isPlaying()){
+//                        mVideoView.pause();
+//                        Log.e("------------","2");
+//                    }
+//
+//                }
+//
+//                    View view2 = recyclerViewAttentionUsers.getChildAt(mCurrentPosition);
+//                    if (view2 != null) {
+//                        VideoView videoView2 = view2.findViewById(R.id.video_player);
+//                        videoView2.pause();
+//                        Log.e("------------", "21");
+//                    }
+//                }
+        }
+
 //        adapter.setGetP(new VideoRecyclerViewAdapter.GetP() {
 //            @Override
 //            public void ostion(View view, int po) {
@@ -575,13 +723,13 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                Log.e("------------", "a1=" + hidden);
             }
 //            else {
-//                Log.e("------------","不可见="+hidden);
+                Log.e("------------","不可见="+hidden);
 //                mVideoView = new VideoView(AppUtils.getContext());
 //                mVideoView.pause();
 //            }
         } else {
             //可见
-//            Log.e("------------","可见="+hidden);
+            Log.e("------------","可见="+hidden);
             //刷新关注
 //            mPresenter.requestMyAttentionUsersAndUsersVideos();   //用evbus
 
@@ -648,8 +796,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
     public void showShare(int pos) {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
-        Bundle arg=new Bundle();
-        arg.putString("url",attentionUsersVideos.get(pos).getUrl());
+        Bundle arg = new Bundle();
+        arg.putString("url", attentionUsersVideos.get(pos).getUrl());
         bottomShareDialog.setArguments(arg);
         bottomShareDialog.show(getChildFragmentManager(), "share");
 
@@ -674,6 +822,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     }
 
     private Dialog dialog;
+
     @Override
     public void linerck(int position, String type, View view, View view2) {
 //        Log.e("---------", type + "  " + position);
@@ -778,18 +927,18 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             FileLength = con.getContentLength();
             message.what = 0;
             handler.sendMessage(message);
-            int line=0;
+            int line = 0;
             while ((line = bs.read(bytes)) != -1) {
                 fs.write(bytes, 0, line);
                 fs.flush();
-                Message message1=new Message();
-                message1.what=1;
+                Message message1 = new Message();
+                message1.what = 1;
                 handler.sendMessage(message1);
             }
             is.close();
             randomAccessFile.close();
-            Message message2=new Message();
-            message2.what=2;
+            Message message2 = new Message();
+            message2.what = 2;
             handler.sendMessage(message2);
 
         } catch (Exception e) {
@@ -878,6 +1027,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                             JSONObject data = object.optJSONObject("data");
                             String islike = data.optString("is_like");
                             EventBus.getDefault().post(new attentionchange("关注"));
+
                             if (islike.equals("1")) {
                                 button.setText("已关注");
                             } else {
@@ -913,7 +1063,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                            textView.setText(x+"%");
                         break;
                     case 2:
-                        if (dialog!=null)
+                        if (dialog != null)
                             dialog.dismiss();
                         Toast.makeText(getActivity(), "下载完成", Toast.LENGTH_LONG).show();
                         break;

@@ -169,8 +169,10 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
             if (video.getGood_id().equals("0")) {
                 holder.bussiness.setVisibility(View.INVISIBLE);
+                Log.e("---videogood1=",video.getGood_id());
             } else {
                 holder.bussiness.setVisibility(View.VISIBLE);
+                Log.e("---videogood2=",video.getGood_id());
             }
 
 
@@ -236,8 +238,10 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
             if (video.getGood_id().equals("0")) {
                 holder.bussiness.setVisibility(View.INVISIBLE);
+                Log.e("---videogood3=",video.getGood_id());
             } else {
                 holder.bussiness.setVisibility(View.VISIBLE);
+                Log.e("---videogood4=",video.getGood_id());
             }
 
 

@@ -58,9 +58,8 @@
         android:id="@+id/iv_userimage"
         android:layout_width="95dp"
         android:layout_height="95dp"
-        android:layout_alignTop="@+id/iv_pho"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="-31dp"
+        android:visibility="gone"
+        android:layout_gravity="center"
         android:src="@mipmap/edit_tou_icon" />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_userimagetwo"
@@ -80,7 +79,7 @@
         android:layout_centerInParent="true"/>
 </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:gravity="center"
@@ -93,7 +92,8 @@
             android:layout_gravity="center"
             android:layout_height="wrap_content">
         </android.support.v7.widget.RecyclerView>
-    </LinearLayout>
+
+    </RelativeLayout>
 
 
     <TextView
@@ -292,16 +292,17 @@
         android:src="@mipmap/next_icon"/>
     <TextView
         android:id="@+id/tv_address"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="深圳市龙岗区"
+        android:text="深圳市-龙岗区"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/iv_edit_address"
         android:layout_toRightOf="@id/t2"
         android:layout_centerHorizontal="true"
         android:textColor="#ffa5a4a4"
         android:gravity="center_horizontal"
-        android:textSize="18sp"
+        android:textSize="16sp"
+        android:singleLine="true"
         />
 
 </RelativeLayout>
