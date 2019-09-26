@@ -43,7 +43,7 @@ public class FragmentZuopingGeRen extends Fragment {
     //    @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
     //    @BindView(R.id.wangluoyichang)
-    RelativeLayout wangluoyichang;
+    RelativeLayout wangluoyichang,rl_rlv;
     //    @BindView(R.id.m_swipe_layout)
 //    SmartRefreshLayout mSwipeLayout;
     private View view;
@@ -73,6 +73,7 @@ public class FragmentZuopingGeRen extends Fragment {
         nodingdan = view.findViewById(R.id.nodingdan);
 //        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
         wangluoyichang = view.findViewById(R.id.wangluoyichang);
+        rl_rlv = view.findViewById(R.id.rl_rlv);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -140,7 +141,7 @@ public class FragmentZuopingGeRen extends Fragment {
                             if (response.body() != null && response.body().getData().size() > 0) {
                                 itemlist.clear();
                                 rlv.setVisibility(View.VISIBLE);
-//                                mSwipeLayout.setVisibility(View.VISIBLE);
+                                rl_rlv.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
                                 itemlist = response.body().getData();
@@ -160,7 +161,7 @@ public class FragmentZuopingGeRen extends Fragment {
                                     rlv.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
-//                                    mSwipeLayout.setVisibility(View.GONE);
+                                    rl_rlv.setVisibility(View.GONE);
                                 }
 
                             }
@@ -169,7 +170,7 @@ public class FragmentZuopingGeRen extends Fragment {
                         } else {
                             dialog.dismiss();
                             rlv.setVisibility(View.GONE);
-//                            mSwipeLayout.setVisibility(View.GONE);
+                            rl_rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                         }
@@ -179,7 +180,7 @@ public class FragmentZuopingGeRen extends Fragment {
                     public void onFailure(Call<MyFaBuBean> call, Throwable t) {
                         dialog.dismiss();
                         rlv.setVisibility(View.GONE);
-//                        mSwipeLayout.setVisibility(View.GONE);
+                        rl_rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                     }

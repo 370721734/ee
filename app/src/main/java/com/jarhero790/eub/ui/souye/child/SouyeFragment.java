@@ -928,6 +928,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
         Bundle args = new Bundle();
         args.putString("url", lists.get(po).getUrl());
+        args.putString("videoid",lists.get(po).getVideo_id());
         bottomShareDialog.setArguments(args);
         bottomShareDialog.show(getChildFragmentManager(), "share");
         bottomShareDialog.setShareDialog(new BottomShareDialog.ShareDialog() {

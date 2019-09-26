@@ -71,6 +71,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 //    ViewPagerLayoutManager layoutManager;
 //    private int mCurrentPosition;//当前播放的第几个视频 ，
     private int mposition;
+
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();//作品
 
 
@@ -460,10 +461,11 @@ public class PlayVideoActivity extends AppCompatActivity {
 
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
             RelativeLayout relativeLayout = itemView.findViewById(R.id.container);
+            RelativeLayout buss=itemView.findViewById(R.id.bussiness);
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
             Glide.with(this)
                     .load(zanBeanList.get(position).getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.white))
+                    .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(mTikTokController.getThumb());
             ViewParent parent = mVideoView.getParent();
             if (parent instanceof RelativeLayout) {
@@ -477,6 +479,12 @@ public class PlayVideoActivity extends AppCompatActivity {
             } else {
                 mVideoView.setUrl(zanBeanList.get(position).getUrl());
             }
+            if (zanBeanList.get(position).getGood_id().equals("0")){
+                buss.setVisibility(View.INVISIBLE);
+            }else {
+                buss.setVisibility(View.VISIBLE);
+            }
+
 
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
             mVideoView.start();
@@ -487,10 +495,11 @@ public class PlayVideoActivity extends AppCompatActivity {
 
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
             RelativeLayout relativeLayout = itemView.findViewById(R.id.container);
+            RelativeLayout buss=itemView.findViewById(R.id.bussiness);
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
             Glide.with(this)
                     .load(list.get(position).getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.white))
+                    .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(mTikTokController.getThumb());
             ViewParent parent = mVideoView.getParent();
             if (parent instanceof RelativeLayout) {
@@ -504,6 +513,12 @@ public class PlayVideoActivity extends AppCompatActivity {
             } else {
                 mVideoView.setUrl(list.get(position).getUrl());
             }
+            if (list.get(position).getGood_id().equals("0")){
+                buss.setVisibility(View.INVISIBLE);
+            }else {
+                buss.setVisibility(View.VISIBLE);
+            }
+
 
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
             mVideoView.start();

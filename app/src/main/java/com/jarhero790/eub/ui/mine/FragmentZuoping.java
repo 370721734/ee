@@ -51,7 +51,7 @@ public class FragmentZuoping extends SupportFragment {
     RecyclerView rlv;
     Unbinder unbinder;
     RelativeLayout nodingdan;
-    RelativeLayout wangluoyichang;
+    RelativeLayout wangluoyichang, rl_rlv;
     private View view;
     private static FragmentZuoping instance = null;
 //    SmartRefreshLayout mSwipeLayout;
@@ -79,6 +79,7 @@ public class FragmentZuoping extends SupportFragment {
         unbinder = ButterKnife.bind(this, view);
         nodingdan = view.findViewById(R.id.nodingdan);
         wangluoyichang = view.findViewById(R.id.wangluoyichang);
+        rl_rlv = view.findViewById(R.id.rl_rlv);
 //        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
         return view;
     }
@@ -86,7 +87,7 @@ public class FragmentZuoping extends SupportFragment {
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (!hidden){
+        if (!hidden) {
 //            page = 1;
 //            initDate();
 //            Log.e("----------zuoping","onHiddenChanged");
@@ -110,8 +111,6 @@ public class FragmentZuoping extends SupportFragment {
         linearItemDecoration.setSpanSpace(10);
         linearItemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
         rlv.addItemDecoration(linearItemDecoration);
-
-
 
 
 //        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
@@ -138,6 +137,7 @@ public class FragmentZuoping extends SupportFragment {
 
     private Dialog dialog;
     Call<MyFaBuBean> calls = null;
+
     private void initDate() {
         dialog = new Dialog(getActivity(), R.style.progress_dialog);
         dialog.setContentView(R.layout.dialog);
@@ -153,32 +153,32 @@ public class FragmentZuoping extends SupportFragment {
                             dialog.dismiss();
                             if (response.body() != null && response.body().getData() != null) {
                                 if (response.body().getData().size() > 0) {
-                                itemlist.clear();
-                                rlv.setVisibility(View.VISIBLE);
-                                nodingdan.setVisibility(View.GONE);
-                                wangluoyichang.setVisibility(View.GONE);
-//                                mSwipeLayout.setVisibility(View.VISIBLE);
-                                itemlist = response.body().getData();
-                                if (page == 1) {
-                                    list.clear();
-                                    list.addAll(itemlist);
-                                    adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
-                                    rlv.setAdapter(adapter);
-                                } else {
-                                    list.addAll(itemlist);
-                                    adapter.notifyDataSetChanged();
-                                }
+                                    itemlist.clear();
+                                    rlv.setVisibility(View.VISIBLE);
+                                    nodingdan.setVisibility(View.GONE);
+                                    wangluoyichang.setVisibility(View.GONE);
+                                    rl_rlv.setVisibility(View.VISIBLE);
+                                    itemlist = response.body().getData();
+                                    if (page == 1) {
+                                        list.clear();
+                                        list.addAll(itemlist);
+                                        adapter = new ZuoPingAdapter(getActivity(), list, myclickdele, myclicktu);
+                                        rlv.setAdapter(adapter);
+                                    } else {
+                                        list.addAll(itemlist);
+                                        adapter.notifyDataSetChanged();
+                                    }
                                 } else {
                                     rlv.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
-//                                    mSwipeLayout.setVisibility(View.GONE);
+                                    rl_rlv.setVisibility(View.GONE);
                                 }
                             } else {
                                 rlv.setVisibility(View.GONE);
                                 nodingdan.setVisibility(View.VISIBLE);
                                 wangluoyichang.setVisibility(View.GONE);
-//                                mSwipeLayout.setVisibility(View.GONE);
+                                rl_rlv.setVisibility(View.GONE);
                             }
 
                         } else {
@@ -186,7 +186,7 @@ public class FragmentZuoping extends SupportFragment {
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
-//                            mSwipeLayout.setVisibility(View.GONE);
+                            rl_rlv.setVisibility(View.GONE);
                         }
                     }
 
@@ -195,6 +195,7 @@ public class FragmentZuoping extends SupportFragment {
                         dialog.dismiss();
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
+                        rl_rlv.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
                     }
                 });
@@ -204,12 +205,12 @@ public class FragmentZuoping extends SupportFragment {
         @Override
         public void myclick(int position, View view) {
 //            Log.e("-------1", "" + position);
-            AlertDialog.Builder builder=new AlertDialog.Builder(getActivity(),R.style.loading_dialog);
-            View layout=View.inflate(getActivity(),R.layout.item_delete_video,null);
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.loading_dialog);
+            View layout = View.inflate(getActivity(), R.layout.item_delete_video, null);
             builder.setView(layout);
-            Dialog dialog=builder.create();
-            TextView cancle=layout.findViewById(R.id.cancle);
-            TextView submit=layout.findViewById(R.id.submit);
+            Dialog dialog = builder.create();
+            TextView cancle = layout.findViewById(R.id.cancle);
+            TextView submit = layout.findViewById(R.id.submit);
             cancle.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -228,22 +229,22 @@ public class FragmentZuoping extends SupportFragment {
     };
 
     private void deletevideo(int video_id) {
-        RetrofitManager.getInstance().getDataServer().delvideo(SharePreferenceUtil.getToken(AppUtils.getContext()),video_id).enqueue(new Callback<ResponseBody>() {
+        RetrofitManager.getInstance().getDataServer().delvideo(SharePreferenceUtil.getToken(AppUtils.getContext()), video_id).enqueue(new Callback<ResponseBody>() {
             @Override
             public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     try {
-                        String json=response.body().string();
+                        String json = response.body().string();
 //                        Log.e("--------",json);
-                        JSONObject object=new JSONObject(json);
-                        int code=object.optInt("code");
-                        String msg=object.optString("msg");
-                        if (code==200){
-                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                        JSONObject object = new JSONObject(json);
+                        int code = object.optInt("code");
+                        String msg = object.optString("msg");
+                        if (code == 200) {
+                            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
                             initDate();
                             adapter.notifyDataSetChanged();//??
-                        }else {
-                            Toast.makeText(getActivity(),msg,Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
                         }
                     } catch (Exception e) {
@@ -266,7 +267,7 @@ public class FragmentZuoping extends SupportFragment {
             Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", list);
-            intent.putExtra("videotype","mine");
+            intent.putExtra("videotype", "mine");
             startActivity(intent);
 
         }

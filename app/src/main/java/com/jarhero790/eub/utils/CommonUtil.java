@@ -6,20 +6,33 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.view.ViewCompat;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.view.WindowInsets;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.jarhero790.eub.GlobalApplication;
+import com.jarhero790.eub.R;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 
@@ -268,7 +281,7 @@ public class CommonUtil {
                 if (index == 0) {
                 } else {
                     Uri u = Uri.parse("content://media/external/images/media/" + index);
-                    System.out.println("temp uri is :" + u);
+//                    System.out.println("temp uri is :" + u);
                 }
             }
             if (path != null) {
@@ -418,5 +431,175 @@ public class CommonUtil {
             return "" + s;
         }
     }
+
+
+
+
+
+
+
+
+
+    /**
+
+     * 文本转成Bitmap
+
+     * @param text 文本内容
+
+     * @param context 上下文
+
+     * @return 图片的bitmap
+
+     */
+
+    public static Bitmap textToBitmap(String text , Context context) {
+
+        float scale = context.getResources().getDisplayMetrics().scaledDensity;
+
+        TextView tv = new TextView(context);
+
+
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        tv.setLayoutParams(layoutParams);
+
+        tv.setText(text);
+
+        tv.setTextSize(scale * 24);
+
+        tv.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        tv.setDrawingCacheEnabled(true);
+
+        tv.setTextColor(Color.RED);
+
+        tv.setBackgroundColor(Color.TRANSPARENT);
+
+        tv.measure(View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED),
+
+                View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED));
+
+        tv.layout(0, 0, tv.getMeasuredWidth(), tv.getMeasuredHeight());
+
+        tv.buildDrawingCache();
+
+        Bitmap bitmap = tv.getDrawingCache();
+
+        int rate = bitmap.getHeight() / 20;
+
+        return Bitmap.createScaledBitmap(bitmap, bitmap.getWidth()/rate, 20, false);
+
+    }
+
+
+
+    /**
+
+     * 文字生成图片
+
+     * @param filePath filePath
+
+     * @param text text
+
+     * @param context context
+
+     * @return 生成图片是否成功
+
+     */
+
+    public static Bitmap textToPicture(String filePath, String text , Context context){
+
+        Bitmap bitmap = textToBitmap(text , context);
+
+        FileOutputStream outputStream = null;
+
+        try {
+
+            outputStream = new FileOutputStream(filePath);
+
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+            outputStream.flush();
+
+        } catch (IOException e) {
+
+            e.printStackTrace();
+            Bitmap bitmap1= BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo);
+
+            return bitmap1;
+
+        }finally {
+
+            try {
+
+                if(outputStream != null){
+
+                    outputStream.close();
+
+                }
+
+            } catch (IOException e) {
+
+                e.printStackTrace();
+
+            }
+
+        }
+
+        return bitmap;
+
+    }
+
+
+
+
+
+
+
+
+
+    public static Bitmap textAsBitmap(String text, float textSize) {
+
+        TextPaint textPaint = new TextPaint();
+
+// textPaint.setARGB(0x31, 0x31, 0x31, 0);
+
+        textPaint.setColor(Color.WHITE);
+        textPaint.setFakeBoldText(true);
+
+        textPaint.setAntiAlias(true);
+
+        textPaint.setTextSize(textSize);
+
+        StaticLayout layout = new StaticLayout(text, textPaint, 450,
+
+                Layout.Alignment.ALIGN_NORMAL, 1.3f, 0.0f, true);
+
+        Bitmap bitmap = Bitmap.createBitmap(layout.getWidth() + 20,
+
+                layout.getHeight() + 20, Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+
+        canvas.translate(10, 10);
+
+// canvas.drawColor(Color.GRAY);
+
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);//绘制透明色
+
+        layout.draw(canvas);
+
+        Log.d("textAsBitmap",
+
+                String.format("1:%d %d", layout.getWidth(), layout.getHeight()));
+
+        return bitmap;
+
+    }
+
 
 }

@@ -71,6 +71,8 @@
         <activity
             android:name=".message.souye.BusinessWebTwoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".message.souye.UserJiuBaoActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".message.message.ConversationListActivity"
             android:screenOrientation="portrait">

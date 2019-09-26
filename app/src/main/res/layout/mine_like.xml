@@ -8,6 +8,8 @@
 
   <RelativeLayout
       android:layout_width="match_parent"
+      android:visibility="visible"
+      android:id="@+id/rl_rlv"
       android:layout_height="match_parent">
       <android.support.v7.widget.RecyclerView
           android:id="@+id/rlv"
@@ -32,7 +34,7 @@
             android:layout_height="100dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="40dp"
-            android:src="@mipmap/no_zuoping"/>
+            android:src="@mipmap/no_xifang"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,6 +43,7 @@
             android:layout_marginTop="20sp"
             android:layout_below="@id/ivtext"
             android:text="暂无作品"
+            android:visibility="gone"
             android:layout_centerHorizontal="true"
             />
     </RelativeLayout>

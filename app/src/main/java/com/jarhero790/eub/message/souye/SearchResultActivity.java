@@ -156,8 +156,15 @@ public class SearchResultActivity extends AppCompatActivity {
 
                                 tvMemo.setText("粉丝：" + userBeans.getFensi() + "  关注：" + userBeans.getLike() + "  点赞：" + userBeans.getMyzan());
 
-//                                tvGuanzu.setText(userBeans.getSubscribe());//关注
-
+                                if (userBeans.getIs_like() == 1) {
+                                    if (userBeans.getIs_likeEach() == 1) {
+                                        tvGuanzu.setText("已互关");
+                                    } else {
+                                        tvGuanzu.setText("已关注");
+                                    }
+                                } else {
+                                    tvGuanzu.setText("+关注");
+                                }
 
                                 recyclerView.setNestedScrollingEnabled(false);
 

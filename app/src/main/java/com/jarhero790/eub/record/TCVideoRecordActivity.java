@@ -1447,7 +1447,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             } else if (requestCode == IMAGE_REQUEST_CODE) {
 
                 Uri imageUri = data.getData();
-                Log.e("----------------", "视频地址"+imageUri);
+//                Log.e("----------------", "视频地址"+imageUri);
                 File files = CommonUtil.uriToFile(imageUri, TCVideoRecordActivity.this);
 //                Bitmap bitmaps=CommonUtil.getVideoThumbnail(files.getAbsolutePath());
 
@@ -2066,5 +2066,14 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             }
         }
     }
+
+
+
+
+
+
+
+
+
 }
 

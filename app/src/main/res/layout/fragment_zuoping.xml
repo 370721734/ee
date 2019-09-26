@@ -8,6 +8,7 @@
 
   <RelativeLayout
       android:layout_width="match_parent"
+      android:id="@+id/rl_rlv"
       android:layout_height="wrap_content">
       <android.support.v7.widget.RecyclerView
           android:layout_marginTop="@dimen/dp_10"

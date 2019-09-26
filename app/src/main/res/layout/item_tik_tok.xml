@@ -234,6 +234,7 @@
             android:id="@+id/bussiness"
             android:layout_width="162dp"
             android:layout_height="27dp"
+            android:visibility="invisible"
             android:layout_above="@id/rl_user"
             android:layout_marginLeft="10dp"
             android:layout_marginBottom="19dp"

@@ -4,7 +4,10 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
@@ -23,8 +26,22 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.record.DialogUtil;
+import com.jarhero790.eub.record.FileUtils;
+import com.jarhero790.eub.record.PlayState;
+import com.jarhero790.eub.record.TCConstants;
+import com.jarhero790.eub.record.TCEditerUtil;
+import com.jarhero790.eub.record.TCVideoEditerActivity;
+import com.jarhero790.eub.record.TCVideoEditerWrapper;
+import com.jarhero790.eub.record.TCVideoRecordActivity;
 import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.CommonUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
+import com.tencent.rtmp.TXLiveConstants;
+import com.tencent.ugc.TXRecordCommon;
+import com.tencent.ugc.TXVideoEditConstants;
+import com.tencent.ugc.TXVideoEditer;
+import com.tencent.ugc.TXVideoInfoReader;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -34,38 +51,46 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.RandomAccessFile;
+import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.reactivex.functions.Consumer;
 
 
-public class BottomShareDialog extends DialogFragment implements AdapterView.OnItemClickListener {
+public class BottomShareDialog extends DialogFragment implements AdapterView.OnItemClickListener, TCVideoEditerWrapper.TXVideoPreviewListenerWrapper, TXVideoEditer.TXVideoGenerateListener {
     private View view;
     private Window window;
 
-    private static BottomShareDialog instance=null;
+    private static BottomShareDialog instance = null;
 
     private DialogInterface.OnDismissListener mOnClickListener;
 
-    private LinearLayout ll_down,ll_weixin;
+    private LinearLayout ll_down, ll_weixin;
 
-    public void setOnDismissListener(DialogInterface.OnDismissListener listener){
+    public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
         this.mOnClickListener = listener;
     }
 
-
+    private String mVideoOutputPath;                        // 视频输出路径
 
     public static BottomShareDialog newInstance() {
-        if(instance==null){
-            instance= new BottomShareDialog();
+        if (instance == null) {
+            instance = new BottomShareDialog();
         }
         return instance;
     }
 
     private String url;
-    private static String filePath= "/download/";
+    private static String filePath = "/download/";
+
+
+    private TCVideoEditerWrapper mEditerWrapper;
+    // 短视频SDK获取到的视频信息
+    private TXVideoEditer mTXVideoEditer;                   // SDK接口类
+
 
     @Override
     public void onPause() {
@@ -80,6 +105,32 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     }
 
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        mEditerWrapper = TCVideoEditerWrapper.getInstance();
+        mEditerWrapper.addTXVideoPreviewListenerWrapper(this);
+//        mVideoOutputPath = getCustomVideoOutputPath();
+
+//        mTXVideoEditer = new TXVideoEditer(getActivity());
+//        mEditerWrapper.setEditer(mTXVideoEditer);
+
+
+    }
+
+//    private static final String OUTPUT_DIR_NAME = "TXUGC";
+//    private String getCustomVideoOutputPath() {
+//        long currentTime = System.currentTimeMillis();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
+//        String time = sdf.format(new Date(currentTime));
+//        String outputDir = Environment.getExternalStorageDirectory() + File.separator + OUTPUT_DIR_NAME;
+//        File outputFolder = new File(outputDir);
+//        if (!outputFolder.exists()) {
+//            outputFolder.mkdir();
+//        }
+//        String tempOutputPath = outputDir + File.separator + "TXUGC_" + time + ".mp4";
+//        return tempOutputPath;
+//    }
 
 
     @Nullable
@@ -88,8 +139,8 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         // 去掉默认的标题
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         view = inflater.inflate(R.layout.souye_share, null);
-        ll_down=view.findViewById(R.id.ll_down);
-        ll_weixin=view.findViewById(R.id.ll_weixin);
+        ll_down = view.findViewById(R.id.ll_down);
+        ll_weixin = view.findViewById(R.id.ll_weixin);
 
         ll_down.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -102,15 +153,16 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
 
+                Toast.makeText(getActivity(), "开始下载", Toast.LENGTH_SHORT).show();
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        if (url!=null)
-                        downvideo(url);
+                        if (url != null)
+                            downvideo(url);
                     }
                 }).start();
-                if (shareDialog!=null){
-                    shareDialog.Clicklinear(v,"下载");
+                if (shareDialog != null) {
+                    shareDialog.Clicklinear(v, "下载");
                 }
                 dismiss();
             }
@@ -118,8 +170,8 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         ll_weixin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (shareDialog!=null){
-                    shareDialog.Clicklinear(v,"分享");
+                if (shareDialog != null) {
+                    shareDialog.Clicklinear(v, "分享");
                 }
                 dismiss();
             }
@@ -136,6 +188,8 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     }
 
     private Dialog dialog;
+    private String videoid;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -144,7 +198,8 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         Bundle bundle = getArguments();
         if (bundle != null) {
             url = bundle.getString("url");
-            Log.e("------------url=>", url);
+            videoid = bundle.getString("videoid");
+//            Log.e("------------url=>", url+"  "+videoid);
 //            page = 1;
 //            requestdate(vid);
 
@@ -181,21 +236,49 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     }
 
 
-
-
-
     @Override
     public void onDismiss(DialogInterface dialog) {
         super.onDismiss(dialog);
-        if(mOnClickListener != null) {
+        if (mOnClickListener != null) {
             mOnClickListener.onDismiss(dialog);
         }
     }
 
-
-    public interface ShareDialog{
-        void Clicklinear(View view,String type);
+    @Override
+    public void onPreviewProgressWrapper(int time) {
+//        Log.e("------------","rrrrrrrrrrrrrrrrrrrrrrrrrrr1");
     }
+
+    @Override
+    public void onPreviewFinishedWrapper() {
+//        Log.e("------------","rrrrrrrrrrrrrrrrrrrrrrrrrrr2");
+    }
+
+    @Override
+    public void onGenerateProgress(float v) {
+//        Log.e("------------","rrrrrrrrrrrrrrrrrrrrrrrrrrr3"+v);
+
+//        Toast.makeText(AppUtils.getContext(),"下载中...",Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onGenerateComplete(TXVideoEditConstants.TXGenerateResult txGenerateResult) {
+//          Log.e("------------","rrrrrrrrrrrrrrrrrrrrrrrrrrr4");
+        if (dialog != null)
+            dialog.dismiss();
+
+        if (fileString != null)
+            FileUtils.deleteFile(fileString);
+        if (tufileString!=null)
+            FileUtils.deleteFile(tufileString);
+        Toast.makeText(AppUtils.getContext(), "下载完成", Toast.LENGTH_LONG).show();
+    }
+
+
+    public interface ShareDialog {
+        void Clicklinear(View view, String type);
+    }
+
     private ShareDialog shareDialog;
 
     public void setShareDialog(ShareDialog shareDialog) {
@@ -203,12 +286,12 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     }
 
 
-
-
     private int FileLength;
 
+    private String fileString;
+
     private void downvideo(String url) {
-        String savePAth=Environment.getExternalStorageDirectory()+filePath;
+        String savePAth = Environment.getExternalStorageDirectory() + filePath;
         File file1 = new File(savePAth);
         if (!file1.exists()) {
             file1.mkdir();
@@ -221,9 +304,9 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
 
         Message message = new Message();
         try {
-            if (!file.exists())
-            file.createNewFile();
-
+//            if (!file.exists())
+//            file.createNewFile();
+            fileString = file.getAbsolutePath();
             con = (HttpURLConnection) new URL(url).openConnection();
             con.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/53.0.2785.143 Safari/537.36");
             is = con.getInputStream();
@@ -232,22 +315,22 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
 
             RandomAccessFile randomAccessFile = new RandomAccessFile(file, "rwd");
             randomAccessFile.setLength(FileLength);
-            byte[] bytes = new byte[1024*4];
+            byte[] bytes = new byte[1024 * 4];
             FileLength = con.getContentLength();
             message.what = 0;
             handler.sendMessage(message);
-            int line=0;
+            int line = 0;
             while ((line = bs.read(bytes)) != -1) {
                 fs.write(bytes, 0, line);
                 fs.flush();
-                Message message1=new Message();
-                message1.what=1;
+                Message message1 = new Message();
+                message1.what = 1;
                 handler.sendMessage(message1);
             }
             is.close();
             randomAccessFile.close();
-            Message message2=new Message();
-            message2.what=2;
+            Message message2 = new Message();
+            message2.what = 2;
             handler.sendMessage(message2);
 
         } catch (Exception e) {
@@ -285,9 +368,13 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
 //                            textView.setText(x+"%");
                         break;
                     case 2:
-                        if (dialog!=null)
-                            dialog.dismiss();
-                        Toast.makeText(AppUtils.getContext(), "下载完成", Toast.LENGTH_LONG).show();
+//                        if (dialog!=null)
+//                            dialog.dismiss();
+
+                        Toast.makeText(AppUtils.getContext(), "正在下载", Toast.LENGTH_SHORT).show();
+                        startEditVideo();
+
+
                         break;
                     default:
                         break;
@@ -297,16 +384,13 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     };
 
 
-
-
-
     public void requestPermissions(Activity activity) {
         RxPermissions rxPermission = new RxPermissions(activity);
         //请求权限全部结果
         rxPermission.request(
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
                 Manifest.permission.READ_EXTERNAL_STORAGE
-                 )
+        )
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean granted) throws Exception {
@@ -352,5 +436,197 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         //                        }
         //                    }
         //                });
+    }
+
+
+    private VideoMainHandler mVideoMainHandler;                 // 加载完信息后的回调主线程Hanlder
+    private Thread mLoadBackgroundThread;                       // 后台加载视频信息的线程
+
+
+    //下一个
+    private void startEditVideo() {
+        mTXVideoEditer = new TXVideoEditer(AppUtils.getContext());
+        int ret = mTXVideoEditer.setVideoPath(fileString);//
+        if (ret != 0) {
+            if (ret == TXVideoEditConstants.ERR_SOURCE_NO_TRACK) {
+//                DialogUtil.showDialog(this, "视频预处理失败", "不支持的视频格式", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        finish();
+//                    }
+//                });
+//            } else if (ret == TXVideoEditConstants.ERR_UNSUPPORT_AUDIO_FORMAT) {
+//                DialogUtil.showDialog(this, "视频预处理失败", "暂不支持非单双声道的视频格式", new View.OnClickListener() {
+//                    @Override
+//                    public void onClick(View v) {
+//                        finish();
+//                    }
+//                });
+            }
+            return;
+        }
+
+        TCVideoEditerWrapper wrapper = TCVideoEditerWrapper.getInstance();
+        wrapper.setEditer(mTXVideoEditer);
+
+//        initPhoneListener();
+
+        // 开始加载视频信息
+        mVideoMainHandler = new VideoMainHandler();
+        mLoadBackgroundThread = new Thread(new LoadVideoRunnable(this));
+        mLoadBackgroundThread.start();
+
+
+        /////
+        startGenerate();
+
+    }
+
+
+    /**
+     * 加在视频信息的runnable
+     */
+    private class LoadVideoRunnable implements Runnable {
+        private WeakReference<BottomShareDialog> mWekActivity;
+
+        LoadVideoRunnable(BottomShareDialog activity) {
+            mWekActivity = new WeakReference<BottomShareDialog>(activity);
+        }
+
+        @Override
+        public void run() {
+            if (mWekActivity == null || mWekActivity.get() == null) {
+                return;
+            }
+            BottomShareDialog activity = mWekActivity.get();
+            if (activity == null) return;
+            TXVideoEditConstants.TXVideoInfo info = TXVideoInfoReader.getInstance().getVideoFileInfo(fileString);
+
+//            if (isCancel.get()) {
+//                return;
+//            }
+            if (info == null) {// error 发生错误
+                mVideoMainHandler.sendEmptyMessage(BottomShareDialog.VideoMainHandler.LOAD_VIDEO_ERROR);
+            } else {
+                TCVideoEditerWrapper.getInstance().setTXVideoInfo(info);
+                mVideoMainHandler.sendEmptyMessage(BottomShareDialog.VideoMainHandler.LOAD_VIDEO_SUCCESS);
+            }
+        }
+    }
+
+
+    private void startGenerate() {
+        mTXVideoEditer.cancel(); // 注意：生成时，停止输出缩略图
+
+        startGenerateVideo();
+    }
+
+
+    private void startGenerateVideo() {
+        // 处于生成状态
+//        mCurrentState = PlayState.STATE_GENERATE;
+//        // 防止
+//        mTvDone.setEnabled(false);
+//        mTvDone.setClickable(false);
+        // 生成视频输出路径
+        mVideoOutputPath = TCEditerUtil.generateVideoPath();
+//        if (mWorkLoadingProgress == null) {
+//            initWorkLoadingProgress();
+//        }
+//        mWorkLoadingProgress.setProgress(0);
+//        mWorkLoadingProgress.setCancelable(false);
+//        mWorkLoadingProgress.show(getSupportFragmentManager(), "progress_dialog");
+
+        // 添加片尾水印
+        addTailWaterMark();  //腾讯云水印
+
+        mTXVideoEditer.setCutFromTime(getCutterStartTime(), getCutterEndTime());
+        mTXVideoEditer.setVideoGenerateListener(this);
+        mTXVideoEditer.setVideoBitrate(9600);
+        mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_720P, mVideoOutputPath);
+
+    }
+
+
+    private long getCutterStartTime() {
+        return mEditerWrapper.getCutterStartTime();
+    }
+
+    private long getCutterEndTime() {
+        return mEditerWrapper.getCutterEndTime();
+    }
+
+
+    private String tufileString;
+    /**
+     * 添加水印
+     */
+    private void addTailWaterMark() {
+
+//        TXVideoEditConstants.TXVideoInfo info = TCVideoEditerWrapper.getInstance().getTXVideoInfo();
+
+//        Bitmap tailWaterMarkBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.tcloud_logo);
+//        float widthHeightRatio = tailWaterMarkBitmap.getWidth() / (float) tailWaterMarkBitmap.getHeight();
+
+        TXVideoEditConstants.TXRect txRect = new TXVideoEditConstants.TXRect();
+//        txRect.width = 0.25f; // 归一化的片尾水印，这里设置了一个固定值，水印占屏幕宽度的0.25。
+        // 后面根据实际图片的宽高比，计算出对应缩放后的图片的宽度：txRect.width * videoInfo.width 和高度：txRect.width * videoInfo.width / widthHeightRatio，然后计算出水印放中间时的左上角位置
+//        txRect.x = (info.width - txRect.width * info.width) / (2f * info.width);
+//        txRect.y = (info.height - txRect.width * info.width / widthHeightRatio) / (2f * info.height);
+
+
+        txRect.x = 0f;
+        txRect.y = 0f;
+        txRect.width = 0.5f;
+        String tustring = Environment.getExternalStorageDirectory() + "/images/";
+        File filer = new File(tustring);
+        if (!filer.exists()) {
+            filer.mkdirs();
+        }
+
+        File bb = new File(tustring, "image1.jpg");
+        try {
+            bb.createNewFile();
+            tufileString=bb.getAbsolutePath();
+//            Bitmap bitmap = CommonUtil.textToPicture(bb.getAbsolutePath(),"钻视TV \r\n 112233",TCVideoEditerActivity.this);
+
+//            Bitmap bitmap=CommonUtil.textToBitmap("钻视TV \r\n 112233",TCVideoEditerActivity.this);
+
+
+            Bitmap bitmap = CommonUtil.textAsBitmap(" 钻视TV \r\n ID:" + videoid, 48);
+
+
+            mTXVideoEditer.setWaterMark(bitmap, txRect);//全局
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+//        mTXVideoEditer.setTailWaterMark(tailWaterMarkBitmap, txRect, 3);//片尾
+
+    }
+
+
+    private class VideoMainHandler extends Handler {
+        static final int LOAD_VIDEO_SUCCESS = 0;
+        static final int LOAD_VIDEO_ERROR = -1;
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case LOAD_VIDEO_ERROR:
+                    if (dialog != null)
+                        dialog.dismiss();
+
+                    break;
+                case LOAD_VIDEO_SUCCESS:
+                    if (dialog != null)
+                        dialog.dismiss();
+
+                    break;
+            }
+        }
+
     }
 }

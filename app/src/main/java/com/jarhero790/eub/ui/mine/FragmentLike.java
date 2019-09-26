@@ -53,7 +53,7 @@ public class FragmentLike extends SupportFragment {
 //    @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
 //    @BindView(R.id.wangluoyichang)
-    RelativeLayout wangluoyichang;
+    RelativeLayout wangluoyichang,rl_rlv;
 //    SmartRefreshLayout mSwipeLayout;
     private View view;
 
@@ -100,6 +100,7 @@ public class FragmentLike extends SupportFragment {
         rlv = view.findViewById(R.id.rlv);
         nodingdan=view.findViewById(R.id.nodingdan);
         wangluoyichang=view.findViewById(R.id.wangluoyichang);
+        rl_rlv=view.findViewById(R.id.rl_rlv);
 //        mSwipeLayout=view.findViewById(R.id.m_swipe_layout);
         unbinder = ButterKnife.bind(this, view);
         return view;
@@ -171,7 +172,7 @@ private Dialog dialog;
                             if (response.body()!=null && response.body().getData()!=null){
 //                                Log.e("--------------","size="+response.body().getData().size());
                                 itemlist.clear();
-//                                mSwipeLayout.setVisibility(View.VISIBLE);
+                                rl_rlv.setVisibility(View.VISIBLE);
                                 rlv.setVisibility(View.VISIBLE);
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
@@ -198,7 +199,7 @@ private Dialog dialog;
                                     rlv.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
-//                                    mSwipeLayout.setVisibility(View.GONE);
+                                    rl_rlv.setVisibility(View.GONE);
                                 }else {
 //                                    Toast.makeText(getActivity(), "没有相关数据", Toast.LENGTH_SHORT).show();
                                 }
@@ -210,7 +211,7 @@ private Dialog dialog;
                             rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
-//                            mSwipeLayout.setVisibility(View.GONE);
+                            rl_rlv.setVisibility(View.GONE);
                         }
                     }
 
@@ -220,7 +221,7 @@ private Dialog dialog;
                         rlv.setVisibility(View.GONE);
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);
-//                        mSwipeLayout.setVisibility(View.GONE);
+                        rl_rlv.setVisibility(View.GONE);
                     }
                 });
     }

@@ -452,15 +452,16 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
         mTXVodPlayer.setConfig(mTXPlayConfig);
 
-        mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);
-//        if (istransverse==TXLiveConstants.RENDER_ROTATION_90){
-////            mTXVodPlayer.setRate(90f);//没有用
-//            Log.e("-------------","旋转了90");
-//            mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION);
-//        }else {
-//            Log.e("-------------","旋转了0");
-//            mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);//RENDER_MODE_ADJUST_RESOLUTION
-//        }
+//        mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);
+        if (istransverse==TXLiveConstants.RENDER_ROTATION_90){
+//            mTXVodPlayer.setRate(90f);//没有用
+            Log.e("-------------","旋转了90");
+            mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION);
+        }else {
+            Log.e("-------------","旋转了0");
+            mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);//RENDER_MODE_ADJUST_RESOLUTION
+
+        }
 
         int result = mTXVodPlayer.startPlay(mVideoPath); // result返回值：0 success;  -1 empty url; -2 invalid url; -3 invalid playType;
         if (result != 0) {

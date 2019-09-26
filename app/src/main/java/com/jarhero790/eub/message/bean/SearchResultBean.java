@@ -123,6 +123,8 @@ public class SearchResultBean implements Serializable {
             private int myzan;
             private int like;
             private int fensi;
+            private int is_like;
+            private int is_likeEach;
 
             public int getId() {
                 return id;
@@ -338,6 +340,22 @@ public class SearchResultBean implements Serializable {
 
             public void setFensi(int fensi) {
                 this.fensi = fensi;
+            }
+
+            public int getIs_like() {
+                return is_like;
+            }
+
+            public void setIs_like(int is_like) {
+                this.is_like = is_like;
+            }
+
+            public int getIs_likeEach() {
+                return is_likeEach;
+            }
+
+            public void setIs_likeEach(int is_likeEach) {
+                this.is_likeEach = is_likeEach;
             }
         }
 

@@ -108,7 +108,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private int mCurrentState = PlayState.STATE_NONE;       // 播放器当前状态
 
     private String mVideoOutputPath;                        // 视频输出路径
-//    private String outpathvideo;
+    //    private String outpathvideo;
     private int mVideoResolution = -1;                      // 分辨率类型（如果是从录制过来的话才会有，这参数）
 
     private long mVideoDuration;                            // 视频的总时长
@@ -196,7 +196,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
         mIsPicCombine = getIntent().getBooleanExtra(TCConstants.INTENT_KEY_MULTI_PIC_CHOOSE, false);
         mNeedProcessVideo = getIntent().getBooleanExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
-        istransverse=getIntent().getIntExtra(TCConstants.TRANSVERSE,TXLiveConstants.RENDER_ROTATION_0);
+        istransverse = getIntent().getIntExtra(TCConstants.TRANSVERSE, TXLiveConstants.RENDER_ROTATION_0);
         if (mIsPicCombine) {
             picPathList = getIntent().getStringArrayListExtra(TCConstants.INTENT_KEY_MULTI_PIC_LIST);
             decodeFileToBitmap(picPathList);
@@ -232,7 +232,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         mVideoResolution = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);
         mCustomBitrate = getIntent().getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 0);
         videotime = getIntent().getIntExtra("time", 0) - 1;
-        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE,TCConstants.VIDEO_RECORD_TYPE_EDIT);
+        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
         // 录制经过预处理的视频路径，在编辑后需要删掉录制源文件
         mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
 
@@ -325,6 +325,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     }
 
     private static final String OUTPUT_DIR_NAME = "TXUGC";
+
     private String getCustomVideoOutputPath() {
         long currentTime = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
@@ -418,12 +419,12 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     };
 
     private void initPlayerLayout() {
-        if (istransverse== TXLiveConstants.RENDER_ROTATION_0){
+        if (istransverse == TXLiveConstants.RENDER_ROTATION_0) {
             TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
             param.videoView = mVideoPlayerLayout;
             param.renderMode = TXVideoEditConstants.PREVIEW_RENDER_MODE_FILL_SCREEN;//PREVIEW_RENDER_MODE_FILL_EDGE
             mTXVideoEditer.initWithPreview(param);
-        }else {
+        } else {
             TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
             param.videoView = mVideoPlayerLayout;
 
@@ -462,8 +463,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             mCurrentState = PlayState.STATE_PLAY;
             isPreviewFinish = false;
             mIbPlay.setImageResource(R.mipmap.ic_pause);
-            if (mMusicPlayer!=null)
-            mMusicPlayer.start();
+            if (mMusicPlayer != null)
+                mMusicPlayer.start();
         }
     }
 
@@ -472,8 +473,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             mTXVideoEditer.resumePlay();
             mCurrentState = PlayState.STATE_RESUME;
             mIbPlay.setImageResource(R.mipmap.ic_pause);
-            if (mMusicPlayer!=null)
-            mMusicPlayer.start();
+            if (mMusicPlayer != null)
+                mMusicPlayer.start();
         }
     }
 
@@ -482,7 +483,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             mTXVideoEditer.pausePlay();
             mCurrentState = PlayState.STATE_PAUSE;
             mIbPlay.setImageResource(R.mipmap.ic_play);
-            if (mMusicPlayer!=null)
+            if (mMusicPlayer != null)
                 mMusicPlayer.pause();
         }
     }
@@ -493,7 +494,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             mTXVideoEditer.stopPlay();
             mCurrentState = PlayState.STATE_STOP;
             mIbPlay.setImageResource(R.mipmap.ic_play);
-            if (mMusicPlayer!=null)
+            if (mMusicPlayer != null)
                 mMusicPlayer.pause();
         }
     }
@@ -515,8 +516,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
             dialog = new Dialog(this, R.style.progress_dialog);
             dialog.setCancelable(false);
-            if (dialog.getWindow()!=null)
-            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+            if (dialog.getWindow() != null)
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
             dialog.setContentView(R.layout.dialog);
             dialog.show();
 
@@ -728,7 +729,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                     intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                     intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
                     intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
-                    intent.putExtra(TCConstants.TRANSVERSE,istransverse);
+                    intent.putExtra(TCConstants.TRANSVERSE, istransverse);
                     intent.putExtra("videotime", videotime);
 //                    Log.e("---------mVideoOutputPath11=","  "+mVideoOutputPath);
                     intent.putExtra("mid", mid);
@@ -911,7 +912,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 dialog.setContentView(R.layout.dialog);
                 dialog.setCancelable(true);
                 if (dialog.getWindow() != null)
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
                 startGenerate();
                 break;
@@ -920,7 +921,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 break;
             case R.id.iv_music:
                 Intent intent = new Intent(this, SelectMusicActivity.class);
-                intent.putExtra("typefabu","edit");
+                intent.putExtra("typefabu", "edit");
                 startActivityForResult(intent, REQUESTMUSIC);
 
                 break;
@@ -1116,7 +1117,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 //        mWorkLoadingProgress.show(getSupportFragmentManager(), "progress_dialog");
 
         // 添加片尾水印
-//        addTailWaterMark();  //腾讯云水印
+        addTailWaterMark();  //腾讯云水印
 
         mTXVideoEditer.setCutFromTime(getCutterStartTime(), getCutterEndTime());
         mTXVideoEditer.setVideoGenerateListener(this);
@@ -1163,13 +1164,43 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         float widthHeightRatio = tailWaterMarkBitmap.getWidth() / (float) tailWaterMarkBitmap.getHeight();
 
         TXVideoEditConstants.TXRect txRect = new TXVideoEditConstants.TXRect();
-        txRect.width = 0.25f; // 归一化的片尾水印，这里设置了一个固定值，水印占屏幕宽度的0.25。
+//        txRect.width = 0.25f; // 归一化的片尾水印，这里设置了一个固定值，水印占屏幕宽度的0.25。
         // 后面根据实际图片的宽高比，计算出对应缩放后的图片的宽度：txRect.width * videoInfo.width 和高度：txRect.width * videoInfo.width / widthHeightRatio，然后计算出水印放中间时的左上角位置
-        txRect.x = (info.width - txRect.width * info.width) / (2f * info.width);
-        txRect.y = (info.height - txRect.width * info.width / widthHeightRatio) / (2f * info.height);
+//        txRect.x = (info.width - txRect.width * info.width) / (2f * info.width);
+//        txRect.y = (info.height - txRect.width * info.width / widthHeightRatio) / (2f * info.height);
 
-        mTXVideoEditer.setTailWaterMark(tailWaterMarkBitmap, txRect, 3);
+
+        txRect.x = 0f;
+        txRect.y = 0f;
+        txRect.width = 0.5f;
+        String tustring=Environment.getExternalStorageDirectory()+"/images/";
+        File filer=new File(tustring);
+        if (!filer.exists()){
+            filer.mkdirs();
+        }
+
+        File bb=new File(tustring,"image1.jpg");
+        try {
+            bb.createNewFile();
+//            Bitmap bitmap = CommonUtil.textToPicture(bb.getAbsolutePath(),"钻视TV \r\n 112233",TCVideoEditerActivity.this);
+
+//            Bitmap bitmap=CommonUtil.textToBitmap("钻视TV \r\n 112233",TCVideoEditerActivity.this);
+
+
+            Bitmap bitmap=CommonUtil.textAsBitmap(" 钻视TV \r\n 112233",48);
+
+
+            mTXVideoEditer.setWaterMark(bitmap, txRect);//全局
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+
+//        mTXVideoEditer.setTailWaterMark(tailWaterMarkBitmap, txRect, 3);//片尾
+
     }
+
 
     @Override // 生成进度回调
     public void onGenerateProgress(final float progress) {
@@ -1419,7 +1450,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                         intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                         intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
                         intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, videoPath);
-                        intent.putExtra(TCConstants.TRANSVERSE,istransverse);
+                        intent.putExtra(TCConstants.TRANSVERSE, istransverse);
                         intent.putExtra("videotime", videotime);
 //                        Log.e("--mVideoOutputPath11=",videoPath+"  "+mVideoOutputPath);
                         intent.putExtra("mid", mid);
@@ -1530,11 +1561,11 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             @Override
             public void onEnd(int result) {
 //                Log.e(TAG, "cutSelectMusic ffmpeg end...");
-                if(mMusicPlayer!=null){//移除上一个选择的音乐背景
-                    mMediaPath.remove(mMediaPath.size()-1);
+                if (mMusicPlayer != null) {//移除上一个选择的音乐背景
+                    mMediaPath.remove(mMediaPath.size() - 1);
                 }
                 mMediaPath.add(musicPath);
-                if (dialog!=null)
+                if (dialog != null)
                     dialog.dismiss();
 //                if (musicUrl != null)
 //                    MediaPlayUtil.getInstance().start(musicPath);
@@ -1663,14 +1694,14 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         });
     }
 
-    private void stopMediaPlayer(){
+    private void stopMediaPlayer() {
         try {
             if (mMusicPlayer != null) {
                 mMusicPlayer.stop();
                 mMusicPlayer.release();
-                mMusicPlayer=null;
+                mMusicPlayer = null;
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
