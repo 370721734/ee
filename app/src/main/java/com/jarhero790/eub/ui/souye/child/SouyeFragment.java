@@ -136,7 +136,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         return instance;
     }
 
-
+//    private Dialog dialog;
     private boolean isLook = true;//可见
 
 //    private TextView tvzan;//点赞
@@ -148,6 +148,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tuijian://推荐
+//                dialog = new Dialog(getActivity(), R.style.progress_dialog);
+//                dialog.setContentView(R.layout.dialog);
+//                dialog.setCancelable(true);
+//                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//                dialog.show();
                 textViewTuijian.setBackgroundResource(R.drawable.button_shape1);
                 textViewTuijian.setTextColor(Color.parseColor("#0E0E0E"));
                 textViewZuixin.setTextColor(Color.parseColor("#EFEDED"));
@@ -162,16 +167,17 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
                 }
 
-                mVideoView.release();
+//                mVideoView.release();
 
                 cate.set(0);
                 page.set(1);
+                flag.set(true);
                 mCurrentPosition = 0;
 //                //加载数据
-                if (lists.size() > 0) {
-                    lists.clear();
+//                if (lists.size() > 0) {
+//                    lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
-                }
+//                }
 
 //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 //                tikTokAdapter.notifyDataSetChanged();
@@ -194,6 +200,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 break;
             case R.id.zuixin://最新
+//                dialog = new Dialog(getActivity(), R.style.progress_dialog);
+//                dialog.setContentView(R.layout.dialog);
+//                dialog.setCancelable(true);
+//                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//                dialog.show();
                 textViewZuixin.setBackgroundResource(R.drawable.button_shape1);
                 textViewTuijian.setTextColor(Color.parseColor("#EFEDED"));
                 textViewZuixin.setTextColor(Color.parseColor("#0E0E0E"));
@@ -204,18 +215,19 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(1);
                 page.set(1);
+                flag.set(true);
                 mCurrentPosition = 0;
                 //加载数据
-                if (lists.size() > 0) {
-                    lists.clear();
+//                if (lists.size() > 0) {
+//                    lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
-                }
+//                }
                 viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
                 if (viewplaypause != null) {
                     viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
                     viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
                 }
-                mVideoView.release();
+//                mVideoView.release();
 //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 
 
@@ -233,6 +245,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
                 break;
             case R.id.changshipin://长视频
+//                dialog = new Dialog(getActivity(), R.style.progress_dialog);
+//                dialog.setContentView(R.layout.dialog);
+//                dialog.setCancelable(true);
+//                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+//                dialog.show();
                 textViewChangshipin.setBackgroundResource(R.drawable.button_shape1);
                 textViewTuijian.setTextColor(Color.parseColor("#EFEDED"));
                 textViewZuixin.setTextColor(Color.parseColor("#EFEDED"));
@@ -242,18 +259,19 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                 cate.set(2);
                 page.set(1);
+                flag.set(true);
                 mCurrentPosition = 0;
                 //加载数据
-                if (lists.size() > 0) {
-                    lists.clear();
+//                if (lists.size() > 0) {
+//                    lists.clear();
 //                    tikTokAdapter.notifyDataSetChanged();
-                }
+//                }
                 viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
                 if (viewplaypause != null) {
                     viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
                     viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
                 }
-                mVideoView.release();
+//                mVideoView.release();
 //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
 
 
@@ -262,6 +280,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
                     } else {
                         mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
+
                     }
                 } else {
                     Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
@@ -399,12 +418,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void updateVideos(ArrayList<Video> videos) {
 
         //设置视频
-//        Log.e("---------", "有没有反应");
+        Log.e("---------", "有没有数据了");
 
-
-//        lists.clear();
+        if (lists.size() > 0) {
+            lists.clear();
+        }
         lists.addAll(videos);
 
+//        if (dialog!=null)
+//            dialog.dismiss();
         if (flag.get() == true) {
             tikTokAdapter = new TikTokAdapter(lists, AppUtils.getContext());
             recyclerView.setLayoutManager(layoutManager);

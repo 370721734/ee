@@ -402,4 +402,21 @@ public class CommonUtil {
         return height;
     }
 
+
+
+    private String shownum(int s) {
+        if (s > 9999) {
+            try {
+                float b = Float.valueOf(s) / 10000f;
+                String format = new DecimalFormat("#.#").format(b);
+                return format+"w";
+            } catch (Exception e) {
+                return s+"";
+            }
+
+        } else {
+            return "" + s;
+        }
+    }
+
 }

@@ -147,7 +147,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         /**Glide方式*/
         Glide.with(context).load(video.getVideo_img())
-                .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
+                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
                 .into(holder.video_thumb);
 
         if (video.getIs_zan().equals("1")) {

@@ -48,7 +48,7 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
     @Override
     public void onBindViewHolder(@NonNull ZuoPingAdapter.MyHolder holder, int position) {
         MyFaBuBean.DataBean bean = list.get(position);
-        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.video_deault).error(R.mipmap.video_deault)).into(holder.ivIcon);
+        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.mine_bg).error(R.mipmap.mine_bg)).into(holder.ivIcon);
         holder.tvXin.setText(CommonUtil.showzannum(bean.getZan()));
         holder.tvGo.setText(CommonUtil.showzannum(bean.getVisit_val()));
 

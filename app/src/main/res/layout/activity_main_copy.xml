@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/black">
+    android:background="@color/backgroudcolor">
 
 
     <FrameLayout
@@ -21,12 +21,7 @@
     </FrameLayout>
 
 
-    <View
-        android:id="@+id/line_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="1px"
-        android:background="@android:color/white"
-        android:visibility="gone" />
+
 
     <LinearLayout
         android:id="@+id/bottomNavigator"
