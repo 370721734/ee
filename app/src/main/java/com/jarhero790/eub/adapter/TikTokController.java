@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.widget.ImageView;
 import com.dueeeke.videoplayer.controller.BaseVideoController;
 import com.dueeeke.videoplayer.controller.MediaPlayerControl;
@@ -17,8 +18,15 @@ public class TikTokController extends BaseVideoController {
     //private SimpleDraweeView thumb;
     private ImageView thumb;
 
-    public TikTokController(@NonNull Context context) {
+    private VideoView videoView;
+
+
+    private String url;
+
+    public TikTokController(@NonNull Context context,VideoView m,String u) {
         super(context);
+        videoView=m;
+        url=u;
     }
 
     public TikTokController(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -42,7 +50,7 @@ public class TikTokController extends BaseVideoController {
 
     @Override
     public void setPlayState(int playState) {
-        super.setPlayState(playState);
+
 
         switch (playState) {
             case VideoView.STATE_IDLE:
@@ -56,14 +64,30 @@ public class TikTokController extends BaseVideoController {
             case VideoView.STATE_PREPARED:
                // L.e("STATE_PREPARED");
                 break;
-            case VideoView.PLAYER_FULL_SCREEN:
-               // L.e("STATE_PREPARED");
-//                if (mMediaPlayer==null){
-//                    mMediaPlayer.startFullScreen();
+//            case VideoView.STATE_ERROR:
+//                if (videoView!=null){
+//
+//
+//                    if (url.length()>0){
+//                        videoView.release();
+//                        videoView.resume();
+//                        videoView.setUrl(url);
+//                        videoView.start();
+////                    if (!videoView.isPlaying()){
+////                        videoView.start();
+////                    }
+//                        videoView.setLooping(true);
+//                        Log.e("-------------err","eeerr");
+//                    }
+////
+//                }else {
+//                    Log.e("-------------err","eeerr2");
 //                }
+//
+//                break;
 
-                break;
         }
+//        super.setPlayState(playState);
     }
 
     public ImageView getThumb() {

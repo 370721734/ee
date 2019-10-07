@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.mine.child;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -8,12 +9,15 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
@@ -112,6 +116,11 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     LinearLayout ll2;
     @BindView(R.id.container)
     FrameLayout container;
+//    @BindView(R.id.bingds)
+//    AppBarLayout binding;
+    @BindView(R.id.coordinator_layout)
+    CoordinatorLayout coordinator_layout;
+
 
     private String money;//签到金币
     private String signtime;//最后签到时间
@@ -137,6 +146,43 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
     }
 
+    public void scrollToTop() {
+        //拿到 appbar 的 behavior,让 appbar 滚动
+//        ViewGroup.LayoutParams layoutParams = binding.getLayoutParams();
+
+//        View mappbar=binding.getChildAt(0);
+//        AppBarLayout.LayoutParams mappbarparams= (AppBarLayout.LayoutParams) mappbar.getLayoutParams();
+//        mappbarparams.setScrollFlags(0);
+
+
+//        CoordinatorLayout.LayoutParams params = (CoordinatorLayout.LayoutParams) binding.getLayoutParams();
+//        AppBarLayout.Behavior appBarLayoutBehavior = (AppBarLayout.Behavior) params.getBehavior();
+//        if (appBarLayoutBehavior!=null)
+//        appBarLayoutBehavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+//            @Override
+//            public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+//                return false;
+//            }
+//        });
+//        CoordinatorLayout.Behavior behavior =params.getBehavior();
+//                ((CoordinatorLayout.LayoutParams) layoutParams).getBehavior();
+
+//        if (behavior instanceof AppBarLayout.Behavior) {
+//            AppBarLayout.Behavior appBarLayoutBehavior = (AppBarLayout.Behavior) behavior;
+//            //拿到下方tabs的y坐标，即为我要的偏移量
+//            float y = binding.getY();
+//            //注意传递负值
+//            appBarLayoutBehavior.setTopAndBottomOffset((int) -y);
+//
+//            appBarLayoutBehavior.setDragCallback(new AppBarLayout.Behavior.DragCallback() {
+//                @Override
+//                public boolean canDrag(@NonNull AppBarLayout appBarLayout) {
+//                    return false;
+//                }
+//            });
+//        }
+    }
+
 
     /**
      * 在com.zuanshitv.app.activity.UserNameLoginActivity中登录成功后获取到的数据发送
@@ -151,11 +197,12 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //        Log.e("-----1", user.getId() + "  " + user.getHeadimgurl());
         textViewNickName.setText(user.getNickname());
         tvTvhao.setText("钻视TV号:" + user.getId());
-        if (user.getHeadimgurl().startsWith("http")) {
-            Glide.with(getActivity()).load(user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
-        } else {
-            Glide.with(getActivity()).load(Api.TU + user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
-        }
+        Glide.with(getActivity()).load(user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(ivUserimage);
+//        if (user.getHeadimgurl().startsWith("http")) {
+//
+//        } else {
+//            Glide.with(getActivity()).load(Api.TU + user.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+//        }
 
         tvMemo.setText(user.getSign());
         money = user.getMoney();
@@ -196,12 +243,51 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         return R.layout.fragment_mine;
     }
 
+    float mPosX;
+    float mPosY;
+    float mCurPosX;
+    float mCurPosY;
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        scrollToTop();
 
+        coordinator_layout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                switch (event.getAction()) {
+                    case MotionEvent.ACTION_DOWN:
+                        mPosX = event.getX();
+                        mPosY = event.getY();
+                        break;
+                    case MotionEvent.ACTION_MOVE:
+                        mCurPosX = event.getX();
+                        mCurPosY = event.getY();
+                        break;
+                    case MotionEvent.ACTION_UP:
+//                        if ((mCurPosY-mPosY>0 && (Math.abs(mCurPosY-mPosY)>25)) || (mCurPosY-mPosY<0 && (Math.abs(mCurPosY-mPosY)>25))){
+//                            Log.e("----------------","向上向下滑动了");
+//                        }else {
+//                            Log.e("----------------","向上向下滑动了000");
+//                        }
+
+                        if (mCurPosY - mPosY > 0 && (Math.abs(mCurPosY - mPosY) > 25)) {
+//                            Log.e("----------------","向上向下滑动了1");
+                        } else if (mCurPosY - mPosY < 0 && (Math.abs(mCurPosY - mPosY) > 25)) {
+//                            Log.e("----------------","向上向下滑动了2");
+                        }else {
+//                            Log.e("----------------","向上向下滑动了3");
+                        }
+
+
+                        break;
+                }
+                return true;
+            }
+        });
     }
 
 
@@ -267,7 +353,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
     @Override
     public void showTabList(String[] tabs) {
-        Log.e("---------11", Arrays.toString(tabs));
+//        Log.e("---------11", Arrays.toString(tabs));
     }
 
     @Override
@@ -279,7 +365,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
 
             JSONObject object = JSONObject.parseObject(data);
-            Log.e("---------dss", "" + object);
+//            Log.e("---------dss", "" + object);
 
 
             int code = object.getInteger("code");
@@ -340,17 +426,18 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 String fens = jsonObject1.getString("fensi");
                 textViewNickName.setText(userInfo.getData().getUser().getNickname());
                 tvTvhao.setText("钻视TV号:" + userInfo.getData().getUser().getId());
-                if (userInfo.getData().getUser().getHeadimgurl().startsWith("http")) {
-                    Glide.with(getActivity()).load(userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
-                } else {
-                    Glide.with(getActivity()).load(Api.TU + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
-                }
+                Glide.with(getActivity()).load(userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(ivUserimage);
+//                if (userInfo.getData().getUser().getHeadimgurl().startsWith("http")) {
+//
+//                } else {
+//                    Glide.with(getActivity()).load(Api.TU + userInfo.getData().getUser().getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(ivUserimage);
+//                }
                 tvHuozai.setText(zan);
                 tvGuanzhu.setText(like);
                 fensi.setText(fens);
                 //先添加自己的
                 userInfoList.add(new UserInfo(userInfo.getData().getUser().getRong_id() + "", userInfo.getData().getUser().getNickname(), Uri.parse(userInfo.getData().getUser().getHeadimgurl())));//"https://ss1.bdstatic.com/70cFuXSh_Q1YnxGkpoWK1HF6hhy/it/u=1253139285,1661865494&fm=26&gp=0.jpg"
-                Log.e("----------ddata=", userInfo.getData().getUser().getRong_id() + "      " + userInfo.getData().getUser().getHeadimgurl());
+//                Log.e("----------ddata=", userInfo.getData().getUser().getRong_id() + "      " + userInfo.getData().getUser().getHeadimgurl());
 
 
             }
@@ -394,7 +481,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
                             for (UserInfo info : userInfoList) {
                                 if (info.getUserId().equals(userid)) {
-                                    Log.e("--------------zhong-", userInfoList.size() + " =  " + info.getPortraitUri() + "   =" + info);
+//                                    Log.e("--------------zhong-", userInfoList.size() + " =  " + info.getPortraitUri() + "   =" + info);
 
 //                                    if (info.getPortraitUri())
 //
@@ -450,7 +537,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
         if (dataBeanList != null && dataBeanList.size() > 0) {
             for (int i = 0; i < dataBeanList.size(); i++) {
                 userInfoList.add(new UserInfo(dataBeanList.get(i).getRong_id() + "", dataBeanList.get(i).getNickname(), Uri.parse(dataBeanList.get(i).getHeadimgurl())));
-                Log.e("---------------data=", dataBeanList.get(i).getHeadimgurl());
+//                Log.e("---------------data=", dataBeanList.get(i).getHeadimgurl());
 
             }
         }
@@ -617,6 +704,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 break;
         }
     }
+
 
     //签到  不能用
 //    private void qiandao() {

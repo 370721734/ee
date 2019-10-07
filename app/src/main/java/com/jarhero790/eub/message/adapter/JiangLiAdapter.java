@@ -44,7 +44,7 @@ public class JiangLiAdapter extends RecyclerView.Adapter<JiangLiAdapter.MyHolder
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         JiangLiBean.DataBean bean = list.get(position);
-        Glide.with(context).load(Api.HOST + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+        Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
 //
 //
         if (bean.getAddtime().length() > 10) {

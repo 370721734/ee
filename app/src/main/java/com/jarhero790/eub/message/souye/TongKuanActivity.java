@@ -267,7 +267,7 @@ public class TongKuanActivity extends AppCompatActivity {
                     WXMediaMessage msg = new WXMediaMessage(webpage);
                     msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
                     msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
-                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.zuanshi_logo);
                     Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
                     bmp.recycle();
                     msg.thumbData = bmpToByteArray(thumbBmp, true);

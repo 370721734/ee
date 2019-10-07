@@ -20,7 +20,7 @@
             android:layout_height="33dp"
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="10dp"
-            android:src="@mipmap/logo" />
+            android:src="@mipmap/zuanshi_logo" />
 
         <TextView
             android:id="@+id/attentionsUserName"
@@ -29,7 +29,7 @@
             android:layout_gravity="center_vertical"
             android:layout_marginLeft="9dp"
             android:gravity="center"
-            android:src="@mipmap/logo"
+            android:src="@mipmap/zuanshi_logo"
             android:text="遨游互动有限公司"
             android:textColor="#ffffff"
             android:textSize="15dp" />

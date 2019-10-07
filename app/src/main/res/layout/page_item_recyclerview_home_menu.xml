@@ -23,7 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:drawablePadding="10dp"
-        android:drawableTop="@mipmap/edit_tou_icon"
+        android:drawableTop="@mipmap/zuanshi_logo"
         android:gravity="center"
         android:text="暂无相关数据"
         android:textSize="16sp"

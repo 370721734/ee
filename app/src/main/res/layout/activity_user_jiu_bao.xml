@@ -1,79 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroudcolor"
-    android:orientation="vertical"
-    >
-
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:orientation="horizontal"
         android:layout_marginTop="25dp"
-        >
+        android:orientation="horizontal">
 
         <ImageView
             android:id="@+id/back"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="@dimen/dp_10"
             android:layout_marginLeft="5dp"
-            android:src="@mipmap/back"/>
+            android:layout_weight="1"
+            android:padding="@dimen/dp_10"
+            android:src="@mipmap/back" />
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="8"
             android:layout_height="wrap_content"
-            android:textColor="#EFEDED"
-            android:textSize="18sp"
             android:layout_gravity="center"
-            android:gravity="center"
             android:layout_marginRight="30dp"
-            android:text="用户举报"/>
+            android:layout_weight="8"
+            android:gravity="center"
+            android:text="用户举报"
+            android:textColor="#EFEDED"
+            android:textSize="18sp" />
 
     </LinearLayout>
 
 
-
     <View
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
-        android:background="#ffffff"
-        />
+        android:layout_marginTop="15dp"
+        android:background="#ffffff" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="内容举报"
-        android:layout_marginTop="20dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="20dp"
+        android:text="内容举报"
         android:textColor="#ff74787e"
-        android:textSize="13sp"
-        />
+        android:textSize="13sp" />
 
 
     <RelativeLayout
         android:id="@+id/rl1"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="垃圾广告、售卖假货等"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="15sp"
-            />
+            android:text="垃圾广告、售卖假货等"
+            android:textColor="#E6E9EE"
+            android:textSize="15sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -81,22 +81,24 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl2"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="色情低俗"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="色情低俗"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -104,22 +106,24 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl3"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="违法犯罪"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="违法犯罪"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -127,22 +131,24 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl4"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="政治敏感"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="政治敏感"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -150,22 +156,24 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
+
     <RelativeLayout
         android:id="@+id/rl5"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="造谣传谣、涉嫌欺诈"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="造谣传谣、涉嫌欺诈"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -173,40 +181,41 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
 
     <View
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:background="#ffffff"
-        />
+        android:background="#ffffff" />
+
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="账号违规"
-        android:layout_marginTop="26dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="26dp"
+        android:text="账号违规"
         android:textColor="#ff74787e"
-        android:textSize="13sp"
-        />
+        android:textSize="13sp" />
+
     <RelativeLayout
         android:id="@+id/rl7"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="冒充官方"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="冒充官方"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -214,23 +223,24 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/rl8"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="头像、昵称、签名违规"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="头像、昵称、签名违规"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -238,43 +248,42 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
+
     <View
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:background="#ffffff"
-        />
-
-
+        android:background="#ffffff" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="侵权"
-        android:layout_marginTop="26dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="26dp"
+        android:text="侵权"
         android:textColor="#ff74787e"
-        android:textSize="13sp"
-        />
+        android:textSize="13sp" />
+
     <RelativeLayout
         android:id="@+id/rl9"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="盗用TA人作品"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="盗用TA人作品"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -282,23 +291,24 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/r20"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="侵犯权益"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="侵犯权益"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -306,41 +316,42 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
+
     <View
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
-        android:background="#ffffff"
-        />
+        android:background="#ffffff" />
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="其他"
-        android:layout_marginTop="26dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="26dp"
+        android:text="其他"
         android:textColor="#ff74787e"
-        android:textSize="13sp"
-        />
+        android:textSize="13sp" />
+
     <RelativeLayout
         android:id="@+id/r21"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="疑似自我伤害"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="疑似自我伤害"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -348,23 +359,24 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/r22"
         android:layout_width="match_parent"
-        android:layout_marginTop="20dp"
-        android:layout_height="38dp">
+        android:layout_height="38dp"
+        android:layout_marginTop="20dp">
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="侮辱谩骂"
-            android:textColor="#E6E9EE"
             android:layout_centerVertical="true"
             android:layout_marginLeft="15dp"
-            android:textSize="16sp"
-            />
+            android:text="侮辱谩骂"
+            android:textColor="#E6E9EE"
+            android:textSize="16sp" />
+
         <ImageView
             android:layout_width="30dp"
             android:layout_height="38dp"
@@ -372,15 +384,16 @@
             android:layout_centerVertical="true"
             android:layout_marginRight="15dp"
             android:padding="@dimen/dp_10"
-            android:src="@mipmap/jiubao_icon"/>
+            android:src="@mipmap/jiubao_icon" />
     </RelativeLayout>
+
     <View
-        android:layout_marginTop="15dp"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"
         android:layout_marginLeft="15dp"
+        android:layout_marginTop="15dp"
         android:layout_marginRight="15dp"
         android:background="#ffffff"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 </LinearLayout>
+</ScrollView>

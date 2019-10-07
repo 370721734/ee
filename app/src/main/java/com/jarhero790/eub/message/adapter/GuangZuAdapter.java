@@ -3,6 +3,7 @@ package com.jarhero790.eub.message.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
@@ -14,6 +15,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GuangZuBean;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.util.List;
 
@@ -53,11 +55,13 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
 //            myHolder.speak.setVisibility(View.VISIBLE);
             myHolder.tvName.setText(bean.getNickname());
             myHolder.tvmemo.setText(bean.getSign());
-            if (bean.getHeadimgurl().startsWith("http")){
-                Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
-            }else{
-                Glide.with(context).load(Api.TU + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
-            }
+//            Log.e("---------------guangzu",bean.getHeadimgurl());
+            Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
+//            if (bean.getHeadimgurl().startsWith("http")){
+//
+//            }else{
+//                Glide.with(context).load(Api.TU + bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+//            }
 
         }
 //        else {
@@ -70,8 +74,17 @@ public class GuangZuAdapter extends RecyclerView.Adapter<GuangZuAdapter.MyHolder
 //            myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));
 //        }
 
+        if ((bean.getId()+"").equals(SharePreferenceUtil.getUserid(context))){
+           myHolder.tvGuanzu.setVisibility(View.INVISIBLE);
+        }else {
+            myHolder.tvGuanzu.setVisibility(View.VISIBLE);
+            myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "已关注");
+        }
 
-        myHolder.tvGuanzu.setText(bean.getIs_likeEach() == 1 ? "已互关" : "已关注");
+
+
+
+
 
         myHolder.tvGuanzu.setTag(position);
         myHolder.tvGuanzu.setOnClickListener(myclick);

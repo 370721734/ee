@@ -9,7 +9,7 @@
         android:id="@+id/tou_image"
         android:layout_width="51dp"
         android:layout_height="51dp"
-        android:src="@mipmap/tou_deault"
+        android:src="@mipmap/zuanshi_logo"
         android:layout_marginLeft="15dp"
         android:layout_centerVertical="true"
         />

@@ -144,22 +144,24 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             //财富`
             holder.caifu.setText(video.getCaifu() + "");
             //tou
-            if (video.getHeadimgurl().startsWith("http")) {
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
-            } else {
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
-            }
 
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
+//            if (video.getHeadimgurl().startsWith("http")) {
+//
+//            } else {
+//                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+//                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+//            }
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
             //旋转图
-            if (video.getHeadimgurl().startsWith("http")) {
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-            } else {
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-            }
+//            if (video.getHeadimgurl().startsWith("http")) {
+//
+//            } else {
+//                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+//                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+//            }
 
 
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
@@ -213,22 +215,24 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             //财富`
             holder.caifu.setText(video.getCaifu() + "");
             //tou
-            if (video.getHeadimgurl().startsWith("http")) {
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
-            } else {
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
-            }
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
 
+//            if (video.getHeadimgurl().startsWith("http")) {
+//
+//            } else {
+//                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+//                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+//            }
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
             //旋转图
-            if (video.getHeadimgurl().startsWith("http")) {
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-            } else {
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-            }
+//            if (video.getHeadimgurl().startsWith("http")) {
+//
+//            } else {
+//                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+//                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+//            }
 
 
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());

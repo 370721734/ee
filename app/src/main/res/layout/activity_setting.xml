@@ -60,7 +60,7 @@
         android:layout_height="95dp"
         android:visibility="gone"
         android:layout_gravity="center"
-        android:src="@mipmap/edit_tou_icon" />
+        android:src="@mipmap/zuanshi_logo" />
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_userimagetwo"
         android:layout_width="95dp"
@@ -69,7 +69,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="-31dp"
         android:visibility="gone"
-        android:src="@mipmap/edit_tou_icon" />
+        android:src="@mipmap/zuanshi_logo" />
 
     <ImageView
         android:id="@+id/iv_pho"

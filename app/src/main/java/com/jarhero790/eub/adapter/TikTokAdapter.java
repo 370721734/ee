@@ -25,6 +25,8 @@ import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.message.souye.GuanPanView;
 import com.jarhero790.eub.message.souye.Love;
+import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.util.List;
 
@@ -144,7 +146,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
          Uri uri = Uri.parse(video.getVideo_img());
          holder.video_thumb.setImageURI(uri);
          **/
-
+        Log.e("---------tu",video.getHeadimgurl()+"   "+video.getId());//没有图片
         /**Glide方式*/
         Glide.with(context).load(video.getVideo_img())
                 .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
@@ -181,34 +183,43 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
         //tou
         if (video.getHeadimgurl().startsWith("http")) {
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                    .error(R.mipmap.souye_logo)).into(holder.userimage);
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
         } else {
-            Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                    .error(R.mipmap.souye_logo)).into(holder.userimage);
+            Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
         }
-
+        Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
         //旋转图
-        if (video.getHeadimgurl().startsWith("http")){
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+//        if (video.getHeadimgurl().startsWith("http")){
+//
+//        }else {
+//            Glide.with(context).load(Api.TU+video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+//                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+//        }
+
+
+        if (video.getId().equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+            holder.btn_attention.setVisibility(View.INVISIBLE);
         }else {
-            Glide.with(context).load(Api.TU+video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            holder.btn_attention.setVisibility(View.VISIBLE);
+            //关注
+            if (video.getIs_like().equals("1")){
+                holder.btn_attention.setText("已关注");
+            }else {
+                holder.btn_attention.setText("+关注");
+            }
         }
 
-        //关注
-        if (video.getIs_like().equals("1")){
-            holder.btn_attention.setText("已关注");
-        }else {
-            holder.btn_attention.setText("+关注");
-        }
 
         if (video.getGood_id().equals("0")){
             holder.bussiness.setVisibility(View.INVISIBLE);
         }else {
             holder.bussiness.setVisibility(View.VISIBLE);
         }
+
+
 
 
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
@@ -309,7 +320,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             @Override
             public void onClick(View view) {
 //
-                mOnItemClickListerer.onItemClick(position, "商城", view, holder.bussiness, view);
+                mOnItemClickListerer.onItemClick(position, "商城", view, holder.bussiness, holder.tvgoodsnum);
 //                Log.e("-----","hehe");
             }
         });

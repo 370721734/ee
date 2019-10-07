@@ -20,6 +20,8 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.bean.SearchResultBean;
+import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,7 +105,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         SearchResultBean.DataBean.VideoBean video = videos.get(position);
             Glide.with(context)
                     .load(video.getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.white))
+                    .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(holder.thumb);
             //标题
             if (video.getTitle() != null && video.getTitle().length() > 0) {
@@ -124,11 +126,11 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
         //商品浏览数量
         holder.tvgoodsnum.setText(video.getClick_num());
             //tou
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                    .error(R.mipmap.souye_logo)).into(holder.userimage);
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
             //旋转图
-            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                    .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
 
             //zan
 //            if (video.getIs_like()==1){
@@ -144,11 +146,17 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
 
 
         //关注
-        if (video.getIs_like().equals("1")){
-            holder.btn_attention.setText("已关注");
+        if ((video.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+            holder.btn_attention.setVisibility(View.INVISIBLE);
         }else {
-            holder.btn_attention.setText("+关注");
+            holder.btn_attention.setVisibility(View.VISIBLE);
+            if (video.getIs_like().equals("1")){
+                holder.btn_attention.setText("已关注");
+            }else {
+                holder.btn_attention.setText("+关注");
+            }
         }
+
 
 
         if (video.getGood_id().equals("0")){

@@ -28,6 +28,7 @@ import com.jarhero790.eub.bean.MessageLike;
 import com.jarhero790.eub.bean.MessageSystem;
 import com.jarhero790.eub.bean.MessagesBean;
 import com.jarhero790.eub.contract.message.MessageContract;
+import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.message.GiftActivity;
 import com.jarhero790.eub.message.message.JiangLiActivity;
 import com.jarhero790.eub.message.message.PinLenActivity;
@@ -35,6 +36,10 @@ import com.jarhero790.eub.message.message.SysMessageActivity;
 import com.jarhero790.eub.message.message.ZanActivity;
 import com.jarhero790.eub.presenter.message.MessagePresenter;
 import com.jarhero790.eub.utils.AppUtils;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +94,24 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
         super.onDetach();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ee(HiddBean bean) {
+
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!EventBus.getDefault().isRegistered(this)){
+            EventBus.getDefault().register(this);
+        }
+
+    }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (EventBus.getDefault().isRegistered(this))
+        EventBus.getDefault().unregister(this);
+    }
 
 
     @Override
@@ -237,12 +260,18 @@ public class MessageFragment extends BaseMVPCompatFragment<MessageContract.Messa
 
     }
 
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//        EventBus.getDefault().post(new HiddBean("true"));
+//    }
+
     /**
      * <p> 获取当前用户本地会话列表的默认方法，该方法返回的是以下类型的会话列表：私聊，群组，系统会话。如果
-     * 您需要获取其它类型的会话列表,可以使用{@link #getConversationList(ResultCallback, Conversation.ConversationType...)} 方法。
+     * 您需要获取其它类型的会话列表,可以使用{@link #)} 方法。
      * <strong>注意：</strong>当更换设备或者清除缓存后，拉取到的是暂存在融云服务器中该账号当天收发过消息的会话列表。</p>
      *
-     * @param callback 获取会话列表的回调。
+     * @param  。
      */
 //    public void getConversationList(final RongIMClient.ResultCallback<List<Conversation>> callback) {
 //

@@ -80,6 +80,9 @@ public class MyFaBuBean implements Serializable {
         private int income;
         private String addtime;
         private int state;
+        private String anyhow;
+        private String is_adv;
+        private String adv_money;
         private String sh_time;
         private int zan;
         private int caifu;
@@ -322,6 +325,30 @@ public class MyFaBuBean implements Serializable {
 
         public void setGood_id(String good_id) {
             this.good_id = good_id;
+        }
+
+        public String getAnyhow() {
+            return anyhow;
+        }
+
+        public void setAnyhow(String anyhow) {
+            this.anyhow = anyhow;
+        }
+
+        public String getIs_adv() {
+            return is_adv;
+        }
+
+        public void setIs_adv(String is_adv) {
+            this.is_adv = is_adv;
+        }
+
+        public String getAdv_money() {
+            return adv_money;
+        }
+
+        public void setAdv_money(String adv_money) {
+            this.adv_money = adv_money;
         }
     }
 }

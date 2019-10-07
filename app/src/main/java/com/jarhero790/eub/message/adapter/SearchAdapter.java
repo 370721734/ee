@@ -47,7 +47,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.MyHolder> 
         SearchBean.DataBean.LikeBean bean = list.get(position);
 
 
-        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.login_bg).error(R.mipmap.login_bg)).into(myHolder.ivIcon);
+        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.ivIcon);
         myHolder.tvNum.setText(CommonUtil.showzannum(bean.getZan()));
 //        myHolder.tvZanle.setText(bean.getContent());
 //        if (bean.getAddtime().length()>10){

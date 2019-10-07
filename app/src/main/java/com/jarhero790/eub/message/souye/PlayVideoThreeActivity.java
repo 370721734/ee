@@ -54,7 +54,7 @@ import retrofit2.Response;
 
 public class PlayVideoThreeActivity extends AppCompatActivity {
 
-    private int position;
+    private int mposition;
     ArrayList<SearchResultBean.DataBean.VideoBean> list = new ArrayList<>();
     TikTokThreeAdapter tikTokAdapter;
     private VideoView mVideoView;
@@ -71,19 +71,19 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
         CommonUtil.setStatusBarTransparent(this);
         mVideoView = new VideoView(this);
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(this);
+        mTikTokController = new TikTokController(this,mVideoView,"");
         mVideoView.setVideoController(mTikTokController);
         mRecyclerView = findViewById(R.id.recycler_view);
         api= WXAPIFactory.createWXAPI(this, GlobalApplication.APP_ID_Wei,true);
         api.registerApp(GlobalApplication.APP_ID_Wei);
         Intent intent = getIntent();
 
-        position = intent.getIntExtra("position", 0);
+        mposition = intent.getIntExtra("position", 0);
         list = (ArrayList<SearchResultBean.DataBean.VideoBean>) intent.getSerializableExtra("vidlist");
 
         tikTokAdapter = new TikTokThreeAdapter(list, this);
 
-//        Log.e("-----------", "a=" + position);
+//        Log.e("-----------", "a=" + mposition);
 //        Log.e("-----------", "b=" + list.size());
 
 
@@ -97,14 +97,14 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
             @Override
             public void onInitComplete() {
                 //自动播放第一条
-                startPlay(position);
-                Log.e("----------", "a=" + mCurrentPosition + " m=" + position);
+                startPlay(mposition);
+                mCurrentPosition=mposition;
 
             }
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-                Log.e("----------", "b=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------", "b=" + mCurrentPosition + " m=" + position);
                 if (mCurrentPosition == position) {
                     mVideoView.release();
                 }
@@ -112,7 +112,7 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
-                Log.e("----------", "c=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------", "c=" + mCurrentPosition + " m=" + position);
                 if (mCurrentPosition == position) return;
                 startPlay(position);
                 mCurrentPosition = position;
@@ -376,15 +376,40 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
         View itemView = mRecyclerView.getChildAt(0);
 
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
+
+
         RelativeLayout relativeLayout = itemView.findViewById(R.id.container);
+        RelativeLayout buss=itemView.findViewById(R.id.bussiness);
+        TextView tvlike=itemView.findViewById(R.id.tv_like);
+        ImageView ivlike=itemView.findViewById(R.id.iv_like);
+        TextView tv_gold_coin=itemView.findViewById(R.id.tv_gold_coin);
+        TextView tv_pinglun=itemView.findViewById(R.id.tv_pinglun);
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
 
 
         Glide.with(this)
                 .load(list.get(position).getVideo_img())
-                .apply(new RequestOptions().placeholder(android.R.color.white))
+                .apply(new RequestOptions().placeholder(android.R.color.black))
                 .into(mTikTokController.getThumb());
         mVideoView.setUrl(list.get(position).getUrl());
+
+
+
+        if (list.get(position).getGood_id().equals("0")){
+            buss.setVisibility(View.INVISIBLE);
+        }else {
+            buss.setVisibility(View.VISIBLE);
+        }
+
+        if (list.get(position).getIs_like().equals("1")){
+            ivlike.setSelected(true);
+        }else {
+            ivlike.setSelected(false);
+        }
+
+        tvlike.setText(list.get(position).getZan()+"");
+        tv_gold_coin.setText(list.get(position).getCaifu()+"");
+        tv_pinglun.setText(list.get(position).getCommentNum()+"");
 
         ViewParent parent = mVideoView.getParent();
         if (parent instanceof RelativeLayout) {
@@ -679,7 +704,7 @@ public class PlayVideoThreeActivity extends AppCompatActivity {
                     WXMediaMessage msg = new WXMediaMessage(webpage);
                     msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
                     msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
-                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.zuanshi_logo);
                     Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
                     bmp.recycle();
                     msg.thumbData = bmpToByteArray(thumbBmp, true);

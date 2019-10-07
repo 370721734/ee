@@ -16,14 +16,11 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.activity.FensiActivity;
-import com.jarhero790.eub.message.adapter.SearchAdapter;
 import com.jarhero790.eub.message.adapter.SearchResultAdapter;
 import com.jarhero790.eub.message.bean.SearchResultBean;
 import com.jarhero790.eub.message.bean.attentionchange;
@@ -40,7 +37,6 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,8 +64,8 @@ public class SearchResultActivity extends AppCompatActivity {
     TextView tvGuanzu;
     @BindView(R.id.rlv)
     RecyclerView recyclerView;
-    @BindView(R.id.m_swipe_layout)
-    SmartRefreshLayout mSwipeLayout;
+//    @BindView(R.id.m_swipe_layout)
+//    SmartRefreshLayout mSwipeLayout;
 
     SearchResultBean.DataBean.UserBean userBeans;
 
@@ -77,13 +73,17 @@ public class SearchResultActivity extends AppCompatActivity {
     ArrayList<SearchResultBean.DataBean.VideoBean> itemvideoBeans = new ArrayList<>();
     @BindView(R.id.tv_memo)
     TextView tvMemo;
+    @BindView(R.id.iv_icon)
+    ImageView ivIcon;
+//    @BindView(R.id.rl_rlv)
+//    RelativeLayout rlRlv;
 
     private int page;
 
     SearchResultAdapter searchAdapter;
 
     String word;
-    View playpause;
+//    View playpause;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,7 +148,7 @@ public class SearchResultActivity extends AppCompatActivity {
                                 userBeans = response.body().getData().getUser();
                                 videoBeans = response.body().getData().getVideo();
 
-
+//                                Log.e("----------jj", "tttttttttt");
 //                                Glide.with(SearchResultActivity.this).load(userBeans.getHeadimgurl())
 //                                        .apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon))
 //                                        .into(ivImage);
@@ -156,34 +156,55 @@ public class SearchResultActivity extends AppCompatActivity {
 
                                 tvMemo.setText("粉丝：" + userBeans.getFensi() + "  关注：" + userBeans.getLike() + "  点赞：" + userBeans.getMyzan());
 
-                                if (userBeans.getIs_like() == 1) {
-                                    if (userBeans.getIs_likeEach() == 1) {
-                                        tvGuanzu.setText("已互关");
+                                if ((userBeans.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+                                    tvGuanzu.setVisibility(View.INVISIBLE);
+                                }else {
+                                    tvGuanzu.setVisibility(View.VISIBLE);
+                                    if (userBeans.getIs_like() == 1) {
+                                        if (userBeans.getIs_likeEach() == 1) {
+                                            tvGuanzu.setText("已互关");
+                                        } else {
+                                            tvGuanzu.setText("已关注");
+                                        }
                                     } else {
-                                        tvGuanzu.setText("已关注");
+                                        tvGuanzu.setText("+关注");
                                     }
-                                } else {
-                                    tvGuanzu.setText("+关注");
                                 }
 
+
                                 recyclerView.setNestedScrollingEnabled(false);
+
 
 
                                 if (page == 1) {
                                     itemvideoBeans.clear();
                                     videoBeans.addAll(itemvideoBeans);
-                                    searchAdapter = new SearchResultAdapter(SearchResultActivity.this, videoBeans, myclick);
-                                    recyclerView.setAdapter(searchAdapter);
+
+
+                                    if (videoBeans.size()>0){
+
+                                        recyclerView.setVisibility(View.VISIBLE);
+                                        ivIcon.setVisibility(View.GONE);
+                                        searchAdapter = new SearchResultAdapter(SearchResultActivity.this, videoBeans, myclick);
+                                        recyclerView.setAdapter(searchAdapter);
+
+                                    }else {
+                                        recyclerView.setVisibility(View.GONE);
+                                        ivIcon.setVisibility(View.VISIBLE);
+                                    }
+
+
                                 } else {
                                     videoBeans.addAll(itemvideoBeans);
                                     searchAdapter.notifyDataSetChanged();
                                 }
 
 
+
                                 searchAdapter.setOnItem(new SearchResultAdapter.OnItem() {
                                     @Override
                                     public void Clicklienr(int position) {
-//                                        Log.e("-------------",position+"");
+                                        Log.e("------------qq-",position+"");
                                         Intent intent = new Intent(SearchResultActivity.this, PlayVideoThreeActivity.class);
                                         intent.putExtra("position", position);
                                         intent.putExtra("vidlist", videoBeans);
@@ -191,13 +212,19 @@ public class SearchResultActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 });
+                            }else {
+//                                Log.e("----------jj", "tttttttttt122");
+                                recyclerView.setVisibility(View.GONE);
+                                ivIcon.setVisibility(View.VISIBLE);
                             }
                         }
                     }
 
                     @Override
                     public void onFailure(Call<SearchResultBean> call, Throwable t) {
-
+//                        Log.e("----------jj", "tttttttttt13322");
+                        recyclerView.setVisibility(View.GONE);
+                        ivIcon.setVisibility(View.VISIBLE);
                     }
                 });
     }
@@ -228,7 +255,8 @@ public class SearchResultActivity extends AppCompatActivity {
 
                 break;
             case R.id.tv_guanzu:
-                guanzu(userBeans.getUser_id() + "");
+                if (userBeans != null && userBeans.getId() != 0)
+                    guanzu(userBeans.getUser_id() + "");
                 break;
         }
     }
@@ -241,15 +269,15 @@ public class SearchResultActivity extends AppCompatActivity {
     }
 
     private void guanzu(String id) {
-        RetrofitManager.getInstance().getDataServer().getguanzu(id, SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new retrofit2.Callback<ResponseBody>() {
+        RetrofitManager.getInstance().getDataServer().getguanzu(id, SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
             @Override
-            public void onResponse(retrofit2.Call<ResponseBody> call, retrofit2.Response<ResponseBody> response) {
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
                 if (response.isSuccessful()) {
                     String json = null;
                     try {
                         json = response.body().string();
-//                        Log.e("----------jj", json);
-                        org.json.JSONObject object = new org.json.JSONObject(json);
+
+                        JSONObject object = new JSONObject(json);
                         int code = object.optInt("code");
                         String msg = object.optString("msg");
                         if (code == 200) {
@@ -278,7 +306,7 @@ public class SearchResultActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(retrofit2.Call<ResponseBody> call, Throwable t) {
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
 
             }
         });

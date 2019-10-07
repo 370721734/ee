@@ -26,6 +26,8 @@ import com.jarhero790.eub.base.BaseCompatActivity;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.AddressBean;
 import com.jarhero790.eub.message.bean.Conver;
+import com.jarhero790.eub.message.souye.TagTwoFragment;
+import com.jarhero790.eub.message.souye.TypeFragment;
 import com.jarhero790.eub.record.TCVideoRecordActivity;
 import com.jarhero790.eub.ui.attention.child.AttentionFragment;
 import com.jarhero790.eub.ui.message.child.MessageFragment;
@@ -33,6 +35,7 @@ import com.jarhero790.eub.ui.mine.child.MineFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFragment;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
+import com.jarhero790.eub.utils.StatusBarUtils;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.map.geolocation.TencentLocation;
 import com.tencent.map.geolocation.TencentLocationListener;
@@ -217,7 +220,7 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
     @Override
     protected void initView(Bundle savedInstanceState) {
         if (savedInstanceState == null) {
-            mFragments[FIRST] = SouyeFragment.newInstance();
+            mFragments[FIRST] = TypeFragment.newInstance();//TypeFragment  SouyeFragment  TagTwoFragment
             mFragments[SECOND] = AttentionFragment.newInstance();
             mFragments[THIRD] = MessageFragment.newInstance();
             mFragments[FOURTH] = MineFragment.newInstance();
@@ -227,7 +230,7 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
                     mFragments[THIRD],
                     mFragments[FOURTH]);
         } else {
-            mFragments[FIRST] = findFragment(SouyeFragment.class);
+            mFragments[FIRST] = findFragment(TypeFragment.class);
             mFragments[SECOND] = findFragment(AttentionFragment.class);
             mFragments[THIRD] = findFragment(MessageFragment.class);
             mFragments[FOURTH] = findFragment(MineFragment.class);
@@ -254,8 +257,9 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         //Log.e("签名",getSHA1Signature(AppUtils.getContext()));
         EventBus.getDefault().register(this);
-        setStatusBarTransparent();
+//        setStatusBarTransparent();
         requestPermissions(this);
+        StatusBarUtils.setBarColor(MainActivity.this,Color.TRANSPARENT);
 //        String sdkVersionStr = TXLiveBase.getSDKVersionStr();
 //        Log.e("---------sdk",sdkVersionStr);//3.0.1185
         locationManager = TencentLocationManager.getInstance(this);

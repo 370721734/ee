@@ -5,12 +5,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import com.jarhero790.eub.bean.Video;
-import com.jarhero790.eub.message.bean.MyFaBuBean;
 
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * Created by 钉某人
+ * github: https://github.com/DingMouRen
+ * email: naildingmouren@gmail.com
+ */
 
 public class ViewPagerLayoutManager extends LinearLayoutManager {
     private static final String TAG = "ViewPagerLayoutManager";
@@ -18,31 +18,19 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
     private OnViewPagerListener mOnViewPagerListener;
     private RecyclerView mRecyclerView;
     private int mDrift;//位移，用来判断移动方向
-//    private List<Video> lists;
-//    private ArrayList<MyFaBuBean.DataBean> liststwo;
-    private Context context;
-    private OnNextPageImageListener onNextPageImageListener;
+//    public interface OnNextPageImageListener {
+//        void showNextImage(String video_img_url);
+//    }
+//    private OnNextPageImageListener onNextPageImageListener;
+//
+//    public void setOnNextPageImageListener(OnNextPageImageListener onNextPageImageListener) {
+//        this.onNextPageImageListener = onNextPageImageListener;
+//    }
 
-    public void setOnNextPageImageListener(OnNextPageImageListener onNextPageImageListener) {
-        this.onNextPageImageListener = onNextPageImageListener;
-    }
-
-    public void setOnViewPagerListenertwo(OnViewPagerListener listener) {
-        this.mOnViewPagerListener = listener;
-    }
-
-    public void setOnViewPagerListener(OnViewPagerListener listener) {
-        this.mOnViewPagerListener = listener;
-    }
-
-    public interface OnNextPageImageListener {
-        void showNextImage(String video_img_url);
-    }
 
 
     public ViewPagerLayoutManager(Context context, int orientation) {
         super(context, orientation, false);
-        this.context=context;
         init();
     }
 
@@ -53,6 +41,7 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
 
     private void init() {
         mPagerSnapHelper = new PagerSnapHelper();
+
     }
 
 
@@ -66,7 +55,12 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
 
     @Override
     public void onLayoutChildren(RecyclerView.Recycler recycler, RecyclerView.State state) {
-        super.onLayoutChildren(recycler, state);
+        try {
+            super.onLayoutChildren(recycler, state);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+//
     }
 
     /**
@@ -74,31 +68,25 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
      * 缓慢拖拽-> SCROLL_STATE_DRAGGING
      * 快速滚动-> SCROLL_STATE_SETTLING
      * 空闲状态-> SCROLL_STATE_IDLE
+     * @param state
      */
     @Override
     public void onScrollStateChanged(int state) {
         switch (state) {
-            case RecyclerView.SCROLL_STATE_IDLE://RecyclerView当前没有滚动
+            case RecyclerView.SCROLL_STATE_IDLE:
                 View viewIdle = mPagerSnapHelper.findSnapView(this);
-                if (viewIdle==null)
-                    return;
                 int positionIdle = getPosition(viewIdle);
                 if (mOnViewPagerListener != null && getChildCount() == 1) {
                     mOnViewPagerListener.onPageSelected(positionIdle,positionIdle == getItemCount() - 1);
                 }
-                //onNextPageImageListener.showNextImage(positionIdle+"--");
                 break;
-            case RecyclerView.SCROLL_STATE_DRAGGING://RecyclerView当前正被外部输入（如用户触摸输入）拖动
-//                View viewDrag = mPagerSnapHelper.findSnapView(this);
-//                int positionDrag = getPosition(viewDrag);
-
-               // Toast.makeText(AppUtils.getContext(),positionDrag,Toast.LENGTH_LONG).show();
-                //String url=lists.get(positionDrag+1).getVideo_img();
-
+            case RecyclerView.SCROLL_STATE_DRAGGING:
+                View viewDrag = mPagerSnapHelper.findSnapView(this);
+                int positionDrag = getPosition(viewDrag);
                 break;
-            case RecyclerView.SCROLL_STATE_SETTLING://RecyclerView当前正在将动画设置到最终位置，而不受外部控制。
-//                View viewSettling = mPagerSnapHelper.findSnapView(this);
-                //int positionSettling = getPosition(viewSettling);
+            case RecyclerView.SCROLL_STATE_SETTLING:
+                View viewSettling = mPagerSnapHelper.findSnapView(this);
+                int positionSettling = getPosition(viewSettling);
                 break;
 
         }
@@ -108,6 +96,10 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
 
     /**
      * 监听竖直方向的相对偏移量
+     * @param dy
+     * @param recycler
+     * @param state
+     * @return
      */
     @Override
     public int scrollVerticallyBy(int dy, RecyclerView.Recycler recycler, RecyclerView.State state) {
@@ -118,6 +110,10 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
 
     /**
      * 监听水平方向的相对偏移量
+     * @param dx
+     * @param recycler
+     * @param state
+     * @return
      */
     @Override
     public int scrollHorizontallyBy(int dx, RecyclerView.Recycler recycler, RecyclerView.State state) {
@@ -127,15 +123,10 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
 
     /**
      * 设置监听
+     * @param listener
      */
-    public void setOnViewPagerListener(OnViewPagerListener listener,List<Video> lists){
+    public void setOnViewPagerListener(OnViewPagerListener listener){
         this.mOnViewPagerListener = listener;
-//        this.lists=lists;
-    }
-
-    public void setOnViewPagerListenertwo(OnViewPagerListener listener, ArrayList<MyFaBuBean.DataBean> lists){
-        this.mOnViewPagerListener = listener;
-//        this.liststwo=lists;
     }
 
     private RecyclerView.OnChildAttachStateChangeListener mChildAttachStateChangeListener = new RecyclerView.OnChildAttachStateChangeListener() {
@@ -149,19 +140,11 @@ public class ViewPagerLayoutManager extends LinearLayoutManager {
         @Override
         public void onChildViewDetachedFromWindow(View view) {
             if (mDrift >= 0){
-                if (mOnViewPagerListener != null) {
-                    mOnViewPagerListener.onPageRelease(true,getPosition(view));
-                }
+                if (mOnViewPagerListener != null) mOnViewPagerListener.onPageRelease(true,getPosition(view));
             }else {
-                if (mOnViewPagerListener != null){
-                    mOnViewPagerListener.onPageRelease(false,getPosition(view));
-                }
+                if (mOnViewPagerListener != null) mOnViewPagerListener.onPageRelease(false,getPosition(view));
             }
 
         }
     };
-
-
-
-
 }

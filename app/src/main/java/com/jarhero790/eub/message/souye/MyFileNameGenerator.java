@@ -1,5 +1,6 @@
 package com.jarhero790.eub.message.souye;
 
+import android.net.Uri;
 import android.text.TextUtils;
 
 import com.danikula.videocache.ProxyCacheUtils;
@@ -25,6 +26,11 @@ public class MyFileNameGenerator implements FileNameGenerator {
         }
         String name = ProxyCacheUtils.computeMD5(url);
         return TextUtils.isEmpty(extension) ? name : name + "." + extension;
+
+
+//        Uri uri = Uri.parse(url);
+//        String videoId = uri.getQueryParameter("videoId");
+//        return videoId + ".mp4";
     }
 
     private String getExtension(String url) {

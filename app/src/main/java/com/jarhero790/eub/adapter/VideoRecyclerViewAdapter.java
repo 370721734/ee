@@ -83,21 +83,24 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         if (getP != null) {
             getP.ostion(holder.userimage, position);
         }
-        if (attentionVideo.getHeadimgurl().startsWith("http")) {
-            Glide.with(mcontext).load(attentionVideo.getHeadimgurl()).apply(new RequestOptions()
-                    .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
-        } else {
-            Glide.with(mcontext).load(Api.TU + attentionVideo.getHeadimgurl()).apply(new RequestOptions()
-                    .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
-        }
+        Glide.with(mcontext).load(attentionVideo.getHeadimgurl()).apply(new RequestOptions()
+                .placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(holder.userimage);
+//        if (attentionVideo.getHeadimgurl().startsWith("http")) {
+//
+//        } else {
+//            Glide.with(mcontext).load(Api.TU + attentionVideo.getHeadimgurl()).apply(new RequestOptions()
+//                    .placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(holder.userimage);
+//        }
 
-        if (videoImg.startsWith("http")) {
-            Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
-                    .into(holder.ivdeault);
-        } else {
-            Glide.with(mcontext).load(Api.TU + videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
-                    .into(holder.ivdeault);
-        }
+
+        Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+                .into(holder.ivdeault);
+//        if (videoImg.startsWith("http")) {
+//
+//        } else {
+//            Glide.with(mcontext).load(Api.TU + videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+//                    .into(holder.ivdeault);
+//        }
         holder.zan.setText(attentionVideo.getZan() + "人赞过");
 
         if (attentionVideo.getIs_zan().equals("1")) {

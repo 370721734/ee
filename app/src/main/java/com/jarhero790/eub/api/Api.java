@@ -336,6 +336,10 @@ public interface Api {
     @FormUrlEncoded
     @POST("user/index/dosearch")
     Call<SearchResultBean> dosearch(@Field("keywords") String keywords, @Field("page") Integer page, @Field("token") String token);
+    //搜索关注
+    @FormUrlEncoded
+    @POST("user/index/dosearch")
+    Call<GuangZuBean> dosearchattion(@Field("keywords") String keywords,@Field("token") String token);
 
 
 
@@ -424,5 +428,15 @@ public interface Api {
     @FormUrlEncoded
     @POST("web/index/identical")
     Call<TongKuanBean> getidentical(@Field("page") Integer page, @Field("video_id") String v, @Field("token") String token);
+
+
+    //商品浏览数量增加
+    @FormUrlEncoded
+    @POST("web/Shopping/click_num")
+    Call<ResponseBody> click_num(@Field("good_id") String good_id);
+
+
+
+
 
 }

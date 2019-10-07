@@ -48,6 +48,7 @@ import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -72,7 +73,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
     //    private VideoView mVideoView;
 //    ViewPagerLayoutManager layoutManager;
 //    private int mCurrentPosition;//当前播放的第几个视频 ，
-    private int position;
+    private int mposition;
     ArrayList<SearchBean.DataBean.VisitBean> list = new ArrayList<>();
 
     ArrayList<SearchBean.DataBean.LikeBean> likeBeans = new ArrayList<>();
@@ -99,7 +100,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
         CommonUtil.setStatusBarTransparent(this);
         mVideoView = new VideoView(this);
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(this);
+        mTikTokController = new TikTokController(this,mVideoView,"");
         mVideoView.setVideoController(mTikTokController);
         mRecyclerView = findViewById(R.id.recycler_view);
         api = WXAPIFactory.createWXAPI(this, GlobalApplication.APP_ID_Wei, true);
@@ -107,7 +108,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        position = intent.getIntExtra("position", 0);
+        mposition = intent.getIntExtra("position", 0);
         type = intent.getStringExtra("type");
         if (type != null && type.equals("like")) {
             likeBeans = (ArrayList<SearchBean.DataBean.LikeBean>) intent.getSerializableExtra("vidlist");
@@ -150,14 +151,15 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
             @Override
             public void onInitComplete() {
                 //自动播放第一条
-                startPlay(position);
-                Log.e("----------", "a=" + mCurrentPosition + " m=" + position);
+                startPlay(mposition);
+//                Log.e("----------", "开始=" + mCurrentPosition + " m=" + mposition);
+                mCurrentPosition=mposition;
 
             }
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-                Log.e("----------", "b=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------onpagerelease", "b=" + mCurrentPosition + " m=" + position);
                 if (mCurrentPosition == position) {
                     mVideoView.release();
                 }
@@ -165,10 +167,23 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
-                Log.e("----------", "c=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------", "结束=" + mCurrentPosition + " m=" + position);
                 if (mCurrentPosition == position) return;
+
                 startPlay(position);
                 mCurrentPosition = position;
+//                if (type != null && type.equals("like")) {
+//                    int sb=(position+mCurrentPosition)>likeBeans.size()?0:(position+mCurrentPosition);
+//                    startPlay(sb);
+//                    mCurrentPosition = sb;
+//                    Log.e("----------------","来了没有，="+sb);
+//                }else {
+//                    int sb=(position+mCurrentPosition)>list.size()?0:(position+mCurrentPosition);
+//                    startPlay(sb);
+//                    mCurrentPosition = sb;
+//                    Log.e("----------------","来了没有，="+sb);
+//                }
+
             }
         });
 
@@ -255,7 +270,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position, String itemtype, View view, View view1, View view2, String listtype) {
                 if (itemtype.equals("评论")) {
-                    Log.e("-----", "1" + listtype);
+//                    Log.e("-----", "1" + listtype);
                     showPingLun(listtype);
 
 
@@ -280,6 +295,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
                         ImageView ivlike = (ImageView) view;
                         TextView tv2 = (TextView) view1;
 
+//                        Log.e("-----------","点了1");
                         if (ivlike.isSelected()) {
                             ivlike.setSelected(false);
                             likeVideo(listtype);
@@ -392,6 +408,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
             vids = list.get(mCurrentPosition).getVideo_id() + "";
         }
 
+//        Log.e("------------","点了2="+vids);
         RetrofitManager.getInstance().getDataServer().zanorno(vids, SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<ShipinDianZanBean>() {
                     @Override
@@ -428,36 +445,90 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
 
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
         RelativeLayout relativeLayout = itemView.findViewById(R.id.container);
+        RelativeLayout buss=itemView.findViewById(R.id.bussiness);
+        TextView tvlike=itemView.findViewById(R.id.tv_like);
+        ImageView ivlike=itemView.findViewById(R.id.iv_like);
+
+        TextView tv_gold_coin=itemView.findViewById(R.id.tv_gold_coin);
+        TextView tv_pinglun=itemView.findViewById(R.id.tv_pinglun);
+
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
 
         if (type != null && type.equals("like")) {
             Glide.with(this)
                     .load(likeBeans.get(position).getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.white))
+                    .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(mTikTokController.getThumb());
 
             HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoTwoActivity.this);
             String proxyUrl = proxy.getProxyUrl(likeBeans.get(position).getUrl());
+//            File file=new File(proxyUrl);
+//            if (file.exists()){
+//                Log.e("-------------","mp4存在");
+//            }else {
+//                Log.e("-------------","mp4不存在");
+//            }
             if (proxyUrl.length() > 0) {
                 mVideoView.setUrl(proxyUrl);
             } else {
                 mVideoView.setUrl(likeBeans.get(position).getUrl());
             }
 
+
+            if (likeBeans.get(position).getGood_id().equals("0")){
+                buss.setVisibility(View.INVISIBLE);
+            }else {
+                buss.setVisibility(View.VISIBLE);
+            }
+
+            if (likeBeans.get(position).getIs_like()==1){
+                ivlike.setSelected(true);
+            }else {
+                ivlike.setSelected(false);
+            }
+
+            tvlike.setText(likeBeans.get(position).getZan()+"");
+            tv_gold_coin.setText(likeBeans.get(position).getCaifu()+"");
+            tv_pinglun.setText(likeBeans.get(position).getCommentNum()+"");
+
         } else {
             Glide.with(this)
                     .load(list.get(position).getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.white))
+                    .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(mTikTokController.getThumb());
 
             HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoTwoActivity.this);
             String proxyUrl = proxy.getProxyUrl(list.get(position).getUrl());
+//            File file=new File(proxyUrl);
+//            if (file.exists()){
+//                Log.e("-------------","mp4存在");
+//            }else {
+//                Log.e("-------------","mp4不存在");
+//            }
+
             if (proxyUrl.length() > 0) {
                 mVideoView.setUrl(proxyUrl);
             } else {
                 mVideoView.setUrl(list.get(position).getUrl());
             }
 
+
+            if (list.get(position).getGood_id().equals("0")){
+                buss.setVisibility(View.INVISIBLE);
+            }else {
+                buss.setVisibility(View.VISIBLE);
+            }
+
+
+            if (list.get(position).getIs_like()==1){
+                ivlike.setSelected(true);
+            }else {
+                ivlike.setSelected(false);
+            }
+
+            tvlike.setText(list.get(position).getZan()+"");
+            tv_gold_coin.setText(list.get(position).getCaifu()+"");
+            tv_pinglun.setText(list.get(position).getCommentNum()+"");
         }
 
 
@@ -757,7 +828,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
                     WXMediaMessage msg = new WXMediaMessage(webpage);
                     msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
                     msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
-                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.logo);
+                    Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.zuanshi_logo);
                     Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
                     bmp.recycle();
                     msg.thumbData = bmpToByteArray(thumbBmp, true);

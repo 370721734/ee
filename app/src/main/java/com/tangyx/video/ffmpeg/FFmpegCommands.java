@@ -72,10 +72,11 @@ public class FFmpegCommands {
      * @param audio1
      * @param audio2
      * @param outputUrl
+     * 两个音乐合并
      * @return
      */
     public static String[] composeAudio(String audio1, String audio2, String outputUrl) {
-        Log.w("SLog","audio1:" + audio1 + "\naudio2:" + audio2 + "\noutputUrl:" + outputUrl);
+//        Log.w("SLog","audio1:" + audio1 + "\naudio2:" + audio2 + "\noutputUrl:" + outputUrl);
         String[] commands = new String[10];
         commands[0] = "ffmpeg";
         //输入
@@ -124,7 +125,7 @@ public class FFmpegCommands {
      * @return
      */
     public static String[] composeVideo(String videoUrl, String musicOrAudio, String outputUrl, long second) {
-        Log.w("SLog","videoUrl:" + videoUrl + "\nmusicOrAudio:" + musicOrAudio + "\noutputUrl:" + outputUrl + "\nsecond:" + second);
+        Log.e("SLog","videoUrl:" + videoUrl + "\nmusicOrAudio:" + musicOrAudio + "\noutputUrl:" + outputUrl + "\nsecond:" + second);
         String[] commands = new String[14];
         commands[0] = "ffmpeg";
         //输入
@@ -184,7 +185,7 @@ public class FFmpegCommands {
      * ts拼接视频
      */
     public static String[] concatTsVideo(String _filePath, String _outPath) {//-f concat -i list.txt -c copy concat.mp4
-        Log.w("SLog","_filePath:" + _filePath + "\n_outPath:" + _outPath);
+//        Log.w("SLog","_filePath:" + _filePath + "\n_outPath:" + _outPath);
         ArrayList<String> _commands = new ArrayList<>();
         _commands.add("ffmpeg");
         _commands.add("-i");
@@ -203,5 +204,18 @@ public class FFmpegCommands {
             commands[i] = _commands.get(i);
         }
         return commands;
+    }
+
+    public static String[] compasevideo(String inputvideo,String outputvideo){
+         String[] commands=new String[8];
+         commands[0]="ffmpeg";
+         commands[0]="-i";
+         commands[0]=inputvideo;
+         commands[0]="-r";
+         commands[0]="10";
+         commands[0]="-b:a";
+         commands[0]="32k";
+         commands[0]=outputvideo;
+         return commands;
     }
 }

@@ -11,7 +11,7 @@
         android:layout_height="20dp"
         android:layout_marginLeft="15dp"
         android:layout_marginTop="10dp"
-        android:src="@mipmap/edit_tou_icon"/>
+        android:src="@mipmap/zuanshi_logo"/>
 
     <TextView
         android:id="@+id/tv_name"

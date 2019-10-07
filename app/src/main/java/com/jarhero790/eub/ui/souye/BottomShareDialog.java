@@ -26,6 +26,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.message.souye.UserJiuBaoActivity;
 import com.jarhero790.eub.record.DialogUtil;
 import com.jarhero790.eub.record.FileUtils;
 import com.jarhero790.eub.record.PlayState;
@@ -63,12 +64,13 @@ import io.reactivex.functions.Consumer;
 public class BottomShareDialog extends DialogFragment implements AdapterView.OnItemClickListener, TCVideoEditerWrapper.TXVideoPreviewListenerWrapper, TXVideoEditer.TXVideoGenerateListener {
     private View view;
     private Window window;
+    private String userid;
 
     private static BottomShareDialog instance = null;
 
     private DialogInterface.OnDismissListener mOnClickListener;
 
-    private LinearLayout ll_down, ll_weixin;
+    private LinearLayout ll_down, ll_weixin,ll_jiubao;
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
         this.mOnClickListener = listener;
@@ -140,6 +142,7 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         getDialog().requestWindowFeature(Window.FEATURE_NO_TITLE);
         view = inflater.inflate(R.layout.souye_share, null);
         ll_down = view.findViewById(R.id.ll_down);
+        ll_jiubao = view.findViewById(R.id.ll_jiubao);
         ll_weixin = view.findViewById(R.id.ll_weixin);
 
         ll_down.setOnClickListener(new View.OnClickListener() {
@@ -165,6 +168,14 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
                     shareDialog.Clicklinear(v, "下载");
                 }
                 dismiss();
+            }
+        });
+        ll_jiubao.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(), UserJiuBaoActivity.class);
+                intent.putExtra("userid", userid);
+                startActivity(intent);
             }
         });
         ll_weixin.setOnClickListener(new View.OnClickListener() {
@@ -199,6 +210,7 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         if (bundle != null) {
             url = bundle.getString("url");
             videoid = bundle.getString("videoid");
+            userid=bundle.getString("userid");
 //            Log.e("------------url=>", url+"  "+videoid);
 //            page = 1;
 //            requestdate(vid);

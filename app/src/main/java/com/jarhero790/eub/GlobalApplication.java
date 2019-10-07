@@ -50,6 +50,11 @@ public class GlobalApplication extends Application {
                 .build();
     }
 
+    private HttpProxyCacheServer newProxy2(){
+        return new HttpProxyCacheServer.Builder(this)
+                .maxCacheFilesCount(20)
+                .build();
+    }
 
 
 

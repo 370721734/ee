@@ -51,7 +51,7 @@ public class AttentionUsersAdapter extends RecyclerView.Adapter<AttentionUsersAd
 //
 //            }
             Glide.with(AppUtils.getContext()).load(attentionUsers.get(position).getHeadimgurl()).apply(new RequestOptions()
-                    .placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(holder.attentionsUserIcon);
+                    .placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(holder.attentionsUserIcon);
 
             holder.framelayout_container.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -69,7 +69,7 @@ public class AttentionUsersAdapter extends RecyclerView.Adapter<AttentionUsersAd
 //
 //            }
             Glide.with(AppUtils.getContext()).load(Api.TU + attentionUsers.get(position).getHeadimgurl()).apply(new RequestOptions()
-                    .placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(holder.attentionsUserIcon);
+                    .placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(holder.attentionsUserIcon);
             holder.framelayout_container.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

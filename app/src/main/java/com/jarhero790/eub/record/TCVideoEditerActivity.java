@@ -1117,7 +1117,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 //        mWorkLoadingProgress.show(getSupportFragmentManager(), "progress_dialog");
 
         // 添加片尾水印
-        addTailWaterMark();  //腾讯云水印
+//        addTailWaterMark();  //腾讯云水印
 
         mTXVideoEditer.setCutFromTime(getCutterStartTime(), getCutterEndTime());
         mTXVideoEditer.setVideoGenerateListener(this);
@@ -1597,7 +1597,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
      */
     private void extractVideo() {
         final String outVideo = mTargetPath + "/video.mp4";
-        Log.e("----------", "是不是.mp4" + outVideo);
+//        Log.e("----------", "是不是.mp4" + outVideo);
         String[] commands = FFmpegCommands.extractVideo(getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH), outVideo);
         FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
             @Override
@@ -1622,7 +1622,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
      */
     private void extractAudio() {
         final String outVideo = mTargetPath + "/audio.aac";
-        Log.e("-----------音频路径对不对", outVideo);
+//        Log.e("-----------音频路径对不对", outVideo);
         String[] commands = FFmpegCommands.extractAudio(getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH), outVideo);
         FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
             @Override

@@ -44,7 +44,7 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         GiftBean.DataBean bean = list.get(position);
-        Glide.with(context).load(Api.HOST + bean.getImg()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+        Glide.with(context).load(bean.getImg()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
         myHolder.tvName.setText(bean.getName());
 
 //

@@ -43,7 +43,7 @@ public class SysMessageAdapter extends RecyclerView.Adapter<SysMessageAdapter.My
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         SysMessageBean.DataBean.SystemBean bean = list.get(position);
-        Glide.with(context).load(Api.HOST + bean.getImg()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+        Glide.with(context).load(bean.getImg()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
         myHolder.content.setText(bean.getContent());
 
         if (bean.getAddtime().length() > 10) {

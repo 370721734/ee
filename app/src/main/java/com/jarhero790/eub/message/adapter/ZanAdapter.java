@@ -56,14 +56,14 @@ public class ZanAdapter extends RecyclerView.Adapter<ZanAdapter.MyHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         ZanBean.DataBean bean = list.get(position);
-        Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+        Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
         myHolder.tvName.setText(bean.getNickname());
 //
         if (bean.getAddtime().length() > 10) {
             myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));
         }
 
-        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.zan_icon).error(R.mipmap.zan_icon)).into(myHolder.ivIcon);
+        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.ivIcon);
 
 
         myHolder.touImage.setOnClickListener(new View.OnClickListener() {

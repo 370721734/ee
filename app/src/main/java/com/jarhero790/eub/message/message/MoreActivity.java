@@ -110,8 +110,8 @@ public class MoreActivity extends AppCompatActivity {
 
                                     tvName.setText(bean.getData().getUser().getNickname());
 //                                    tvTvhao.setText("钻视TV号:" + bean.getData().getUser().getId());
-                                    Glide.with(MoreActivity.this).load(Api.TU + bean.getData().getUser().getHeadimgurl())
-                                            .apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon).error(R.mipmap.edit_tou_icon)).into(touImage);
+                                    Glide.with(MoreActivity.this).load( bean.getData().getUser().getHeadimgurl())
+                                            .apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(touImage);
 
 //                                    tvGuanzhu.setText("" + bean.getData().getLike());
 //                                    fensi.setText("" + bean.getData().getFensi());

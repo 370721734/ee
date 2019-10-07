@@ -21,6 +21,8 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.SearchBean;
+import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,18 +135,18 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             holder.caifu.setText(video.getCaifu() + "");
             if (video.getHeadimgurl().startsWith("http")) {
                 //tou
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                        .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
                 //旋转图
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                        .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
             } else {
                 //tou
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                        .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
                 //旋转图
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                        .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
             }
 
             //zan
@@ -157,11 +159,17 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             }
 
 //            关注
-            if (video.getIs_like() == 1) {
-                holder.btn_attention.setText("已关注");
-            } else {
-                holder.btn_attention.setText("+关注");
+            if ((video.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+                holder.btn_attention.setVisibility(View.INVISIBLE);
+            }else {
+                holder.btn_attention.setVisibility(View.VISIBLE);
+                if (video.getIs_like() == 1) {
+                    holder.btn_attention.setText("已关注");
+                } else {
+                    holder.btn_attention.setText("+关注");
+                }
             }
+
 
             if (video.getGood_id().equals("0")) {
                 holder.bussiness.setVisibility(View.INVISIBLE);
@@ -195,22 +203,22 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
 
             //商品浏览数量
             holder.tvgoodsnum.setText(video.getClick_num());
-
-            if (video.getHeadimgurl().startsWith("http")) {
-                //tou
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
-                //旋转图
-                Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-            } else {
-                //tou
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
-                        .error(R.mipmap.souye_logo)).into(holder.userimage);
-                //旋转图
-                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
-                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
-            }
+            //tou
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.userimage);
+            //旋转图
+            Glide.with(context).load(video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
+//            if (video.getHeadimgurl().startsWith("http")) {
+//
+//            } else {
+//                //tou
+//                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo)
+//                        .error(R.mipmap.souye_logo)).into(holder.userimage);
+//                //旋转图
+//                Glide.with(context).load(Api.TU + video.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.edit_tou_icon)
+//                        .error(R.mipmap.edit_tou_icon)).into(holder.circleImageView);
+//            }
 
 
             //zan
@@ -223,11 +231,17 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             }
 
             //            关注
-            if (video.getIs_like() == 1) {
-                holder.btn_attention.setText("已关注");
-            } else {
-                holder.btn_attention.setText("+关注");
+            if ((video.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+                holder.btn_attention.setVisibility(View.INVISIBLE);
+            }else {
+                holder.btn_attention.setVisibility(View.VISIBLE);
+                if (video.getIs_like() == 1) {
+                    holder.btn_attention.setText("已关注");
+                } else {
+                    holder.btn_attention.setText("+关注");
+                }
             }
+
 
 
             if (video.getGood_id().equals("0")) {

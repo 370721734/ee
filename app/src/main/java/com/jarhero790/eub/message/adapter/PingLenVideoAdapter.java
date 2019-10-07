@@ -72,7 +72,7 @@ public class PingLenVideoAdapter extends RecyclerView.Adapter<PingLenVideoAdapte
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
         OtherPingLBean.DataBean.CommentListBean bean = list.get(position);
-        Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.music).error(R.mipmap.music)).into(myHolder.touImage);
+        Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
         myHolder.tvName.setText(bean.getNickname());
         myHolder.content.setText(bean.getContent() + "  " + bean.getAddtime().substring(0,10));
         myHolder.tvZan.setText(CommonUtil.showzannum(bean.getZan()));
@@ -299,7 +299,7 @@ public class PingLenVideoAdapter extends RecyclerView.Adapter<PingLenVideoAdapte
             }
 
             public void bindView(OtherPingLBean.DataBean.CommentListBean.UcommentBean bean){
-                Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(touImageTwo);
+                Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(touImageTwo);
                 tvName2.setText(bean.getNickname());
                 content2.setText(bean.getContent());
 

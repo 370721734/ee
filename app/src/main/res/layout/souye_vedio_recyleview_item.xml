@@ -147,7 +147,7 @@
                     android:layout_marginBottom="13dp"
                     android:background="@mipmap/guangpan_icon"
                     android:padding="12dp"
-                    android:src="@mipmap/music"
+                    android:src="@mipmap/zuanshi_logo"
                     android:visibility="visible" />
 
                 <com.jarhero790.eub.widget.Music
@@ -195,7 +195,7 @@
                     android:id="@+id/souye_logo"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
-                    android:src="@mipmap/souye_logo" />
+                    android:src="@mipmap/zuanshi_logo" />
 
                 <TextView
                     android:id="@+id/tv_uname"

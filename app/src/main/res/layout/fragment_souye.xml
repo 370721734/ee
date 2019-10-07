@@ -12,7 +12,6 @@
         android:scrollbars="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         />
     <!--<FrameLayout-->
         <!--android:id="@+id/frameLayoutContainer"-->
@@ -32,6 +31,7 @@
             android:orientation="horizontal"
             android:background="@drawable/titlebg"
             android:layout_marginTop="22dp"
+            android:visibility="visible"
             >
 
             <TextView
@@ -78,6 +78,7 @@
             android:layout_marginTop="22dp"
             android:src="@mipmap/search_icon"
             android:tint="#f2f2f2"
+            android:visibility="visible"
             />
 
 

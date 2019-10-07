@@ -220,13 +220,15 @@ public class GeRenInfoActivity extends AppCompatActivity {
 
                                     textViewNickName.setText(bean.getData().getUser().getNickname());
                                     tvTvhao.setText("钻视TV号:" + bean.getData().getUser().getId());
-                                    if (bean.getData().getUser().getHeadimgurl().startsWith("http")) {
-                                        Glide.with(GeRenInfoActivity.this).load(bean.getData().getUser().getHeadimgurl())
-                                                .apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
-                                    } else {
-                                        Glide.with(GeRenInfoActivity.this).load(Api.TU + bean.getData().getUser().getHeadimgurl())
-                                                .apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
-                                    }
+
+                                    Glide.with(GeRenInfoActivity.this).load(bean.getData().getUser().getHeadimgurl())
+                                            .apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(ivUserimage);
+//                                    if (bean.getData().getUser().getHeadimgurl().startsWith("http")) {
+//
+//                                    } else {
+//                                        Glide.with(GeRenInfoActivity.this).load(Api.TU + bean.getData().getUser().getHeadimgurl())
+//                                                .apply(new RequestOptions().placeholder(R.mipmap.about_icon).error(R.mipmap.about_icon)).into(ivUserimage);
+//                                    }
 
 
                                     tvGuanzhu.setText("" + bean.getData().getLike());

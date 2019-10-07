@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     android:background="@color/backgroudcolor"
     android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true"
     >
 
 
@@ -49,10 +51,47 @@
         android:alpha="0.5"
         />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="37dp"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_toLeftOf="@id/tv_cancel"
+        android:layout_toRightOf="@id/ivback"
+        android:background="@drawable/serch_bg"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/iv_icon"
+            android:layout_width="37dp"
+            android:layout_height="37dp"
+            android:padding="9dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="28dp"
+            android:src="@mipmap/search" />
+
+        <EditText
+            android:id="@+id/et_search"
+            android:layout_width="match_parent"
+            android:layout_height="37dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="19dp"
+            android:background="@null"
+            android:gravity="center"
+            android:hint="搜索用户名或用户账号"
+            android:text=""
+            android:textColor="#ff7c7c86"
+            android:textColorHint="#ff7c7c86"
+            android:textSize="15sp" />
+
+    </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rlv"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="15dp"
+        android:visibility="visible"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -66,11 +105,10 @@
         android:gravity="center"
         android:visibility="gone">
 
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@android:color/white"
-            android:text="没有信息"
+            android:src="@mipmap/no_guanzu"
             />
     </RelativeLayout>
 

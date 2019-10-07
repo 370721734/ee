@@ -89,7 +89,20 @@ public class GuangZuBean {
         private String username;
         private String pwd;
         private String signtime;
+        private int is_like;
         private int is_likeEach;
+
+        public DataBean(int id, String nickname, String headimgurl, String sign, int is_like, int is_likeEach) {
+            this.id = id;
+            this.nickname = nickname;
+            this.headimgurl = headimgurl;
+            this.sign = sign;
+            this.is_like = is_like;
+            this.is_likeEach = is_likeEach;
+        }
+
+        public DataBean() {
+        }
 
         public int getId() {
             return id;
@@ -281,6 +294,14 @@ public class GuangZuBean {
 
         public void setIs_likeEach(int is_likeEach) {
             this.is_likeEach = is_likeEach;
+        }
+
+        public int getIs_like() {
+            return is_like;
+        }
+
+        public void setIs_like(int is_like) {
+            this.is_like = is_like;
         }
     }
 }

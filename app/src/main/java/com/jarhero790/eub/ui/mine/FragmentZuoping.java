@@ -24,6 +24,7 @@ import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
 import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 import com.scwang.smartrefresh.layout.api.RefreshLayout;
@@ -81,8 +82,12 @@ public class FragmentZuoping extends SupportFragment {
         wangluoyichang = view.findViewById(R.id.wangluoyichang);
         rl_rlv = view.findViewById(R.id.rl_rlv);
 //        mSwipeLayout = view.findViewById(R.id.m_swipe_layout);
+//        int height = rl_rlv.getHeight();///没用
+//        Log.e("--------------height=",height+"  seenheight="+CommonUtil.measureWidthAndHeight(rl_rlv));
         return view;
     }
+
+
 
     @Override
     public void onHiddenChanged(boolean hidden) {

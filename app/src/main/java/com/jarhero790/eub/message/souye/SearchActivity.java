@@ -225,7 +225,7 @@ public class SearchActivity extends AppCompatActivity {
     SearchAdapter.Myclick myclick = new SearchAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-//            Log.e("-----", "" + position);
+            Log.e("-----searchactivity", "=" + position);
             Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", likeBeans);

@@ -10,7 +10,7 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:layout_width="0dp"
         android:layout_weight="1"
-        android:src="@mipmap/music"
+        android:src="@mipmap/zuanshi_logo"
         android:id="@+id/userHeadIcon"
         android:layout_gravity="center"
         android:gravity="center"

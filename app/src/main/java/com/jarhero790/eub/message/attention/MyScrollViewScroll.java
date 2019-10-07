@@ -30,21 +30,21 @@ public class MyScrollViewScroll extends ScrollView {
     }
 
 //    @Override
-////    public boolean onInterceptTouchEvent(MotionEvent e) {
-////        int action = e.getAction();
-////        switch (action) {
-////            case MotionEvent.ACTION_DOWN:
-////                // downX = (int) e.getRawX();
-////                downY = (int) e.getRawY();
-////                break;
-////            case MotionEvent.ACTION_MOVE:
-////                int moveY = (int) e.getRawY();
-////                if (Math.abs(moveY - downY) > touchSlop) {
-////                    return true;
-////                }
-////        }
-////        return super.onInterceptTouchEvent(e);
-////    }
+//    public boolean onInterceptTouchEvent(MotionEvent e) {
+//        int action = e.getAction();
+//        switch (action) {
+//            case MotionEvent.ACTION_DOWN:
+//                // downX = (int) e.getRawX();
+//                downY = (int) e.getRawY();
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                int moveY = (int) e.getRawY();
+//                if (Math.abs(moveY - downY) > touchSlop) {
+//                    return true;
+//                }
+//        }
+//        return super.onInterceptTouchEvent(e);
+//    }
 
 
 
@@ -60,11 +60,11 @@ public class MyScrollViewScroll extends ScrollView {
                 break;
             case MotionEvent.ACTION_MOVE: {
                 int moveY = (int) ev.getRawY();
-//                if (Math.abs(moveY - downY) > touchSlop) {//父容器需要事件
-//                    intercepted = true;
-//                } else {
-//                    intercepted = false;
-//                }
+                if (Math.abs(moveY - downY) > touchSlop) {//父容器需要事件
+                    intercepted = true;
+                } else {
+                    intercepted = false;
+                }
                 break;
             }
             case MotionEvent.ACTION_UP: {
@@ -74,6 +74,10 @@ public class MyScrollViewScroll extends ScrollView {
         }
         return intercepted;
     }
+
+
+
+
     @Override
     protected void onOverScrolled(int scrollX, int scrollY, boolean clampedX, boolean clampedY) {
         super.onOverScrolled(scrollX, scrollY, clampedX, clampedY);

@@ -269,15 +269,19 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                     Log.e("---------data=>", data);
                                     if (type_id == type_id1) {
                                         tvLin.setText("已领取");
+                                        view.setSelected(true);
                                     }
                                     if (type_id == type_id2) {
                                         tvLin2.setText("已领取");
+                                        view2.setSelected(true);
                                     }
                                     if (type_id == type_id3) {
                                         tvLin3.setText("已领取");
+                                        view3.setSelected(true);
                                     }
                                     if (type_id == type_id4) {
                                         tvLin4.setText("已领取");
+                                        view4.setSelected(true);
                                     }
 
                                     Toast.makeText(QianDaoActivity.this, msg, Toast.LENGTH_SHORT).show();
@@ -509,11 +513,42 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 
 //                                    Log.e("------------44", bean.getData().getShare() + "  " + bean.getData().getComment_task() + "  " + bean.getData().getTask_type().get(3).getMoney());
 
-                                    tvLin.setText(bean.getData().getComment_task() == 1 ? "已领取" : "领取");
-                                    tvLin2.setText(bean.getData().getShare_task() == 1 ? "已领取" : "领取");
-                                    tvLin3.setText(bean.getData().getVideo_task() == 1 ? "已领取" : "领取");
-                                    tvLin4.setText(bean.getData().getGive_task() == 1 ? "已领取" : "领取");
+//                                    tvLin.setText(bean.getData().getComment_task() == 1 ? "已领取" : "领取");
+//                                    tvLin2.setText(bean.getData().getShare_task() == 1 ? "已领取" : "领取");
+//                                    tvLin3.setText(bean.getData().getVideo_task() == 1 ? "已领取" : "领取");
+//                                    tvLin4.setText(bean.getData().getGive_task() == 1 ? "已领取" : "领取");
 
+                                    if (bean.getData().getComment_task()==1){
+                                        view.setSelected(true);
+                                        tvLin.setText("已领取");
+                                    }else {
+                                        view.setSelected(false);
+                                        tvLin.setText("领取");
+                                    }
+
+                                    if (bean.getData().getShare_task() == 1){
+                                        view2.setSelected(true);
+                                        tvLin2.setText("已领取");
+                                    }else {
+                                        view2.setSelected(false);
+                                        tvLin2.setText("领取");
+                                    }
+
+                                    if (bean.getData().getVideo_task()==1){
+                                        view3.setSelected(true);
+                                        tvLin3.setText("已领取");
+                                    }else {
+                                        view3.setSelected(false);
+                                        tvLin3.setText("领取");
+                                    }
+
+                                    if (bean.getData().getGive_task() == 1){
+                                        view4.setSelected(true);
+                                        tvLin4.setText("已领取");
+                                    }else {
+                                        view4.setSelected(false);
+                                        tvLin4.setText("领取");
+                                    }
                                 }
                             });
 

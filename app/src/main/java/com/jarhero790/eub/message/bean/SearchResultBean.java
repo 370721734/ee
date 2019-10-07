@@ -412,6 +412,7 @@ public class SearchResultBean implements Serializable {
             private String nickname;
             private String click_num;
             private int is_zan;
+            private int commentNum;
             private String is_like;
             private String good_id;
 
@@ -630,6 +631,14 @@ public class SearchResultBean implements Serializable {
 
             public void setClick_num(String click_num) {
                 this.click_num = click_num;
+            }
+
+            public int getCommentNum() {
+                return commentNum;
+            }
+
+            public void setCommentNum(int commentNum) {
+                this.commentNum = commentNum;
             }
         }
     }

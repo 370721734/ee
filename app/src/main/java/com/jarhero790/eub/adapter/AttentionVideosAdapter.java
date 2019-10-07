@@ -70,14 +70,14 @@ class AttentionVideosAdapter extends RecyclerView.Adapter<AttentionVideosAdapter
             Glide.with(mcontext).load(Api.TU+videoImg).apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
                     .into(holder.ivdeault);
         }
-
-        if (attentionVideo.getHeadimgurl().startsWith("http")){
-            Glide.with(mcontext).load(attentionVideo.getHeadimgurl()).apply(new RequestOptions()
-                    .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
-        }else {
-            Glide.with(mcontext).load(Api.TU+attentionVideo.getHeadimgurl()).apply(new RequestOptions()
-                    .placeholder(R.mipmap.souye_logo).error(R.mipmap.souye_logo)).into(holder.userimage);
-        }
+        Glide.with(mcontext).load(attentionVideo.getHeadimgurl()).apply(new RequestOptions()
+                .placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(holder.userimage);
+//        if (attentionVideo.getHeadimgurl().startsWith("http")){
+//
+//        }else {
+//            Glide.with(mcontext).load(Api.TU+attentionVideo.getHeadimgurl()).apply(new RequestOptions()
+//                    .placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(holder.userimage);
+//        }
 
         holder.zan.setText(attentionVideo.getZan()+"人赞过");
 

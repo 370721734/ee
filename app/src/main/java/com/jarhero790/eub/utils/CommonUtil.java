@@ -45,10 +45,11 @@ public class CommonUtil {
     /**
      * 测量View的宽高
      */
-    public static void measureWidthAndHeight(View view) {
+    public static int measureWidthAndHeight(View view) {
         int widthMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         int heightMeasureSpec = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
         view.measure(widthMeasureSpec, heightMeasureSpec);
+        return heightMeasureSpec;
     }
 
     public static String showzannum(int s) {
@@ -528,7 +529,7 @@ public class CommonUtil {
         } catch (IOException e) {
 
             e.printStackTrace();
-            Bitmap bitmap1= BitmapFactory.decodeResource(context.getResources(),R.mipmap.logo);
+            Bitmap bitmap1= BitmapFactory.decodeResource(context.getResources(),R.mipmap.zuanshi_logo);
 
             return bitmap1;
 

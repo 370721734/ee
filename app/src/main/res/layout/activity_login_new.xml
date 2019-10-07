@@ -30,7 +30,7 @@
         <ImageView
             android:layout_width="65dp"
             android:layout_height="90dp"
-            android:src="@mipmap/logo"
+            android:src="@mipmap/zuanshi_logo"
             android:gravity="center"
             />
 

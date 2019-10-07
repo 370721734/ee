@@ -11,6 +11,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.AppBarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.RecyclerView;
@@ -89,7 +90,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     @BindView(R.id.framelayout_container)
     LinearLayout framelayoutContainer;
     @BindView(R.id.rl_user)
-    RelativeLayout rlUser;
+    RelativeLayout rlUser;   //1
     @BindView(R.id.attentionsUserIcon)
     CircleImageView attentionsUserIcon;
     @BindView(R.id.rl_rlv)
@@ -98,9 +99,13 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
     ImageView ivtext;
     @BindView(R.id.rl_no_dp)
     RelativeLayout rlNoDp;
+    @BindView(R.id.appbar)
+    AppBarLayout appbar;
+    //    @BindView(R.id.nested)
+//    NestedScrollView nested;
     //    @BindView(R.id.myscroll)
 //    MyScrollViewScroll myscroll;
-    private int mCurrentPosition=0;//当前播放的第几个视频 ，
+    private int mCurrentPosition = 0;//当前播放的第几个视频 ，
 
     @BindView(R.id.recyclerViewAttentionUsers)
     RecyclerView recyclerViewAttentionUsers;
@@ -156,8 +161,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void Strings(String ss){
-        Log.e("----------ss=",ss);
+    public void Strings(String ss) {
+//        Log.e("----------ss=",ss);
 //        if (mVideoView != null) {
 //            mVideoView.pause();
 //        }
@@ -195,17 +200,26 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
         }
 
         //
-        if (attentionUsersVideos.size()>0){
+        if (attentionUsersVideos.size() > 0) {
+            View childAt = appbar.getChildAt(0);
+            AppBarLayout.LayoutParams params= (AppBarLayout.LayoutParams) childAt.getLayoutParams();
+            params.setScrollFlags(AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL);
+            childAt.setLayoutParams(params);
             rlRlv.setVisibility(View.VISIBLE);
             rlNoDp.setVisibility(View.GONE);
             adapter = new VideoRecyclerViewAdapter(attentionUsersVideos, getActivity(), this);
             recyclerViewAttentionUsers.setLayoutManager(linearLayoutManager);
             recyclerViewAttentionUsers.setAdapter(adapter);
-        }else {
+        } else {
             rlRlv.setVisibility(View.GONE);
             rlNoDp.setVisibility(View.VISIBLE);
-            rlUser.setVisibility(View.VISIBLE);
+//            rlUser.setVisibility(View.VISIBLE);//2
 
+            Log.e("------------", "老弟来了，没有数据了");
+
+            View childAt = appbar.getChildAt(0);
+            AppBarLayout.LayoutParams params= (AppBarLayout.LayoutParams) childAt.getLayoutParams();
+            params.setScrollFlags(0);
 
             if (mVideoView != null) {
                 mVideoView.pause();
@@ -224,7 +238,6 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //            onStop();
 //            rlRlv.removeView(recyclerViewAttentionUsers);
 //            rlRlv.removeAllViews();
-
 
 
 //            recyclerViewAttentionUsers.removeAllViews();
@@ -272,9 +285,6 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                    }
 //                }
 //            });
-
-
-
 
 
 //            recyclerViewAttentionUsers.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
@@ -384,7 +394,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                ImageView ivplay = view.findViewById(R.id.iv_play);
 //                ivdeault.setVisibility(View.VISIBLE);
 //                ivplay.setImageDrawable(getResources().getDrawable(R.mipmap.play_icon));
-//                Log.e("------------", "窗口消失了");
+                Log.e("------------", "recyclerViewAttentionUsers窗口消失了");
                 if (videoView != null && !videoView.isFullScreen()) {
                     videoView.release();
 
@@ -397,6 +407,19 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
                 }
             }
         });
+
+//        nested.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+//            @Override
+//            public void onViewAttachedToWindow(View v) {
+//
+//            }
+//
+//            @Override
+//            public void onViewDetachedFromWindow(View v) {
+//                Log.e("------------", "nested窗口消失了");
+//            }
+//        });
+
 
 //        myscroll.setOnScrollChangeListener(new View.OnScrollChangeListener() {
 //            @Override
@@ -454,7 +477,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                        View vieew=recyclerView.getChildAt(0).findViewById(R.id.attentionsUserIcon);
 //                        Log.e("--------------1", "滚动停止"+mCurrentPosition);
                         if (mCurrentPosition == 0) {
-                            rlUser.setVisibility(View.VISIBLE);
+//                            rlUser.setVisibility(View.VISIBLE);//3
                         }
 //
                         break;
@@ -477,7 +500,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 ////                    attentionuserRecyclerview.scrollBy(dx, dy);
 //                    rlUser.scrollBy(dx, dy);
 //                    rlUser.setBackgroundColor(Color.TRANSPARENT);
-                    rlUser.setVisibility(View.GONE);
+//                    rlUser.setVisibility(View.GONE);//4
                 }
 //                else {
 //                    Log.e("----------", "来了没有，静止");
@@ -596,6 +619,15 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
             }
         });
+
+//        nested.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//
+//            }
+//
+//
+//        });
 
 
 //        attentionuserRecyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -723,13 +755,13 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                Log.e("------------", "a1=" + hidden);
             }
 //            else {
-                Log.e("------------","不可见="+hidden);
+//                Log.e("------------","不可见="+hidden);
 //                mVideoView = new VideoView(AppUtils.getContext());
 //                mVideoView.pause();
 //            }
         } else {
             //可见
-            Log.e("------------","可见="+hidden);
+//            Log.e("------------","可见="+hidden);
             //刷新关注
 //            mPresenter.requestMyAttentionUsersAndUsersVideos();   //用evbus
 

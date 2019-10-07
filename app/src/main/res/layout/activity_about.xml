@@ -42,7 +42,7 @@
 <ImageView
     android:layout_width="95dp"
     android:layout_height="95dp"
-    android:src="@mipmap/about_icon"
+    android:src="@mipmap/zuanshi_logo"
     android:layout_marginTop="37dp"
     android:layout_gravity="center_horizontal"/>
 
