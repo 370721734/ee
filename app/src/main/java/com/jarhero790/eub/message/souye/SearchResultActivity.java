@@ -204,7 +204,7 @@ public class SearchResultActivity extends AppCompatActivity {
                                 searchAdapter.setOnItem(new SearchResultAdapter.OnItem() {
                                     @Override
                                     public void Clicklienr(int position) {
-                                        Log.e("------------qq-",position+"");
+//                                        Log.e("------------qq-",position+"");
                                         Intent intent = new Intent(SearchResultActivity.this, PlayVideoThreeActivity.class);
                                         intent.putExtra("position", position);
                                         intent.putExtra("vidlist", videoBeans);

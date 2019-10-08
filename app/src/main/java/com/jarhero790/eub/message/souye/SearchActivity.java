@@ -139,6 +139,8 @@ public class SearchActivity extends AppCompatActivity {
                         calls = call;
                         dialog.dismiss();
                         if (response.isSuccessful()) {
+                            visitBeans.clear();
+                            itemlikeBeans.clear();
                             if (response.body() != null && response.body().getCode() == 200) {
                                 visitBeans = response.body().getData().getVisit();
                                 itemlikeBeans = response.body().getData().getLike();
@@ -225,7 +227,7 @@ public class SearchActivity extends AppCompatActivity {
     SearchAdapter.Myclick myclick = new SearchAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-            Log.e("-----searchactivity", "=" + position);
+//            Log.e("-----searchactivity", "=" + position);
             Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", likeBeans);

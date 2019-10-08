@@ -365,7 +365,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
 
             JSONObject object = JSONObject.parseObject(data);
-//            Log.e("---------dss", "" + object);
+            Log.e("---------dss", "" + object);
 
 
             int code = object.getInteger("code");

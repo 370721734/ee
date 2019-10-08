@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
@@ -54,10 +53,10 @@ import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.bean.Zanchange;
 import com.jarhero790.eub.message.bean.attentionchange;
+import com.jarhero790.eub.message.bean.souyelooktwo;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.message.souye.ListFragment;
-import com.jarhero790.eub.message.souye.SearchActivity;
 import com.jarhero790.eub.message.souye.TagFragment;
 import com.jarhero790.eub.message.souye.TongKuanActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
@@ -106,6 +105,8 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
     Unbinder unbinder;
     @BindView(R.id.search_icon)
     ImageView searchIcon;
+    @BindView(R.id.nodingdan)
+    RelativeLayout nodingdan;
     private int mCurrentPosition;//当前播放的第几个视频 ，
     private List<Video> lists = new ArrayList<>();
     private TikTokController mTikTokController;
@@ -150,6 +151,8 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 
 
     private boolean isnext = false;
+
+    GlobalApplication app;
 
     private List<BaseFragment> fragmentList;
     private Fragment tempFragment;
@@ -352,6 +355,43 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 //    }
 
 
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void ee1(souyelookone bean) {
+//        if (bean.equals("one")){
+//            if (mVideoView != null) {
+//                mVideoView.pause();
+//            }
+//        }
+//    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ee2(souyelooktwo bean) {
+        if (bean.getName().equals("ok")) {
+            Log.e("-------souyetwo", "ee2_ok");
+            if (mVideoView != null) {
+                if (!mVideoView.isPlaying()) {
+                    mVideoView.start();
+                }
+            }
+        } else {
+//            if (mVideoView != null) {
+//                mVideoView.pause();
+//            }
+//            onHiddenChanged(true);
+            Log.e("-------souyetwo", "ee2");
+        }
+    }
+
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void ee3(souyelookthree bean) {
+//        if (bean.equals("three")){
+//            if (mVideoView != null) {
+//                mVideoView.pause();
+//            }
+//        }
+//    }
+
+
     @Override
     public void initData() {
         super.initData();
@@ -378,9 +418,10 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        app = (GlobalApplication) getActivity().getApplication();
 //        initFragment();
 
-        mTikTokController = new TikTokController(AppUtils.getContext(),mVideoView,"");
+        mTikTokController = new TikTokController(AppUtils.getContext(), mVideoView, "");
         /**
          * 重要代码  类似抖音垂直加载
          */
@@ -391,14 +432,14 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.e("-----------", "souye-onViewCreated");
+        Log.e("-----------", "souyetwo-onViewCreated");
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         getActivity().getWindow().setFormat(PixelFormat.TRANSLUCENT);
-        Log.e("-----------", "souye-onActivityCreated");
+        Log.e("-----------", "souyetwo-onActivityCreated");
         api = WXAPIFactory.createWXAPI(getActivity(), GlobalApplication.APP_ID_Wei, true);
         api.registerApp(GlobalApplication.APP_ID_Wei);
     }
@@ -455,9 +496,13 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 
         //设置视频
         Log.e("---------", "有没有数据了2");
-//        layoutManager = new ViewPagerLayoutManager(AppUtils.getContext(), OrientationHelper.VERTICAL);
-//        layoutManager.setOnViewPagerListener(this);
-        recyclerView.setLayoutManager(layoutManager);
+        if (videos == null || videos.size() == 0) {
+            recyclerView.setVisibility(View.GONE);
+            nodingdan.setVisibility(View.VISIBLE);
+            return;
+        }
+        recyclerView.setVisibility(View.VISIBLE);
+        nodingdan.setVisibility(View.GONE);
 
         lists.addAll(videos);
 
@@ -465,7 +510,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
             dialog.dismiss();
         if (flag.get() == true) {
             tikTokAdapter = new TikTokAdapter(lists, AppUtils.getContext());
-
+            recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(tikTokAdapter);
             flag.set(false);
             videosPageListenerOnListener();
@@ -586,7 +631,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         //在停止播放后，显示播放图标，点击播放图标继续播放
         super.onStop();
         Log.e("-------", "souyetwo-onStop");
-        firstv=true;
+        firstv = true;
     }
 
 
@@ -609,9 +654,9 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
             }
 //            if (mPresenter!=null)
 //            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-            Log.e("-------", "souye-onResume");
+            Log.e("-------", "souyetwo-onResume");
         } else {
-            Log.e("-------", "souye-onResumeN");
+            Log.e("-------", "souyetwo-onResumeN");
         }
 
 
@@ -671,7 +716,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
     public void ee(HiddBean bean) {
         if (bean != null) {
             if (bean.getName().equals("true")) {
-//                Log.e("----------", "souye-onHidden" + "隐藏1");
+                Log.e("----------", "souyetwo-onHidden" + "隐藏2");
                 setLook(false);
                 if (mVideoView != null) {
                     mVideoView.pause();
@@ -680,31 +725,34 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                     EventBus.getDefault().unregister(this);
                 }
             } else {
-//                Log.e("----------", "souye-onHidden可见1");
-                setLook(true);
-                viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
-                if (viewplaypause != null) {
-                    viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
-                    viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
-                }
+                if (app.isIslooktwo()) {
+                    Log.e("----------", "souyetwo-onHidden可见2");
+                    setLook(true);
+                    viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
+                    if (viewplaypause != null) {
+                        viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+                        viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+                    }
 
-                if (mVideoView != null) {
-                    mVideoView.resume();
+                    if (mVideoView != null) {
+                        mVideoView.resume();
 //                Log.e("----------1", "是不是这里" + mCurrentPosition);
-                    startPlay(mCurrentPosition);
+                        startPlay(mCurrentPosition);
 
-                } else {
-                    mVideoView = new VideoView(AppUtils.getContext());
-                    mVideoView.resume();
-                    startPlay(mCurrentPosition);
+                    } else {
+                        mVideoView = new VideoView(AppUtils.getContext());
+                        mVideoView.resume();
+                        startPlay(mCurrentPosition);
 //                Log.e("----------2", "是不是这里");
+                    }
                 }
+
             }
 
         }
     }
 
-    private boolean firstv=true;
+    private boolean firstv = true;
 
     //ok
     @Override
@@ -741,7 +789,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 //                Log.e("----------2", "是不是这里");
                 }
             }
-            firstv=false;
+            firstv = false;
         }
     }
 
@@ -1009,7 +1057,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         mVideoView = new VideoView(AppUtils.getContext());
         //视频循环播放
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(AppUtils.getContext(),mVideoView,"");
+        mTikTokController = new TikTokController(AppUtils.getContext(), mVideoView, "");
         mVideoView.setVideoController(mTikTokController);
         /**
          * 推荐  最新  长视频
@@ -1164,7 +1212,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
             return;
         Video vedio = lists.get(position);
         int positiontwo = ((position + 1) > (lists.size() - 1)) ? position : (position + 1);
-        Video vediotwo=lists.get(positiontwo);
+        Video vediotwo = lists.get(positiontwo);
         //EventBus.getDefault().post(position);
         /**
          Uri uri = Uri.parse(vedio.getVideo_img());

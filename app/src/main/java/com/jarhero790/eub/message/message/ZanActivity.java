@@ -119,7 +119,7 @@ public class ZanActivity extends AppCompatActivity {
 
 
                                         }else {
-                                            Log.e("------------","vid"+giftBeanList.get(position).getUrl());
+//                                            Log.e("------------","vid"+giftBeanList.get(position).getUrl());
                                             Intent intent = new Intent(ZanActivity.this, PlayVideoActivity.class);
                                             intent.putExtra("position", position);
                                             intent.putExtra("vidlist", giftBeanList);

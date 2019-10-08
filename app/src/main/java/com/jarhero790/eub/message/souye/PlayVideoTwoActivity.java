@@ -363,9 +363,9 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
     private void attentions(String listtype, Button button) {
         String vid = "";
         if (listtype.equals("like")) {
-            vid = likeBeans.get(mCurrentPosition).getId() + "";
+            vid = likeBeans.get(mCurrentPosition).getUid() + "";
         } else {
-            vid = list.get(mCurrentPosition).getId() + "";
+            vid = list.get(mCurrentPosition).getUid() + "";
         }
 
         RetrofitManager.getInstance().getDataServer().attentionUserTwo(vid, SharePreferenceUtil.getToken(AppUtils.getContext())).enqueue(new Callback<ResponseBody>() {
@@ -812,6 +812,11 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
 
     public void showShare() {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
+        Bundle args = new Bundle();
+        args.putString("url", list.get(mCurrentPosition).getUrl());
+        args.putString("videoid", list.get(mCurrentPosition).getVideo_id()+"");
+        args.putString("userid",list.get(mCurrentPosition).getUid()+"");
+        bottomShareDialog.setArguments(args);
         bottomShareDialog.show(getSupportFragmentManager(), "share");
         bottomShareDialog.setShareDialog(new BottomShareDialog.ShareDialog() {
             @Override

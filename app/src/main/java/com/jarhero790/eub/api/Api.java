@@ -10,6 +10,7 @@ import com.jarhero790.eub.message.bean.CurrVedoBean;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GeRenBean;
 import com.jarhero790.eub.message.bean.GiftBean;
+import com.jarhero790.eub.message.bean.GiftBeanTwo;
 import com.jarhero790.eub.message.bean.GuangZuBean;
 import com.jarhero790.eub.message.bean.JiangLiBean;
 import com.jarhero790.eub.message.bean.LikeBean;
@@ -247,7 +248,7 @@ public interface Api {
     //我的礼物  注意
     @FormUrlEncoded
     @POST("web/index/mygift")
-    Call<GiftBean> getmygift(@Field("token") String token);
+    Call<GiftBeanTwo> getmygift(@Field("token") String token);
 
 
     //赠送礼物

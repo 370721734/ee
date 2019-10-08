@@ -79,6 +79,10 @@ public class GlobalApplication extends Application {
     public IWXAPI api;
     private  String CITY="";//定位城市
 
+    private boolean islookone;
+    private boolean islooktwo;
+    private boolean islookthree;
+
     public static synchronized GlobalApplication getInstance() {
         return mApp;
     }
@@ -259,4 +263,27 @@ public class GlobalApplication extends Application {
     }
 
 
+    public boolean isIslookone() {
+        return islookone;
+    }
+
+    public void setIslookone(boolean islookone) {
+        this.islookone = islookone;
+    }
+
+    public boolean isIslooktwo() {
+        return islooktwo;
+    }
+
+    public void setIslooktwo(boolean islooktwo) {
+        this.islooktwo = islooktwo;
+    }
+
+    public boolean isIslookthree() {
+        return islookthree;
+    }
+
+    public void setIslookthree(boolean islookthree) {
+        this.islookthree = islookthree;
+    }
 }

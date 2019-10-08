@@ -133,11 +133,13 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
                     .error(R.mipmap.zuanshi_logo)).into(holder.circleImageView);
 
             //zan
-//            if (video.getIs_like()==1){
+            if (video.getIs_like().equals("1")){
 //                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.iv_like_selected));
-//            }else {
+                holder.iv_like.setSelected(true);
+            }else {
 //                holder.iv_like.setImageDrawable(context.getResources().getDrawable(R.mipmap.icon_video_heart));
-//            }
+                holder.iv_like.setSelected(false);
+            }
 
 
 
@@ -146,7 +148,7 @@ public class TikTokThreeAdapter extends RecyclerView.Adapter<TikTokThreeAdapter.
 
 
         //关注
-        if ((video.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+        if ((video.getUid()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
             holder.btn_attention.setVisibility(View.INVISIBLE);
         }else {
             holder.btn_attention.setVisibility(View.VISIBLE);

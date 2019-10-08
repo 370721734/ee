@@ -14,6 +14,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -23,9 +24,12 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.message.message.MoreActivity;
+import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.UserJiuBaoActivity;
 import com.jarhero790.eub.record.DialogUtil;
 import com.jarhero790.eub.record.FileUtils;
@@ -35,8 +39,10 @@ import com.jarhero790.eub.record.TCEditerUtil;
 import com.jarhero790.eub.record.TCVideoEditerActivity;
 import com.jarhero790.eub.record.TCVideoEditerWrapper;
 import com.jarhero790.eub.record.TCVideoRecordActivity;
+import com.jarhero790.eub.record.bean.FaVBean;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 import com.tbruyelle.rxpermissions2.RxPermissions;
 import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.ugc.TXRecordCommon;
@@ -45,6 +51,9 @@ import com.tencent.ugc.TXVideoEditer;
 import com.tencent.ugc.TXVideoInfoReader;
 
 import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.json.JSONObject;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -59,6 +68,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import io.reactivex.functions.Consumer;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 public class BottomShareDialog extends DialogFragment implements AdapterView.OnItemClickListener, TCVideoEditerWrapper.TXVideoPreviewListenerWrapper, TXVideoEditer.TXVideoGenerateListener {
@@ -70,7 +83,7 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
 
     private DialogInterface.OnDismissListener mOnClickListener;
 
-    private LinearLayout ll_down, ll_weixin,ll_jiubao;
+    private LinearLayout ll_down, ll_weixin,ll_jiubao,ll_lahei;
 
     public void setOnDismissListener(DialogInterface.OnDismissListener listener) {
         this.mOnClickListener = listener;
@@ -144,6 +157,7 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
         ll_down = view.findViewById(R.id.ll_down);
         ll_jiubao = view.findViewById(R.id.ll_jiubao);
         ll_weixin = view.findViewById(R.id.ll_weixin);
+        ll_lahei = view.findViewById(R.id.ll_lahei);
 
         ll_down.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -187,8 +201,40 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
                 dismiss();
             }
         });
+        ll_lahei.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                laheiuser();
+                dismiss();
+            }
+        });
 
         return view;
+    }
+
+    private void laheiuser() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity(), R.style.loading_dialog);
+        View layout = View.inflate(getActivity(), R.layout.item_more_lahei, null);
+        TextView can = layout.findViewById(R.id.cancle);
+        TextView sub = layout.findViewById(R.id.submit);
+        builder.setView(layout);
+
+        Dialog dialog = builder.create();
+        can.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+        sub.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                laheiusernext();
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
@@ -204,14 +250,14 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
         requestPermissions(getActivity());
         Bundle bundle = getArguments();
         if (bundle != null) {
             url = bundle.getString("url");
             videoid = bundle.getString("videoid");
             userid=bundle.getString("userid");
-//            Log.e("------------url=>", url+"  "+videoid);
+//            Log.e("------------url=>", "userid=  "+userid);
 //            page = 1;
 //            requestdate(vid);
 
@@ -220,6 +266,9 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
 
 
     }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void fav(FaVBean faVBean) {}
 
     @Override
     public void onDestroy() {
@@ -640,5 +689,49 @@ public class BottomShareDialog extends DialogFragment implements AdapterView.OnI
             }
         }
 
+    }
+
+
+
+    private void laheiusernext() {
+        if (userid != null) {
+//            Log.e("------------url=>", "userid2=  "+userid);
+            RetrofitManager.getInstance().getDataServer().blacklist(SharePreferenceUtil.getToken(AppUtils.getContext()), userid, "1")
+                    .enqueue(new Callback<ResponseBody>() {
+                        @Override
+                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                            if (response.isSuccessful()) {
+                                try {
+                                    String json = response.body().string();
+//                                    Log.e("----------lashare-", json);
+                                    JSONObject object = new JSONObject(json);
+                                    int code = object.optInt("code");
+                                    String msg = object.optString("msg");
+                                    if (code == 200) {
+                                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                                        EventBus.getDefault().post(new FaVBean("video"));
+                                    } else {
+                                        Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }else {
+//                                Log.e("----------lashare-", "失败2");
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                            Log.e("----------lashare-", "失败");
+                        }
+                    });
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
     }
 }

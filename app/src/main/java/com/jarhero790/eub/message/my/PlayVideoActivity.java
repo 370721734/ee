@@ -820,6 +820,18 @@ public class PlayVideoActivity extends AppCompatActivity {
 
     public void showShare() {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
+        Bundle args = new Bundle();
+        if (videotype.equals("zan")){
+            args.putString("url", zanBeanList.get(mCurrentPosition).getUrl());
+            args.putString("videoid", zanBeanList.get(mCurrentPosition).getVideo_id()+"");
+            args.putString("userid",zanBeanList.get(mCurrentPosition).getUid()+"");
+        }else {
+            args.putString("url", list.get(mCurrentPosition).getUrl());
+            args.putString("videoid", list.get(mCurrentPosition).getVideo_id()+"");
+            args.putString("userid",list.get(mCurrentPosition).getUid()+"");
+        }
+
+        bottomShareDialog.setArguments(args);
         bottomShareDialog.show(getSupportFragmentManager(), "share");
     }
 

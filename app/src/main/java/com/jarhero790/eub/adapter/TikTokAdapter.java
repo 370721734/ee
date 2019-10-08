@@ -200,7 +200,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //        }
 
 
-        if (video.getId().equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+        if (video.getUid().equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
             holder.btn_attention.setVisibility(View.INVISIBLE);
         }else {
             holder.btn_attention.setVisibility(View.VISIBLE);

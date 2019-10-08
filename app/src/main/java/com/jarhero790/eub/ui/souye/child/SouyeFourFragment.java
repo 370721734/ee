@@ -52,6 +52,7 @@ import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.bean.Zanchange;
 import com.jarhero790.eub.message.bean.attentionchange;
 import com.jarhero790.eub.message.bean.souyelookone;
+import com.jarhero790.eub.message.bean.souyelookthree;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.BusinessWebTwoActivity;
 import com.jarhero790.eub.message.souye.SearchActivity;
@@ -97,7 +98,7 @@ import retrofit2.Response;
 
 //1.动画旋转问题
 //2分享，
-public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePresenter>
+public class SouyeFourFragment extends BaseMVPCompatFragment<SouyeContract.SouyePresenter>
         implements SouyeContract.ISouyeView, View.OnClickListener, OnViewPagerListener {
 
     View viewplaypause;
@@ -106,14 +107,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     Unbinder unbinder;
     @BindView(R.id.search_icon)
     ImageView searchIcon;
-    @BindView(R.id.nodingdan)
-    RelativeLayout nodingdan;
     private int mCurrentPosition;//当前播放的第几个视频 ，
     private List<Video> lists = new ArrayList<>();
     private TikTokController mTikTokController;
     private TikTokAdapter tikTokAdapter;
     private VideoView mVideoView;
-    private AtomicInteger cate = new AtomicInteger(0);
+    private AtomicInteger cate = new AtomicInteger(2);
     private AtomicInteger page = new AtomicInteger(1);
 
     @BindView(R.id.recycler_view)
@@ -136,11 +135,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //    View viewcir;
 //    private boolean isPrepared = true;
 
-    private static SouyeFragment instance = null;
+    private static SouyeFourFragment instance = null;
 
-    public static SouyeFragment newInstance() {
+    public static SouyeFourFragment newInstance() {
         if (instance == null) {
-            instance = new SouyeFragment();
+            instance = new SouyeFourFragment();
         }
         return instance;
     }
@@ -335,21 +334,21 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ee1(souyelookone bean) {
-        if (bean.getName().equals("ok")) {
-            Log.e("-------souye", "ee1_ok");
-            if (mVideoView != null) {
-                if (!mVideoView.isPlaying()) {
-                    mVideoView.start();
-                }
-            }
-        } else {
-            Log.e("-------souye", "ee1");
+    public void ee3(souyelookthree bean) {
+          if (bean.getName().equals("ok")){
+              Log.e("-------souyefour","ee4_ok");
+              if (mVideoView!=null){
+                  if (!mVideoView.isPlaying()){
+                      mVideoView.start();
+                  }
+              }
+          }else {
+              Log.e("-------souyefour","ee4");
 //              if (mVideoView != null) {
 //                  mVideoView.pause();
 //              }
 //              onHiddenChanged(true);
-        }
+          }
     }
 //
 //    @Subscribe(threadMode = ThreadMode.MAIN)
@@ -369,6 +368,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //            }
 //        }
 //    }
+
+
 
 
     @Override
@@ -397,14 +398,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTikTokController = new TikTokController(AppUtils.getContext(), mVideoView, "");
+        mTikTokController = new TikTokController(AppUtils.getContext(),mVideoView,"");
         /**
          * 重要代码  类似抖音垂直加载
          */
         layoutManager = new ViewPagerLayoutManager(AppUtils.getContext(), OrientationHelper.VERTICAL);
         layoutManager.setOnViewPagerListener(this);
 
-        app = (GlobalApplication) getActivity().getApplication();
+        app= (GlobalApplication) getActivity().getApplication();
     }
 
     @Override
@@ -473,15 +474,13 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void updateVideos(ArrayList<Video> videos) {
 
         //设置视频
-        Log.e("---------", "有没有数据了1");
-        if (videos == null || videos.size() == 0) {
-            recyclerView.setVisibility(View.GONE);
-            nodingdan.setVisibility(View.VISIBLE);
+
+
+        if (videos==null){
+            Log.e("---------", "有没有数据了4"+"no");
             return;
         }
-        recyclerView.setVisibility(View.VISIBLE);
-        nodingdan.setVisibility(View.GONE);
-
+        Log.e("---------", "有没有数据了4");
         lists.addAll(videos);
 
         if (dialog != null)
@@ -607,8 +606,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        }
         //在停止播放后，显示播放图标，点击播放图标继续播放
         super.onStop();
-        Log.e("-------", "souye-onStop");
-        firstv = true;
+        Log.e("-------", "souyefour-onStop");
+        firstv=true;
 //        if (!EventBus.getDefault().isRegistered(this)) {
 //            EventBus.getDefault().unregister(this);
 //        }
@@ -633,9 +632,9 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             }
 //            if (mPresenter!=null)
 //            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-            Log.e("-------", "souye-onResume");
+            Log.e("-------", "souyefour-onResume");
         } else {
-            Log.e("-------", "souye-onResumeN");
+            Log.e("-------", "souyefour-onResumeN");
         }
 
 
@@ -651,13 +650,13 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void fav(FaVBean faVBean) {
 
         if (faVBean.getName().equals("video")) {
-            Log.e("---------faVBean=", faVBean.getName());
+            Log.e("---------faVBean=",faVBean.getName());
 
-            if (mVideoView != null && mVideoView.isPlaying()) {
+            if (mVideoView!=null && mVideoView.isPlaying()){
                 mVideoView.pause();
                 mVideoView.release();
                 mVideoView.resume();
-                Log.e("---------", "来了没有vv");
+                Log.e("---------","来了没有vv");
             }
 //                //加载数据
             if (lists.size() > 0) {
@@ -697,14 +696,14 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        Log.e("--------", "souye-ondestroy");
+        Log.e("--------", "souyefour-ondestroy");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ee(HiddBean bean) {
         if (bean != null) {
             if (bean.getName().equals("true")) {
-                Log.e("----------", "souye-onHidden" + "隐藏1");
+                Log.e("----------", "souyefour-onHidden" + "隐藏4");
                 setLook(false);
                 if (mVideoView != null) {
                     mVideoView.pause();
@@ -713,8 +712,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     EventBus.getDefault().unregister(this);
                 }
             } else {
-                if (app.isIslookone()) {
-                    Log.e("----------", "souye-onHidden可见1");
+                if (app.isIslookone()){
+                    Log.e("----------", "souyefour-onHidden可见4");
                     setLook(true);
                     viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
                     if (viewplaypause != null) {
@@ -740,15 +739,15 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         }
     }
 
-    private boolean firstv = true;
+    private boolean firstv=true;
 
     //ok
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
-        if (firstv) {
+        if (firstv){
             if (hidden) {
-                Log.e("----------", "souye-onHidden" + hidden + "隐藏");
+                Log.e("----------", "souyefour-onHidden" + hidden + "隐藏");
                 setLook(false);
                 if (mVideoView != null) {
                     mVideoView.pause();
@@ -757,7 +756,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     EventBus.getDefault().unregister(this);
                 }
             } else {//可见
-                Log.e("----------", "souye-onHidden" + hidden + "可见");
+                Log.e("----------", "souyefour-onHidden" + hidden + "可见");
                 setLook(true);
                 viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
                 if (viewplaypause != null) {
@@ -778,7 +777,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 }
             }
 
-            firstv = false;
+            firstv=false;
         }
 
 
@@ -1054,7 +1053,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         mVideoView = new VideoView(getActivity());
         //视频循环播放
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(AppUtils.getContext(), mVideoView, "");
+        mTikTokController = new TikTokController(AppUtils.getContext(),mVideoView,"");
         mVideoView.setVideoController(mTikTokController);
         /**
          * 推荐  最新  长视频
@@ -1080,7 +1079,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         Bundle args = new Bundle();
         args.putString("url", lists.get(po).getUrl());
         args.putString("videoid", lists.get(po).getVideo_id());
-        args.putString("userid", lists.get(po).getUid());
+        args.putString("userid",lists.get(po).getUid());
         bottomShareDialog.setArguments(args);
         bottomShareDialog.show(getChildFragmentManager(), "share");
         bottomShareDialog.setShareDialog(new BottomShareDialog.ShareDialog() {
@@ -1245,6 +1244,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        boolean fullyCached=proxy.isCached(vedio.getUrl());
 
 
+
 //        Log.e("-----------","是否有缓存"+fullyCached);
 
 //        proxy.setCacheHeaders();
@@ -1259,6 +1259,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        }else {
 //            mVideoView.setUrl(vedio.getUrl());
 //        }
+
 
 
 //        Log.e("--------proxyurll=", proxyUrl);
@@ -1487,7 +1488,7 @@ e.printStackTrace();
     private void downfile(String url) {
 //        /storage/emulated/0/Android/data/com.jarhero790.eub/cache/music-cache/d460c1ad5a2611f539.mp4
 //        http://aoyouhudongkeji-1259346675.cos.ap-guangzhou.myqcloud.com/45c92a4833f114d460c1ad5a2611f539.mp4        100
-        String filepath = "/storage/emulated/0/Android/data/com.jarhero790.eub/cache/music-cache/" + System.currentTimeMillis() + ".mp4";
+        String filepath="/storage/emulated/0/Android/data/com.jarhero790.eub/cache/music-cache/"+System.currentTimeMillis()+".mp4";
 //        File filevideo=new File(filepath);
 
 //        FileCache fileCache=new FileCache(filevideo);
@@ -1496,23 +1497,23 @@ e.printStackTrace();
         InputStream is = null;//读的方法
 
 
-        URL url1s = null;
+        URL url1s= null;
         try {
             url1s = new URL(url);
-            HttpURLConnection conn = (HttpURLConnection) url1s.openConnection();
-            is = conn.getInputStream();
-            fos = new FileOutputStream(filepath);
+            HttpURLConnection conn= (HttpURLConnection) url1s.openConnection();
+            is=conn.getInputStream();
+            fos=new FileOutputStream(filepath);
 
-            int len = 0;
-            byte[] buf = new byte[1024];
-            while ((len = is.read(buf)) != -1) {
-                fos.write(buf, 0, len);
+            int len=0;
+            byte[] buf=new byte[1024];
+            while ((len=is.read(buf))!=-1){
+                fos.write(buf,0,len);
             }
 
 
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
+        }finally {
             try {
                 is.close();
             } catch (IOException e) {

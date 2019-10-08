@@ -12,6 +12,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.GiftAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.GiftBean;
+import com.jarhero790.eub.message.bean.GiftBeanTwo;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
@@ -33,7 +34,7 @@ import retrofit2.Response;
 
 public class GiftActivity extends AppCompatActivity {
 
-    List<GiftBean.DataBean> giftBeanList = new ArrayList<>();
+    List<GiftBeanTwo.DataBean> giftBeanList = new ArrayList<>();
     GiftAdapter giftAdapter;
 
     @BindView(R.id.recyclerViewPinLen)
@@ -61,22 +62,22 @@ public class GiftActivity extends AppCompatActivity {
     }
 
 //    CustomProgressDialog dialog = new CustomProgressDialog();
-    retrofit2.Call<GiftBean> calls=null;
+    retrofit2.Call<GiftBeanTwo> calls=null;
 
     private void initDate() {
 //        dialog.createLoadingDialog(this, "正在加载...");
 //        dialog.show();
 
         RetrofitManager.getInstance().getDataServer().getmygift(SharePreferenceUtil.getToken(AppUtils.getContext()))
-                .enqueue(new Callback<GiftBean>() {
+                .enqueue(new Callback<GiftBeanTwo>() {
                     @Override
-                    public void onResponse(Call<GiftBean> call, Response<GiftBean> response) {
-                        Log.e("-------55", "1:" + response.body().getCode());
+                    public void onResponse(Call<GiftBeanTwo> call, Response<GiftBeanTwo> response) {
+//                        Log.e("-------55", "1:" + response.body().getCode());
                         calls=call;
                         if (response.isSuccessful()) {
 //                            dialog.dismiss();
                             if (response.body()!=null && response.body().getData().size()>0) {
-                                Log.e("-------55", "1:" + response.body().getData().size());
+//                                Log.e("-------55", "1:" + response.body().getData().size());
                                 giftBeanList.clear();
                                 nodingdan.setVisibility(View.GONE);
                                 wangluoyichang.setVisibility(View.GONE);
@@ -100,7 +101,7 @@ public class GiftActivity extends AppCompatActivity {
                     }
 
                     @Override
-                    public void onFailure(Call<GiftBean> call, Throwable t) {
+                    public void onFailure(Call<GiftBeanTwo> call, Throwable t) {
 //                        dialog.dismiss();
                         nodingdan.setVisibility(View.GONE);
                         wangluoyichang.setVisibility(View.VISIBLE);

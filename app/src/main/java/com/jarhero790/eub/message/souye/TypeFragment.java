@@ -1,6 +1,7 @@
 package com.jarhero790.eub.message.souye;
 
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,13 +17,21 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.HiddBean;
+import com.jarhero790.eub.message.bean.souyelookone;
+import com.jarhero790.eub.message.bean.souyelookthree;
+import com.jarhero790.eub.message.bean.souyelooktwo;
 import com.jarhero790.eub.ui.message.child.MessageFragment;
 import com.jarhero790.eub.ui.mine.child.MineFragment;
+import com.jarhero790.eub.ui.souye.child.SouyeFourFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeThreeFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeTwoFragment;
+import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -57,6 +66,7 @@ public class TypeFragment extends SupportFragment {
     public SouyeFragment listFragment;
     public SouyeTwoFragment tagFragment;
     public SouyeThreeFragment fbcFragment;
+//    public SouyeFourFragment fbcFragment;
 
 //    @Override
 //    public boolean onBackPressed() {
@@ -68,6 +78,7 @@ public class TypeFragment extends SupportFragment {
 //
 //    }
 
+    GlobalApplication app;
 
     private static TypeFragment instance = null;
 
@@ -98,6 +109,10 @@ public class TypeFragment extends SupportFragment {
         super.onCreate(savedInstanceState);
         EventBus.getDefault().register(this);
         currentIndex = 0;
+        app = (GlobalApplication) getActivity().getApplication();
+        app.setIslookone(true);
+        app.setIslooktwo(false);
+        app.setIslookthree(false);
         initFragment();
 //        String[] titles = {"分类", "标签"};
 
@@ -115,8 +130,6 @@ public class TypeFragment extends SupportFragment {
 //    }
 
 
-
-
     @Override
     public void onResume() {
         super.onResume();
@@ -132,10 +145,10 @@ public class TypeFragment extends SupportFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) {
-//            Log.e("--------typefragment", "隐藏");
+            Log.e("--------typefragment", "隐藏");
             EventBus.getDefault().post(new HiddBean("true"));
         } else {
-//            Log.e("--------typefragment", "可见");
+            Log.e("--------typefragment", "可见");
             EventBus.getDefault().post(new HiddBean("false"));
         }
     }
@@ -174,7 +187,7 @@ public class TypeFragment extends SupportFragment {
         listFragment = SouyeFragment.newInstance();
         tagFragment = SouyeTwoFragment.newInstance();
         fbcFragment = SouyeThreeFragment.newInstance();
-
+//        fbcFragment = SouyeFourFragment.newInstance();
         fragmentList.add(listFragment);
         fragmentList.add(tagFragment);
         fragmentList.add(fbcFragment);
@@ -222,6 +235,21 @@ public class TypeFragment extends SupportFragment {
 
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ee1(souyelookone bean) {
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ee2(souyelooktwo bean) {
+
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ee3(souyelookthree bean) {
+
+    }
+
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -252,7 +280,7 @@ public class TypeFragment extends SupportFragment {
         unbinder.unbind();
     }
 
-    @OnClick({R.id.tuijian, R.id.zuixin, R.id.changshipin})
+    @OnClick({R.id.tuijian, R.id.zuixin, R.id.changshipin, R.id.search_icon})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tuijian:
@@ -265,6 +293,12 @@ public class TypeFragment extends SupportFragment {
                 textViewChangshipin.setTextColor(Color.parseColor("#EFEDED"));
                 textViewZuixin.setBackgroundResource(0);
                 textViewChangshipin.setBackgroundResource(0);
+                EventBus.getDefault().post(new souyelookone("ok"));
+                EventBus.getDefault().post(new souyelooktwo("two"));
+                EventBus.getDefault().post(new souyelookthree("three"));
+                app.setIslookone(true);
+                app.setIslooktwo(false);
+                app.setIslookthree(false);
                 break;
             case R.id.zuixin:
 //                switchFragment(tempFragment, fragmentList.get(1));
@@ -276,6 +310,14 @@ public class TypeFragment extends SupportFragment {
                 textViewChangshipin.setTextColor(Color.parseColor("#EFEDED"));
                 textViewTuijian.setBackgroundResource(0);
                 textViewChangshipin.setBackgroundResource(0);
+
+
+                EventBus.getDefault().post(new souyelookone("one"));
+                EventBus.getDefault().post(new souyelooktwo("ok"));
+                EventBus.getDefault().post(new souyelookthree("three"));
+                app.setIslookone(false);
+                app.setIslooktwo(true);
+                app.setIslookthree(false);
                 break;
             case R.id.changshipin:
 //                switchFragment(tempFragment, fragmentList.get(2));
@@ -287,6 +329,21 @@ public class TypeFragment extends SupportFragment {
                 textViewChangshipin.setTextColor(Color.parseColor("#0E0E0E"));
                 textViewTuijian.setBackgroundResource(0);
                 textViewZuixin.setBackgroundResource(0);
+
+                EventBus.getDefault().post(new souyelooktwo("two"));
+                EventBus.getDefault().post(new souyelookone("one"));
+                EventBus.getDefault().post(new souyelookthree("ok"));
+                app.setIslookone(false);
+                app.setIslooktwo(false);
+                app.setIslookthree(true);
+                break;
+            case R.id.search_icon:
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                    startActivity(new Intent(getActivity(), LoginNewActivity.class));
+                } else {
+                    Intent sear = new Intent(getActivity(), SearchActivity.class);
+                    startActivity(sear);
+                }
                 break;
         }
         showFragment();

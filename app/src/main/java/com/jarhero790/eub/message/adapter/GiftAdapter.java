@@ -3,6 +3,7 @@ package com.jarhero790.eub.message.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,7 +13,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
-import com.jarhero790.eub.message.bean.GiftBean;
+import com.jarhero790.eub.message.bean.GiftBeanTwo;
 
 import java.util.List;
 
@@ -25,10 +26,10 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.MyHolder> {
 
 
     private Context context;
-    private List<GiftBean.DataBean> list;
+    private List<GiftBeanTwo.DataBean> list;
     private Myclick myclick;
 
-    public GiftAdapter(Context context, List<GiftBean.DataBean> list, Myclick myclick) {
+    public GiftAdapter(Context context, List<GiftBeanTwo.DataBean> list, Myclick myclick) {
         this.context = context;
         this.list = list;
         this.myclick = myclick;
@@ -43,9 +44,17 @@ public class GiftAdapter extends RecyclerView.Adapter<GiftAdapter.MyHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MyHolder myHolder, int position) {
-        GiftBean.DataBean bean = list.get(position);
-        Glide.with(context).load(bean.getImg()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
-        myHolder.tvName.setText(bean.getName());
+        GiftBeanTwo.DataBean bean = list.get(position);
+//        Log.e("-------gift",bean.getImg()+"   "+bean.getName()+"  "+bean.getGift_id());
+        Glide.with(context).load(bean.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.touImage);
+        myHolder.tvName.setText(bean.getNickname());
+        myHolder.tvGiftText.setText(bean.getGift_name());
+        if (bean.getAddtime()!=null && bean.getAddtime().length()>10){
+            myHolder.tvTime.setText(bean.getAddtime().substring(0,10));
+        }
+
+
+
 
 //
 //        if (bean.getAddtime().length() > 9) {

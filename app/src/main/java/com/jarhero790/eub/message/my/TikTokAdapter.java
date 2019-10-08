@@ -25,6 +25,8 @@ import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.message.souye.GuanPanView;
 import com.jarhero790.eub.message.souye.Love;
 import com.jarhero790.eub.model.bean.souye.VideoBean;
+import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,14 +169,27 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
             holder.circleImageView.startAnimation(rotateAnimation);
 
-            holder.btn_attention.setText(video.getIs_like() == 1 ? "已关注" : "关注");//自己的
+
+//            holder.btn_attention.setText(video.getIs_like() == 1 ? "已关注" : "关注");//自己的
+            if ((video.getUid() + "").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))) {
+                holder.btn_attention.setVisibility(View.INVISIBLE);
+            } else {
+                holder.btn_attention.setVisibility(View.VISIBLE);
+                //关注
+                if (video.getIs_like() == 1) {
+                    holder.btn_attention.setText("已关注");
+                } else {
+                    holder.btn_attention.setText("+关注");
+                }
+            }
+
 
             if (video.getGood_id().equals("0")) {
                 holder.bussiness.setVisibility(View.INVISIBLE);
-                Log.e("---videogood1=",video.getGood_id());
+//                Log.e("---videogood1=", video.getGood_id());
             } else {
                 holder.bussiness.setVisibility(View.VISIBLE);
-                Log.e("---videogood2=",video.getGood_id());
+//                Log.e("---videogood2=", video.getGood_id());
             }
 
 
@@ -242,10 +257,10 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 
             if (video.getGood_id().equals("0")) {
                 holder.bussiness.setVisibility(View.INVISIBLE);
-                Log.e("---videogood3=",video.getGood_id());
+                Log.e("---videogood3=", video.getGood_id());
             } else {
                 holder.bussiness.setVisibility(View.VISIBLE);
-                Log.e("---videogood4=",video.getGood_id());
+                Log.e("---videogood4=", video.getGood_id());
             }
 
 
@@ -354,7 +369,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             @Override
             public void onClick(View view) {
 //
-                mOnItemClickListerer.onItemClick(position, "同款", view, view, view,type);
+                mOnItemClickListerer.onItemClick(position, "同款", view, view, view, type);
 //                Log.e("-----","hehe");
             }
         });
@@ -409,7 +424,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         RelativeLayout rlhead;
         ImageView play_pause, back;
 
-        TextView caifu,tvgoodsnum;
+        TextView caifu, tvgoodsnum;
         Love love;
         RelativeLayout bussiness;
         RelativeLayout tongkuang;
@@ -443,8 +458,8 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             love = itemView.findViewById(R.id.love);
             bussiness = itemView.findViewById(R.id.bussiness);
             back = itemView.findViewById(R.id.back);
-            tongkuang=itemView.findViewById(R.id.tongkuang);
-            tvgoodsnum=itemView.findViewById(R.id.tvgoodsnum);
+            tongkuang = itemView.findViewById(R.id.tongkuang);
+            tvgoodsnum = itemView.findViewById(R.id.tvgoodsnum);
         }
     }
 

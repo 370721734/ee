@@ -26,9 +26,9 @@ public class FFmpegRun {
 
             @Override
             protected Integer doInBackground(String[]... params) {
-                for (int i = 0; i < params.length; i++) {
-                    Log.e("-------------uu-", params[i]+"");
-                }
+//                for (int i = 0; i < params.length; i++) {
+////                    Log.e("-------------uu-", params[i]+"");
+//                }
                 return run(params[0]);
             }
 

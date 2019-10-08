@@ -159,7 +159,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             }
 
 //            关注
-            if ((video.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+            if ((video.getUid()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
                 holder.btn_attention.setVisibility(View.INVISIBLE);
             }else {
                 holder.btn_attention.setVisibility(View.VISIBLE);
@@ -231,7 +231,7 @@ public class TikTokTwoAdapter extends RecyclerView.Adapter<TikTokTwoAdapter.Vide
             }
 
             //            关注
-            if ((video.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+            if ((video.getUid()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
                 holder.btn_attention.setVisibility(View.INVISIBLE);
             }else {
                 holder.btn_attention.setVisibility(View.VISIBLE);
