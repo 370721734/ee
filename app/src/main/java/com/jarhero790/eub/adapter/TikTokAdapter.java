@@ -5,6 +5,7 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -148,9 +150,29 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
          **/
         Log.e("---------tu",video.getHeadimgurl()+"   "+video.getId());//没有图片
         /**Glide方式*/
-        Glide.with(context).load(video.getVideo_img())
-                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
-                .into(holder.video_thumb);
+
+
+        if (video.getAnyhow().equals("1")) {
+            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            holder.video_thumb.setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            Glide.with(context).load(video.getVideo_img())
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+                    .into(holder.video_thumb);
+            Log.e("---------","竖");
+
+        }else {
+//            holder.video_thumb.setMaxHeight(400);
+            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            holder.video_thumb.setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            holder.video_thumb.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.video_thumb.setAdjustViewBounds(true);
+            Glide.with(context).load(video.getVideo_img())
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+                    .into(holder.video_thumb);
+            Log.e("---------","横");
+        }
 
         if (video.getIs_zan().equals("1")) {
 //            holder.iv_like.setImageResource(R.drawable.iv_like_selected);

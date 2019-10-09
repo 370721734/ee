@@ -88,7 +88,6 @@ public class FragmentZuoping extends SupportFragment {
     }
 
 
-
     @Override
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
@@ -145,9 +144,10 @@ public class FragmentZuoping extends SupportFragment {
 
     private void initDate() {
         dialog = new Dialog(getActivity(), R.style.progress_dialog);
-        dialog.setContentView(R.layout.dialog);
+
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setContentView(R.layout.dialog);
         dialog.show();
         RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()), page)
                 .enqueue(new Callback<MyFaBuBean>() {

@@ -51,6 +51,8 @@ public class PinLAdapter extends RecyclerView.Adapter<PinLAdapter.MyHolder> {
             myHolder.tvTime.setText(bean.getAddtime().substring(0,10));
         }
 
+        Glide.with(context).load(bean.getVideo_img()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo).error(R.mipmap.zuanshi_logo)).into(myHolder.ivIcon);
+
 //
 //        if (bean.getAddtime().length() > 9) {
 //            myHolder.tvTime.setText(bean.getAddtime().substring(0, 10));

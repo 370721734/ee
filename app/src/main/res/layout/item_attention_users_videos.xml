@@ -57,20 +57,27 @@
         android:layout_marginEnd="26dp"
         android:layout_marginRight="26dp">
 
-        <com.dueeeke.videoplayer.player.VideoView
-            android:id="@+id/video_player"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="390dp"
             android:layout_marginLeft="10dp"
-            android:background="#222222" />
+            android:layout_height="390dp">
+            <com.dueeeke.videoplayer.player.VideoView
+                android:id="@+id/video_player"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                 />
+            <ImageView
+                android:id="@+id/iv_deault"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:adjustViewBounds="true"
+                android:scaleType="fitXY"
+                android:visibility="gone" />
 
-        <ImageView
-            android:id="@+id/iv_deault"
-            android:layout_width="match_parent"
-            android:layout_height="390dp"
-            android:adjustViewBounds="true"
-            android:scaleType="fitXY"
-            android:visibility="gone" />
+        </RelativeLayout>
+
+
+
 
         <ImageView
             android:id="@+id/iv_play"

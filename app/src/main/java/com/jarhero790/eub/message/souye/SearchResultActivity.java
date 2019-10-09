@@ -10,12 +10,12 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +29,6 @@ import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -46,7 +45,6 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import silladus.basic.IFragment;
 
 public class SearchResultActivity extends AppCompatActivity {
 
@@ -75,6 +73,10 @@ public class SearchResultActivity extends AppCompatActivity {
     TextView tvMemo;
     @BindView(R.id.iv_icon)
     ImageView ivIcon;
+    @BindView(R.id.ll1)
+    LinearLayout ll1;
+    @BindView(R.id.rl2)
+    RelativeLayout rl2;
 //    @BindView(R.id.rl_rlv)
 //    RelativeLayout rlRlv;
 
@@ -156,9 +158,9 @@ public class SearchResultActivity extends AppCompatActivity {
 
                                 tvMemo.setText("粉丝：" + userBeans.getFensi() + "  关注：" + userBeans.getLike() + "  点赞：" + userBeans.getMyzan());
 
-                                if ((userBeans.getId()+"").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+                                if ((userBeans.getId() + "").equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))) {
                                     tvGuanzu.setVisibility(View.INVISIBLE);
-                                }else {
+                                } else {
                                     tvGuanzu.setVisibility(View.VISIBLE);
                                     if (userBeans.getIs_like() == 1) {
                                         if (userBeans.getIs_likeEach() == 1) {
@@ -175,22 +177,21 @@ public class SearchResultActivity extends AppCompatActivity {
                                 recyclerView.setNestedScrollingEnabled(false);
 
 
-
                                 if (page == 1) {
                                     itemvideoBeans.clear();
                                     videoBeans.addAll(itemvideoBeans);
 
 
-                                    if (videoBeans.size()>0){
+                                    if (videoBeans.size() > 0) {
 
-                                        recyclerView.setVisibility(View.VISIBLE);
-                                        ivIcon.setVisibility(View.GONE);
+                                        ll1.setVisibility(View.VISIBLE);
+                                        rl2.setVisibility(View.GONE);
                                         searchAdapter = new SearchResultAdapter(SearchResultActivity.this, videoBeans, myclick);
                                         recyclerView.setAdapter(searchAdapter);
 
-                                    }else {
-                                        recyclerView.setVisibility(View.GONE);
-                                        ivIcon.setVisibility(View.VISIBLE);
+                                    } else {
+                                        ll1.setVisibility(View.GONE);
+                                        rl2.setVisibility(View.VISIBLE);
                                     }
 
 
@@ -198,7 +199,6 @@ public class SearchResultActivity extends AppCompatActivity {
                                     videoBeans.addAll(itemvideoBeans);
                                     searchAdapter.notifyDataSetChanged();
                                 }
-
 
 
                                 searchAdapter.setOnItem(new SearchResultAdapter.OnItem() {
@@ -212,10 +212,10 @@ public class SearchResultActivity extends AppCompatActivity {
                                         startActivity(intent);
                                     }
                                 });
-                            }else {
+                            } else {
 //                                Log.e("----------jj", "tttttttttt122");
-                                recyclerView.setVisibility(View.GONE);
-                                ivIcon.setVisibility(View.VISIBLE);
+                                ll1.setVisibility(View.GONE);
+                                rl2.setVisibility(View.VISIBLE);
                             }
                         }
                     }
@@ -223,8 +223,8 @@ public class SearchResultActivity extends AppCompatActivity {
                     @Override
                     public void onFailure(Call<SearchResultBean> call, Throwable t) {
 //                        Log.e("----------jj", "tttttttttt13322");
-                        recyclerView.setVisibility(View.GONE);
-                        ivIcon.setVisibility(View.VISIBLE);
+                        ll1.setVisibility(View.GONE);
+                        rl2.setVisibility(View.VISIBLE);
                     }
                 });
     }

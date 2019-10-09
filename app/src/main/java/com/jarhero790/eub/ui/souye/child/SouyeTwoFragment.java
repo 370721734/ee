@@ -1211,8 +1211,8 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         if (lists == null || lists.size() == 0)
             return;
         Video vedio = lists.get(position);
-        int positiontwo = ((position + 1) > (lists.size() - 1)) ? position : (position + 1);
-        Video vediotwo = lists.get(positiontwo);
+//        int positiontwo = ((position + 1) > (lists.size() - 1)) ? position : (position + 1);
+//        Video vediotwo = lists.get(positiontwo);
         //EventBus.getDefault().post(position);
         /**
          Uri uri = Uri.parse(vedio.getVideo_img());
@@ -1226,16 +1226,48 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
             viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
         }
         // 加载视频的预览图片 Glide方式
-        Glide.with(this)
-                .load(vedio.getVideo_img())
-                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(mTikTokController.getThumb());
+//        Glide.with(this)
+//                .load(vedio.getVideo_img())
+//                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                .into(mTikTokController.getThumb());
+
+        if (vedio.getAnyhow().equals("1")) {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
+//            Log.e("-------------","竖屏视频");
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            mTikTokController.getThumb().setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+            mTikTokController.getThumb().setAdjustViewBounds(true);
+            Glide.with(getActivity())
+                    .load(vedio.getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumb());
+
+        } else {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+//            mVideoView.setRotation();
+//            Log.e("-------------","横屏视频");
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mTikTokController.getThumb().setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+            mTikTokController.getThumb().setAdjustViewBounds(true);
+            Glide.with(getActivity())
+                    .load(vedio.getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumb());
+        }
 
         View itemView = recyclerView.getChildAt(0);
 
         HttpProxyCacheServer proxy = GlobalApplication.getProxy(getActivity());
         String proxyUrl = proxy.getProxyUrl(vedio.getUrl());
-        String proxyUrltwo = proxy.getProxyUrl(vediotwo.getUrl());
+//        String proxyUrltwo = proxy.getProxyUrl(vediotwo.getUrl());
         mVideoView.setUrl(proxyUrl);
 //        Log.e("----------------hurl=",proxyUrl);
 //        Log.e("----------------vurl=",vedio.getUrl());
@@ -1246,14 +1278,14 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 //            mVideoView.setUrl(vedio.getUrl());
 //        }
 
-        if (vedio.getAnyhow().equals("1")) {
-            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
-//            Log.e("-------------","竖屏视频");
-        } else {
-            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
-//            mVideoView.setRotation();
-//            Log.e("-------------","横屏视频");
-        }
+//        if (vedio.getAnyhow().equals("1")) {
+//            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
+////            Log.e("-------------","竖屏视频");
+//        } else {
+//            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+////            mVideoView.setRotation();
+////            Log.e("-------------","横屏视频");
+//        }
 
         //重要
 //        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);//中心载剪

@@ -24,6 +24,7 @@ import com.jarhero790.eub.adapter.OnViewPagerListener;
 import com.jarhero790.eub.adapter.TikTokController;
 import com.jarhero790.eub.adapter.ViewPagerLayoutManager;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.adapter.GlideLoadUtils;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.message.bean.Zanchange;
@@ -69,8 +70,8 @@ public class PlayVideoActivity extends AppCompatActivity {
 //    private TikTokTwoAdapter tikTokAdapter;
     //    private VideoView mVideoView;
 //    ViewPagerLayoutManager layoutManager;
-//    private int mCurrentPosition;//当前播放的第几个视频 ，
-    private int mposition;
+    private int mCurrentPosition;//当前播放的第几个视频 ，
+//    private int mposition;
 
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();//作品
 
@@ -84,15 +85,17 @@ public class PlayVideoActivity extends AppCompatActivity {
     private static final String TAG = "TikTokActivity";
     private VideoView mVideoView;
     private TikTokController mTikTokController;
-    private int mCurrentPosition;
+    //    private int mCurrentPosition;
     private RecyclerView mRecyclerView;
     //    private List<VideoBean> mVideoList = new ArrayList<>();
     ViewPagerLayoutManager layoutManager;
 
     private String videotype = "mine";
 
+    private boolean isfirst = true;
+
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void eeee(Zanchange zanchange){
+    public void eeee(Zanchange zanchange) {
 
     }
 
@@ -107,14 +110,14 @@ public class PlayVideoActivity extends AppCompatActivity {
         }
         mVideoView = new VideoView(this);
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(this,mVideoView,"");
+        mTikTokController = new TikTokController(this, mVideoView, "");
         mVideoView.setVideoController(mTikTokController);
         mRecyclerView = findViewById(R.id.recycler_view);
 
 
         Intent intent = getIntent();
         videotype = intent.getStringExtra("videotype");
-        mposition = intent.getIntExtra("position", 0);
+        mCurrentPosition = intent.getIntExtra("position", 0);
 
 
         if (videotype != null && videotype.equals("zan")) {
@@ -127,7 +130,7 @@ public class PlayVideoActivity extends AppCompatActivity {
         }
 
 
-//        Log.e("-----------", "a=" + position);
+        Log.e("-----------", "来了=" + mCurrentPosition);
 //        Log.e("-----------", "b=" + list.size());
 
 
@@ -158,24 +161,34 @@ public class PlayVideoActivity extends AppCompatActivity {
             @Override
             public void onInitComplete() {
                 //自动播放第一条
-                startPlay(mposition);
-                mCurrentPosition=mposition;
-//                Log.e("----------", "a=" + mCurrentPosition + " m=" + position);
+                startPlay(mCurrentPosition);
+//                mCurrentPosition=mposition;
+//                Log.e("----------", "当前位置=" + mCurrentPosition + "播放的位置=" + mCurrentPosition);
 
             }
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-//                Log.e("----------", "b=" + mCurrentPosition + " m=" + position);
+//                Log.e("----------", "onPageRelease b=" + mCurrentPosition + "  onPageRelease m=" + position);
                 if (mCurrentPosition == position) {
                     mVideoView.release();
+                }
+
+                if (mCurrentPosition > 0 && isfirst) {
+                    mVideoView.release();
+                    isfirst = false;
+                    Log.e("----------", "onPageRelease bb=" + mCurrentPosition + "  onPageRelease mm=" + position);
                 }
             }
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
-//                Log.e("----------", "c=" + mCurrentPosition + " m=" + position);
-                if (mCurrentPosition == position) return;
+//                Log.e("----------", "onPageSelected c=" + mCurrentPosition + " onPageSelected m=" + position);
+                if (mCurrentPosition == position) {
+                    startPlay(0);
+                    return;
+                }
+
                 startPlay(position);
                 mCurrentPosition = position;
             }
@@ -400,6 +413,7 @@ public class PlayVideoActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     public void onStop() {
         super.onStop();
@@ -417,7 +431,7 @@ public class PlayVideoActivity extends AppCompatActivity {
 
 
 //                tikTokAdapter.notifyItemChanged(mCurrentPosition);
-                if (response.isSuccessful()){
+                if (response.isSuccessful()) {
                     EventBus.getDefault().post(new Zanchange("zan"));
 //                    try {
 //                        String json=response.body().string();
@@ -454,19 +468,19 @@ public class PlayVideoActivity extends AppCompatActivity {
 
     private void startPlay(int position) {
 
-        if (videotype!=null && videotype.equals("zan")) {
+        if (videotype != null && videotype.equals("zan")) {
             if (zanBeanList.size() == 0)
                 return;
             View itemView = mRecyclerView.getChildAt(0);
 
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
             RelativeLayout relativeLayout = itemView.findViewById(R.id.container);
-            RelativeLayout buss=itemView.findViewById(R.id.bussiness);
-            TextView tvlike=itemView.findViewById(R.id.tv_like);
-            ImageView ivlike=itemView.findViewById(R.id.iv_like);
+            RelativeLayout buss = itemView.findViewById(R.id.bussiness);
+            TextView tvlike = itemView.findViewById(R.id.tv_like);
+            ImageView ivlike = itemView.findViewById(R.id.iv_like);
 
-            TextView tv_gold_coin=itemView.findViewById(R.id.tv_gold_coin);
-            TextView tv_pinglun=itemView.findViewById(R.id.tv_pinglun);
+            TextView tv_gold_coin = itemView.findViewById(R.id.tv_gold_coin);
+            TextView tv_pinglun = itemView.findViewById(R.id.tv_pinglun);
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
             Glide.with(this)
                     .load(zanBeanList.get(position).getVideo_img())
@@ -479,34 +493,34 @@ public class PlayVideoActivity extends AppCompatActivity {
             relativeLayout.addView(mVideoView, 2);
             HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoActivity.this);
             String proxyUrl = proxy.getProxyUrl(zanBeanList.get(position).getUrl());
-            if (proxyUrl.length() > 0) {
-                mVideoView.setUrl(proxyUrl);
-            } else {
-                mVideoView.setUrl(zanBeanList.get(position).getUrl());
-            }
-            if (zanBeanList.get(position).getGood_id().equals("0")){
+            mVideoView.setUrl(proxyUrl);
+//            if (proxyUrl.length() > 0) {
+//
+//            } else {
+//                mVideoView.setUrl(zanBeanList.get(position).getUrl());
+//            }
+            if (zanBeanList.get(position).getGood_id().equals("0")) {
                 buss.setVisibility(View.INVISIBLE);
-            }else {
+            } else {
                 buss.setVisibility(View.VISIBLE);
             }
 
 
-            if (zanBeanList.get(position).getIs_like()==1){
+            if (zanBeanList.get(position).getIs_like() == 1) {
                 ivlike.setSelected(true);
-            }else {
+            } else {
                 ivlike.setSelected(false);
             }
 
-            tvlike.setText(zanBeanList.get(position).getZan()+"");
-            tv_gold_coin.setText(zanBeanList.get(position).getCaifu()+"");
-            tv_pinglun.setText(zanBeanList.get(position).getCommentNum()+"");
+            tvlike.setText(zanBeanList.get(position).getZan() + "");
+            tv_gold_coin.setText(zanBeanList.get(position).getCaifu() + "");
+            tv_pinglun.setText(zanBeanList.get(position).getCommentNum() + "");
 
 
-
-            if (zanBeanList.get(position).getAnyhow().equals("1")){
+            if (zanBeanList.get(position).getAnyhow().equals("1")) {
                 mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
 //                Log.e("-------------","竖屏视频");
-            }else {
+            } else {
                 mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
 //            mVideoView.setRotation();
 //                Log.e("-------------","横屏视频");
@@ -519,52 +533,57 @@ public class PlayVideoActivity extends AppCompatActivity {
                 return;
             View itemView = mRecyclerView.getChildAt(0);
 
+            Log.e("-------------", "当前播放位置=" + position + "  传入的位置=" + mCurrentPosition);
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
             RelativeLayout relativeLayout = itemView.findViewById(R.id.container);
-            RelativeLayout buss=itemView.findViewById(R.id.bussiness);
-            TextView tvlike=itemView.findViewById(R.id.tv_like);
-            ImageView ivlike=itemView.findViewById(R.id.iv_like);
+            RelativeLayout buss = itemView.findViewById(R.id.bussiness);
+            TextView tvlike = itemView.findViewById(R.id.tv_like);
+            ImageView ivlike = itemView.findViewById(R.id.iv_like);
 
-            TextView tv_gold_coin=itemView.findViewById(R.id.tv_gold_coin);
-            TextView tv_pinglun=itemView.findViewById(R.id.tv_pinglun);
+            TextView tv_gold_coin = itemView.findViewById(R.id.tv_gold_coin);
+            TextView tv_pinglun = itemView.findViewById(R.id.tv_pinglun);
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
-            Glide.with(this)
-                    .load(list.get(position).getVideo_img())
-                    .apply(new RequestOptions().placeholder(android.R.color.black))
-                    .into(mTikTokController.getThumb());
+//            Glide.with(this)
+//                    .load(list.get(position).getVideo_img())
+//                    .apply(new RequestOptions().placeholder(android.R.color.black))
+//                    .into(mTikTokController.getThumb());
 
+            GlideLoadUtils.getInstance().glideLoad(PlayVideoActivity.this,list.get(position).getVideo_img(),mTikTokController.getThumb(),R.color.backgroudcolor);
+
+            Log.e("--------firsttu",list.get(position).getVideo_img());
             HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoActivity.this);
             String proxyUrl = proxy.getProxyUrl(list.get(position).getUrl());
-            if (proxyUrl.length() > 0) {
-                mVideoView.setUrl(proxyUrl);
-            } else {
-                mVideoView.setUrl(list.get(position).getUrl());
-            }
-            if (list.get(position).getGood_id().equals("0")){
+            mVideoView.setUrl(proxyUrl);
+//            if (proxyUrl.length() > 0) {
+//
+//            } else {
+//                mVideoView.setUrl(list.get(position).getUrl());
+//            }
+            if (list.get(position).getGood_id().equals("0")) {
                 buss.setVisibility(View.INVISIBLE);
-            }else {
+            } else {
                 buss.setVisibility(View.VISIBLE);
             }
 
 
-            if (list.get(position).getIs_like()==1){
+            if (list.get(position).getIs_like() == 1) {
                 ivlike.setSelected(true);
-            }else {
+            } else {
                 ivlike.setSelected(false);
             }
 
-            tvlike.setText(list.get(position).getZan()+"");
-            tv_gold_coin.setText(list.get(position).getCaifu()+"");
-            tv_pinglun.setText(list.get(position).getCommentNum()+"");
+            tvlike.setText(list.get(position).getZan() + "");
+            tv_gold_coin.setText(list.get(position).getCaifu() + "");
+            tv_pinglun.setText(list.get(position).getCommentNum() + "");
 
 
-            if (list.get(position).getAnyhow().equals("1")){
+            if (list.get(position).getAnyhow().equals("1")) {
                 mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
-                Log.e("-------------","竖屏视频");
-            }else {
+                Log.e("-------------", "竖屏视频");
+            } else {
                 mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
 //            mVideoView.setRotation();
-                Log.e("-------------","横屏视频");
+                Log.e("-------------", "横屏视频");
             }
 
 //            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
@@ -821,14 +840,14 @@ public class PlayVideoActivity extends AppCompatActivity {
     public void showShare() {
         BottomShareDialog bottomShareDialog = BottomShareDialog.newInstance();
         Bundle args = new Bundle();
-        if (videotype.equals("zan")){
+        if (videotype.equals("zan")) {
             args.putString("url", zanBeanList.get(mCurrentPosition).getUrl());
-            args.putString("videoid", zanBeanList.get(mCurrentPosition).getVideo_id()+"");
-            args.putString("userid",zanBeanList.get(mCurrentPosition).getUid()+"");
-        }else {
+            args.putString("videoid", zanBeanList.get(mCurrentPosition).getVideo_id() + "");
+            args.putString("userid", zanBeanList.get(mCurrentPosition).getUid() + "");
+        } else {
             args.putString("url", list.get(mCurrentPosition).getUrl());
-            args.putString("videoid", list.get(mCurrentPosition).getVideo_id()+"");
-            args.putString("userid",list.get(mCurrentPosition).getUid()+"");
+            args.putString("videoid", list.get(mCurrentPosition).getVideo_id() + "");
+            args.putString("userid", list.get(mCurrentPosition).getUid() + "");
         }
 
         bottomShareDialog.setArguments(args);

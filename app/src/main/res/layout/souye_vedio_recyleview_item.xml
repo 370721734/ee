@@ -21,7 +21,9 @@
         android:id="@+id/souye_page_video_thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="centerCrop" />
+        android:layout_centerVertical="true"
+        android:visibility="visible"
+         />
 
 
     <!--

@@ -94,12 +94,17 @@ public class SearchBean implements Serializable {
             private int id;
             private int uid;
             private int mid;
+            private String good_id;
             private int time;
             private String title;
+            private String describe;
             private String url;
             private int income;
             private String addtime;
             private int state;
+            private int anyhow;
+            private String is_adv;
+            private String adv_money;
             private String sh_time;
             private int zan;
             private int caifu;
@@ -114,12 +119,11 @@ public class SearchBean implements Serializable {
             private Object wurl;
             private Object collect;
             private String headimgurl;
-            private String nickname;
             private String click_num;
+            private String nickname;
             private int is_zan;
             private int commentNum;
             private int is_like;
-            private String good_id;
 
             public int getId() {
                 return id;
@@ -352,6 +356,38 @@ public class SearchBean implements Serializable {
 
             public void setClick_num(String click_num) {
                 this.click_num = click_num;
+            }
+
+            public String getDescribe() {
+                return describe;
+            }
+
+            public void setDescribe(String describe) {
+                this.describe = describe;
+            }
+
+            public int getAnyhow() {
+                return anyhow;
+            }
+
+            public void setAnyhow(int anyhow) {
+                this.anyhow = anyhow;
+            }
+
+            public String getIs_adv() {
+                return is_adv;
+            }
+
+            public void setIs_adv(String is_adv) {
+                this.is_adv = is_adv;
+            }
+
+            public String getAdv_money() {
+                return adv_money;
+            }
+
+            public void setAdv_money(String adv_money) {
+                this.adv_money = adv_money;
             }
         }
 
@@ -389,12 +425,17 @@ public class SearchBean implements Serializable {
             private int id;
             private int uid;
             private int mid;
+            private String good_id;
             private int time;
             private String title;
+            private String describe;
             private String url;
             private int income;
             private String addtime;
             private int state;
+            private int anyhow;
+            private String is_adv;
+            private String adv_money;
             private String sh_time;
             private int zan;
             private int caifu;
@@ -409,12 +450,12 @@ public class SearchBean implements Serializable {
             private Object wurl;
             private Object collect;
             private String headimgurl;
-            private String nickname;
             private String click_num;
+            private String nickname;
             private int is_zan;
             private int commentNum;
             private int is_like;
-            private String good_id;
+
 
             public int getId() {
                 return id;
@@ -646,6 +687,38 @@ public class SearchBean implements Serializable {
 
             public void setClick_num(String click_num) {
                 this.click_num = click_num;
+            }
+
+            public String getDescribe() {
+                return describe;
+            }
+
+            public void setDescribe(String describe) {
+                this.describe = describe;
+            }
+
+            public int getAnyhow() {
+                return anyhow;
+            }
+
+            public void setAnyhow(int anyhow) {
+                this.anyhow = anyhow;
+            }
+
+            public String getIs_adv() {
+                return is_adv;
+            }
+
+            public void setIs_adv(String is_adv) {
+                this.is_adv = is_adv;
+            }
+
+            public String getAdv_money() {
+                return adv_money;
+            }
+
+            public void setAdv_money(String adv_money) {
+                this.adv_money = adv_money;
             }
         }
     }

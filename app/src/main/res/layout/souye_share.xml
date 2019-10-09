@@ -91,6 +91,32 @@
 
 
 
+        <LinearLayout
+            android:id="@+id/ll_lahei"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:visibility="visible"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:src="@mipmap/souye_lahei_icon" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="拉黑"
+                android:textColor="#ffffff"
+                android:layout_marginTop="15dp"
+                android:textSize="13sp"  />
+
+        </LinearLayout>
+
 
         <LinearLayout
             android:id="@+id/ll_weixin"

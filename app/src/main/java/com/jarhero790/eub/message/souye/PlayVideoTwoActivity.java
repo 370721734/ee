@@ -28,6 +28,7 @@ import com.jarhero790.eub.adapter.ViewPagerLayoutManager;
 import com.jarhero790.eub.bean.AttentionBean;
 import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.adapter.GlideLoadUtils;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.my.PlayVideoActivity;
@@ -72,8 +73,8 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
 //    private TikTokTwoAdapter tikTokAdapter;
     //    private VideoView mVideoView;
 //    ViewPagerLayoutManager layoutManager;
-//    private int mCurrentPosition;//当前播放的第几个视频 ，
-    private int mposition;
+    private int mCurrentPosition;//当前播放的第几个视频 ，
+//    private int mposition;
     ArrayList<SearchBean.DataBean.VisitBean> list = new ArrayList<>();
 
     ArrayList<SearchBean.DataBean.LikeBean> likeBeans = new ArrayList<>();
@@ -85,12 +86,13 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
     //    private static final String TAG = "TikTokActivity";
     private VideoView mVideoView;
     private TikTokController mTikTokController;
-    private int mCurrentPosition;
+//    private int mCurrentPosition;
     private RecyclerView mRecyclerView;
     //    private List<VideoBean> mVideoList = new ArrayList<>();
     ViewPagerLayoutManager layoutManager;
 
     private String type = "";
+    private boolean isfirst = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,7 +110,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
 
-        mposition = intent.getIntExtra("position", 0);
+        mCurrentPosition = intent.getIntExtra("position", 0);
         type = intent.getStringExtra("type");
         if (type != null && type.equals("like")) {
             likeBeans = (ArrayList<SearchBean.DataBean.LikeBean>) intent.getSerializableExtra("vidlist");
@@ -117,7 +119,6 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
         } else {
             list = (ArrayList<SearchBean.DataBean.VisitBean>) intent.getSerializableExtra("vidlist");
             tikTokAdapter = new TikTokTwoAdapter(list, this);
-
 
         }
 
@@ -151,9 +152,9 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
             @Override
             public void onInitComplete() {
                 //自动播放第一条
-                startPlay(mposition);
+                startPlay(mCurrentPosition);
 //                Log.e("----------", "开始=" + mCurrentPosition + " m=" + mposition);
-                mCurrentPosition=mposition;
+//                mCurrentPosition=mposition;
 
             }
 
@@ -163,12 +164,20 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
                 if (mCurrentPosition == position) {
                     mVideoView.release();
                 }
+                if (mCurrentPosition > 0 && isfirst) {
+                    mVideoView.release();
+                    isfirst = false;
+//                    Log.e("----------", "onPageRelease bb=" + mCurrentPosition + "  onPageRelease mm=" + position);
+                }
             }
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
 //                Log.e("----------", "结束=" + mCurrentPosition + " m=" + position);
-                if (mCurrentPosition == position) return;
+                if (mCurrentPosition == position) {
+                    startPlay(0);
+                    return;
+                }
 
                 startPlay(position);
                 mCurrentPosition = position;
@@ -452,6 +461,18 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
         TextView tv_gold_coin=itemView.findViewById(R.id.tv_gold_coin);
         TextView tv_pinglun=itemView.findViewById(R.id.tv_pinglun);
 
+
+
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, 0, 0);
+        mVideoView.setLayoutParams(params);
+        View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置
+        if (view != null)
+            view.findViewById(R.id.thumb).setVisibility(View.VISIBLE);
+
+
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
 
         if (type != null && type.equals("like")) {
@@ -459,20 +480,22 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
                     .load(likeBeans.get(position).getVideo_img())
                     .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(mTikTokController.getThumb());
+//            GlideLoadUtils.getInstance().glideLoad(this,likeBeans.get(position).getVideo_img(),mTikTokController.getThumb(),R.color.backgroudcolor);
 
             HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoTwoActivity.this);
             String proxyUrl = proxy.getProxyUrl(likeBeans.get(position).getUrl());
+            mVideoView.setUrl(proxyUrl);
 //            File file=new File(proxyUrl);
 //            if (file.exists()){
 //                Log.e("-------------","mp4存在");
 //            }else {
 //                Log.e("-------------","mp4不存在");
 //            }
-            if (proxyUrl.length() > 0) {
-                mVideoView.setUrl(proxyUrl);
-            } else {
-                mVideoView.setUrl(likeBeans.get(position).getUrl());
-            }
+//            if (proxyUrl.length() > 0) {
+//
+//            } else {
+//                mVideoView.setUrl(likeBeans.get(position).getUrl());
+//            }
 
 
             if (likeBeans.get(position).getGood_id().equals("0")){
@@ -491,14 +514,24 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
             tv_gold_coin.setText(likeBeans.get(position).getCaifu()+"");
             tv_pinglun.setText(likeBeans.get(position).getCommentNum()+"");
 
+//            if (likeBeans.get(position).getAnyhow()==1){
+//                //竖
+//
+//            }else {
+//
+//            }
+
         } else {
             Glide.with(this)
                     .load(list.get(position).getVideo_img())
                     .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(mTikTokController.getThumb());
 
+//            GlideLoadUtils.getInstance().glideLoad(this,list.get(position).getVideo_img(),mTikTokController.getThumb(),R.color.backgroudcolor);
+
             HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoTwoActivity.this);
             String proxyUrl = proxy.getProxyUrl(list.get(position).getUrl());
+            mVideoView.setUrl(proxyUrl);
 //            File file=new File(proxyUrl);
 //            if (file.exists()){
 //                Log.e("-------------","mp4存在");
@@ -506,11 +539,11 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
 //                Log.e("-------------","mp4不存在");
 //            }
 
-            if (proxyUrl.length() > 0) {
-                mVideoView.setUrl(proxyUrl);
-            } else {
-                mVideoView.setUrl(list.get(position).getUrl());
-            }
+//            if (proxyUrl.length() > 0) {
+//
+//            } else {
+//                mVideoView.setUrl(list.get(position).getUrl());
+//            }
 
 
             if (list.get(position).getGood_id().equals("0")){
@@ -538,18 +571,11 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
         }
         relativeLayout.addView(mVideoView, 2);
 
+
         mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         mVideoView.start();
 
 
-        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
-                RelativeLayout.LayoutParams.MATCH_PARENT,
-                RelativeLayout.LayoutParams.MATCH_PARENT);
-        params.setMargins(0, 0, 0, 0);
-        mVideoView.setLayoutParams(params);
-        View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置
-        if (view != null)
-            view.findViewById(R.id.thumb).setVisibility(View.VISIBLE);
 
 
         //确定高度

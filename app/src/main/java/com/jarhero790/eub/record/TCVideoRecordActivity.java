@@ -53,6 +53,7 @@ import android.widget.Toast;
 
 import com.jarhero790.eub.BuildConfig;
 import com.jarhero790.eub.record.activity.CustomRoundAngleImageView;
+import com.jarhero790.eub.record.bean.BitmapBean;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.liteav.basic.log.TXCLog;
 import com.tencent.rtmp.TXLiveConstants;
@@ -63,6 +64,10 @@ import com.jarhero790.eub.R;
 import com.tencent.ugc.TXVideoEditConstants;
 import com.tencent.ugc.TXVideoEditer;
 import com.tencent.ugc.TXVideoInfoReader;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -234,9 +239,10 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             //  mRenderRotation = TXLiveConstants.RENDER_ROTATION_0;
             intent.putExtra(TCConstants.TRANSVERSE, istransverse);
             if (istransverse==TXLiveConstants.RENDER_ROTATION_0){
-                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);//竖
             }else {
-                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+                intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);//横
+
             }
 //            int times = (int) mProgressTime.getTag();
             intent.putExtra("time", videotime);///////////////////////////////////////////////////////////
@@ -261,6 +267,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         CommonUtil.setStatusBarTransparent(this);
 
         setContentView(R.layout.activity_video_record);
+        EventBus.getDefault().register(this);
 
         mTXCameraRecord = TXUGCRecord.getInstance(this.getApplicationContext());
 
@@ -633,10 +640,16 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         TXCLog.i(TAG, "onStop");
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void bitee(BitmapBean bitmapBean){
+
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         TXCLog.i(TAG, "onDestroy");
+        EventBus.getDefault().unregister(this);
     }
 
     @Override
@@ -1479,16 +1492,20 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 //                        Log.e("-----------","宽度"+width+"    高度"+height);
 
 
-                        MediaMetadataRetriever media = new MediaMetadataRetriever();
+//                        MediaMetadataRetriever media = new MediaMetadataRetriever();
 
-                        media.setDataSource(files.getAbsolutePath());// videoPath 本地视频的路径
+//                        media.setDataSource(files.getAbsolutePath());// videoPath 本地视频的路径
 
-                        Bitmap bitmap = media.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+//                        Bitmap bitmap = media.getFrameAtTime(1, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);//第一种获取缩略图方法
 
+
+
+                        Bitmap bitmap = TXVideoInfoReader.getInstance().getSampleImage(0, files.getAbsolutePath());//第二种获取缩略图
                         int width1 = bitmap.getWidth();
                         int height1 = bitmap.getHeight();
-//                        Log.e("-----------", "宽度" + width1 + "    高度" + height1);
+                        Log.e("-----------", "宽度" + width1 + "    高度" + height1);
 //                        mIvBigShow.setImageBitmap(bitmap);//对应的ImageView赋值图片
+                        EventBus.getDefault().post(new BitmapBean(bitmap));
 
                         if (width1 > height1) {
                             //模

@@ -37,6 +37,7 @@ import com.jarhero790.eub.message.permission.KbPermissionListener;
 import com.jarhero790.eub.message.permission.KbPermissionUtils;
 import com.jarhero790.eub.record.TCConstants;
 import com.jarhero790.eub.record.TCVideoEditerActivity;
+import com.jarhero790.eub.record.bean.BitmapBean;
 import com.jarhero790.eub.record.bean.FaVBean;
 import com.jarhero790.eub.record.view.MediaPlayUtil;
 import com.jarhero790.eub.utils.AppUtils;
@@ -220,18 +221,26 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
     }
 
+//    private Bitmap bitmaped;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fav(FaVBean faVBean) {
 
     }
-
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void bitee(BitmapBean bitmapBean){
+//         if (bitmapBean!=null)
+//             bitmaped=bitmapBean.getBitmap();
+//        String s = CommonUtil.convertIconToString(bitmaped);
+//        Log.e("-----------------ss=",s);
+//    }
 
     @OnClick({R.id.back, R.id.tv_fabu, R.id.iv_music, R.id.submit, R.id.record_preview})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
+//               startActivity(new Intent(FaBuActivity.this,BitmapViewActivity.class));
                 break;
             case R.id.tv_fabu:
 

@@ -1214,8 +1214,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
          Uri uri = Uri.parse(vedio.getVideo_img());
          mTikTokController.getThumb().setImageURI(uri);
          */
-        int positiontwo = ((position + 1) > (lists.size() - 1)) ? position : (position + 1);
-        Video vediotwo = lists.get(positiontwo);
+//        int positiontwo = ((position + 1) > (lists.size() - 1)) ? position : (position + 1);
+//        Video vediotwo = lists.get(positiontwo);
 //        Log.e("-----------------url1=",vedio.getUrl());
 //        Log.e("-----------------url2=",vediotwo.getUrl());
 //        downfile(vediotwo.getUrl());
@@ -1226,12 +1226,42 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         }
 //        RequestBuilder<Drawable> builder = Glide.with(getActivity()).load(vedio.getVideo_img());
         // 加载视频的预览图片 Glide方式
-        Glide.with(getActivity())
-                .load(vedio.getVideo_img())
-//                .thumbnail(0.1f)
-                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(mTikTokController.getThumb());
 
+
+        if (vedio.getAnyhow().equals("1")) {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
+//            Log.e("-------------","竖屏视频");
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            mTikTokController.getThumb().setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+            mTikTokController.getThumb().setAdjustViewBounds(true);
+            Glide.with(getActivity())
+                    .load(vedio.getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumb());
+
+        } else {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+//            mVideoView.setRotation();
+//            Log.e("-------------","横屏视频");
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            mTikTokController.getThumb().setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+            mTikTokController.getThumb().setAdjustViewBounds(true);
+            Glide.with(getActivity())
+                    .load(vedio.getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumb());
+        }
+
+
+//        Log.e("----------soufirsttu", vedio.getVideo_img());
         View itemView = recyclerView.getChildAt(0);
         HttpProxyCacheServer proxy = GlobalApplication.getProxy(getActivity());
 //        proxy.registerCacheListener(new CacheListener() {
@@ -1279,14 +1309,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        mVideoView.requestFocus();
 //        mVideoView.setVideoController(mediaController);
 
-        if (vedio.getAnyhow().equals("1")) {
-            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
-//            Log.e("-------------","竖屏视频");
-        } else {
-            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
-//            mVideoView.setRotation();
-//            Log.e("-------------","横屏视频");
-        }
 
         //重要
 //        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);//中心载剪

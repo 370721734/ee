@@ -16,7 +16,7 @@ import com.jarhero790.eub.R;
 public class TikTokController extends BaseVideoController {
 
     //private SimpleDraweeView thumb;
-    private ImageView thumb;
+    private ImageView thumb,thumb2;
 
     private VideoView videoView;
 
@@ -46,6 +46,7 @@ public class TikTokController extends BaseVideoController {
     protected void initView() {
         super.initView();
         thumb = mControllerView.findViewById(R.id.iv_thumb);
+//        thumb2 = mControllerView.findViewById(R.id.iv_thumb2);
     }
 
     @Override
@@ -56,10 +57,12 @@ public class TikTokController extends BaseVideoController {
             case VideoView.STATE_IDLE:
                 //L.e("STATE_IDLE");
                thumb.setVisibility(VISIBLE);
+//               thumb2.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_PLAYING:
                 //L.e("STATE_PLAYING");
                 thumb.setVisibility(GONE);
+//                thumb2.setVisibility(GONE);
                 break;
             case VideoView.STATE_PREPARED:
                // L.e("STATE_PREPARED");
@@ -93,4 +96,9 @@ public class TikTokController extends BaseVideoController {
     public ImageView getThumb() {
         return thumb;
     }
+//    public ImageView getThumb2() {
+//        return thumb2;
+//    }
+
+
 }

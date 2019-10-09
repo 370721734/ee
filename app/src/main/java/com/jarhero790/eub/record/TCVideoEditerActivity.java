@@ -39,6 +39,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.record.activity.FaBuActivity;
 import com.jarhero790.eub.record.activity.GifUtil;
 import com.jarhero790.eub.record.activity.SelectMusicActivity;
+import com.jarhero790.eub.record.bean.BitmapBean;
 import com.jarhero790.eub.record.ffem.FileUtilss;
 import com.jarhero790.eub.record.fragment.TCCutterFragment;
 import com.jarhero790.eub.record.view.MediaPlayUtil;
@@ -51,6 +52,8 @@ import com.tencent.ugc.TXRecordCommon;
 import com.tencent.ugc.TXVideoEditConstants;
 import com.tencent.ugc.TXVideoEditer;
 import com.tencent.ugc.TXVideoInfoReader;
+
+import org.greenrobot.eventbus.EventBus;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -676,6 +679,22 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 Bitmap bitmap = TXVideoInfoReader.getInstance().getSampleImage(0, mVideoOutputPath);
                 if (bitmap == null)
                     return null;
+
+                int width1 = bitmap.getWidth();
+                int height1 = bitmap.getHeight();
+                Log.e("-----------", "宽度" + width1 + "    高度" + height1);
+//                        mIvBigShow.setImageBitmap(bitmap);//对应的ImageView赋值图片
+//                EventBus.getDefault().post(new BitmapBean(bitmap));
+
+                if (width1 > height1) {
+                    //模
+                    istransverse = TXLiveConstants.RENDER_ROTATION_90;
+                } else {
+                    istransverse = TXLiveConstants.RENDER_ROTATION_0;
+                }
+
+
+
                 String mediaFileName = outputVideo.getAbsolutePath();
                 if (mediaFileName.lastIndexOf(".") != -1) {
                     mediaFileName = mediaFileName.substring(0, mediaFileName.lastIndexOf("."));

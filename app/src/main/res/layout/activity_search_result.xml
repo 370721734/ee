@@ -5,9 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroudcolor"
-    android:orientation="vertical"
     android:focusable="true"
     android:focusableInTouchMode="true"
+    android:orientation="vertical"
     tools:context=".message.souye.SearchResultActivity">
 
     <RelativeLayout
@@ -72,14 +72,21 @@
 
     </RelativeLayout>
 
-        <ScrollView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <LinearLayout
+                android:id="@+id/ll1"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:visibility="visible">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -160,20 +167,35 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/rlv"
                         android:layout_width="match_parent"
-                        android:visibility="visible"
-                        android:layout_height="match_parent">
+                        android:layout_height="match_parent"
+                        android:visibility="visible">
 
                     </android.support.v7.widget.RecyclerView>
-                    <ImageView
-                        android:id="@+id/iv_icon"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="50dp"
-                        android:visibility="gone"
-                        android:src="@mipmap/no_sou_sou"
-                        android:layout_centerHorizontal="true"/>
+
                 </RelativeLayout>
             </LinearLayout>
-        </ScrollView>
+
+
+            <RelativeLayout
+                android:id="@+id/rl2"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                 android:orientation="vertical"
+                android:gravity="center"
+                android:visibility="gone"
+                >
+
+                <ImageView
+                    android:id="@+id/iv_icon"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:layout_gravity="center"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="300dp"
+                    android:src="@mipmap/no_sou_sou" />
+            </RelativeLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

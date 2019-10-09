@@ -30,7 +30,7 @@
         <ImageView
             android:layout_width="65dp"
             android:layout_height="90dp"
-            android:src="@mipmap/zuanshi_logo"
+            android:src="@mipmap/souye_login_icon"
             android:gravity="center"
             />
 
