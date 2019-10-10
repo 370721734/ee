@@ -134,13 +134,14 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 //        holder.ivdeault.setVisibility(View.VISIBLE);
         HttpProxyCacheServer proxy = GlobalApplication.getProxy(mcontext);
         String proxyUrl = proxy.getProxyUrl(attentionVideo.getUrl());
+        holder.videoPlayer.setUrl(proxyUrl);
 //        Log.e("-------p1=",proxyUrl);
 //        Log.e("-------p2=",attentionVideo.getUrl());
-        if (proxyUrl.length() > 0) {
-            holder.videoPlayer.setUrl(proxyUrl);
-        } else {
-            holder.videoPlayer.setUrl(attentionVideo.getUrl());
-        }
+//        if (proxyUrl.length() > 0) {
+//
+//        } else {
+//            holder.videoPlayer.setUrl(attentionVideo.getUrl());
+//        }
 
 //        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
 //        holder.videoPlayer.start();

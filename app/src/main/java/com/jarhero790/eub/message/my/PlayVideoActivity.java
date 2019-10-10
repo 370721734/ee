@@ -58,7 +58,19 @@ import retrofit2.Response;
 //播放视频界面
 public class PlayVideoActivity extends AppCompatActivity {
 
-//    @BindView(R.id.recycler_view)
+
+    private static PlayVideoActivity instance;
+
+    public PlayVideoActivity() {
+    }
+    public static PlayVideoActivity getInstance(){
+        if (instance==null){
+            instance=new PlayVideoActivity();
+        }
+        return instance;
+    }
+
+    //    @BindView(R.id.recycler_view)
 //    RecyclerView recyclerView;
 //    @BindView(R.id.frameLayoutContainer)
 //    FrameLayout frameLayoutContainer;
@@ -71,8 +83,8 @@ public class PlayVideoActivity extends AppCompatActivity {
     //    private VideoView mVideoView;
 //    ViewPagerLayoutManager layoutManager;
     private int mCurrentPosition;//当前播放的第几个视频 ，
-//    private int mposition;
-
+    //    private int mposition;
+    private int firstposition;
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();//作品
 
 
@@ -105,6 +117,7 @@ public class PlayVideoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_play_video);
         ButterKnife.bind(this);
         CommonUtil.setStatusBarTransparent(this);
+        instance=this;
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().register(this);
         }
@@ -118,6 +131,7 @@ public class PlayVideoActivity extends AppCompatActivity {
         Intent intent = getIntent();
         videotype = intent.getStringExtra("videotype");
         mCurrentPosition = intent.getIntExtra("position", 0);
+        firstposition = intent.getIntExtra("position", 0);
 
 
         if (videotype != null && videotype.equals("zan")) {
@@ -130,7 +144,7 @@ public class PlayVideoActivity extends AppCompatActivity {
         }
 
 
-        Log.e("-----------", "来了=" + mCurrentPosition);
+//        Log.e("-----------", "来了=" + mCurrentPosition);
 //        Log.e("-----------", "b=" + list.size());
 
 
@@ -156,6 +170,14 @@ public class PlayVideoActivity extends AppCompatActivity {
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerView.setAdapter(tikTokAdapter);
 
+
+        mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+            }
+        });
+
         adapterSetOnItemClickListerer();
         layoutManager.setOnViewPagerListener(new OnViewPagerListener() {
             @Override
@@ -163,34 +185,59 @@ public class PlayVideoActivity extends AppCompatActivity {
                 //自动播放第一条
                 startPlay(mCurrentPosition);
 //                mCurrentPosition=mposition;
-//                Log.e("----------", "当前位置=" + mCurrentPosition + "播放的位置=" + mCurrentPosition);
+                Log.e("----------", "当前位置=" + mCurrentPosition + "播放的位置=" + mCurrentPosition);
 
             }
 
             @Override
             public void onPageRelease(boolean isNext, int position) {
-//                Log.e("----------", "onPageRelease b=" + mCurrentPosition + "  onPageRelease m=" + position);
-                if (mCurrentPosition == position) {
-                    mVideoView.release();
+                Log.e("----------", "onPageRelease b=" + mCurrentPosition + "  onPageRelease m=" + position);
+//                if (mCurrentPosition == position) {
+//                    mVideoView.release();
+//                }
+//
+//                if (mCurrentPosition > 0 && isfirst) {
+//                    mVideoView.release();
+//                    isfirst = false;
+//                    Log.e("----------", "onPageRelease bb=" + mCurrentPosition + "  onPageRelease mm=" + position);
+//                }
+                mVideoView.release();
+                if (mCurrentPosition!=0){
+
+                    Log.e("----------", "onPageRelease bbb=" + mCurrentPosition + "  onPageRelease mmm=" + position);
                 }
 
-                if (mCurrentPosition > 0 && isfirst) {
-                    mVideoView.release();
-                    isfirst = false;
-                    Log.e("----------", "onPageRelease bb=" + mCurrentPosition + "  onPageRelease mm=" + position);
-                }
             }
 
             @Override
             public void onPageSelected(int position, boolean isBottom) {
-//                Log.e("----------", "onPageSelected c=" + mCurrentPosition + " onPageSelected m=" + position);
-                if (mCurrentPosition == position) {
-                    startPlay(0);
-                    return;
+                Log.e("----------", "onPageSelected c=" + mCurrentPosition + " onPageSelected m=" + position);
+//                if (mCurrentPosition == position) {
+//                    startPlay(0);
+//                    return;
+//                }
+
+                int boposition = firstposition + position;
+                if (videotype != null && videotype.equals("zan")) {
+//                    if (boposition>zanBeanList.size()-1){
+//
+//                    }
+                    int bo = boposition % zanBeanList.size();
+                    startPlay(bo);
+                    mCurrentPosition = bo;
+
+                } else {
+//                    if (boposition>list.size()-1){
+//                        mCurrentPosition
+//
+//                    }
+                    int bo = boposition % list.size();
+                    startPlay(bo);
+                    mCurrentPosition = bo;
                 }
 
-                startPlay(position);
-                mCurrentPosition = position;
+//                startPlay(position);
+//                mCurrentPosition = position;
             }
         });
 
@@ -468,6 +515,11 @@ public class PlayVideoActivity extends AppCompatActivity {
 
     private void startPlay(int position) {
 
+        tikTokAdapter.setPosition(firstposition);
+//        if (mposti!=null){
+//            mposti.clicker(position);
+//        }
+
         if (videotype != null && videotype.equals("zan")) {
             if (zanBeanList.size() == 0)
                 return;
@@ -478,6 +530,7 @@ public class PlayVideoActivity extends AppCompatActivity {
             RelativeLayout buss = itemView.findViewById(R.id.bussiness);
             TextView tvlike = itemView.findViewById(R.id.tv_like);
             ImageView ivlike = itemView.findViewById(R.id.iv_like);
+            ImageView thumb = itemView.findViewById(R.id.thumb);
 
             TextView tv_gold_coin = itemView.findViewById(R.id.tv_gold_coin);
             TextView tv_pinglun = itemView.findViewById(R.id.tv_pinglun);
@@ -486,6 +539,7 @@ public class PlayVideoActivity extends AppCompatActivity {
                     .load(zanBeanList.get(position).getVideo_img())
                     .apply(new RequestOptions().placeholder(android.R.color.black))
                     .into(mTikTokController.getThumb());
+            GlideLoadUtils.getInstance().glideLoad(this,zanBeanList.get(position).getVideo_img(),thumb,R.color.backgroudcolor);
             ViewParent parent = mVideoView.getParent();
             if (parent instanceof RelativeLayout) {
                 ((RelativeLayout) parent).removeView(mVideoView);
@@ -534,12 +588,13 @@ public class PlayVideoActivity extends AppCompatActivity {
             View itemView = mRecyclerView.getChildAt(0);
 
             Log.e("-------------", "当前播放位置=" + position + "  传入的位置=" + mCurrentPosition);
+
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
             RelativeLayout relativeLayout = itemView.findViewById(R.id.container);
             RelativeLayout buss = itemView.findViewById(R.id.bussiness);
             TextView tvlike = itemView.findViewById(R.id.tv_like);
             ImageView ivlike = itemView.findViewById(R.id.iv_like);
-
+//            ImageView thumb = itemView.findViewById(R.id.thumb);
             TextView tv_gold_coin = itemView.findViewById(R.id.tv_gold_coin);
             TextView tv_pinglun = itemView.findViewById(R.id.tv_pinglun);
 //            RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
@@ -548,9 +603,16 @@ public class PlayVideoActivity extends AppCompatActivity {
 //                    .apply(new RequestOptions().placeholder(android.R.color.black))
 //                    .into(mTikTokController.getThumb());
 
-            GlideLoadUtils.getInstance().glideLoad(PlayVideoActivity.this,list.get(position).getVideo_img(),mTikTokController.getThumb(),R.color.backgroudcolor);
+            GlideLoadUtils.getInstance().glideLoad(PlayVideoActivity.this, list.get(position).getVideo_img(), mTikTokController.getThumb(), R.color.backgroudcolor);
 
-            Log.e("--------firsttu",list.get(position).getVideo_img());
+//                        Glide.with(this)
+//                    .load(list.get(position).getVideo_img())
+//                    .apply(new RequestOptions().placeholder(android.R.color.black))
+//                    .into(thumb);
+
+//            GlideLoadUtils.getInstance().glideLoad(this,zanBeanList.get(position).getVideo_img(),thumb,R.color.backgroudcolor);
+
+            Log.e("--------firsttu", list.get(position).getVideo_img());
             HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoActivity.this);
             String proxyUrl = proxy.getProxyUrl(list.get(position).getUrl());
             mVideoView.setUrl(proxyUrl);
@@ -891,5 +953,14 @@ public class PlayVideoActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public interface Mposti{
+        void clicker(int position);
+    }
+    private Mposti mposti;
+
+    public void setMposti(Mposti mposti) {
+        this.mposti = mposti;
     }
 }

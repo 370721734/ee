@@ -108,6 +108,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     ImageView searchIcon;
     @BindView(R.id.nodingdan)
     RelativeLayout nodingdan;
+    @BindView(R.id.wangluoyichang)
+    RelativeLayout wangluoyichang;
     private int mCurrentPosition;//当前播放的第几个视频 ，
     private List<Video> lists = new ArrayList<>();
     private TikTokController mTikTokController;
@@ -203,7 +205,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                     }
                 } else {
-                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+                    wangluoyichang.setVisibility(View.VISIBLE);
+                    nodingdan.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
                 }
 
 
@@ -249,7 +254,11 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                     }
                 } else {
-                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+                    wangluoyichang.setVisibility(View.VISIBLE);
+                    nodingdan.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+
                 }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------2-",cate.get()+"");
@@ -294,7 +303,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
                     }
                 } else {
-                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+                    wangluoyichang.setVisibility(View.VISIBLE);
+                    nodingdan.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
                 }
 //                tikTokAdapter.notifyDataSetChanged();
 //                Log.e("-------3-",cate.get()+"");
@@ -308,6 +320,29 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     startActivity(sear);
                 }
 
+                break;
+            case R.id.wangluoyichang:
+                if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                    if (lists.size() > 0) {
+                        lists.clear();
+                    }
+
+                    wangluoyichang.setVisibility(View.GONE);
+                    nodingdan.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.VISIBLE);
+                    if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+//                Log.e("-----------", "无token————initdata");
+                    } else {
+//                Log.e("-----------", "有token----initdata");
+                        mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
+                    }
+                } else {
+//            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+                    wangluoyichang.setVisibility(View.VISIBLE);
+                    nodingdan.setVisibility(View.GONE);
+                    recyclerView.setVisibility(View.GONE);
+                }
                 break;
         }
     }
@@ -388,7 +423,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
             }
         } else {
-            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+            wangluoyichang.setVisibility(View.VISIBLE);
+            nodingdan.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
         }
 
 
@@ -473,7 +511,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void updateVideos(ArrayList<Video> videos) {
 
         //设置视频
-        Log.e("---------", "有没有数据了1");
+//        Log.e("---------", "有没有数据了1");
         if (videos == null || videos.size() == 0) {
             recyclerView.setVisibility(View.GONE);
             nodingdan.setVisibility(View.VISIBLE);
@@ -649,37 +687,31 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void fav(FaVBean faVBean) {
-
         if (faVBean.getName().equals("video")) {
-            Log.e("---------faVBean=", faVBean.getName());
-
             if (mVideoView != null && mVideoView.isPlaying()) {
                 mVideoView.pause();
                 mVideoView.release();
                 mVideoView.resume();
-                Log.e("---------", "来了没有vv");
             }
-//                //加载数据
             if (lists.size() > 0) {
                 lists.clear();
-
                 tikTokAdapter.notifyDataSetChanged();
             }
             cate.set(0);
             page.set(1);
             mCurrentPosition = 0;
             flag.set(true);
-
             if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
                 if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                     mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-//                    Log.e("-----------","无token");
                 } else {
-//                    Log.e("-----------","有token");
                     mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                 }
             } else {
-                Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+                wangluoyichang.setVisibility(View.VISIBLE);
+                nodingdan.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
             }
         }
 
@@ -1018,7 +1050,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
             mPresenter.zan(lists.get(mCurrentPosition).getVideo_id(), SharePreferenceUtil.getToken(AppUtils.getContext()));
         } else {
-            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+            wangluoyichang.setVisibility(View.VISIBLE);
+            nodingdan.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.GONE);
         }
     }
 
@@ -1063,6 +1098,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         textViewZuixin.setOnClickListener(this);
         textViewChangshipin.setOnClickListener(this);
         searchIcon.setOnClickListener(this);
+        wangluoyichang.setOnClickListener(this);
 
     }
 
@@ -1389,7 +1425,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
                 }
             } else {
-                Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
+                wangluoyichang.setVisibility(View.VISIBLE);
+                nodingdan.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
             }
         }
 

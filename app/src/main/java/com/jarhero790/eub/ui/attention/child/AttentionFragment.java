@@ -45,6 +45,7 @@ import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.my.GuangZuActivity;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.presenter.attention.AttentionPresenter;
+import com.jarhero790.eub.record.bean.FaVBean;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
 import com.jarhero790.eub.ui.souye.BottomShareDialog;
 import com.jarhero790.eub.utils.AppUtils;
@@ -169,6 +170,9 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //        VideoViewManager.instance().release();
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void fav(FaVBean faVBean) {}
+
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -215,22 +219,56 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             rlNoDp.setVisibility(View.VISIBLE);
 //            rlUser.setVisibility(View.VISIBLE);//2
 
-            Log.e("------------", "老弟来了，没有数据了");
+
 
             View childAt = appbar.getChildAt(0);
             AppBarLayout.LayoutParams params= (AppBarLayout.LayoutParams) childAt.getLayoutParams();
             params.setScrollFlags(0);
 
-            if (mVideoView != null) {
 
+
+            if (linearLayoutManager != null)
+                viewvideo = linearLayoutManager.findViewByPosition(mCurrentPosition);
+            if (viewvideo != null)
+                mVideoView = viewvideo.findViewById(R.id.video_player);
+
+            if (mVideoView!=null){
+                mVideoView.setUrl("");
+                mVideoView.setLooping(false);
+                mVideoView.resume();
+                mVideoView.start();
+                mVideoView.pause();
                 mVideoView.release();
-                Log.e("------------", "老弟来了，没有数据了2");
+                EventBus.getDefault().post(new FaVBean("video"));
+//                if (mVideoView.isPlaying()){
+//                    Log.e("------------", "老弟来了，没有数据了i");
+//                }else {
+//                    Log.e("------------", "老弟来了，没有数据了h");
+//                }
+//                Log.e("------------", "老弟来了，没有数据了c");
             }
+
+//            VideoView videoView = recyclerViewAttentionUsers.getChildAt(0).findViewById(R.id.video_player);
+//            if (videoView!=null){
+//                Log.e("------------", "老弟来了，没有数据了d");
+////                videoView.pause();
+////                videoView.release();
+//                if (videoView.isPlaying()){
+//
+////                    videoView.pause();
+////                    videoView.release();
+//                    Log.e("------------", "老弟来了，没有数据了f");
+//                }else {
+//                    Log.e("------------", "老弟来了，没有数据了g");
+//                }
+//            }else {
+//                Log.e("------------", "老弟来了，没有数据了e");
+//            }
 //            onHiddenChanged(true);
 //            onPause();
 //            onStop();
 //            onDestroyView();
-            VideoViewManager.instance().release();
+//            VideoViewManager.instance().release();
 
 //            EventBus.getDefault().post("ok");
 //            EventBus.getDefault().post(new attentionchange("ok"));
@@ -545,7 +583,27 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
 
                     if (visibleCount==0){
-                        Log.e("------------", "老弟来了，没有数据了5");
+
+                        if (mVideoView!=null && mVideoView.isPlaying()){
+                            mVideoView.pause();
+                            mVideoView.release();
+                            Log.e("------------", "老弟来了，没有数据了c");
+                        }else {
+                            Log.e("------------", "老弟来了，没有数据了5");
+                        }
+
+                        VideoView videoView = recyclerView.getChildAt(0).findViewById(R.id.video_player);
+                        if (videoView!=null){
+                            Log.e("------------", "老弟来了，没有数据了d");
+                            if (videoView.isPlaying()){
+                                Log.e("------------", "老弟来了，没有数据了f");
+                            }else {
+                                Log.e("------------", "老弟来了，没有数据了g");
+                            }
+                        }else {
+                            Log.e("------------", "老弟来了，没有数据了e");
+                        }
+
                     }
 
 
@@ -763,6 +821,8 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             viewvideo = linearLayoutManager.findViewByPosition(mCurrentPosition);
         if (viewvideo != null)
             mVideoView = viewvideo.findViewById(R.id.video_player);
+
+        Log.e("------------", "老弟来了，没有数据了a");
         if (hidden) {
             //不可见
             setLook(false);

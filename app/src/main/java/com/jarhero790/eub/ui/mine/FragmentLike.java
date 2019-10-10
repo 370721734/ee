@@ -171,32 +171,38 @@ private Dialog dialog;
                             dialog.dismiss();
                             if (response.body()!=null && response.body().getData()!=null){
 //                                Log.e("--------------","size="+response.body().getData().size());
-                                itemlist.clear();
-                                rl_rlv.setVisibility(View.VISIBLE);
-                                rlv.setVisibility(View.VISIBLE);
-                                nodingdan.setVisibility(View.GONE);
-                                wangluoyichang.setVisibility(View.GONE);
-                                itemlist = response.body().getData();
+                                if (response.body().getData().size()>0){
+                                    itemlist.clear();
+                                    rl_rlv.setVisibility(View.VISIBLE);
+                                    rlv.setVisibility(View.VISIBLE);
+                                    nodingdan.setVisibility(View.GONE);
+                                    wangluoyichang.setVisibility(View.GONE);
+                                    itemlist = response.body().getData();
 
 
 
-                                if (page==1){
-                                    list.clear();
-                                    list.addAll(itemlist);
-                                    adapter = new LikeAdapter(getActivity(), list, myclickdele, myclicktu);
-                                    rlv.setAdapter(adapter);
+                                    if (page==1){
+                                        list.clear();
+                                        list.addAll(itemlist);
+                                        adapter = new LikeAdapter(getActivity(), list, myclickdele, myclicktu);
+                                        rlv.setAdapter(adapter);
 //                                    adapter.setList(list);
-                                }else {
-                                    list.addAll(itemlist);
+                                    }else {
+                                        list.addAll(itemlist);
 //                                    Log.e("-------------","刷新了没");
 //                                    adapter.setList(list);
-                                    adapter.notifyDataSetChanged();
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                }else {
+                                    rl_rlv.setVisibility(View.GONE);
+                                    nodingdan.setVisibility(View.VISIBLE);
+                                    wangluoyichang.setVisibility(View.GONE);
                                 }
+
 
 
                             }else {
                                 if (page==1){
-                                    rlv.setVisibility(View.GONE);
                                     nodingdan.setVisibility(View.VISIBLE);
                                     wangluoyichang.setVisibility(View.GONE);
                                     rl_rlv.setVisibility(View.GONE);
@@ -208,7 +214,6 @@ private Dialog dialog;
                             }
                         } else {
                             dialog.dismiss();
-                            rlv.setVisibility(View.GONE);
                             nodingdan.setVisibility(View.GONE);
                             wangluoyichang.setVisibility(View.VISIBLE);
                             rl_rlv.setVisibility(View.GONE);

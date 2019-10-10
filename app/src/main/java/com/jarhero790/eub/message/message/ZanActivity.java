@@ -59,6 +59,9 @@ public class ZanActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         manager = new LinearLayoutManager(this);
         recyclerViewZan.setLayoutManager(manager);
+        LinearItemDecoration itemDecoration = new LinearItemDecoration();
+        itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
+        recyclerViewZan.addItemDecoration(itemDecoration);
         initDate();
     }
 
@@ -95,9 +98,36 @@ public class ZanActivity extends AppCompatActivity {
                                     giftBeanList = response.body().getData();
                                     zanAdapter = new ZanAdapter(ZanActivity.this, giftBeanList, myclick);
                                     recyclerViewZan.setAdapter(zanAdapter);
-                                    LinearItemDecoration itemDecoration = new LinearItemDecoration();
-                                    itemDecoration.setColor(getResources().getColor(R.color.backgroudcolor));
-                                    recyclerViewZan.addItemDecoration(itemDecoration);
+
+
+
+
+
+                                    zanAdapter.setZanOnclick(new ZanAdapter.ZanOnclick() {
+                                        @Override
+                                        public void OnCliearck(View view, String type, int position) {
+                                            if (type.equals("tou")){
+//                                            Log.e("------------","tou");
+                                                if (giftBeanList.get(position).getId() > 0) {
+                                                    Intent intent = new Intent(ZanActivity.this, GeRenInfoActivity.class);
+                                                    intent.putExtra("userid", "" + giftBeanList.get(position).getUid() + "");
+                                                    startActivity(intent);
+                                                }
+
+
+                                            }else {
+//                                            Log.e("------------","vid"+giftBeanList.get(position).getUrl());
+                                                Intent intent = new Intent(ZanActivity.this, PlayVideoActivity.class);
+                                                intent.putExtra("position", position);
+                                                intent.putExtra("vidlist", giftBeanList);
+                                                intent.putExtra("videotype","zan");
+                                                startActivity(intent);
+
+
+                                            }
+                                        }
+                                    });
+
                                 } else {
                                     recyclerViewZan.setVisibility(View.GONE);
                                     wangluoyichang.setVisibility(View.GONE);
@@ -106,30 +136,8 @@ public class ZanActivity extends AppCompatActivity {
 
 
 
-                                zanAdapter.setZanOnclick(new ZanAdapter.ZanOnclick() {
-                                    @Override
-                                    public void OnCliearck(View view, String type, int position) {
-                                        if (type.equals("tou")){
-//                                            Log.e("------------","tou");
-                                            if (giftBeanList.get(position).getId() > 0) {
-                                                Intent intent = new Intent(ZanActivity.this, GeRenInfoActivity.class);
-                                                intent.putExtra("userid", "" + giftBeanList.get(position).getUid() + "");
-                                                startActivity(intent);
-                                            }
 
 
-                                        }else {
-//                                            Log.e("------------","vid"+giftBeanList.get(position).getUrl());
-                                            Intent intent = new Intent(ZanActivity.this, PlayVideoActivity.class);
-                                            intent.putExtra("position", position);
-                                            intent.putExtra("vidlist", giftBeanList);
-                                            intent.putExtra("videotype","zan");
-                                            startActivity(intent);
-
-
-                                        }
-                                    }
-                                });
 
 
                             }

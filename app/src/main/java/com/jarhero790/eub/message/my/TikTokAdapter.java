@@ -43,6 +43,13 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     ArrayList<ZanBean.DataBean> zanBeanList = new ArrayList<>();
     private String type = "";
 
+    private int mposi;
+
+    public void setPosition(int pp) {
+        mposi = pp;
+
+    }
+
     //为RecyclerView的Item添加监听
     public interface OnItemClickListener {
         void onItemClick(int position, String type, View view, View view2, View view3, String videotype);
@@ -110,10 +117,35 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
         }
     }
 
+//    private int position;
     @Override
-    public void onBindViewHolder(final VideoHolder holder, int position) {
+    public void onBindViewHolder(final VideoHolder holder, int positiondd) {
+
+
+
+//        if (mposi!=position)
+
+//        PlayVideoActivity.getInstance().setMposti(new PlayVideoActivity.Mposti() {
+//            @Override
+//            public void clicker(int positions) {
+//
+//                position=positions;
+//
+//                Log.e("---------tik=", "po=" + position+"  poss=" + positions);
+//            }
+//        });
 
         if (type.equals("zan")) {
+
+            int position=(holder.getLayoutPosition()+mposi)%zanBeanList.size();
+//            if (position>zanBeanList.size()-1){
+//                position=0;
+//            }else {
+//                position=holder.getLayoutPosition()+mposi;
+//            }
+            Log.e("--------tiktok=", "mposi=" + mposi + "positionrrrrr="+holder.getLayoutPosition());
+
+
             ZanBean.DataBean video = zanBeanList.get(position);
             Glide.with(context)
                     .load(video.getVideo_img())
@@ -198,12 +230,27 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
 //        holder.guanPanView.startAnimation(rotateAnimation);
             onClick(holder, position, "zan");
         } else {
+
+            int position=(holder.getLayoutPosition()+mposi)%videos.size();
+//            if (position>videos.size()-1){
+//                position=0;
+//            }else {
+//                position=holder.getLayoutPosition()+mposi;
+//            }
+
+
+
+            Log.e("--------tiktok=", "mposi=" + mposi + "positionrrrrr="+holder.getLayoutPosition());
+
+
             MyFaBuBean.DataBean video = videos.get(position);
+
             Glide.with(context)
                     .load(video.getVideo_img())
                     .apply(new RequestOptions().placeholder(R.mipmap.welcon_de).error(R.mipmap.welcon_de))
                     .into(holder.thumb);
 
+//            Log.e("-----------img=",video.getVideo_img());
 
             //标题
             if (video.getTitle() != null && video.getTitle().length() > 0) {
@@ -395,9 +442,9 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public int getItemCount() {
         if (type.equals("zan")) {
-            return zanBeanList == null ? 0 : zanBeanList.size();
+            return zanBeanList == null ? 0 : zanBeanList.size()-mposi;
         } else {
-            return videos == null ? 0 : videos.size();
+            return videos == null ? 0 : videos.size()-mposi;
         }
 
     }
