@@ -526,7 +526,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
         if (dialog != null)
             dialog.dismiss();
-        if (flag.get() == true) {
+        if (flag.get()) {
             tikTokAdapter = new TikTokAdapter(lists, AppUtils.getContext());
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(tikTokAdapter);
@@ -1250,12 +1250,19 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        View bb=View.inflate(this,R.layout.item_tik_tok,null);不行这句
 
 //        FrameLayout frameLayout = itemView.findViewById(R.id.container);
-        if (itemView==null) return;
+        if (itemView == null) return;
         RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
         Glide.with(this)
                 .load(lists.get(position).getHeadimgurl())
                 .apply(new RequestOptions().placeholder(R.color.backgroudcolor))
                 .into(mTikTokController.getThumb());
+        //
+//        int positiontwo = ((position + 1) > (lists.size() - 1)) ? position : (position + 1);
+//        Video vediotwo = lists.get(positiontwo);
+//        Glide.with(AppUtils.getContext())
+//                .load(vediotwo.getVideo_img())
+//                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL));
+        //
         ViewParent parent = mVideoView.getParent();
         if (parent instanceof RelativeLayout) {
             ((RelativeLayout) parent).removeView(mVideoView);
@@ -1265,7 +1272,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         mVideoView.start();
     }
-
 
 
     private void startPlaydd(int position) {

@@ -112,6 +112,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
     @Override
     public void onViewRecycled(@NonNull VideoHolder holder) {
         super.onViewRecycled(holder);
+        //注释一下试
         ImageView imageView1 = holder.video_thumb;
         ImageView imageView2 = holder.iv_like;
         ImageView imageView3 = holder.iv_commit;
