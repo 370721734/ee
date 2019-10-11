@@ -24,6 +24,7 @@ import android.view.animation.Animation;
 import android.view.animation.LinearInterpolator;
 import android.view.animation.RotateAnimation;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -95,8 +96,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-//1.动画旋转问题
-//2分享，
+
 public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePresenter>
         implements SouyeContract.ISouyeView, View.OnClickListener, OnViewPagerListener {
 
@@ -511,7 +511,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void updateVideos(ArrayList<Video> videos) {
 
         //设置视频
-//        Log.e("---------", "有没有数据了1");
+        Log.e("---------", "有没有数据了1");
         if (videos == null || videos.size() == 0) {
             recyclerView.setVisibility(View.GONE);
             nodingdan.setVisibility(View.VISIBLE);
@@ -521,6 +521,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         nodingdan.setVisibility(View.GONE);
 
         lists.addAll(videos);
+//        String url = videos.get(0).getUrl();
+//        Log.e("-----------url=",url);
 
         if (dialog != null)
             dialog.dismiss();
@@ -534,7 +536,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
 
             if (mCurrentPosition != 0)
-                startPlay(mCurrentPosition);//ok
+                startPlayx(mCurrentPosition);//ok
 //            Log.e("----------", "video来了没有true");
 
             tikTokAdapter.notifyDataSetChanged();
@@ -666,7 +668,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 mVideoView.resume();
                 flag.set(true);
 //                Log.e("----------4", "是不是这里" + mCurrentPosition);
-                startPlay(mCurrentPosition);
+                startPlayx(mCurrentPosition);
 
             }
 //            if (mPresenter!=null)
@@ -757,12 +759,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                     if (mVideoView != null) {
                         mVideoView.resume();
 //                Log.e("----------1", "是不是这里" + mCurrentPosition);
-                        startPlay(mCurrentPosition);
+                        startPlayx(mCurrentPosition);
 
                     } else {
                         mVideoView = new VideoView(AppUtils.getContext());
                         mVideoView.resume();
-                        startPlay(mCurrentPosition);
+                        startPlayx(mCurrentPosition);
 //                Log.e("----------2", "是不是这里");
                     }
                 }
@@ -800,12 +802,12 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 if (mVideoView != null) {
                     mVideoView.resume();
 //                Log.e("----------1", "是不是这里" + mCurrentPosition);
-                    startPlay(mCurrentPosition);
+                    startPlayx(mCurrentPosition);
 
                 } else {
                     mVideoView = new VideoView(AppUtils.getContext());
                     mVideoView.resume();
-                    startPlay(mCurrentPosition);
+                    startPlayx(mCurrentPosition);
 //                Log.e("----------2", "是不是这里");
                 }
             }
@@ -1241,7 +1243,32 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
     private Dialog dialog;
 
-    private void startPlay(int position) {
+
+    private void startPlayx(int position) {
+
+        View itemView = recyclerView.getChildAt(0);
+//        View bb=View.inflate(this,R.layout.item_tik_tok,null);不行这句
+
+//        FrameLayout frameLayout = itemView.findViewById(R.id.container);
+        if (itemView==null) return;
+        RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
+        Glide.with(this)
+                .load(lists.get(position).getHeadimgurl())
+                .apply(new RequestOptions().placeholder(R.color.backgroudcolor))
+                .into(mTikTokController.getThumb());
+        ViewParent parent = mVideoView.getParent();
+        if (parent instanceof RelativeLayout) {
+            ((RelativeLayout) parent).removeView(mVideoView);
+        }
+        relativeLayout.addView(mVideoView);
+        mVideoView.setUrl(lists.get(position).getUrl());
+        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        mVideoView.start();
+    }
+
+
+
+    private void startPlaydd(int position) {
         if (lists == null || lists.size() == 0)
             return;
         Video vedio = lists.get(position);
@@ -1727,7 +1754,7 @@ e.printStackTrace();
     @Override
     public void onInitComplete() {
         //自动播放第一条
-        startPlay(0);
+        startPlayx(0);
     }
 
     @Override
@@ -1740,7 +1767,7 @@ e.printStackTrace();
     @Override
     public void onPageSelected(int position, boolean isBottom) {
         if (mCurrentPosition == position) return;
-        startPlay(position);
+        startPlayx(position);
         mCurrentPosition = position;
 //                Log.e("-----------gg","2222222222不同");
         //ok
