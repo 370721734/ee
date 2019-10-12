@@ -28,6 +28,7 @@ import com.jarhero790.eub.ui.message.child.MessageFragment;
 import com.jarhero790.eub.ui.mine.child.MineFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFourFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFragment;
+import com.jarhero790.eub.ui.souye.child.SouyeOFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeThreeFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeTwoFragment;
 import com.jarhero790.eub.utils.AppUtils;
@@ -64,6 +65,7 @@ public class TypeFragment extends SupportFragment {
     private List<Fragment> fragmentList;
     private Fragment tempFragment;
     public SouyeFragment listFragment;
+//    public SouyeOFragment listFragment;
     public SouyeTwoFragment tagFragment;
     public SouyeThreeFragment fbcFragment;
 //    public SouyeFourFragment fbcFragment;

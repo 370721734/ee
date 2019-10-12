@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
@@ -52,11 +53,17 @@ public class LoginNewActivity extends AppCompatActivity {
                 break;
             case R.id.weixin_login:
                 //微信登录
+                if (app.api!=null && app.api.isWXAppInstalled()){
+                    SendAuth.Req req=new SendAuth.Req();
+                    req.scope = "snsapi_userinfo";
+                    req.state = "wechat_sdk_demo_test";
+                    app.api.sendReq(req);
+                }else {
+                    Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
 
-                SendAuth.Req req=new SendAuth.Req();
-                req.scope = "snsapi_userinfo";
-                req.state = "wechat_sdk_demo_test";
-                app.api.sendReq(req);
+                }
+
+
                 break;
             case R.id.zhifubao_login:
 

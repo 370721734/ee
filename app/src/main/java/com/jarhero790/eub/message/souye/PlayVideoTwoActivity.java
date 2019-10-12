@@ -102,7 +102,7 @@ public class PlayVideoTwoActivity extends AppCompatActivity {
         CommonUtil.setStatusBarTransparent(this);
         mVideoView = new VideoView(this);
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(this,mVideoView,"");
+        mTikTokController = new TikTokController(this);
         mVideoView.setVideoController(mTikTokController);
         mRecyclerView = findViewById(R.id.recycler_view);
         api = WXAPIFactory.createWXAPI(this, GlobalApplication.APP_ID_Wei, true);

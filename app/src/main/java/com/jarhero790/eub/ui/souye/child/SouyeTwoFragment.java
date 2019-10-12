@@ -109,13 +109,13 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
     RelativeLayout nodingdan;
     @BindView(R.id.wangluoyichang)
     RelativeLayout wangluoyichang;
-    private int mCurrentPosition;//当前播放的第几个视频 ，
+    private static int mCurrentPosition;//当前播放的第几个视频 ，
     private List<Video> lists = new ArrayList<>();
     private TikTokController mTikTokController;
     private TikTokAdapter tikTokAdapter;
     private VideoView mVideoView;
-    private AtomicInteger cate = new AtomicInteger(1);
-    private AtomicInteger page = new AtomicInteger(1);
+    private static AtomicInteger cate = new AtomicInteger(1);
+    private static AtomicInteger page = new AtomicInteger(1);
 
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
@@ -131,7 +131,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 
     ViewPagerLayoutManager layoutManager;
 
-    private AtomicBoolean flag = new AtomicBoolean(true);
+    private static AtomicBoolean flag = new AtomicBoolean(true);
 
     RotateAnimation rotateAnimation;//旋转动画
 //    View viewcir;
@@ -143,6 +143,10 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         if (instance == null) {
             instance = new SouyeTwoFragment();
         }
+        cate.set(1);
+        page.set(1);
+        flag.set(true);
+        mCurrentPosition = 0;
         return instance;
     }
 
@@ -449,7 +453,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         app = (GlobalApplication) getActivity().getApplication();
 //        initFragment();
 
-        mTikTokController = new TikTokController(AppUtils.getContext(), mVideoView, "");
+        mTikTokController = new TikTokController(AppUtils.getContext());
         /**
          * 重要代码  类似抖音垂直加载
          */
@@ -536,7 +540,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 
         if (dialog != null)
             dialog.dismiss();
-        if (flag.get() == true) {
+        if (flag.get()) {
             tikTokAdapter = new TikTokAdapter(lists, AppUtils.getContext());
             recyclerView.setLayoutManager(layoutManager);
             recyclerView.setAdapter(tikTokAdapter);
@@ -1091,7 +1095,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         mVideoView = new VideoView(AppUtils.getContext());
         //视频循环播放
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(AppUtils.getContext(), mVideoView, "");
+        mTikTokController = new TikTokController(AppUtils.getContext());
         mVideoView.setVideoController(mTikTokController);
         /**
          * 推荐  最新  长视频
@@ -1242,7 +1246,55 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 
     private Dialog dialog;
 
+
     private void startPlay(int position) {
+
+        //如果滑动到了最后一页 就要加载新的数据了
+        if (position == lists.size() - 1) {
+            page.getAndIncrement();
+            if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                dialog = new Dialog(getActivity(), R.style.progress_dialog);
+                dialog.setContentView(R.layout.dialog);
+                dialog.setCancelable(false);
+                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.show();
+                flag.set(false);
+                if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                } else {
+                    mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
+                }
+            } else {
+                wangluoyichang.setVisibility(View.VISIBLE);
+                nodingdan.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.GONE);
+            }
+        }
+
+        View itemView = recyclerView.getChildAt(0);
+//        View bb=View.inflate(this,R.layout.item_tik_tok,null);不行这句
+        if (itemView==null) return;
+        RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
+        Glide.with(this)
+                .load(lists.get(position).getVideo_img())
+                .apply(new RequestOptions().placeholder(android.R.color.white))
+                .into(mTikTokController.getThumb());
+        ViewParent parent = mVideoView.getParent();
+        if (parent instanceof RelativeLayout) {
+            ((RelativeLayout) parent).removeView(mVideoView);
+        }
+        if (relativeLayout==null) return;
+        relativeLayout.addView(mVideoView,2);
+        HttpProxyCacheServer proxy = GlobalApplication.getProxy(getActivity());
+        String proxyUrl = proxy.getProxyUrl(lists.get(position).getUrl());
+        mVideoView.setUrl(proxyUrl);
+        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        mVideoView.start();
+//        Log.e("-----------tu7",lists.get(position).getVideo_img());
+//        Log.e("-----------url",lists.get(position).getUrl());
+    }
+
+    private void startPlay2(int position) {
         if (lists == null || lists.size() == 0)
             return;
         Video vedio = lists.get(position);

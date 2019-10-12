@@ -15,18 +15,11 @@ import com.jarhero790.eub.R;
 
 public class TikTokController extends BaseVideoController {
 
-    //private SimpleDraweeView thumb;
-    private ImageView thumb,thumb2;
-
-    private VideoView videoView;
+    private ImageView thumb;
 
 
-    private String url;
-
-    public TikTokController(@NonNull Context context,VideoView m,String u) {
+    public TikTokController(@NonNull Context context) {
         super(context);
-        videoView=m;
-        url=u;
     }
 
     public TikTokController(@NonNull Context context, @Nullable AttributeSet attrs) {
@@ -46,23 +39,21 @@ public class TikTokController extends BaseVideoController {
     protected void initView() {
         super.initView();
         thumb = mControllerView.findViewById(R.id.iv_thumb);
-//        thumb2 = mControllerView.findViewById(R.id.iv_thumb2);
     }
 
     @Override
     public void setPlayState(int playState) {
-
-
+        super.setPlayState(playState);
         switch (playState) {
             case VideoView.STATE_IDLE:
                 //L.e("STATE_IDLE");
                thumb.setVisibility(VISIBLE);
-//               thumb2.setVisibility(VISIBLE);
+                Log.e("--------------","显示图片");
                 break;
             case VideoView.STATE_PLAYING:
                 //L.e("STATE_PLAYING");
                 thumb.setVisibility(GONE);
-//                thumb2.setVisibility(GONE);
+                Log.e("--------------","隐藏图片");
                 break;
             case VideoView.STATE_PREPARED:
                // L.e("STATE_PREPARED");
@@ -90,15 +81,12 @@ public class TikTokController extends BaseVideoController {
 //                break;
 
         }
-//        super.setPlayState(playState);
+//
     }
 
     public ImageView getThumb() {
         return thumb;
     }
-//    public ImageView getThumb2() {
-//        return thumb2;
-//    }
 
 
 }

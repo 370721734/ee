@@ -398,7 +398,7 @@ public class SouyeFourFragment extends BaseMVPCompatFragment<SouyeContract.Souye
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mTikTokController = new TikTokController(AppUtils.getContext(),mVideoView,"");
+        mTikTokController = new TikTokController(AppUtils.getContext());
         /**
          * 重要代码  类似抖音垂直加载
          */
@@ -1053,7 +1053,7 @@ public class SouyeFourFragment extends BaseMVPCompatFragment<SouyeContract.Souye
         mVideoView = new VideoView(getActivity());
         //视频循环播放
         mVideoView.setLooping(true);
-        mTikTokController = new TikTokController(AppUtils.getContext(),mVideoView,"");
+        mTikTokController = new TikTokController(AppUtils.getContext());
         mVideoView.setVideoController(mTikTokController);
         /**
          * 推荐  最新  长视频
