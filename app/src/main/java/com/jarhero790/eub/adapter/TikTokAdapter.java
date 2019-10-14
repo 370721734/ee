@@ -20,6 +20,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
@@ -151,31 +152,31 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
          **/
         Log.e("---------tu",video.getHeadimgurl()+"   "+video.getId());//没有图片
         /**Glide方式*/
-        Glide.with(context).load(video.getVideo_img())
-                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
-                .into(holder.video_thumb);
+//        Glide.with(context).load(video.getVideo_img())
+//                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+//                .into(holder.video_thumb);
 
-//        if (video.getAnyhow().equals("1")) {
-//            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//            holder.video_thumb.setLayoutParams(params);
-//            params.addRule(RelativeLayout.CENTER_VERTICAL);
-//            Glide.with(context).load(video.getVideo_img())
-//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
-//                    .into(holder.video_thumb);
+        if (video.getAnyhow().equals("1")) {
+            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+            holder.video_thumb.setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            Glide.with(context).load(video.getVideo_img())
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(holder.video_thumb);
 //            Log.e("---------","竖");
-//
-//        }else {
-////            holder.video_thumb.setMaxHeight(400);
-//            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//            holder.video_thumb.setLayoutParams(params);
-//            params.addRule(RelativeLayout.CENTER_VERTICAL);
-//            holder.video_thumb.setScaleType(ImageView.ScaleType.FIT_XY);
-//            holder.video_thumb.setAdjustViewBounds(true);
-//            Glide.with(context).load(video.getVideo_img())
-//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
-//                    .into(holder.video_thumb);
+
+        }else {
+//            holder.video_thumb.setMaxHeight(400);
+            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            holder.video_thumb.setLayoutParams(params);
+            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            holder.video_thumb.setScaleType(ImageView.ScaleType.FIT_XY);
+            holder.video_thumb.setAdjustViewBounds(true);
+            Glide.with(context).load(video.getVideo_img())
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(holder.video_thumb);
 //            Log.e("---------","横");
-//        }
+        }
 
         if (video.getIs_zan().equals("1")) {
 //            holder.iv_like.setImageResource(R.drawable.iv_like_selected);

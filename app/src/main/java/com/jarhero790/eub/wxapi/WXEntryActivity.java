@@ -130,19 +130,19 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
 //                    initRetrofit(code);
                 }
                 finish();
-                Log.e("-----", "ww");
+//                Log.e("-----", "ww");
 
                 break;
             case BaseResp.ErrCode.ERR_USER_CANCEL:
-                Log.e("WXTest", "onResp ERR_USER_CANCEL ");
+//                Log.e("WXTest", "onResp ERR_USER_CANCEL ");
                 //发送取消
                 break;
             case BaseResp.ErrCode.ERR_AUTH_DENIED:
-                Log.e("WXTest", "onResp ERR_AUTH_DENIED");
+//                Log.e("WXTest", "onResp ERR_AUTH_DENIED");
                 //发送被拒绝
                 break;
             default:
-                Log.e("WXTest", "onResp default errCode " + resp.errCode);
+//                Log.e("WXTest", "onResp default errCode " + resp.errCode);
                 //发送返回
                 break;
         }

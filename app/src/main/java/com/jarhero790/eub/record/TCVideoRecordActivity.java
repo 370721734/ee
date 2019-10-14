@@ -145,7 +145,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private int mMaxDuration;
     private int mAspectRatio; // 视频比例
     private int mRecordResolution; // 录制分辨率
-    private int mHomeOrientation = TXLiveConstants.VIDEO_ANGLE_HOME_DOWN; // 录制方向
+    private int mHomeOrientation = TXLiveConstants.VIDEO_ANGLE_HOME_DOWN; // 录制方向 竖
     private int mRenderRotation = TXLiveConstants.RENDER_ROTATION_PORTRAIT; // 渲染方向
     private int mBiteRate; // 码率
     private int mFps; // 帧率
@@ -227,14 +227,16 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             }
         }
 
+        //明
         private void loadVideoSuccess() {
             // 更新一下VideoInfo的时间
             Intent intent = new Intent(TCVideoRecordActivity.this, TCVideoEditerActivity.class);
             // 如果是从录制过来的话，需要传递一个分辨率参数下去。
-            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mRecommendQuality);
+
+            intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);//高
 
             intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mTXRecordResult.videoPath);
-            intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
+            intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, mBiteRate);
             intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
             //  mRenderRotation = TXLiveConstants.RENDER_ROTATION_0;
             intent.putExtra(TCConstants.TRANSVERSE, istransverse);
@@ -289,29 +291,38 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             TXCLog.e(TAG, "intent is null");
             return;
         }
-        mMinDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MIN_DURATION, 5 * 1000);
-        mMaxDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MAX_DURATION, 60 * 1000);
-        mAspectRatio = intent.getIntExtra(TCConstants.RECORD_CONFIG_ASPECT_RATIO, TXRecordCommon.VIDEO_RENDER_MODE_FULL_FILL_SCREEN);//VIDEO_ASPECT_RATIO_1_1
-        mRecommendQuality = intent.getIntExtra(TCConstants.RECORD_CONFIG_RECOMMEND_QUALITY, TXRecordCommon.VIDEO_QUALITY_HIGH);
-        mNeedEditer = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_NEED_EDITER, true);
-        mTouchFocus = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_TOUCH_FOCUS, false);
-
+//        mMinDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MIN_DURATION, 5 * 1000);  //5秒
+        mMinDuration=5*1000;
+//        mMaxDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MAX_DURATION, 60 * 1000);
+        mMaxDuration=60 * 1000;
+//        mAspectRatio = intent.getIntExtra(TCConstants.RECORD_CONFIG_ASPECT_RATIO, TXRecordCommon.VIDEO_RENDER_MODE_FULL_FILL_SCREEN);//VIDEO_ASPECT_RATIO_1_1
+        mAspectRatio=TXRecordCommon.VIDEO_ASPECT_RATIO_9_16;
+//        mRecommendQuality = intent.getIntExtra(TCConstants.RECORD_CONFIG_RECOMMEND_QUALITY, TXRecordCommon.VIDEO_QUALITY_MEDIUM);//VIDEO_QUALITY_HIGH
+        mRecommendQuality=TXRecordCommon.VIDEO_QUALITY_MEDIUM;
+//        mNeedEditer = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_NEED_EDITER, true);
+        mNeedEditer=true;
+//        mTouchFocus = intent.getBooleanExtra(TCConstants.RECORD_CONFIG_TOUCH_FOCUS, false);
+        mTouchFocus=false;
         mCurrentAspectRatio = mAspectRatio;
         setSelectAspect();
 
         mRecordProgressView.setMaxDuration(mMaxDuration);
         mRecordProgressView.setMinDuration(mMinDuration);
 
-        if (mRecommendQuality != -1) {
-            // 使用了推荐的视频质量设置，用TXUGCSimpleConfig
-            TXCLog.i(TAG, "mRecommendQuality = " + mRecommendQuality);
-            return;
-        }
+//        if (mRecommendQuality != -1) {
+//            // 使用了推荐的视频质量设置，用TXUGCSimpleConfig
+//            TXCLog.i(TAG, "mRecommendQuality = " + mRecommendQuality);
+//            return;
+//        }
         // 自定义视频质量设置，用TXUGCCustomConfig
-        mRecordResolution = intent.getIntExtra(TCConstants.RECORD_CONFIG_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);
-        mBiteRate = intent.getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 6500);
-        mFps = intent.getIntExtra(TCConstants.RECORD_CONFIG_FPS, 20);
-        mGop = intent.getIntExtra(TCConstants.RECORD_CONFIG_GOP, 3);
+//        mRecordResolution = intent.getIntExtra(TCConstants.RECORD_CONFIG_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);
+        mRecordResolution=TXRecordCommon.VIDEO_RESOLUTION_540_960;
+//        mBiteRate = intent.getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 6500);//
+        mBiteRate=6500;
+//        mFps = intent.getIntExtra(TCConstants.RECORD_CONFIG_FPS, 20);
+        mFps=20;
+//        mGop = intent.getIntExtra(TCConstants.RECORD_CONFIG_GOP, 3);
+        mGop=3;
 
         TXCLog.d(TAG, "mMinDuration = " + mMinDuration + ", mMaxDuration = " + mMaxDuration + ", mAspectRatio = " + mAspectRatio +
                 ", mRecommendQuality = " + mRecommendQuality + ", mRecordResolution = " + mRecordResolution + ", mBiteRate = " + mBiteRate + ", mFps = " + mFps + ", mGop = " + mGop);

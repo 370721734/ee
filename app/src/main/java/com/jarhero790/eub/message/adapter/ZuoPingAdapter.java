@@ -15,6 +15,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.utils.CommonUtil;
+import com.jarhero790.eub.utils.SharePreferenceUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -55,6 +56,12 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
 
         holder.rll.setTag(position);
         holder.rll.setOnClickListener(myclick_tu);
+
+        if (!SharePreferenceUtil.getUserid(context).equals(bean.getUid()+"")){
+            holder.rldelete.setVisibility(View.GONE);
+        }else {
+            holder.rldelete.setVisibility(View.VISIBLE);
+        }
 
         holder.rldelete.setTag(position);
         holder.rldelete.setOnClickListener(myclick_delete);

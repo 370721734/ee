@@ -3,6 +3,8 @@ package com.jarhero790.eub.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -11,8 +13,15 @@ import android.widget.Toast;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.base.AppManager;
+import com.jarhero790.eub.message.bean.souyelookone;
+import com.jarhero790.eub.message.bean.souyelookthree;
+import com.jarhero790.eub.message.bean.souyelooktwo;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,42 +41,78 @@ public class LoginNewActivity extends AppCompatActivity {
     ImageView zhifubaoLogin;
 
     GlobalApplication app;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login_new);
         ButterKnife.bind(this);
-          app= (GlobalApplication) getApplication();
+        app = (GlobalApplication) getApplication();
         CommonUtil.setStatusBarTransparent(LoginNewActivity.this);
         AppManager.getAppManager().addActivity(this);
+        EventBus.getDefault().register(this);
     }
 
 
-    @OnClick({R.id.phoneLogin, R.id.qq_login, R.id.weixin_login, R.id.zhifubao_login})
+    @OnClick({R.id.phoneLogin, R.id.qq_login, R.id.weixin_login, R.id.zhifubao_login, R.id.back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.phoneLogin:
-                startActivity(new Intent(this,LoginPhoneActivity.class));
+                startActivity(new Intent(this, LoginPhoneActivity.class));
                 break;
             case R.id.qq_login:
                 break;
             case R.id.weixin_login:
                 //微信登录
-                if (app.api!=null && app.api.isWXAppInstalled()){
-                    SendAuth.Req req=new SendAuth.Req();
+                if (app.api != null && app.api.isWXAppInstalled()) {
+                    SendAuth.Req req = new SendAuth.Req();
                     req.scope = "snsapi_userinfo";
                     req.state = "wechat_sdk_demo_test";
                     app.api.sendReq(req);
-                }else {
+                } else {
                     Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
-
                 }
-
 
                 break;
             case R.id.zhifubao_login:
 
                 break;
+            case R.id.back:
+                if (app.isIslookthree()) {
+                    EventBus.getDefault().post(new souyelookthree("ok"));
+                } else if (app.isIslooktwo()) {
+                    EventBus.getDefault().post(new souyelooktwo("ok"));
+                } else {
+                    EventBus.getDefault().post(new souyelookone("ok"));
+                }
+
+                finish();
+                break;
         }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void ee1(souyelookone bean) {
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
+    }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK && event.getAction() == KeyEvent.ACTION_DOWN) {
+            if (app.isIslookthree()) {
+                EventBus.getDefault().post(new souyelookthree("ok"));
+            } else if (app.isIslooktwo()) {
+                EventBus.getDefault().post(new souyelooktwo("ok"));
+            } else {
+                EventBus.getDefault().post(new souyelookone("ok"));
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

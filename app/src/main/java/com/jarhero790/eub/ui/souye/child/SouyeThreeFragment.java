@@ -1286,7 +1286,17 @@ public class SouyeThreeFragment extends BaseMVPCompatFragment<SouyeContract.Souy
         HttpProxyCacheServer proxy = GlobalApplication.getProxy(getActivity());
         String proxyUrl = proxy.getProxyUrl(lists.get(position).getUrl());
         mVideoView.setUrl(proxyUrl);
-        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        if (lists.get(position).getAnyhow().equals("1")) {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        }else {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+        }
+        //全屏
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, 0, 0);
+        mVideoView.setLayoutParams(params);
         mVideoView.start();
 //        Log.e("-----------tu7",lists.get(position).getVideo_img());
 //        Log.e("-----------url",lists.get(position).getUrl());
@@ -1311,41 +1321,41 @@ public class SouyeThreeFragment extends BaseMVPCompatFragment<SouyeContract.Souy
             viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
         }
         // 加载视频的预览图片 Glide方式
-//        Glide.with(this)
-//                .load(vedio.getVideo_img())
-//                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-//                .into(mTikTokController.getThumb());
+        Glide.with(this)
+                .load(vedio.getVideo_img())
+                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                .into(mTikTokController.getThumb());
 
         if (vedio.getAnyhow().equals("1")) {
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//q
 //            Log.e("-------------","竖屏视频");
 
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            mTikTokController.getThumb().setLayoutParams(params);
-            params.addRule(RelativeLayout.CENTER_VERTICAL);
-            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
-            mTikTokController.getThumb().setAdjustViewBounds(true);
-            Glide.with(getActivity())
-                    .load(vedio.getVideo_img())
-//                .thumbnail(0.1f)
-                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .into(mTikTokController.getThumb());
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            mTikTokController.getThumb().setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+//            mTikTokController.getThumb().setAdjustViewBounds(true);
+//            Glide.with(getActivity())
+//                    .load(vedio.getVideo_img())
+////                .thumbnail(0.1f)
+//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                    .into(mTikTokController.getThumb());
 
         } else {
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
 //            mVideoView.setRotation();
 //            Log.e("-------------","横屏视频");
 
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            mTikTokController.getThumb().setLayoutParams(params);
-            params.addRule(RelativeLayout.CENTER_VERTICAL);
-            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
-            mTikTokController.getThumb().setAdjustViewBounds(true);
-            Glide.with(getActivity())
-                    .load(vedio.getVideo_img())
-//                .thumbnail(0.1f)
-                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .into(mTikTokController.getThumb());
+//            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            mTikTokController.getThumb().setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+//            mTikTokController.getThumb().setAdjustViewBounds(true);
+//            Glide.with(getActivity())
+//                    .load(vedio.getVideo_img())
+////                .thumbnail(0.1f)
+//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                    .into(mTikTokController.getThumb());
         }
 
         View itemView = recyclerView.getChildAt(0);

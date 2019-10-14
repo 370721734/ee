@@ -1288,7 +1288,17 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         HttpProxyCacheServer proxy = GlobalApplication.getProxy(getActivity());
         String proxyUrl = proxy.getProxyUrl(lists.get(position).getUrl());
         mVideoView.setUrl(proxyUrl);
-        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        if (lists.get(position).getAnyhow().equals("1")) {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        }else {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+        }
+        //全屏
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, 0, 0);
+        mVideoView.setLayoutParams(params);
         mVideoView.start();
 //        Log.e("-----------tu7",lists.get(position).getVideo_img());
 //        Log.e("-----------url",lists.get(position).getUrl());

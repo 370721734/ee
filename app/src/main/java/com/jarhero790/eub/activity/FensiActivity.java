@@ -19,6 +19,7 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.adapter.FeiSiAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
+import com.jarhero790.eub.message.bean.attentionchange;
 import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
@@ -26,6 +27,10 @@ import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
+
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -75,7 +80,7 @@ public class FensiActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.layout_fensi);
         ButterKnife.bind(this);
-//        EventBus.getDefault().register(this);
+        EventBus.getDefault().register(this);
         recyclerViewFensi = findViewById(R.id.recyclerViewFensi);
         CommonUtil.setStatusBarTransparent(this);
         GridLayoutManager manager = new GridLayoutManager(FensiActivity.this, 1);
@@ -161,6 +166,10 @@ public class FensiActivity extends Activity {
         });
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void attentionname(attentionchange name) {
+    }
+
 //    public void getfensi() {
 //        //通过RequestBody.create 创建requestBody对象
 //        RequestBody requestBody = new MultipartBody.Builder()
@@ -225,14 +234,15 @@ public class FensiActivity extends Activity {
 //
 //    }
 
-
+    //关注
     FeiSiAdapter.Myclick myclick = new FeiSiAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-            Log.e("--------1", "" + position + "  " + arrayList.get(position).getUser_id());
+//            Log.e("--------1", "" + position + "  " + arrayList.get(position).getUser_id());
             guanzu(arrayList.get(position).getUser_id() + "");
         }
     };
+    //个人信息
     FeiSiAdapter.Myclick touclick = new FeiSiAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
@@ -246,10 +256,11 @@ public class FensiActivity extends Activity {
 
         }
     };
+    //聊天
     FeiSiAdapter.Myclick speak = new FeiSiAdapter.Myclick() {
         @Override
         public void myClick(int position, View view) {
-            Log.e("--------3", "" + position + "  " + arrayList.get(position).getUser_id() + "  " + arrayList.get(position).getNickname());
+//            Log.e("--------3", "" + position + "  " + arrayList.get(position).getUser_id() + "  " + arrayList.get(position).getNickname());
 //            --------3: 0  5032  5032
             //1.判断是否互关
             if (arrayList.get(position).getIs_likeEach() == 1) {
@@ -280,14 +291,15 @@ public class FensiActivity extends Activity {
                     String json = null;
                     try {
                         json = response.body().string();
-                        Log.e("----------jj", json);
+//                        Log.e("----------jj", json);
                         org.json.JSONObject object = new org.json.JSONObject(json);
                         int code = object.optInt("code");
                         String msg = object.optString("msg");
                         if (code == 200) {
-                            Log.e("----------jj", "0" + msg);
+//                            Log.e("----------jj", "0" + msg);
                             getfensitwo();//刷新
                             Toast.makeText(FensiActivity.this, msg, Toast.LENGTH_SHORT).show();
+                            EventBus.getDefault().post(new attentionchange("ok"));
 
                         } else {
                             Toast.makeText(FensiActivity.this, msg, Toast.LENGTH_SHORT).show();
@@ -333,5 +345,6 @@ public class FensiActivity extends Activity {
         if (calls != null) {
             calls.cancel();
         }
+        EventBus.getDefault().unregister(this);
     }
 }

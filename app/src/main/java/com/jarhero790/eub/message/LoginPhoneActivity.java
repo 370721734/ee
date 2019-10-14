@@ -226,6 +226,7 @@ public class LoginPhoneActivity extends AppCompatActivity {
                                         successBusinese(result);
 
                                         startActivity(new Intent(LoginPhoneActivity.this, MainActivity.class));
+                                        //成功后，返回主页怎么，继续播放
 
 //                                Toast.makeText(LoginPhoneActivity.this, msg, Toast.LENGTH_LONG).show();
                                         finish();

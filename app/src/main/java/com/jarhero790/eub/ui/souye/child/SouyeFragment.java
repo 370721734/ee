@@ -115,7 +115,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     private TikTokController mTikTokController;
     private TikTokAdapter tikTokAdapter;
     private VideoView mVideoView;
-//    private AtomicInteger cate = new AtomicInteger(0);
+    //    private AtomicInteger cate = new AtomicInteger(0);
 //    private AtomicInteger page = new AtomicInteger(1);
     private static AtomicInteger cate = new AtomicInteger(0);
     private static AtomicInteger page = new AtomicInteger(1);
@@ -517,7 +517,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
     public void updateVideos(ArrayList<Video> videos) {
 
         lists.addAll(videos);
-        mVideoView=new VideoView(getActivity());
+        mVideoView = new VideoView(getActivity());
         mVideoView.setLooping(true);
         mTikTokController = new TikTokController(AppUtils.getContext());
         mVideoView.setVideoController(mTikTokController);
@@ -554,9 +554,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //            }
 //        });
 //        adapterSetOnItemClickListerer();
-
-
-
 
 
         //设置视频
@@ -646,8 +643,6 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         });
 
 
-
-
     }
 
 
@@ -721,6 +716,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 flag.set(true);
 //                Log.e("----------4", "是不是这里" + mCurrentPosition);
                 startPlay(mCurrentPosition);
+
 
             }
 //            if (mPresenter!=null)
@@ -1325,7 +1321,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
         mVideoView.start();
     }
 
-
+//    RelativeLayout.LayoutParams params;
     private void startPlay(int position) {
 
         //如果滑动到了最后一页 就要加载新的数据了
@@ -1335,6 +1331,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 dialog = new Dialog(getActivity(), R.style.progress_dialog);
                 dialog.setContentView(R.layout.dialog);
                 dialog.setCancelable(false);
+                if (dialog.getWindow()!=null)
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
                 flag.set(false);
@@ -1352,30 +1349,78 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
         View itemView = recyclerView.getChildAt(0);
 //        View bb=View.inflate(this,R.layout.item_tik_tok,null);不行这句
-        if (itemView==null) return;
+        if (itemView == null) return;
         RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
         Glide.with(this)
                 .load(lists.get(position).getVideo_img())
-                .apply(new RequestOptions().placeholder(android.R.color.white))
+                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
                 .into(mTikTokController.getThumb());
+
         ViewParent parent = mVideoView.getParent();
         if (parent instanceof RelativeLayout) {
             ((RelativeLayout) parent).removeView(mVideoView);
         }
-        if (relativeLayout==null) return;
-        relativeLayout.addView(mVideoView,2);
+        if (relativeLayout == null) return;
+        relativeLayout.addView(mVideoView, 2);
         HttpProxyCacheServer proxy = GlobalApplication.getProxy(getActivity());
         String proxyUrl = proxy.getProxyUrl(lists.get(position).getUrl());
         mVideoView.setUrl(proxyUrl);
-        if (lists.get(position).getAnyhow().equals("1")){
+        if (lists.get(position).getAnyhow().equals("1")) {
+
+//            mTikTokController.TikTokContro(false,lists.get(position).getVideo_img());
+//            if (tuaddurl!=null)
+//                tuaddurl.onClickear(false,lists.get(position).getVideo_img());
+
+//            RelativeLayout.LayoutParams   params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            mTikTokController.getThumb().setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.CENTER_CROP);
+////            mTikTokController.getThumb().setAdjustViewBounds(true);
+//            Glide.with(getActivity())
+//                    .load(lists.get(position).getVideo_img())
+////                .thumbnail(0.1f)
+//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                    .into(mTikTokController.getThumb());
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
-        }else {
+//            Log.e("---------------","我是竖屏来了");
+        } else {
+//            mTikTokController.TikTokContro(true,lists.get(position).getVideo_img());
+//            if (tuaddurl!=null)
+//                tuaddurl.onClickear(true,lists.get(position).getVideo_img());
+//            RelativeLayout.LayoutParams   params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);//
+//            mTikTokController.getThumb().setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+//            mTikTokController.getThumb().setAdjustViewBounds(true);
+//            Glide.with(getActivity())
+//                    .load(lists.get(position).getVideo_img())
+////                .thumbnail(0.1f)
+//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                    .into(mTikTokController.getThumb());
+//            Log.e("---------------","横屏来了");
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+
         }
+
+        //全屏
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.MATCH_PARENT);
+        params.setMargins(0, 0, 0, 0);
+        mVideoView.setLayoutParams(params);
+//        View view = layoutManager.findViewByPosition(position);    //为recyclerView中item位置
+//        if (view != null)
+//            view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
 
         mVideoView.start();
 //        Log.e("-----------tu7",lists.get(position).getVideo_img());
 //        Log.e("-----------url",lists.get(position).getUrl());
+
+        viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
+        if (viewplaypause != null) {
+            viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
+//            viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
+        }
     }
 
 
@@ -1854,12 +1899,54 @@ e.printStackTrace();
     public void onPageRelease(boolean isNext, int position) {
         if (mCurrentPosition == position) {
             mVideoView.release();
+
         }
     }
 
     @Override
     public void onPageSelected(int position, boolean isBottom) {
         if (mCurrentPosition == position) return;
+//                Glide.with(this)
+//                .load(lists.get(position).getVideo_img())
+//                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                .into(mTikTokController.getThumb());
+
+
+
+//        if (lists.get(position).getAnyhow().equals("1")) {
+//            params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            mTikTokController.getThumb().setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+//            mTikTokController.getThumb().setAdjustViewBounds(true);
+//            Glide.with(getActivity())
+//                    .load(lists.get(position).getVideo_img())
+////                .thumbnail(0.1f)
+//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                    .into(mTikTokController.getThumb());
+////            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+//            Log.e("---------------","我是竖屏来了");
+//        } else {
+//             params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);//
+//            mTikTokController.getThumb().setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+//            mTikTokController.getThumb().setAdjustViewBounds(true);
+//            Glide.with(getActivity())
+//                    .load(lists.get(position).getVideo_img())
+////                .thumbnail(0.1f)
+//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                    .into(mTikTokController.getThumb());
+//            Log.e("---------------","横屏来了");
+////            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+//
+//        }
+
+
+
+
+
+
         startPlay(position);
         mCurrentPosition = position;
 //                Log.e("-----------gg","2222222222不同");
@@ -1889,4 +1976,14 @@ e.printStackTrace();
 //            notifyItemRangeChanged(0, poiItemList.size());
 //        }
 //    }
+
+
+    public interface Tuaddurl{
+        void onClickear(boolean isheng,String url);
+    }
+    private Tuaddurl tuaddurl;
+
+    public void setTuaddurl(Tuaddurl tuaddurl) {
+        this.tuaddurl = tuaddurl;
+    }
 }
