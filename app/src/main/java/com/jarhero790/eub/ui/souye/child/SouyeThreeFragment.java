@@ -1273,10 +1273,10 @@ public class SouyeThreeFragment extends BaseMVPCompatFragment<SouyeContract.Souy
 //        View bb=View.inflate(this,R.layout.item_tik_tok,null);不行这句
         if (itemView==null) return;
         RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
-        Glide.with(this)
-                .load(lists.get(position).getVideo_img())
-                .apply(new RequestOptions().placeholder(android.R.color.white))
-                .into(mTikTokController.getThumb());
+//        Glide.with(this)
+//                .load(lists.get(position).getVideo_img())
+//                .apply(new RequestOptions().placeholder(android.R.color.white))
+//                .into(mTikTokController.getThumb());
         ViewParent parent = mVideoView.getParent();
         if (parent instanceof RelativeLayout) {
             ((RelativeLayout) parent).removeView(mVideoView);
@@ -1287,8 +1287,22 @@ public class SouyeThreeFragment extends BaseMVPCompatFragment<SouyeContract.Souy
         String proxyUrl = proxy.getProxyUrl(lists.get(position).getUrl());
         mVideoView.setUrl(proxyUrl);
         if (lists.get(position).getAnyhow().equals("1")) {
+            mTikTokController.getThumb().setVisibility(View.VISIBLE);
+            mTikTokController.getThumbHeng().setVisibility(View.GONE);
+            Glide.with(getActivity())
+                    .load(lists.get(position).getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumb());
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
         }else {
+            mTikTokController.getThumb().setVisibility(View.GONE);
+            mTikTokController.getThumbHeng().setVisibility(View.VISIBLE);
+            Glide.with(getActivity())
+                    .load(lists.get(position).getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumbHeng());
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
         }
         //全屏

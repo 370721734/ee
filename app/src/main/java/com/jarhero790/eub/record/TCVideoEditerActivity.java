@@ -198,7 +198,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
 
         mIsPicCombine = getIntent().getBooleanExtra(TCConstants.INTENT_KEY_MULTI_PIC_CHOOSE, false);
-        mNeedProcessVideo = getIntent().getBooleanExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
+        mNeedProcessVideo = getIntent().getBooleanExtra(TCConstants.VIDEO_EDITER_IMPORT, false);//4
         istransverse = getIntent().getIntExtra(TCConstants.TRANSVERSE, TXLiveConstants.RENDER_ROTATION_0);
         if (mIsPicCombine) {
             picPathList = getIntent().getStringArrayListExtra(TCConstants.INTENT_KEY_MULTI_PIC_LIST);
@@ -232,12 +232,12 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             mVideoDuration = mEditerWrapper.getTXVideoInfo().duration;
         }
         mEditerWrapper.setCutterStartTime(0, mVideoDuration);
-        mVideoResolution = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);
-        mCustomBitrate = getIntent().getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 0);
+        mVideoResolution = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_RESOLUTION, -1);//1
+        mCustomBitrate = getIntent().getIntExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 0);//3
         videotime = getIntent().getIntExtra("time", 0) - 1;
-        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+        mVideoFrom = getIntent().getIntExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);//5
         // 录制经过预处理的视频路径，在编辑后需要删掉录制源文件
-        mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);
+        mRecordProcessedPath = getIntent().getStringExtra(TCConstants.VIDEO_EDITER_PATH);//2
 
 //        Log.e("---------------------mVideoOutputPath=2",mVideoOutputPath+"   "+mRecordProcessedPath);
         mVideoOutputPath = getCustomVideoOutputPath();
@@ -1144,6 +1144,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         if (mCustomBitrate != 0) { // 是否自定义码率
             mTXVideoEditer.setVideoBitrate(mCustomBitrate);
         }
+
+
         if (mVideoResolution == -1) {// 默认情况下都将输出720的视频
             mTXVideoEditer.generateVideo(TXVideoEditConstants.VIDEO_COMPRESSED_720P, mVideoOutputPath);
         } else if (mVideoResolution == TXRecordCommon.VIDEO_RESOLUTION_360_640) {
@@ -1462,14 +1464,18 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
                     if (mresult != null && ms != null) {
                         Intent intent = new Intent(TCVideoEditerActivity.this, FaBuActivity.class);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
                         intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                         intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
                         intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                         intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
                         intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, videoPath);
                         intent.putExtra(TCConstants.TRANSVERSE, istransverse);
+                        if (istransverse==TXLiveConstants.RENDER_ROTATION_0){
+                            intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);//竖
+                        }else {
+                            intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);//横
+                        }
+
                         intent.putExtra("videotime", videotime);
 //                        Log.e("--mVideoOutputPath11=",videoPath+"  "+mVideoOutputPath);
                         intent.putExtra("mid", mid);
@@ -1505,7 +1511,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
-                Log.e(TAG, "changeAudioVol ffmpeg start...");
+//                Log.e(TAG, "changeAudioVol ffmpeg start...");
                 handler.sendEmptyMessage(0);
             }
 

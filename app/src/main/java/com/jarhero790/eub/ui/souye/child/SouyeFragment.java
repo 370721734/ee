@@ -1351,10 +1351,10 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //        View bb=View.inflate(this,R.layout.item_tik_tok,null);不行这句
         if (itemView == null) return;
         RelativeLayout relativeLayout = itemView.findViewById(R.id.souye_page_video_relativeLayout);
-        Glide.with(this)
-                .load(lists.get(position).getVideo_img())
-                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-                .into(mTikTokController.getThumb());
+//        Glide.with(this)
+//                .load(lists.get(position).getVideo_img())
+//                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+//                .into(mTikTokController.getThumb());
 
         ViewParent parent = mVideoView.getParent();
         if (parent instanceof RelativeLayout) {
@@ -1371,32 +1371,43 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //            if (tuaddurl!=null)
 //                tuaddurl.onClickear(false,lists.get(position).getVideo_img());
 
+
+            mTikTokController.getThumb().setVisibility(View.VISIBLE);
+            mTikTokController.getThumbHeng().setVisibility(View.GONE);
+
 //            RelativeLayout.LayoutParams   params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
 //            mTikTokController.getThumb().setLayoutParams(params);
 //            params.addRule(RelativeLayout.CENTER_VERTICAL);
 //            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.CENTER_CROP);
 ////            mTikTokController.getThumb().setAdjustViewBounds(true);
-//            Glide.with(getActivity())
-//                    .load(lists.get(position).getVideo_img())
-////                .thumbnail(0.1f)
-//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-//                    .into(mTikTokController.getThumb());
+            Glide.with(getActivity())
+                    .load(lists.get(position).getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumb());
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
 //            Log.e("---------------","我是竖屏来了");
         } else {
 //            mTikTokController.TikTokContro(true,lists.get(position).getVideo_img());
 //            if (tuaddurl!=null)
 //                tuaddurl.onClickear(true,lists.get(position).getVideo_img());
+
+
+            mTikTokController.getThumb().setVisibility(View.GONE);
+            mTikTokController.getThumbHeng().setVisibility(View.VISIBLE);
+
+
+
 //            RelativeLayout.LayoutParams   params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);//
 //            mTikTokController.getThumb().setLayoutParams(params);
 //            params.addRule(RelativeLayout.CENTER_VERTICAL);
 //            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
 //            mTikTokController.getThumb().setAdjustViewBounds(true);
-//            Glide.with(getActivity())
-//                    .load(lists.get(position).getVideo_img())
-////                .thumbnail(0.1f)
-//                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-//                    .into(mTikTokController.getThumb());
+            Glide.with(getActivity())
+                    .load(lists.get(position).getVideo_img())
+//                .thumbnail(0.1f)
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .into(mTikTokController.getThumbHeng());
 //            Log.e("---------------","横屏来了");
             mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
 

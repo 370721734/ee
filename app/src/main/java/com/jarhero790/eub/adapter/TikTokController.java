@@ -24,6 +24,7 @@ import com.jarhero790.eub.utils.AppUtils;
 public class TikTokController extends BaseVideoController {
 
     private ImageView thumb;
+    private ImageView iv_thumb_heng;
 //    private boolean isheng;
 //    private String url;
 
@@ -53,6 +54,7 @@ public class TikTokController extends BaseVideoController {
     protected void initView() {
         super.initView();
         thumb = mControllerView.findViewById(R.id.iv_thumb);
+        iv_thumb_heng = mControllerView.findViewById(R.id.iv_thumb_heng);
 
 
 
@@ -95,11 +97,13 @@ public class TikTokController extends BaseVideoController {
             case VideoView.STATE_IDLE:
                 //L.e("STATE_IDLE");
                thumb.setVisibility(VISIBLE);
+                iv_thumb_heng.setVisibility(VISIBLE);
 //                Log.e("--------------","显示图片");
                 break;
             case VideoView.STATE_PLAYING:
                 //L.e("STATE_PLAYING");
                 thumb.setVisibility(GONE);
+                iv_thumb_heng.setVisibility(GONE);
 //                Log.e("--------------","隐藏图片");
                 break;
             case VideoView.STATE_PREPARED:
@@ -133,6 +137,9 @@ public class TikTokController extends BaseVideoController {
 
     public ImageView getThumb() {
         return thumb;
+    }
+    public ImageView getThumbHeng() {
+        return iv_thumb_heng;
     }
 
 

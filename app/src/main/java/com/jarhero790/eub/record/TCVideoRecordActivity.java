@@ -234,7 +234,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             // 如果是从录制过来的话，需要传递一个分辨率参数下去。
 
             intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);//高
-
+            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH,mTXRecordResult.coverPath);
             intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mTXRecordResult.videoPath);
             intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, mBiteRate);
             intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
