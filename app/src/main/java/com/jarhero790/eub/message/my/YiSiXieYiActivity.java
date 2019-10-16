@@ -2,7 +2,6 @@ package com.jarhero790.eub.message.my;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -14,7 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class XieYiActivity extends AppCompatActivity {
+public class YiSiXieYiActivity extends AppCompatActivity {
 
     @BindView(R.id.back)
     ImageView back;
@@ -48,7 +47,7 @@ public class XieYiActivity extends AppCompatActivity {
 
 //        webView.loadUrl("http://120.79.222.191/zstv/public/index.php/user/index/index.html");
 //        webView.loadUrl("http://www.51ayhd.com/user/index/index.html");//下载app页面
-        webView.loadUrl("http://www.51ayhd.com/user/index/agreement.html");//下载app页面
+        webView.loadUrl("http://www.51ayhd.com/user/index/privacy.html");
 
 
     }

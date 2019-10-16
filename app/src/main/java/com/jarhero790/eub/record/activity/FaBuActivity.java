@@ -12,6 +12,8 @@ import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -389,52 +391,69 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
 
 //
-                    RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap, part).enqueue(new Callback<ResponseBody>() {
-                        @Override
-                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-                            if (response.isSuccessful()) {
-                                dialog.dismiss();
-                                tvFabu.setEnabled(true);
-                                try {
-                                    String json = response.body().string();
-//                                    Log.e("--------------333", json);
-                                    JSONObject object = new JSONObject(json);
-                                    int code = object.optInt("code");
-                                    String msg = object.optString("msg");
-                                    if (code == 200) {
-                                        EventBus.getDefault().post(new FaVBean("video"));
-                                        startActivity(new Intent(FaBuActivity.this, MainActivity.class));
-
-                                    } else {
-                                        Toast.makeText(FaBuActivity.this, msg, Toast.LENGTH_SHORT).show();
-                                    }
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            } else {
-                                dialog.dismiss();
-                                tvFabu.setEnabled(true);
-//                            Log.e("--------------333", "fail" + response.message());
-//                            try {
-//                                Log.e("--------------3232","fail"+response.body().string());
-//                            } catch (IOException e) {
-//                                e.printStackTrace();
+//                    RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap, part).enqueue(new Callback<ResponseBody>() {
+//                        @Override
+//                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+//                            if (response.isSuccessful()) {
+//                                dialog.dismiss();
+//                                tvFabu.setEnabled(true);
+//                                try {
+//                                    String json = response.body().string();
+////                                    Log.e("--------------333", json);
+//                                    JSONObject object = new JSONObject(json);
+//                                    int code = object.optInt("code");
+//                                    String msg = object.optString("msg");
+//                                    if (code == 200) {
+//                                        EventBus.getDefault().post(new FaVBean("video"));
+//                                        startActivity(new Intent(FaBuActivity.this, MainActivity.class));
+//
+//                                    } else {
+//                                        Toast.makeText(FaBuActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                                    }
+//                                } catch (Exception e) {
+//                                    e.printStackTrace();
+//                                }
+//                            } else {
+//                                dialog.dismiss();
+//                                tvFabu.setEnabled(true);
+////                            Log.e("--------------333", "fail" + response.message());
+////                            try {
+////                                Log.e("--------------3232","fail"+response.body().string());
+////                            } catch (IOException e) {
+////                                e.printStackTrace();
+////                            }
+//
 //                            }
-
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-//                            Log.e("--------------333", "fail2");
-                            dialog.dismiss();
-                            tvFabu.setEnabled(true);
-                        }
-                    });
+//                        }
+//
+//                        @Override
+//                        public void onFailure(Call<ResponseBody> call, Throwable t) {
+////                            Log.e("--------------333", "fail2");
+//                            dialog.dismiss();
+//                            tvFabu.setEnabled(true);
+//                        }
+//                    });
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+
+
+//                new Thread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        outputvideo = Environment.getExternalStorageDirectory().getPath() + "/" + System.currentTimeMillis() + ".mp4";
+//                        String cmd_tran3=String.format("ffmpeg -i "+mVideoPath+" -vcodec libx264 -crf 20 "+outputvideo);
+//                        int i= com.mabeijianxi.jianxiffmpegcmd.MainActivity.getInstance().jxFFmpegCMDRun(cmd_tran3);
+//                        Log.e("-----------i=","="+i);
+//                             new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                                 @Override
+//                                 public void run() {
+//                                     dialog.dismiss();
+//                                 }
+//                             });
+//                    }
+//                }).start();
 
 
 //                outputvideo = Environment.getExternalStorageDirectory().getPath() + "/" + System.currentTimeMillis() + ".mp4";

@@ -58,6 +58,8 @@
         <activity
             android:name=".message.souye.BindPhoneActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".message.my.YiSiXieYiActivity"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".message.my.PlayVideoActivity"
             android:screenOrientation="portrait" />

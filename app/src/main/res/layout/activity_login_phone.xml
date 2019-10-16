@@ -15,7 +15,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
         android:gravity="left"
-        android:padding="11dp"
+        android:padding="12dp"
         android:src="@mipmap/back" />
 
 
@@ -148,6 +148,7 @@
             android:layout_height="15dp"
             android:layout_marginTop="12dp"
             android:gravity="center_vertical"
+            android:visibility="invisible"
             android:orientation="horizontal">
 
             <ImageView

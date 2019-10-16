@@ -15,7 +15,7 @@
         android:layout_marginLeft="16dp"
         android:layout_marginTop="20dp"
         android:gravity="left"
-        android:padding="10dp"
+        android:padding="12dp"
         android:visibility="visible"
         android:src="@mipmap/back" />
 
@@ -66,6 +66,52 @@
             android:gravity="center"
             />
 
+        <LinearLayout
+            android:layout_width="230dp"
+            android:orientation="horizontal"
+            android:layout_marginTop="15dp"
+            android:gravity="center_horizontal"
+            android:layout_height="30dp">
+            <CheckBox
+                android:id="@+id/checkbox"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:button="@drawable/checkbox_check"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="请先阅读"
+                android:layout_marginLeft="5dp"
+                android:textColor="#ffffff"
+                android:gravity="center_vertical"
+                android:textSize="11sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_user_xiyi"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="用户协议"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:textColor="#ffddd0af"
+                android:gravity="center_vertical"
+                android:textSize="11sp"
+                />
+
+            <TextView
+                android:id="@+id/tv_yisi_xiyi"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="隐私协议"
+                android:gravity="center_vertical"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:textColor="#ffddd0af"
+                android:textSize="11sp"
+                />
+
+        </LinearLayout>
 
 
 
@@ -77,7 +123,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="horizontal"
-            android:layout_marginTop="57dp"
+            android:layout_marginTop="40dp"
             >
 
 

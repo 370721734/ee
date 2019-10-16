@@ -37,8 +37,8 @@ android {
         applicationId "com.jarhero790.eub"
         minSdkVersion 22
         targetSdkVersion 28
-        versionCode 1
-        versionName "1.1"
+        versionCode 110514
+        versionName "110514.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -51,6 +51,15 @@ android {
 //            abiFilters "armeabi", "armeabi-v7a", "x86"
 //            abiFilters "armeabi-v7a"
         }
+
+//        externalNativeBuild {
+//            cmake {
+//                cppFlags "-std=c++11"
+//            }
+//            ndk{
+//                abiFilters "armeabi-v7a","x86","x86_64","armeabi"
+//            }
+//        }
 
     }
     buildTypes {
@@ -180,6 +189,7 @@ dependencies {
     //视频缓存
 //    implementation 'com.danikula:videocache:2.7.1'
     api project(':AndroidVideoCache')
+//    api project(':appvideo')
 //
 
 }

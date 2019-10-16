@@ -3,11 +3,12 @@ package com.jarhero790.eub.message;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.GlobalApplication;
@@ -16,6 +17,8 @@ import com.jarhero790.eub.base.AppManager;
 import com.jarhero790.eub.message.bean.souyelookone;
 import com.jarhero790.eub.message.bean.souyelookthree;
 import com.jarhero790.eub.message.bean.souyelooktwo;
+import com.jarhero790.eub.message.my.XieYiActivity;
+import com.jarhero790.eub.message.my.YiSiXieYiActivity;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.tencent.mm.opensdk.modelmsg.SendAuth;
 
@@ -41,6 +44,12 @@ public class LoginNewActivity extends AppCompatActivity {
     ImageView zhifubaoLogin;
 
     GlobalApplication app;
+    @BindView(R.id.checkbox)
+    CheckBox checkbox;
+    @BindView(R.id.tv_user_xiyi)
+    TextView tvUserXiyi;
+    @BindView(R.id.tv_yisi_xiyi)
+    TextView tvYisiXiyi;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,24 +63,34 @@ public class LoginNewActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.phoneLogin, R.id.qq_login, R.id.weixin_login, R.id.zhifubao_login, R.id.back})
+    @OnClick({R.id.phoneLogin, R.id.qq_login, R.id.weixin_login, R.id.zhifubao_login, R.id.back,R.id.tv_user_xiyi,R.id.tv_yisi_xiyi})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.phoneLogin:
-                startActivity(new Intent(this, LoginPhoneActivity.class));
+                if (checkbox.isChecked()){
+                    startActivity(new Intent(this, LoginPhoneActivity.class));
+                }else {
+                    Toast.makeText(this, "请先确认用户协议和隐私协议", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.qq_login:
                 break;
             case R.id.weixin_login:
                 //微信登录
-                if (app.api != null && app.api.isWXAppInstalled()) {
-                    SendAuth.Req req = new SendAuth.Req();
-                    req.scope = "snsapi_userinfo";
-                    req.state = "wechat_sdk_demo_test";
-                    app.api.sendReq(req);
-                } else {
-                    Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
+                if (checkbox.isChecked()){
+                    if (app.api != null && app.api.isWXAppInstalled()) {
+                        SendAuth.Req req = new SendAuth.Req();
+                        req.scope = "snsapi_userinfo";
+                        req.state = "wechat_sdk_demo_test";
+                        app.api.sendReq(req);
+                    } else {
+                        Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
+                    }
+                }else {
+                    Toast.makeText(this, "请先确认用户协议和隐私协议", Toast.LENGTH_SHORT).show();
                 }
+
 
                 break;
             case R.id.zhifubao_login:
@@ -87,6 +106,12 @@ public class LoginNewActivity extends AppCompatActivity {
                 }
 
                 finish();
+                break;
+            case R.id.tv_user_xiyi:
+                startActivity(new Intent(this, XieYiActivity.class));
+                break;
+            case R.id.tv_yisi_xiyi:
+                startActivity(new Intent(this, YiSiXieYiActivity.class));
                 break;
         }
     }
