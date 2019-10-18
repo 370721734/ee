@@ -135,7 +135,9 @@ public class TCVideoEditerActivity extends FragmentActivity implements
     private int videotime;//时间
     private MediaPlayer mMusicPlayer;
 
-    private int istransverse;
+    private int istransverse;//横竖
+//    private boolean isedit=false;//是否有音乐
+
     /**
      * 缩略图进度条相关
      */
@@ -516,6 +518,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             music = data.getStringExtra("music");
             mid = data.getStringExtra("mid");
 //            Log.e("-----------music=", music);
+//            isedit=true;
 
             dialog = new Dialog(this, R.style.progress_dialog);
             dialog.setCancelable(false);

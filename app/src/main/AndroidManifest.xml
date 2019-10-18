@@ -59,6 +59,7 @@
             android:name=".message.souye.BindPhoneActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".message.my.YiSiXieYiActivity"
+
             android:screenOrientation="portrait"/>
         <activity
             android:name=".message.my.PlayVideoActivity"
@@ -129,6 +130,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".message.my.XieYiActivity"
+           android:theme="@style/mTheme"
             android:screenOrientation="portrait" />
         <activity
             android:name=".message.my.AboutActivity"
@@ -182,24 +184,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".record.TCVideoRecordActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.LoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.UserNameLoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.PhoneLoginActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.RegisterActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.RegisterByPhoneActivity"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.RegisterByUsernameActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.FensiActivity"

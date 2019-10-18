@@ -419,7 +419,9 @@ public class SettingActivity extends AppCompatActivity {
 
                 break;
             case R.id.tv_xieyi:
-                startActivity(new Intent(SettingActivity.this, XieYiActivity.class));
+                startActivity(new Intent(SettingActivity.this, XieYiActivity.class)
+                        .putExtra("name", "用户协议")
+                        .putExtra("url","http://www.51ayhd.com/user/index/agreement.html"));
                 break;
             case R.id.man:
                 sexs = "1";

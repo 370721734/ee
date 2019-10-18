@@ -35,11 +35,11 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginRight="30dp"
-            android:text="关于我们"/>
+            android:text="联系我们"/>
 
     </LinearLayout>
 
-<ImageView
+<de.hdodenhof.circleimageview.CircleImageView
     android:layout_width="95dp"
     android:layout_height="95dp"
     android:src="@mipmap/zuanshi_logo"
@@ -74,4 +74,49 @@
         android:textColor="#ff838181"
         android:textSize="15sp"
         />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+
+
+        <TextView
+            android:id="@+id/tv_acctent_find"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="账号找回"
+            android:layout_marginTop="36dp"
+            android:textColor="#ff838181"
+            android:textSize="15sp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="60dp"
+            />
+
+        <TextView
+            android:id="@+id/tv_user_xiyi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="用户协议"
+            android:layout_marginTop="36dp"
+            android:textColor="#ff838181"
+            android:textSize="15sp"
+            android:layout_above="@id/tv_acctent_find"
+            />
+
+        <TextView
+            android:id="@+id/tv_yisi_xiyi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="隐私协议"
+            android:layout_marginTop="36dp"
+            android:layout_above="@id/tv_user_xiyi"
+            android:textColor="#ff838181"
+            android:textSize="15sp"
+            />
+
+    </RelativeLayout>
 </LinearLayout>

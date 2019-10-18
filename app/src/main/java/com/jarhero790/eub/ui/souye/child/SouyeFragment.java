@@ -745,7 +745,7 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
             }
             if (lists.size() > 0) {
                 lists.clear();
-                tikTokAdapter.notifyDataSetChanged();
+//                tikTokAdapter.notifyDataSetChanged();//空
             }
             cate.set(0);
             page.set(1);

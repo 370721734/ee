@@ -25,6 +25,7 @@
             android:src="@mipmap/back"/>
 
         <TextView
+            android:id="@+id/center_title"
             android:layout_width="0dp"
             android:layout_weight="8"
             android:layout_height="wrap_content"
@@ -43,11 +44,17 @@
         android:layout_marginTop="5dp"
         android:background="#ffffff"/>
 
-
-    <WebView
-        android:id="@+id/rc_webview"
+    <RelativeLayout
         android:layout_width="match_parent"
+        android:background="@color/backgroudcolor"
         android:layout_height="match_parent">
-    </WebView>
+        <WebView
+            android:id="@+id/rc_webview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </WebView>
+    </RelativeLayout>
+
+
 
 </LinearLayout>

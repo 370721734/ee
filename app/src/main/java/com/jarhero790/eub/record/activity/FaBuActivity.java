@@ -1,19 +1,19 @@
 package com.jarhero790.eub.record.activity;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
@@ -37,6 +37,7 @@ import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.permission.KbPermission;
 import com.jarhero790.eub.message.permission.KbPermissionListener;
 import com.jarhero790.eub.message.permission.KbPermissionUtils;
+import com.jarhero790.eub.record.FileUtils;
 import com.jarhero790.eub.record.TCConstants;
 import com.jarhero790.eub.record.TCVideoEditerActivity;
 import com.jarhero790.eub.record.bean.BitmapBean;
@@ -79,6 +80,7 @@ import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import silladus.basic.IFragment;
 
 
 public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListener {
@@ -252,9 +254,11 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                    ImageView imageView = viewp.findViewById(R.id.iv_icon);
 //                    Glide.with(this).load(R.mipmap.wangluoicon).apply(new RequestOptions().diskCacheStrategy(DiskCacheStrategy.RESOURCE))
 //                            .into(imageView);
-                dialog.setContentView(R.layout.dialog);
+
                 dialog.setCancelable(false);
+                if (dialog.getWindow()!=null)
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setContentView(R.layout.dialog);
                 dialog.show();
 
                 String title = etTitle.getText().toString();
@@ -268,7 +272,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 Map<String, RequestBody> bodyMap = builder.bulider();
 
 
-                File file = new File(mVideoPath);//更换
+//                File file = new File(mVideoPath);//更换
 //                if (!file.exists()) {
 //                    file.mkdirs();
 //                }
@@ -327,8 +331,13 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                    bytes = GifUtil.readStream(mVideoPath);
 
 //                    String newbytes = new String(bytes, "UTF-8");
-                    RequestBody yfile = RequestBody.create(MediaType.parse("video/mp4"), file);//
-                    MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), yfile);
+
+
+//                    RequestBody yfile = RequestBody.create(MediaType.parse("video/mp4"), file);//
+//                    MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), yfile);
+
+
+
 ////                    if (bytes.length>0){
 //
 //                    RetrofitManager.getInstance().getDataServer().uploadmusic(SharePreferenceUtil.getToken(AppUtils.getContext())
@@ -390,71 +399,120 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                    });
 
 
-//
-//                    RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap, part).enqueue(new Callback<ResponseBody>() {
-//                        @Override
-//                        public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
-//                            if (response.isSuccessful()) {
-//                                dialog.dismiss();
-//                                tvFabu.setEnabled(true);
-//                                try {
-//                                    String json = response.body().string();
-////                                    Log.e("--------------333", json);
-//                                    JSONObject object = new JSONObject(json);
-//                                    int code = object.optInt("code");
-//                                    String msg = object.optString("msg");
-//                                    if (code == 200) {
-//                                        EventBus.getDefault().post(new FaVBean("video"));
-//                                        startActivity(new Intent(FaBuActivity.this, MainActivity.class));
-//
-//                                    } else {
-//                                        Toast.makeText(FaBuActivity.this, msg, Toast.LENGTH_SHORT).show();
-//                                    }
-//                                } catch (Exception e) {
-//                                    e.printStackTrace();
-//                                }
-//                            } else {
-//                                dialog.dismiss();
-//                                tvFabu.setEnabled(true);
-////                            Log.e("--------------333", "fail" + response.message());
-////                            try {
-////                                Log.e("--------------3232","fail"+response.body().string());
-////                            } catch (IOException e) {
-////                                e.printStackTrace();
-////                            }
-//
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Looper.prepare();
+//                            Log.e("-----------i=","1");
+                            outputvideo = Environment.getExternalStorageDirectory().getPath() + "/" + System.currentTimeMillis() + ".mp4";
+                            String cmd_tran3=String.format("ffmpeg -i "+mVideoPath+" -vcodec libx264 -crf 24 "+outputvideo);
+                            int i= com.mabeijianxi.jianxiffmpegcmd.MainActivity.getInstance().jxFFmpegCMDRun(cmd_tran3);
+
+//                            Log.e("-----------i=","="+i);
+                            if (i==0){
+                                File file = new File(outputvideo);//更换
+                                RequestBody yfile = RequestBody.create(MediaType.parse("video/mp4"), file);//
+                                MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), yfile);
+
+                                RetrofitManager.getInstance().getDataServer().uploadLocal(bodyMap, part).enqueue(new Callback<ResponseBody>() {
+                                    @Override
+                                    public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+                                        if (response.isSuccessful()) {
+//                                            dialog.dismiss();
+//                                            tvFabu.setEnabled(true);
+                                            try {
+                                                String json = response.body().string();
+//                                    Log.e("--------------333", json);
+                                                JSONObject object = new JSONObject(json);
+                                                int code = object.optInt("code");
+                                                String msg = object.optString("msg");
+                                                if (code == 200) {
+//                                                    EventBus.getDefault().post(new FaVBean("video"));
+//                                                    startActivity(new Intent(FaBuActivity.this, MainActivity.class));
+                                                    mhandler.sendEmptyMessage(1);
+
+                                                } else {
+                                                    mhandler.sendEmptyMessage(2);
+//                                                    Toast.makeText(FaBuActivity.this, msg, Toast.LENGTH_SHORT).show();
+                                                }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        } else {
+                                            mhandler.sendEmptyMessage(2);
+//                                            dialog.dismiss();
+//                                            tvFabu.setEnabled(true);
+//                            Log.e("--------------333", "fail" + response.message());
+//                            try {
+//                                Log.e("--------------3232","fail"+response.body().string());
+//                            } catch (IOException e) {
+//                                e.printStackTrace();
 //                            }
-//                        }
+
+                                        }
+                                    }
+
+                                    @Override
+                                    public void onFailure(Call<ResponseBody> call, Throwable t) {
+//                            Log.e("--------------333", "fail2");
+//                                        dialog.dismiss();
+//                                        tvFabu.setEnabled(true);
+                                        mhandler.sendEmptyMessage(2);
+                                    }
+                                });
+                            }
+
+//                             new Handler(Looper.getMainLooper()).post(new Runnable() {
+//                                 @Override
+//                                 public void run() {
+//                                     Toast.makeText(FaBuActivity.this,"ok了"+i,Toast.LENGTH_LONG).show();
+//                                     if (dialog!=null)
+//                                     dialog.dismiss();
+//                                 }
+//                             });
+//                        runOnUiThread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                Log.e("-----------i=","2");
+//                                Toast.makeText(FaBuActivity.this,"ok了"+i,Toast.LENGTH_LONG).show();
+//                                if (dialog!=null)
+//                                     dialog.dismiss();
 //
-//                        @Override
-//                        public void onFailure(Call<ResponseBody> call, Throwable t) {
-////                            Log.e("--------------333", "fail2");
-//                            dialog.dismiss();
-//                            tvFabu.setEnabled(true);
-//                        }
-//                    });
+//                                Log.e("-----------i=","3");
+//                            }
+//                        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                            Looper.loop();
+                        }
+                    }).start();
 
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
 
 
-//                new Thread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        outputvideo = Environment.getExternalStorageDirectory().getPath() + "/" + System.currentTimeMillis() + ".mp4";
-//                        String cmd_tran3=String.format("ffmpeg -i "+mVideoPath+" -vcodec libx264 -crf 20 "+outputvideo);
-//                        int i= com.mabeijianxi.jianxiffmpegcmd.MainActivity.getInstance().jxFFmpegCMDRun(cmd_tran3);
-//                        Log.e("-----------i=","="+i);
-//                             new Handler(Looper.getMainLooper()).post(new Runnable() {
-//                                 @Override
-//                                 public void run() {
-//                                     dialog.dismiss();
-//                                 }
-//                             });
-//                    }
-//                }).start();
 
+
+//                Log.e("-----------i=","4");
 
 //                outputvideo = Environment.getExternalStorageDirectory().getPath() + "/" + System.currentTimeMillis() + ".mp4";
 //                File file=new File(outputvideo);
@@ -486,7 +544,7 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mVideoResolution);
                 intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, mVideoFrom);//TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD
                 intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoPath);
-                intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 9600);
+                intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 6500);
                 intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
                 intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mCoverImagePath);
 //                int times = (int) mProgressTime.getTag();
@@ -711,5 +769,30 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
         return false;
     }
 
+
+    @SuppressLint("HandlerLeak")
+    Handler mhandler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+          switch (msg.what){
+              case 1:
+                  dialog.dismiss();
+                  tvFabu.setEnabled(true);
+                  EventBus.getDefault().post(new FaVBean("video"));
+                  startActivity(new Intent(FaBuActivity.this, MainActivity.class));
+                  if (outputvideo!=null)
+                  FileUtils.deleteFile(outputvideo);
+                  finish();
+                  break;
+              case 2:
+                  dialog.dismiss();
+                  tvFabu.setEnabled(true);
+                  Toast.makeText(FaBuActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+                  if (outputvideo!=null)
+                      FileUtils.deleteFile(outputvideo);
+                  break;
+          }
+        }
+    };
 
 }

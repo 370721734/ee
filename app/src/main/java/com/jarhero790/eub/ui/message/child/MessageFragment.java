@@ -19,7 +19,6 @@ import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.JSONObject;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.activity.FensiActivity;
-import com.jarhero790.eub.adapter.MessageAdapter;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
 import com.jarhero790.eub.base.BasePresenter;
 import com.jarhero790.eub.bean.Message;

@@ -9,11 +9,6 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.adapter.MessageAdapter;
-import com.jarhero790.eub.bean.MessageEntity;
-import com.jarhero790.eub.bean.MessageLike;
-import com.jarhero790.eub.bean.MessageSystem;
-import com.jarhero790.eub.bean.MessagesBean;
 import com.jarhero790.eub.message.adapter.SysMessageAdapter;
 import com.jarhero790.eub.message.bean.SysMessageBean;
 import com.jarhero790.eub.message.net.RetrofitManager;

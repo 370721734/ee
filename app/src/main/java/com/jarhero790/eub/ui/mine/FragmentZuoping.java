@@ -144,8 +144,8 @@ public class FragmentZuoping extends SupportFragment {
 
     private void initDate() {
         dialog = new Dialog(getActivity(), R.style.progress_dialog);
-
         dialog.setCancelable(true);
+        if (dialog.getWindow()!=null)
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setContentView(R.layout.dialog);
         dialog.show();

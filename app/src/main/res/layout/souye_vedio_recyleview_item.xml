@@ -87,6 +87,22 @@
                 android:textSize="12sp" />
 
             <ImageView
+                android:id="@+id/iv_commit"
+                android:layout_width="30dp"
+                android:layout_height="29dp"
+                android:layout_marginBottom="5dp"
+                android:src="@mipmap/icon_video_commit" />
+
+            <TextView
+                android:id="@+id/tv_pinglun"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:text="0"
+                android:textColor="#F4F0F0"
+                android:textSize="12sp" />
+
+            <ImageView
                 android:id="@+id/iv_gold_coin"
                 android:layout_width="23dp"
                 android:layout_height="35dp"
@@ -102,21 +118,7 @@
                 android:textColor="#F4F0F0"
                 android:textSize="12sp" />
 
-            <ImageView
-                android:id="@+id/iv_commit"
-                android:layout_width="30dp"
-                android:layout_height="29dp"
-                android:layout_marginBottom="5dp"
-                android:src="@mipmap/icon_video_commit" />
 
-            <TextView
-                android:id="@+id/tv_pinglun"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                android:text="0"
-                android:textColor="#F4F0F0"
-                android:textSize="12sp" />
 
             <ImageView
                 android:id="@+id/iv_gift"

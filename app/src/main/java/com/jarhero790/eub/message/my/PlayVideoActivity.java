@@ -171,12 +171,12 @@ public class PlayVideoActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(tikTokAdapter);
 
 
-        mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-
-            }
-        });
+//        mRecyclerView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+//            @Override
+//            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+//
+//            }
+//        });
 
         adapterSetOnItemClickListerer();
         layoutManager.setOnViewPagerListener(new OnViewPagerListener() {

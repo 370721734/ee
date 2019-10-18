@@ -63,13 +63,13 @@ public class LoginNewActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.phoneLogin, R.id.qq_login, R.id.weixin_login, R.id.zhifubao_login, R.id.back,R.id.tv_user_xiyi,R.id.tv_yisi_xiyi})
+    @OnClick({R.id.phoneLogin, R.id.qq_login, R.id.weixin_login, R.id.zhifubao_login, R.id.back, R.id.tv_user_xiyi, R.id.tv_yisi_xiyi})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.phoneLogin:
-                if (checkbox.isChecked()){
+                if (checkbox.isChecked()) {
                     startActivity(new Intent(this, LoginPhoneActivity.class));
-                }else {
+                } else {
                     Toast.makeText(this, "请先确认用户协议和隐私协议", Toast.LENGTH_SHORT).show();
                 }
 
@@ -78,7 +78,7 @@ public class LoginNewActivity extends AppCompatActivity {
                 break;
             case R.id.weixin_login:
                 //微信登录
-                if (checkbox.isChecked()){
+                if (checkbox.isChecked()) {
                     if (app.api != null && app.api.isWXAppInstalled()) {
                         SendAuth.Req req = new SendAuth.Req();
                         req.scope = "snsapi_userinfo";
@@ -87,7 +87,7 @@ public class LoginNewActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
                     }
-                }else {
+                } else {
                     Toast.makeText(this, "请先确认用户协议和隐私协议", Toast.LENGTH_SHORT).show();
                 }
 
@@ -108,16 +108,25 @@ public class LoginNewActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_user_xiyi:
-                startActivity(new Intent(this, XieYiActivity.class));
+                startActivity(new Intent(this, XieYiActivity.class)
+                        .putExtra("name", "用户协议")
+                        .putExtra("url","http://www.51ayhd.com/user/index/agreement.html"));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
                 break;
             case R.id.tv_yisi_xiyi:
-                startActivity(new Intent(this, YiSiXieYiActivity.class));
+                startActivity(new Intent(this, XieYiActivity.class)
+                        .putExtra("name", "隐私协议")
+                        .putExtra("url","http://www.51ayhd.com/user/index/privacy.html"));
+                overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
+
                 break;
         }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     public void ee1(souyelookone bean) {
+
     }
 
     @Override
