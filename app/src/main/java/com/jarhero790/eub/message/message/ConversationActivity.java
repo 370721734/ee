@@ -11,12 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.api.Api;
-import com.jarhero790.eub.message.bean.UserInfo;
-import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.utils.CommonUtil;
 
-import java.lang.annotation.Target;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -26,7 +22,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationFragment;
-import io.rong.imkit.plugin.location.IUserInfoProvider;
 import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import io.rong.imlib.model.Message;

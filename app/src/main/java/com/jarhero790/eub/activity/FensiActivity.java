@@ -7,20 +7,14 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
-import com.google.gson.Gson;
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.api.Api;
 import com.jarhero790.eub.message.adapter.FeiSiAdapter;
 import com.jarhero790.eub.message.bean.FenSiTBean;
 import com.jarhero790.eub.message.bean.attentionchange;
-import com.jarhero790.eub.message.contract.NameContract;
 import com.jarhero790.eub.message.message.GeRenInfoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
@@ -32,7 +26,6 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,13 +33,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.rong.imkit.RongIM;
-import okhttp3.Call;
-import okhttp3.Callback;
-import okhttp3.MultipartBody;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.ResponseBody;
 
 
@@ -321,11 +307,11 @@ public class FensiActivity extends Activity {
     }
 
 
-    private NameContract nameContract;
+//    private NameContract nameContract;
 
-    public void setNameContract(NameContract nameContract) {
-        this.nameContract = nameContract;
-    }
+//    public void setNameContract(NameContract nameContract) {
+//        this.nameContract = nameContract;
+//    }
 
     @OnClick({R.id.back, R.id.wangluoyichang})
     public void onClick(View view) {

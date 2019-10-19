@@ -1424,8 +1424,8 @@ public class SouyeFragment extends BaseMVPCompatFragment<SouyeContract.SouyePres
 //            view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
 
         mVideoView.start();
-//        Log.e("-----------tu7",lists.get(position).getVideo_img());
-//        Log.e("-----------url",lists.get(position).getUrl());
+        Log.e("-----------tu7",lists.get(position).getVideo_img());
+        Log.e("-----------url",lists.get(position).getUrl());
 
         viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
         if (viewplaypause != null) {

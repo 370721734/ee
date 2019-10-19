@@ -738,6 +738,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
                 dialog.dismiss();
                 if (music != null && music.length() > 0) {
+                    extractVideotwo();//发布有音乐也要加特效
                     composeVideoAudio();//1
 //                    Log.e("---------------","有音乐");
                 } else {
@@ -747,11 +748,13 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                     intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
                     intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                     intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
-                    intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);//1
                     intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
                     intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
-                    intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);//2
                     intent.putExtra(TCConstants.TRANSVERSE, istransverse);
+
+
                     intent.putExtra("videotime", videotime);
 //                    Log.e("---------mVideoOutputPath11=","  "+mVideoOutputPath);
                     intent.putExtra("mid", mid);
@@ -1416,7 +1419,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
      */
     private void composeMusicAndAudio(String bgMusicAndAudio) {
         final String videoAudioPath = mTargetPath + "/videoMusicAudio.mp4";
-        final String videoUrl = mMediaPath.get(0);   //是视频地址
+        final String videoUrl = mMediaPath.get(3);   //是视频地址           //这个视频地址没有加特效
+        Log.e("---------video4=",videoUrl);
         final int time = getIntent().getIntExtra("time", 0) - 1;
         String[] common = FFmpegCommands.composeVideo(videoUrl, bgMusicAndAudio, videoAudioPath, time);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
@@ -1522,9 +1526,11 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             public void onEnd(int result) {
                 Log.e(TAG, "changeAudioVol ffmpeg end...");
 //                composeMusicAndAudio(audioOutUrl);
-                if (mMediaPath.size() == 3) {
+                if (mMediaPath.size() == 4) {
                     composeVideoMusic(audioOutUrl);
+                    Log.e("----------","4个吗"+mVideoOutputPath);
                 } else {
+                    Log.e("----------","1个吗"+mVideoOutputPath);
                     composeMusicAndAudio(audioOutUrl);
                 }
             }
@@ -1606,7 +1612,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                     mMusicPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mediaPlayer) {
-                            mediaPlayer.setVolume(0.5f, 0.5f);
+                            mediaPlayer.setVolume(1.0f, 1.0f);
                             mediaPlayer.start();
 //                            mMusicSeekBar.setProgress(50);
                         }
@@ -1643,6 +1649,29 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             }
         });
     }
+
+    private void extractVideotwo() {
+        final String outVideo = mTargetPath + "/video.mp4";
+//        Log.e("----------", "是不是.mp4" + outVideo);
+        String[] commands = FFmpegCommands.extractVideo(mVideoOutputPath, outVideo);
+        FFmpegRun.execute(commands, new FFmpegRun.FFmpegRunListener() {
+            @Override
+            public void onStart() {
+//                mMediaPath = new ArrayList<>();
+                Log.e(TAG, "extractVideo ffmpeg start...");
+            }
+
+            @Override
+            public void onEnd(int result) {
+                Log.e(TAG, "extractVideo ffmpeg end...");
+                Log.e("------------houvideo=", outVideo);
+                mMediaPath.add(outVideo);
+//                extractAudio();
+            }
+        });
+    }
+
+
 
 
     /**
@@ -1705,7 +1734,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             musicUrl = mMediaPath.get(2);
         }
         final String musicOutUrl = mTargetPath + "/tempMusic.aac";
-        final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl, 90, musicOutUrl);
+        final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl, 100, musicOutUrl);
 //        Log.e("---------vol2=",common[3]);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override

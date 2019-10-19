@@ -7,25 +7,15 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONException;
-import com.alibaba.fastjson.JSONObject;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.activity.FensiActivity;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
 import com.jarhero790.eub.base.BasePresenter;
-import com.jarhero790.eub.bean.Message;
-import com.jarhero790.eub.bean.MessageEntity;
-import com.jarhero790.eub.bean.MessageLike;
-import com.jarhero790.eub.bean.MessageSystem;
-import com.jarhero790.eub.bean.MessagesBean;
 import com.jarhero790.eub.contract.message.MessageContract;
 import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.message.GiftActivity;
@@ -40,20 +30,11 @@ import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
-import io.rong.imkit.RongIM;
 import io.rong.imkit.fragment.ConversationListFragment;
-import io.rong.imkit.fragment.IHistoryDataResultCallback;
-import io.rong.imlib.RongIMClient;
 import io.rong.imlib.model.Conversation;
 import okhttp3.ResponseBody;
 
