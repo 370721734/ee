@@ -11,6 +11,15 @@
         android:layout_height="match_parent"
         android:layout_centerInParent="true" />
 
+    <!--<ImageView-->
+        <!--android:id="@+id/iv_thumb_heng"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:scaleType="fitXY"-->
+        <!--android:visibility="gone"-->
+        <!--android:adjustViewBounds="true"/>-->
+
     <ImageView
         android:id="@+id/thumb"
         android:layout_width="match_parent"

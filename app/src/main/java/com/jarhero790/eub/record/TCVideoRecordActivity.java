@@ -1375,8 +1375,6 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         mVideoMainHandler = new VideoMainHandler(TCVideoRecordActivity.this);
         mLoadBackgroundThread = new Thread(new LoadVideoRunnable(this));
         mLoadBackgroundThread.start();
-
-
     }
 
     /**

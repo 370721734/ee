@@ -37,9 +37,12 @@ import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.permission.KbPermission;
 import com.jarhero790.eub.message.permission.KbPermissionListener;
 import com.jarhero790.eub.message.permission.KbPermissionUtils;
+import com.jarhero790.eub.record.DialogUtil;
 import com.jarhero790.eub.record.FileUtils;
 import com.jarhero790.eub.record.TCConstants;
 import com.jarhero790.eub.record.TCVideoEditerActivity;
+import com.jarhero790.eub.record.TCVideoEditerWrapper;
+import com.jarhero790.eub.record.TCVideoRecordActivity;
 import com.jarhero790.eub.record.bean.BitmapBean;
 import com.jarhero790.eub.record.bean.FaVBean;
 import com.jarhero790.eub.record.view.MediaPlayUtil;
@@ -53,6 +56,10 @@ import com.tencent.rtmp.TXLiveConstants;
 import com.tencent.rtmp.TXVodPlayConfig;
 import com.tencent.rtmp.TXVodPlayer;
 import com.tencent.rtmp.ui.TXCloudVideoView;
+import com.tencent.ugc.TXRecordCommon;
+import com.tencent.ugc.TXVideoEditConstants;
+import com.tencent.ugc.TXVideoEditer;
+import com.tencent.ugc.TXVideoInfoReader;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -61,6 +68,7 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -243,8 +251,11 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
-                finish();
-//               startActivity(new Intent(FaBuActivity.this,BitmapViewActivity.class));
+//                finish();
+//               startActivity(new Intent(FaBuActivity.this,TCVideoEditerActivity.class));
+//                loadVideoSuccess();
+
+                startEditVideo();
                 break;
             case R.id.tv_fabu:
 
@@ -256,8 +267,8 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                            .into(imageView);
 
                 dialog.setCancelable(false);
-                if (dialog.getWindow()!=null)
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                if (dialog.getWindow() != null)
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.setContentView(R.layout.dialog);
                 dialog.show();
 
@@ -337,7 +348,6 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                    MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), yfile);
 
 
-
 ////                    if (bytes.length>0){
 //
 //                    RetrofitManager.getInstance().getDataServer().uploadmusic(SharePreferenceUtil.getToken(AppUtils.getContext())
@@ -405,11 +415,11 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                             Looper.prepare();
 //                            Log.e("-----------i=","1");
                             outputvideo = Environment.getExternalStorageDirectory().getPath() + "/" + System.currentTimeMillis() + ".mp4";
-                            String cmd_tran3=String.format("ffmpeg -i "+mVideoPath+" -vcodec libx264 -crf 24 "+outputvideo);
-                            int i= com.mabeijianxi.jianxiffmpegcmd.MainActivity.getInstance().jxFFmpegCMDRun(cmd_tran3);
+                            String cmd_tran3 = String.format("ffmpeg -i " + mVideoPath + " -vcodec libx264 -crf 24 " + outputvideo);
+                            int i = com.mabeijianxi.jianxiffmpegcmd.MainActivity.getInstance().jxFFmpegCMDRun(cmd_tran3);
 
 //                            Log.e("-----------i=","="+i);
-                            if (i==0){
+                            if (i == 0) {
                                 File file = new File(outputvideo);//更换
                                 RequestBody yfile = RequestBody.create(MediaType.parse("video/mp4"), file);//
                                 MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), yfile);
@@ -483,24 +493,6 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //                        });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
                             Looper.loop();
                         }
                     }).start();
@@ -508,8 +500,6 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
-
 
 
 //                Log.e("-----------i=","4");
@@ -771,28 +761,165 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 
 
     @SuppressLint("HandlerLeak")
-    Handler mhandler=new Handler(){
+    Handler mhandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-          switch (msg.what){
-              case 1:
-                  dialog.dismiss();
-                  tvFabu.setEnabled(true);
-                  EventBus.getDefault().post(new FaVBean("video"));
-                  startActivity(new Intent(FaBuActivity.this, MainActivity.class));
-                  if (outputvideo!=null)
-                  FileUtils.deleteFile(outputvideo);
-                  finish();
-                  break;
-              case 2:
-                  dialog.dismiss();
-                  tvFabu.setEnabled(true);
-                  Toast.makeText(FaBuActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
-                  if (outputvideo!=null)
-                      FileUtils.deleteFile(outputvideo);
-                  break;
-          }
+            switch (msg.what) {
+                case 1:
+                    dialog.dismiss();
+                    tvFabu.setEnabled(true);
+                    EventBus.getDefault().post(new FaVBean("video"));
+                    startActivity(new Intent(FaBuActivity.this, MainActivity.class));
+                    if (outputvideo != null)
+                        FileUtils.deleteFile(outputvideo);
+                    finish();
+                    break;
+                case 2:
+                    dialog.dismiss();
+                    tvFabu.setEnabled(true);
+                    Toast.makeText(FaBuActivity.this, "发布失败", Toast.LENGTH_SHORT).show();
+                    if (outputvideo != null)
+                        FileUtils.deleteFile(outputvideo);
+                    break;
+            }
         }
     };
+
+
+    private void loadVideoSuccess() {
+        // 更新一下VideoInfo的时间
+        Intent intent = new Intent(FaBuActivity.this, TCVideoEditerActivity.class);
+        // 如果是从录制过来的话，需要传递一个分辨率参数下去。
+
+        intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, TXRecordCommon.VIDEO_RESOLUTION_540_960);//高
+        intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mCoverImagePath);
+        intent.putExtra(TCConstants.VIDEO_EDITER_PATH, mVideoPath);
+        intent.putExtra(TCConstants.RECORD_CONFIG_BITE_RATE, 6500);
+        intent.putExtra(TCConstants.VIDEO_EDITER_IMPORT, false);
+        //  mRenderRotation = TXLiveConstants.RENDER_ROTATION_0;
+        intent.putExtra(TCConstants.TRANSVERSE, istransverse);
+        if (istransverse == TXLiveConstants.RENDER_ROTATION_0) {
+            intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);//竖
+        } else {
+            intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);//横
+
+        }
+//            int times = (int) mProgressTime.getTag();
+        intent.putExtra("time", videotime);///////////////////////////////////////////////////////////
+//            Log.e("--------videotime2", "时" + videotime);
+        startActivity(intent);
+        finish();
+    }
+
+
+    private TXVideoEditer mTXVideoEditer;                       // SDK接口类
+
+    //下一个
+    private void startEditVideo() {
+        mTXVideoEditer = new TXVideoEditer(this);
+        int ret = mTXVideoEditer.setVideoPath(mVideoPath);//
+        if (ret != 0) {
+            if (ret == TXVideoEditConstants.ERR_SOURCE_NO_TRACK) {
+                DialogUtil.showDialog(this, "视频预处理失败", "不支持的视频格式", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+            } else if (ret == TXVideoEditConstants.ERR_UNSUPPORT_AUDIO_FORMAT) {
+                DialogUtil.showDialog(this, "视频预处理失败", "暂不支持非单双声道的视频格式", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        finish();
+                    }
+                });
+            }
+            return;
+        }
+
+        TCVideoEditerWrapper wrapper = TCVideoEditerWrapper.getInstance();
+        wrapper.setEditer(mTXVideoEditer);
+
+//        initPhoneListener();
+
+        // 开始加载视频信息
+        mVideoMainHandler = new VideoMainHandler(FaBuActivity.this);
+        mLoadBackgroundThread = new Thread(new LoadVideoRunnable(FaBuActivity.this));
+        mLoadBackgroundThread.start();
+    }
+
+
+    private VideoMainHandler mVideoMainHandler;                 // 加载完信息后的回调主线程Hanlder
+    private Thread mLoadBackgroundThread;                       // 后台加载视频信息的线程
+
+    /**
+     * 主线程的Handler 用于处理load 视频信息的完后的动作
+     */
+    private class VideoMainHandler extends Handler {
+        static final int LOAD_VIDEO_SUCCESS = 0;
+        static final int LOAD_VIDEO_ERROR = -1;
+        private WeakReference<FaBuActivity> mWefActivity;
+
+
+        VideoMainHandler(FaBuActivity activity) {
+            mWefActivity = new WeakReference<FaBuActivity>(activity);
+        }
+
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            FaBuActivity activity = mWefActivity.get();
+            if (activity == null) return;
+            switch (msg.what) {
+                case LOAD_VIDEO_ERROR:
+                    if (dialog != null)
+                        dialog.dismiss();
+//                    mIvConfirm.setImageResource(R.drawable.selector_record_confirm);
+//                    mIvConfirm.setEnabled(true);
+//                    loadVideoFail();
+                    break;
+                case LOAD_VIDEO_SUCCESS:
+                    if (dialog != null)
+                        dialog.dismiss();
+//                    mIvConfirm.setImageResource(R.drawable.selector_record_confirm);
+//                    mIvConfirm.setEnabled(true);
+                    loadVideoSuccess();
+                    break;
+            }
+        }
+
+    }
+
+
+    /**
+     * 加在视频信息的runnable
+     */
+    private class LoadVideoRunnable implements Runnable {
+        private WeakReference<FaBuActivity> mWekActivity;
+
+        LoadVideoRunnable(FaBuActivity activity) {
+            mWekActivity = new WeakReference<FaBuActivity>(activity);
+        }
+
+        @Override
+        public void run() {
+            if (mWekActivity == null || mWekActivity.get() == null) {
+                return;
+            }
+            FaBuActivity activity = mWekActivity.get();
+            if (activity == null) return;
+            TXVideoEditConstants.TXVideoInfo info = TXVideoInfoReader.getInstance().getVideoFileInfo(mVideoPath);
+
+//            if (isCancel.get()) {
+//                return;
+//            }
+            if (info == null) {// error 发生错误
+                mVideoMainHandler.sendEmptyMessage(VideoMainHandler.LOAD_VIDEO_ERROR);
+            } else {
+                TCVideoEditerWrapper.getInstance().setTXVideoInfo(info);
+                mVideoMainHandler.sendEmptyMessage(VideoMainHandler.LOAD_VIDEO_SUCCESS);
+            }
+        }
+    }
 
 }

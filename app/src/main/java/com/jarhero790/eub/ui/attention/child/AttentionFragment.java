@@ -801,17 +801,27 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //        View view=recyclerViewAttentionUsers.getChildAt(position);
 //        VideoView videoView=view.findViewById(R.id.video_player);
 //        videoView.start();
-        if (attentionUsersVideos == null || attentionUsersVideos.size() == 0)
-            return;
-        mVideoView.setUrl(attentionUsersVideos.get(position).getUrl());
-        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);//SCREEN_SCALE_MATCH_PARENT
-        mVideoView.start();
+
 //        viewivdeault = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //        viewplaypause = linearLayoutManager.findViewByPosition(mCurrentPosition);
 //        if (viewivdeault != null)
 //            viewivdeault.findViewById(R.id.iv_deault).setVisibility(View.INVISIBLE);
 //        if (viewplaypause != null)
 //            ((ImageView) (viewplaypause.findViewById(R.id.iv_play))).setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
+
+
+        if (attentionUsersVideos == null || attentionUsersVideos.size() == 0)
+            return;
+        mVideoView.setUrl(attentionUsersVideos.get(position).getUrl());
+        if (attentionUsersVideos.get(position).getAnyhow().equals("1")) {
+
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+        }else {
+            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+        }
+//        mVideoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//    SCREEN_SCALE_CENTER_CROP
+        mVideoView.start();
+
     }
 
     @Override

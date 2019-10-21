@@ -62,6 +62,7 @@ public class AttentionVideo  {
      * 音乐id
      */
     private String mid;
+    private String good_id;
 
     /**
      * 时长
@@ -72,6 +73,7 @@ public class AttentionVideo  {
      * 标题
      */
     private String title;
+    private String describe;
 
     /**
      * 视频地址
@@ -90,6 +92,9 @@ public class AttentionVideo  {
      *0待审核  1通过   2失败,
      */
     private String state;
+    private String anyhow;
+    private String is_adv;
+    private String adv_money;
 
     /**
      * 审核通过时间
@@ -300,6 +305,46 @@ public class AttentionVideo  {
 
     public void setLat(String lat) {
         this.lat = lat;
+    }
+
+    public String getGood_id() {
+        return good_id;
+    }
+
+    public void setGood_id(String good_id) {
+        this.good_id = good_id;
+    }
+
+    public String getDescribe() {
+        return describe;
+    }
+
+    public void setDescribe(String describe) {
+        this.describe = describe;
+    }
+
+    public String getAnyhow() {
+        return anyhow;
+    }
+
+    public void setAnyhow(String anyhow) {
+        this.anyhow = anyhow;
+    }
+
+    public String getIs_adv() {
+        return is_adv;
+    }
+
+    public void setIs_adv(String is_adv) {
+        this.is_adv = is_adv;
+    }
+
+    public String getAdv_money() {
+        return adv_money;
+    }
+
+    public void setAdv_money(String adv_money) {
+        this.adv_money = adv_money;
     }
 
     public ArrayList<AttentionUserVideosComment> getComment() {

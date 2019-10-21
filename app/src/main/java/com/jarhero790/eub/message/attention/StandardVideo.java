@@ -8,12 +8,14 @@ import android.content.pm.ActivityInfo;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,6 +26,7 @@ import com.dueeeke.videoplayer.player.VideoView;
 import com.dueeeke.videoplayer.util.L;
 import com.dueeeke.videoplayer.util.PlayerUtils;
 import com.jarhero790.eub.R;
+import com.jarhero790.eub.utils.AppUtils;
 
 public class StandardVideo extends GestureVideoController implements View.OnClickListener {
     protected TextView mTotalTime, mCurrTime;
@@ -36,15 +39,16 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
     private ImageView mPlayButton;
     private ImageView mStartPlayButton;
     private ProgressBar mLoadingProgress;
-    private ImageView mThumb;
+    private ImageView mThumb, mThumbTwo;
     private FrameLayout mCompleteContainer;
     private ImageView mStopFullscreen;
     private TextView mSysTime;//系统当前时间
     private ImageView mBatteryLevel;//电量
-//    private Animation mShowAnim = AnimationUtils.loadAnimation(getContext(), R.anim.dkplayer_anim_alpha_in);
+    //    private Animation mShowAnim = AnimationUtils.loadAnimation(getContext(), R.anim.dkplayer_anim_alpha_in);
 //    private Animation mHideAnim = AnimationUtils.loadAnimation(getContext(), R.anim.dkplayer_anim_alpha_out);
     private BatteryReceiver mBatteryReceiver;
     protected ImageView mRefreshButton;
+
     public StandardVideo(@NonNull Context context) {
         super(context);
     }
@@ -78,7 +82,16 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
         mLockButton = mControllerView.findViewById(R.id.lock);
         mLockButton.setOnClickListener(this);
         mThumb = mControllerView.findViewById(R.id.thumb);
+//        mThumbTwo = mControllerView.findViewById(R.id.iv_thumb_heng);
+        mThumbTwo = new ImageView(AppUtils.getContext());
+        FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);//
+        mThumbTwo.setLayoutParams(params);
+        params.gravity = Gravity.CENTER_VERTICAL;
+        mThumbTwo.setScaleType(ImageView.ScaleType.FIT_XY);
+        mThumbTwo.setAdjustViewBounds(true);
         mThumb.setOnClickListener(this);
+        if (mThumbTwo != null)
+            mThumbTwo.setOnClickListener(this);
         mPlayButton = mControllerView.findViewById(R.id.iv_play);
         mPlayButton.setOnClickListener(this);
         mStartPlayButton = mControllerView.findViewById(R.id.start_play);
@@ -120,8 +133,6 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
             doPauseResume();
         }
     }
-
-
 
 
     @Override
@@ -179,6 +190,8 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
                 mLoadingProgress.setVisibility(GONE);
                 mStartPlayButton.setVisibility(GONE);
                 mThumb.setVisibility(VISIBLE);
+                if (mThumbTwo != null)
+                    mThumbTwo.setVisibility(VISIBLE);
                 break;
             case VideoView.STATE_PLAYING:
                 L.e("STATE_PLAYING");
@@ -187,6 +200,8 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
                 mLoadingProgress.setVisibility(GONE);
                 mCompleteContainer.setVisibility(GONE);
                 mThumb.setVisibility(GONE);
+                if (mThumbTwo != null)
+                    mThumbTwo.setVisibility(GONE);
                 mStartPlayButton.setVisibility(GONE);
                 break;
             case VideoView.STATE_PAUSED:
@@ -209,6 +224,8 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
                 mStartPlayButton.setVisibility(GONE);
                 mLoadingProgress.setVisibility(GONE);
                 mThumb.setVisibility(GONE);
+                if (mThumbTwo != null)
+                    mThumbTwo.setVisibility(GONE);
                 mTopContainer.setVisibility(GONE);
                 break;
             case VideoView.STATE_BUFFERING:
@@ -216,6 +233,8 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
                 mStartPlayButton.setVisibility(GONE);
                 mLoadingProgress.setVisibility(GONE);
                 mThumb.setVisibility(GONE);
+                if (mThumbTwo != null)
+                    mThumbTwo.setVisibility(GONE);
                 mPlayButton.setSelected(mMediaPlayer.isPlaying());
                 break;
             case VideoView.STATE_BUFFERED:
@@ -223,6 +242,8 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
                 mLoadingProgress.setVisibility(GONE);
                 mStartPlayButton.setVisibility(GONE);
                 mThumb.setVisibility(GONE);
+                if (mThumbTwo != null)
+                    mThumbTwo.setVisibility(GONE);
                 mPlayButton.setSelected(mMediaPlayer.isPlaying());
                 break;
             case VideoView.STATE_PLAYBACK_COMPLETED:
@@ -231,6 +252,8 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
                 removeCallbacks(mShowProgress);
                 mStartPlayButton.setVisibility(GONE);
                 mThumb.setVisibility(VISIBLE);
+                if (mThumbTwo != null)
+                    mThumbTwo.setVisibility(VISIBLE);
                 mCompleteContainer.setVisibility(VISIBLE);
                 mStopFullscreen.setVisibility(mMediaPlayer.isFullScreen() ? VISIBLE : GONE);
                 mIsLocked = false;
@@ -257,13 +280,6 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
 //        }
 //        mMediaPlayer.setLock(mIsLocked);
 //    }
-
-
-
-
-
-
-
 
 
     @Override
@@ -331,7 +347,6 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
         }
 
 
-
         int position = (int) mMediaPlayer.getCurrentPosition();
         int duration = (int) mMediaPlayer.getDuration();
 
@@ -353,6 +368,10 @@ public class StandardVideo extends GestureVideoController implements View.OnClic
 
     public ImageView getThumb() {
         return mThumb;
+    }
+
+    public ImageView getThumbTwo() {
+        return mThumbTwo;
     }
 
     @Override

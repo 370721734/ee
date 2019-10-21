@@ -4,10 +4,12 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -68,16 +70,79 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 
         AttentionVideo attentionVideo = videos.get(position);
         ImageView thumb = holder.controller.getThumb();
+//        ImageView thumbtwo = holder.controller.getThumbTwo();
         String videoImg = attentionVideo.getVideo_img();
-        Glide.with(thumb.getContext())
-                .load(videoImg)
-                .apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
-                .into(thumb);
+
+
 
 //        LinearLayout bottom=holder.controller.getChildAt(position).findViewById(R.id.bottom_container);
 //        if (bottom!=null){
 //            bottom.setVisibility(View.GONE);
 //        }
+
+
+        //循环播放
+        holder.videoPlayer.setLooping(true);
+
+        //非常重要
+        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//SCREEN_SCALE_MATCH_PARENT   SCREEN_SCALE_CENTER_CROP
+
+        if (attentionVideo.getAnyhow().equals("1")) {
+//           thumb.setVisibility(View.VISIBLE);
+//            if (thumbtwo!=null)
+//            thumbtwo.setVisibility(View.GONE);
+
+
+
+//            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);//
+//            thumb.setLayoutParams(params);
+//            params.gravity = Gravity.CENTER_VERTICAL;
+//            thumb.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            thumb.setAdjustViewBounds(true);
+
+            Glide.with(thumb.getContext())
+                    .load(videoImg)
+                    .apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+                    .into(thumb);
+
+
+            holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);//SCREEN_SCALE_MATCH_PARENT   SCREEN_SCALE_CENTER_CROP
+        }else {
+
+
+//            thumb.setVisibility(View.GONE);
+//            if (thumbtwo!=null){
+//                thumbtwo.setVisibility(View.VISIBLE);
+//                Glide.with(thumb.getContext())
+//                        .load(videoImg)
+//                        .apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+//                        .into(thumbtwo);
+//            }
+
+//            RelativeLayout.LayoutParams   params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);//
+//            mTikTokController.getThumb().setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            mTikTokController.getThumb().setScaleType(ImageView.ScaleType.FIT_XY);
+//            mTikTokController.getThumb().setAdjustViewBounds(true);
+
+            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);//
+            thumb.setLayoutParams(params);
+            params.gravity = Gravity.CENTER_VERTICAL;
+            thumb.setScaleType(ImageView.ScaleType.FIT_XY);
+            thumb.setAdjustViewBounds(true);
+
+
+            Glide.with(thumb.getContext())
+                    .load(videoImg)
+                    .apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+                    .into(thumb);
+            holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
+        }
+
+
+
+
+
 
 
         if (getP != null) {
@@ -294,10 +359,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             tvmore = itemView.findViewById(R.id.tv_more);
             attentionsButton = itemView.findViewById(R.id.attentionsButton);
 
-            //循环播放
-            videoPlayer.setLooping(true);
-            //非常重要
-            videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
+//            videoPlayer.setLooping(true);
+//            //非常重要
+//            videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//SCREEN_SCALE_MATCH_PARENT   SCREEN_SCALE_CENTER_CROP
 
 //            int widthPixels = itemView.getContext().getResources().getDisplayMetrics().widthPixels;
 //            int heightPixels = itemView.getContext().getResources().getDisplayMetrics().heightPixels;

@@ -16,7 +16,7 @@
         android:visibility="gone"
         android:adjustViewBounds="true"/>
     <ImageView
-        android:id="@+id/iv_thumb"
+        android:id="@+id/thumb"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop" />

@@ -16,6 +16,7 @@ import org.greenrobot.eventbus.ThreadMode;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+//没用
 public class BitmapViewActivity extends AppCompatActivity {
 
     @BindView(R.id.iv_video_image)
