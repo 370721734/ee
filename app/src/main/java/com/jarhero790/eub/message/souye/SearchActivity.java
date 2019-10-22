@@ -23,11 +23,14 @@ import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.MenuPagerAdapter;
 import com.jarhero790.eub.message.adapter.OnItemClickListener;
 import com.jarhero790.eub.message.adapter.SearchAdapter;
+import com.jarhero790.eub.message.adapter.SearchTwoAdapter;
+import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
+import com.jarhero790.eub.record.BaseRecyclerAdapter;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
@@ -76,6 +79,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
     SearchAdapter searchAdapter;
+    SearchTwoAdapter searchTwoAdapter;
+
+    //避免连击
+    private long mLastClickTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -157,7 +164,8 @@ public class SearchActivity extends AppCompatActivity {
                                             //position第几个
                                             //pagerPosition第几个页面
 
-                                            Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+//                                            Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+                                            Intent intent = new Intent(SearchActivity.this, PlayVideoTwo_TwoActivity.class);
                                             intent.putExtra("position", position + (pagerPosition * 6));
                                             intent.putExtra("type", "visit");
                                             intent.putExtra("vidlist", visitBeans);
@@ -184,10 +192,35 @@ public class SearchActivity extends AppCompatActivity {
                                     likeBeans.clear();
                                     likeBeans.addAll(itemlikeBeans);
                                     searchAdapter = new SearchAdapter(SearchActivity.this, likeBeans, myclick);
-                                    recyclerView.setAdapter(searchAdapter);
+                                    searchTwoAdapter = new SearchTwoAdapter(SearchActivity.this, likeBeans);
+                                    recyclerView.setAdapter(searchTwoAdapter);
                                 } else {
                                     likeBeans.addAll(itemlikeBeans);
                                     searchAdapter.notifyDataSetChanged();
+                                    searchTwoAdapter.notifyDataSetChanged();
+                                }
+
+
+                                if (searchTwoAdapter!=null){
+                                    searchTwoAdapter.setOnItemClickListener(new BaseRecyclerAdapter.OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(View view, int position) {
+                                            Log.e("--------------position","="+position+"   ");
+                                            try {
+                                                if (0 == mLastClickTime || System.currentTimeMillis() - mLastClickTime > 1000) {
+                                                    SearchBean.DataBean.LikeBean item = likeBeans.get(position);
+                                                    if (item == null) {
+                                                        Log.e("--------", "live list item is null at position:" + position);
+                                                        return;
+                                                    }
+                                                    startLivePlay(item, position);
+                                                }
+                                                mLastClickTime = System.currentTimeMillis();//
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                    });
                                 }
 
                             }
@@ -201,6 +234,16 @@ public class SearchActivity extends AppCompatActivity {
                         dialog.dismiss();
                     }
                 });
+    }
+
+    private void startLivePlay(SearchBean.DataBean.LikeBean item, int position) {
+        Log.e("-----searchactivity", "=" + position);
+//        Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+        Intent intent = new Intent(SearchActivity.this, PlayVideoTwo_TwoActivity.class);
+        intent.putExtra("position", position);
+        intent.putExtra("vidlist", likeBeans);
+        intent.putExtra("type", "like");
+        startActivity(intent);
     }
 
     @OnClick({R.id.ivback, R.id.ivsearch})
@@ -228,7 +271,8 @@ public class SearchActivity extends AppCompatActivity {
         @Override
         public void myClick(int position, View view) {
 //            Log.e("-----searchactivity", "=" + position);
-            Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);
+//            Intent intent = new Intent(SearchActivity.this, PlayVideoTwoActivity.class);// 滑动 position 问题
+            Intent intent = new Intent(SearchActivity.this, PlayVideoTwo_TwoActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", likeBeans);
             intent.putExtra("type", "like");

@@ -74,6 +74,9 @@
             android:name=".message.souye.PlayVideoTwoActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:name=".message.souye.PlayVideoTwo_TwoActivity"
+            android:screenOrientation="portrait" />
+        <activity
             android:name=".message.souye.PlayVideoThreeActivity"
             android:screenOrientation="portrait" />
         <activity

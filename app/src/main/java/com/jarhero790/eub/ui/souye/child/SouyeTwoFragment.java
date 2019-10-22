@@ -186,16 +186,12 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  textViewChangshipin.setTextColor(Color.parseColor("#EFEDED"));
                  textViewZuixin.setBackgroundResource(0);
                  textViewChangshipin.setBackgroundResource(0);
-
-
                  viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
                  if (viewplaypause != null) {
                  viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
                  viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
                  }
-
                  mVideoView.release();
-
                  cate.set(0);
                  page.set(1);
                  flag.set(true);
@@ -205,11 +201,9 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  //                    lists.clear();
                  //                    tikTokAdapter.notifyDataSetChanged();
                  //                }
-
                  //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
                  //                tikTokAdapter.notifyDataSetChanged();
                  //                Log.e("------1--",cate.get()+"");
-
                  if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
                  if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                  mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
@@ -221,10 +215,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  } else {
                  Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
                  }
-
-
                  //                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
-
                  */
                 break;
             case R.id.zuixin://最新
@@ -243,8 +234,6 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  textViewChangshipin.setTextColor(Color.parseColor("#EFEDED"));
                  textViewTuijian.setBackgroundResource(0);
                  textViewChangshipin.setBackgroundResource(0);
-
-
                  cate.set(1);
                  page.set(1);
                  flag.set(true);
@@ -261,8 +250,6 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  }
                  mVideoView.release();
                  //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-
-
                  if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
                  if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                  mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
@@ -275,7 +262,6 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  //                tikTokAdapter.notifyDataSetChanged();
                  //                Log.e("-------2-",cate.get()+"");
                  //                wodeurl(String.valueOf(cate.get()), String.valueOf(page.get()));
-
                  */
                 break;
             case R.id.changshipin://长视频
@@ -293,7 +279,6 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  textViewChangshipin.setTextColor(Color.parseColor("#0E0E0E"));
                  textViewTuijian.setBackgroundResource(0);
                  textViewZuixin.setBackgroundResource(0);
-
                  cate.set(2);
                  page.set(1);
                  flag.set(true);
@@ -310,14 +295,11 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  }
                  mVideoView.release();
                  //                mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
-
-
                  if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
                  if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                  mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
                  } else {
                  mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
-
                  }
                  } else {
                  Toast.makeText(getActivity(), "网络不可用", Toast.LENGTH_SHORT).show();
@@ -333,7 +315,6 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                  Intent sear = new Intent(getActivity(), SearchActivity.class);
                  startActivity(sear);
                  }
-
                  */
                 break;
             case R.id.wangluoyichang:
@@ -1500,19 +1481,14 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         mVideoView.start();
         //确定高度
 /**
-
  mVideoView.setOnVideoViewStateChangeListener(new OnVideoViewStateChangeListener() {
 @Override public void onPlayerStateChanged(int playerState) {
 //                Log.e("---Player",""+playerState);
 //                int[] size= mVideoView.getVideoSize();
 //                String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
 //                Log.e("Android短视频5",value);
-
-
 }
-
 @Override public void onPlayStateChanged(int playState) {
-
 //                isplay=mVideoView.isPlaying();
 //                if (mVideoView.isPlaying()){
 //                    tikTokAdapter.setIsshow(false);
@@ -1521,8 +1497,6 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 //                    tikTokAdapter.setIsshow(true);
 ////                    tikTokAdapter.notifyItemChanged(mCurrentPosition);
 //                }
-
-
 //                Log.e("---Play",""+playState);
 //                int[] size = mVideoView.getVideoSize();
 //                String value="位置"+position+",width:"+size[0]+" "+",height:"+size[1];
@@ -1549,10 +1523,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 //        if (view != null)
 //        view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
 //        }
-
-
 //进度//ok
-
 int duration = (int) mVideoView.getDuration();
 //                Log.e("---------max-", "" + duration + "  " + mVideoView.getDuration());
 //                if (proPercent != null)
@@ -1566,11 +1537,8 @@ return;
 while (mVideoView.isPlaying()) {
 int currentPosition = (int) mVideoView.getCurrentPosition();
 //                                    Log.e("-----pro",""+currentPosition+"  "+mVideoView.getCurrentPosition());
-
-
 //                                if (proPercent != null)
 //                                    proPercent.setProgress(currentPosition);
-
 //                                Log.e("-------------走完了=",currentPosition+"     "+duration);
 //                                if (currentPosition==duration){
 //                                    Log.e("----------------","走完了");
@@ -1579,7 +1547,6 @@ if (currentPosition >= (duration - 200)) {
 //                                    Log.e("----------------","走完了2");
 handler.sendEmptyMessage(22);
 }
-
 try {
 Thread.sleep(100);
 } catch (InterruptedException e) {
@@ -1589,12 +1556,8 @@ e.printStackTrace();
 }
 }.start();
 }
-
-
 }
 });
-
-
  */
     }
 
