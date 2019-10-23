@@ -116,7 +116,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
     LinearLayout ll2;
     @BindView(R.id.container)
     FrameLayout container;
-//    @BindView(R.id.bingds)
+    //    @BindView(R.id.bingds)
 //    AppBarLayout binding;
     @BindView(R.id.coordinator_layout)
     CoordinatorLayout coordinator_layout;
@@ -278,7 +278,7 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 //                            Log.e("----------------","向上向下滑动了1");
                         } else if (mCurPosY - mPosY < 0 && (Math.abs(mCurPosY - mPosY) > 25)) {
 //                            Log.e("----------------","向上向下滑动了2");
-                        }else {
+                        } else {
 //                            Log.e("----------------","向上向下滑动了3");
                         }
 
@@ -448,6 +448,24 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
                 tvMemo.setText(userInfo.getData().getUser().getSign());
                 money = userInfo.getData().getUser().getMoney() + "";
                 signtime = userInfo.getData().getUser().getSigntime();
+                String citystr = userInfo.getData().getUser().getCity();
+                if (citystr != null && !"".equals(citystr)) {
+//                    湖南省-长沙市-岳麓
+                    if (citystr.contains("-")) {
+                        int a = citystr.indexOf("-");
+                        int b = citystr.lastIndexOf("-");
+                        try {
+                            city.setText(citystr.substring(a, b).replace("-","").replace("市",""));
+                        } catch (Exception e) {
+                            city.setText("深圳");
+                        }
+                    } else {
+                        city.setText("深圳");
+                    }
+                } else {
+                    city.setText("深圳");
+                }
+
 
 //                Log.e("----------token", userInfo.getData().getUser().getRong_token());
 
@@ -594,16 +612,16 @@ public class MineFragment extends BaseMVPCompatFragment<MineMainContract.MineMai
 
     }
 
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    public void city(AddressBean bean) {
-//        Log.e("--------cicici", bean.getCity());
-
-        if (bean != null && bean.getCity() != null) {
-            city.setText(bean.getCity());
-        } else {
-            city.setText("深圳");
-        }
-    }
+//    @Subscribe(threadMode = ThreadMode.MAIN)
+//    public void city(AddressBean bean) {
+////        Log.e("--------cicici", bean.getCity());
+//
+//        if (bean != null && bean.getCity() != null) {
+//            city.setText(bean.getCity());
+//        } else {
+//            city.setText("深圳");
+//        }
+//    }
 
 
     @Override

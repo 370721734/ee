@@ -238,7 +238,7 @@ public class TikTokAdapter extends RecyclerView.Adapter<TikTokAdapter.VideoHolde
             }
         }
 
-        holder.bussiness.setVisibility(View.INVISIBLE);
+        holder.bussiness.setVisibility(View.INVISIBLE);// 暂时隐藏
 //        if (video.getGood_id().equals("0")){
 //            holder.bussiness.setVisibility(View.INVISIBLE);
 //        }else {

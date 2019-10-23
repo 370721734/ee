@@ -26,6 +26,8 @@ import com.jarhero790.eub.message.bean.souyelookthree;
 import com.jarhero790.eub.message.bean.souyelooktwo;
 import com.jarhero790.eub.ui.message.child.MessageFragment;
 import com.jarhero790.eub.ui.mine.child.MineFragment;
+import com.jarhero790.eub.ui.souye.child.SouyeFive;
+import com.jarhero790.eub.ui.souye.child.SouyeFive_One;
 import com.jarhero790.eub.ui.souye.child.SouyeFourFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeOFragment;
@@ -64,11 +66,13 @@ public class TypeFragment extends SupportFragment {
     private FrameLayout fl_type;
     private List<Fragment> fragmentList;
     private Fragment tempFragment;
-    public SouyeFragment listFragment;
+//    public SouyeFragment listFragment;
 //    public SouyeOFragment listFragment;
+    public SouyeFive_One listFragment;
     public SouyeTwoFragment tagFragment;
-    public SouyeThreeFragment fbcFragment;
+//    public SouyeThreeFragment fbcFragment;//ok
 //    public SouyeFourFragment fbcFragment;
+    public SouyeFive fbcFragment;
 
 //    @Override
 //    public boolean onBackPressed() {
@@ -186,9 +190,9 @@ public class TypeFragment extends SupportFragment {
 
     private void initFragment() {
         fragmentList = new ArrayList<>();
-        listFragment = SouyeFragment.newInstance();
+        listFragment = SouyeFive_One.newInstance();
         tagFragment = SouyeTwoFragment.newInstance();
-        fbcFragment = SouyeThreeFragment.newInstance();
+        fbcFragment = SouyeFive.newInstance();
 //        fbcFragment = SouyeFourFragment.newInstance();
         fragmentList.add(listFragment);
         fragmentList.add(tagFragment);

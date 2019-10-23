@@ -65,6 +65,7 @@ import com.jarhero790.eub.ui.souye.BottomGiftDialog;
 import com.jarhero790.eub.ui.souye.BottomPingLunDialog;
 import com.jarhero790.eub.ui.souye.BottomShareDialog;
 import com.jarhero790.eub.utils.AppUtils;
+import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.NetworkConnectionUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
 import com.tencent.mm.opensdk.modelmsg.SendMessageToWX;
@@ -384,10 +385,11 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                 }
             }
         } else {
-//            if (mVideoView != null) {
-//                mVideoView.pause();
-//            }
+            if (mVideoView != null) {
+                mVideoView.pause();
+            }
 //            onHiddenChanged(true);
+            app.setIslooktwo(false);
             Log.e("-------souyetwo", "ee2");
         }
     }
@@ -1123,7 +1125,7 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
                     Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.zuanshi_logo);
                     Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
                     bmp.recycle();
-                    msg.thumbData = bmpToByteArray(thumbBmp, true);
+                    msg.thumbData = CommonUtil.bmpToByteArray(thumbBmp, true);
 
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
                     req.transaction = buildTransaction("webpage");
@@ -1139,22 +1141,6 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
     }
 
 
-    public byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
-        if (needRecycle) {
-            bmp.recycle();
-        }
-
-        byte[] result = output.toByteArray();
-        try {
-            output.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
 
     //ok
     public void showPingLun() {

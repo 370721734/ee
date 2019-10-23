@@ -497,7 +497,7 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
                     }
                 }
 
-                //tong
+                //商城
                 RelativeLayout bussiness = view.findViewById(R.id.bussiness);
                 if (videoinfo.getGood_id().equals("0")) {
                     bussiness.setVisibility(View.INVISIBLE);
@@ -910,7 +910,7 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
                     Bitmap bmp = BitmapFactory.decodeResource(getResources(), R.mipmap.zuanshi_logo);
                     Bitmap thumbBmp = Bitmap.createScaledBitmap(bmp, THUMB_SIZE, THUMB_SIZE, true);
                     bmp.recycle();
-                    msg.thumbData = bmpToByteArray(thumbBmp, true);
+                    msg.thumbData = CommonUtil.bmpToByteArray(thumbBmp, true);
 
                     SendMessageToWX.Req req = new SendMessageToWX.Req();
                     req.transaction = buildTransaction("webpage");
@@ -925,22 +925,6 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
         });
     }
 
-    public byte[] bmpToByteArray(final Bitmap bmp, final boolean needRecycle) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 100, output);
-        if (needRecycle) {
-            bmp.recycle();
-        }
-
-        byte[] result = output.toByteArray();
-        try {
-            output.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        return result;
-    }
 
     public void showGift(String listtype) {
         if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {

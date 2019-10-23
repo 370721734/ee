@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.souye.child;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -27,7 +28,6 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.base.BaseMVPCompatFragment;
@@ -38,9 +38,9 @@ import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
 import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.bean.attentionchange;
+import com.jarhero790.eub.message.bean.souyelookone;
 import com.jarhero790.eub.message.bean.souyelookthree;
 import com.jarhero790.eub.message.net.RetrofitManager;
-import com.jarhero790.eub.message.souye.PlayVideoTwo_TwoActivity;
 import com.jarhero790.eub.message.souye.TongKuanActivity;
 import com.jarhero790.eub.presenter.home.SouyePresenter;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
@@ -68,7 +68,6 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.json.JSONObject;
 
-import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -85,7 +84,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresenter> implements SouyeContract.ISouyeView {
+public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePresenter> implements SouyeContract.ISouyeView {
 
     private static final String TAG = "--------";
     @BindView(R.id.vertical_view_pager)
@@ -133,20 +132,20 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
         return rootView;
     }
 
-    private static SouyeFive instance = null;
+    private static SouyeFive_One instance = null;
 
     private static Object lock = "lock";
 
-    public static SouyeFive newInstance() {
+    public static SouyeFive_One newInstance() {
 
         if (instance == null) {
             synchronized (lock) {
                 if (instance == null) {
-                    instance = new SouyeFive();
+                    instance = new SouyeFive_One();
                 }
             }
         }
-        cate.set(2);
+        cate.set(0);
         page.set(1);
         flag.set(true);
         mCurrentPosition = 0;
@@ -190,7 +189,7 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
         public int reviewstatus;
     }
 
-    private static AtomicInteger cate = new AtomicInteger(2);
+    private static AtomicInteger cate = new AtomicInteger(0);
     private static AtomicInteger page = new AtomicInteger(1);
     private static AtomicBoolean flag = new AtomicBoolean(true);
 
@@ -222,7 +221,6 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
             mVerticalViewPager.setVisibility(View.GONE);
         }
 
-
     }
 
     @Override
@@ -241,17 +239,50 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
         return SouyePresenter.newInstance();
     }
 
+    int sizelent=0;
     @Override
     public void updateVideos(ArrayList<Video> videos) {
-        lists.addAll(videos);
-        if (lists.size() > 0) {
-            initViews();
-            initPlayerSDK();
 
-        } else {
+        sizelent=lists.size()-1;
+
+        if (dialog!=null){
+            dialog.dismiss();
+        }
+
+        //设置视频
+        Log.e("---------", "有没有数据了1");
+        if (videos == null || videos.size() == 0) {
+            mVerticalViewPager.setVisibility(View.GONE);
             wangluoyichang.setVisibility(View.GONE);
             nodingdan.setVisibility(View.VISIBLE);
-            mVerticalViewPager.setVisibility(View.GONE);
+            return;
+        }
+        nodingdan.setVisibility(View.GONE);
+        wangluoyichang.setVisibility(View.GONE);
+        mVerticalViewPager.setVisibility(View.VISIBLE);
+
+
+
+
+        if (flag.get()) {
+            lists.addAll(videos);
+            initViews();
+            initPlayerSDK();
+            Log.e("----------souyefive","flag=true");
+
+        } else {
+
+
+            lists.addAll(sizelent,videos);
+            Log.e("----------souyefive","lists.size()="+lists.size());
+            mCurrentPosition=sizelent;
+            Log.e("----------souyefive","mCurrentPosition="+mCurrentPosition);
+            mPagerAdapter.setlist(lists);
+//            initViews();
+//            mTXVodPlayer.startPlay()
+//            mPagerAdapter.notifyDataSetChanged();
+
+            Log.e("----------souyefive","flag=flase");
         }
 
     }
@@ -271,14 +302,42 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
         super.onActivityCreated(savedInstanceState);
 
     }
-
+    Dialog dialog;
     private void initViews() {
         mVerticalViewPager.setOffscreenPageLimit(2);
         mVerticalViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 TXLog.e(TAG, "mVerticalViewPager, onPageScrolled position = " + position);
+
+//                Glide.get(getActivity()).clearDiskCache();
+                Glide.get(getActivity()).clearMemory();
+
 //                mCurrentPosition = position;
+
+//                ---: thread ID:1|line:-1|mVerticalViewPager, onPageScrolled position = 49
+                //如果滑动到了最后一页 就要加载新的数据了
+                if (position == lists.size() - 1) {
+                    page.getAndIncrement();
+                    if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
+                        dialog = new Dialog(getActivity(), R.style.progress_dialog);
+                        dialog.setCancelable(false);
+                        if (dialog.getWindow()!=null)
+                            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                        dialog.setContentView(R.layout.dialog);
+                        dialog.show();
+                        flag.set(false);
+                        if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
+                            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                        } else {
+                            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
+                        }
+                    } else {
+                        wangluoyichang.setVisibility(View.VISIBLE);
+                        nodingdan.setVisibility(View.GONE);
+                        mVerticalViewPager.setVisibility(View.GONE);
+                    }
+                }
             }
 
             @Override
@@ -295,6 +354,7 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
             }
         });
 
@@ -336,6 +396,10 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
     class MyPagerAdapter extends PagerAdapter implements ITXVodPlayListener {
 
         ArrayList<PlayerInfo> playerInfoList = new ArrayList<>();
+        public void setlist(List<Video> v){
+            lists=v;
+            notifyDataSetChanged();
+        }
 
 
         protected PlayerInfo instantiatePlayerInfo(int position) {
@@ -690,6 +754,8 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
             destroyPlayerInfo(position);
 
             container.removeView((View) object);
+
+
         }
 
         @Override
@@ -921,7 +987,7 @@ public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresente
 
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void ee3(souyelookthree bean) {
+    public void ee1(souyelookone bean) {
         if (bean.getName().equals("ok")) {
             Log.e("-------souyefive", "ee3_ok");
             if (mTXVodPlayer != null) {

@@ -105,11 +105,11 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
     public static final int THIRD = 2;
     public static final int FOURTH = 3;
 
-    //    注册位置监听器
-    TencentLocationListener listener;
-    TencentLocationRequest request;
-    public static boolean isdingweiok = false;//开始没有定位到
-    TencentLocationManager locationManager;
+    //    注册位置监听器  ok
+//    TencentLocationListener listener;//0
+//    TencentLocationRequest request;//0
+//    public static boolean isdingweiok = false;//开始没有定位到//0
+//    TencentLocationManager locationManager;//0
 
     private String islogin = "ddd";
 
@@ -147,8 +147,8 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
                 Manifest.permission.CAMERA,
                 Manifest.permission.READ_PHONE_STATE,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE,
-                Manifest.permission.READ_EXTERNAL_STORAGE,
-                Manifest.permission.ACCESS_COARSE_LOCATION)
+                Manifest.permission.READ_EXTERNAL_STORAGE
+               ) //Manifest.permission.ACCESS_COARSE_LOCATION   //0
                 .subscribe(new Consumer<Boolean>() {
                     @Override
                     public void accept(Boolean granted) throws Exception {
@@ -262,7 +262,7 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
         StatusBarUtils.setBarColor(MainActivity.this,Color.TRANSPARENT);
 //        String sdkVersionStr = TXLiveBase.getSDKVersionStr();
 //        Log.e("---------sdk",sdkVersionStr);//3.0.1185
-        locationManager = TencentLocationManager.getInstance(this);
+//        locationManager = TencentLocationManager.getInstance(this); //0
         app = (GlobalApplication) getApplication();
         AppManager.getAppManager().addActivity(this);
 
@@ -276,10 +276,10 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
             if (checkSelfPermission(permissions[0]) != PackageManager.PERMISSION_GRANTED) {
                 requestPermissions(permissions, 0);
             } else {
-                initdate();
+//                initdate();//0
             }
         } else {
-            initdate();
+//            initdate();//0
         }
 
 
@@ -300,8 +300,8 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
         if (EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
-        if (locationManager != null)
-            locationManager.removeUpdates(listener);
+//        if (locationManager != null)                  //0
+//            locationManager.removeUpdates(listener);  //0
 
 
     }
@@ -310,9 +310,9 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
     protected void onStop() {
         super.onStop();
         islogin = "33333333";
-        if (isdingweiok) {
-            locationManager.removeUpdates(listener);
-        }
+//        if (isdingweiok) {                  //0
+//            locationManager.removeUpdates(listener); //0
+//        }
 
     }
 
@@ -521,6 +521,7 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
 
 
     //定位
+  /**
     private void initdate() {
 
         //腾讯
@@ -598,19 +599,15 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
 
             @Override
             public void onStatusUpdate(String name, int status, String desc) {
-                Log.e("-----name,", name + "," + status + "," + desc);
+//                Log.e("-----name,", name + "," + status + "," + desc);
                 if (status == STATUS_DISABLED) {
-                    /* 检测到定位权限被内置或第三方的权限管理或安全软件禁用, 导致当前应用**很可能无法定位**
-                     * 必要时可对这种情况进行特殊处理, 比如弹出提示或引导
-                     */
+//                      检测到定位权限被内置或第三方的权限管理或安全软件禁用, 导致当前应用**很可能无法定位**
+//                      必要时可对这种情况进行特殊处理, 比如弹出提示或引导
+
 //                    Toast.makeText(CheDetailsActivity.this, "定位权限被禁用!", Toast.LENGTH_SHORT).show();
 //                    premissiongo();
                     requestPermissions(MainActivity.this);
                 }
-//                if (name.equals("wifi")){
-//
-//                }
-
 
             }
         };
@@ -626,12 +623,13 @@ public class MainActivity extends BaseCompatActivity implements View.OnClickList
         }
     }
 
+   */
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         //可在此继续其他操作。
-        initdate();
+//        initdate();//0
     }
 
 

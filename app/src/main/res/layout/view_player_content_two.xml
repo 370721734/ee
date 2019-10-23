@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/container"
     android:layout_width="match_parent"
+    android:background="@color/backgroudcolor"
     android:layout_height="match_parent">
 
     <com.tencent.rtmp.ui.TXCloudVideoView
@@ -10,7 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-
+    <ImageView
+        android:id="@+id/player_iv_cover_heng"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:scaleType="centerCrop"
+        android:visibility="gone"
+        android:adjustViewBounds="true"/>
     <ImageView
         android:id="@+id/player_iv_cover"
         android:layout_width="match_parent"
@@ -143,18 +151,18 @@
 
                 <com.jarhero790.eub.widget.Music
                     android:id="@+id/m"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="20dp"
 
                     app:musicimg="@mipmap/music1" />
 
-                <com.jarhero790.eub.widget.Music2
-                    android:id="@+id/m2"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="30dp"
-                    app:musicimg="@mipmap/music2" />
+                <!--<com.jarhero790.eub.widget.Music2-->
+                    <!--android:id="@+id/m2"-->
+                    <!--android:layout_width="35dp"-->
+                    <!--android:layout_height="35dp"-->
+                    <!--android:layout_marginTop="30dp"-->
+                    <!--app:musicimg="@mipmap/music2" />-->
 
 
                 <com.jarhero790.eub.message.souye.GuanPanView
