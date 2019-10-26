@@ -50,6 +50,7 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.adapter.GlideCacheUtil;
 import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.bean.Zanchange;
 import com.jarhero790.eub.message.bean.attentionchange;
@@ -647,6 +648,9 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
         super.onStop();
         Log.e("-------", "souyetwo-onStop");
         firstv = true;
+        GlideCacheUtil.getInstance().clearImageDiskCache(getActivity());
+        GlideCacheUtil.getInstance().clearImageMemoryCache(getActivity());
+        instance=null;
     }
 
 
@@ -1215,15 +1219,17 @@ public class SouyeTwoFragment extends BaseMVPCompatFragment<SouyeContract.SouyeP
 
 
     private void startPlay(int position) {
+        if (lists==null || lists.size()==0) return;
 
         //如果滑动到了最后一页 就要加载新的数据了
         if (position == lists.size() - 1) {
             page.getAndIncrement();
             if (NetworkConnectionUtils.isNetworkConnected(getActivity())) {
                 dialog = new Dialog(getActivity(), R.style.progress_dialog);
-                dialog.setContentView(R.layout.dialog);
                 dialog.setCancelable(false);
+                if (dialog.getWindow()!=null)
                 dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                dialog.setContentView(R.layout.dialog);
                 dialog.show();
                 flag.set(false);
                 if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {

@@ -134,6 +134,7 @@
             android:orientation="vertical"
             android:gravity="center"
             android:id="@+id/pinglun"
+            android:visibility="gone"
             >
 
 
@@ -195,6 +196,7 @@
         android:layout_width="match_parent"
         android:orientation="vertical"
         android:background="@color/backgroudcolor"
+        android:visibility="invisible"
         android:layout_height="match_parent">
         <fragment
             android:id="@+id/conversationlist"

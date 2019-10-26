@@ -38,7 +38,7 @@ android {
         minSdkVersion 22
         targetSdkVersion 28
         versionCode 110514
-        versionName "110514.1"
+        versionName "110514.2"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
 
@@ -46,6 +46,7 @@ android {
             moduleName "hello_jni"
             stl "stlport_static"
             ldLibs "log"
+
             abiFilters "armeabi", "armeabi-v7a"
             // 如果您使用的是商业版，只能使用 armeabi 架构，即：
 //            abiFilters "armeabi", "armeabi-v7a", "x86"
@@ -189,8 +190,13 @@ dependencies {
     //视频缓存
 //    implementation 'com.danikula:videocache:2.7.1'
     api project(':AndroidVideoCache')
-    api project(':appvideo')
+//    api project(':appvideo')
     implementation 'com.github.castorflex.verticalviewpager:library:19.0.1'
+
+    debugImplementation 'com.squareup.leakcanary:leakcanary-android:1.6.3'
+    releaseImplementation 'com.squareup.leakcanary:leakcanary-android-no-op:1.6.3'
+    // Optional, if you use support library fragments:
+    debugImplementation 'com.squareup.leakcanary:leakcanary-support-fragment:1.6.3'
 //
 
 }

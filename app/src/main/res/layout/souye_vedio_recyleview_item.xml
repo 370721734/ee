@@ -91,6 +91,7 @@
                 android:layout_width="30dp"
                 android:layout_height="29dp"
                 android:layout_marginBottom="5dp"
+                android:visibility="gone"
                 android:src="@mipmap/icon_video_commit" />
 
             <TextView
@@ -99,6 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="20dp"
                 android:text="0"
+                android:visibility="gone"
                 android:textColor="#F4F0F0"
                 android:textSize="12sp" />
 
@@ -157,17 +159,17 @@
 
                 <com.jarhero790.eub.widget.Music
                     android:id="@+id/m"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
                     android:layout_marginTop="20dp"
                     app:musicimg="@mipmap/music1" />
 
-                <com.jarhero790.eub.widget.Music2
-                    android:id="@+id/m2"
-                    android:layout_width="35dp"
-                    android:layout_height="35dp"
-                    android:layout_marginTop="30dp"
-                    app:musicimg="@mipmap/music2" />
+                <!--<com.jarhero790.eub.widget.Music2-->
+                    <!--android:id="@+id/m2"-->
+                    <!--android:layout_width="35dp"-->
+                    <!--android:layout_height="35dp"-->
+                    <!--android:layout_marginTop="30dp"-->
+                    <!--app:musicimg="@mipmap/music2" />-->
 
 
                 <com.jarhero790.eub.message.souye.GuanPanView

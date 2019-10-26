@@ -751,6 +751,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 
                 dialog.dismiss();
                 if (music != null && music.length() > 0) {
+                    mAudioVol=0;
                     extractVideotwo();//发布有音乐也要加特效
                     composeVideoAudio();//1
 //                    Log.e("---------------","有音乐");
@@ -1611,7 +1612,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
                 if (mMusicPlayer != null) {//移除上一个选择的音乐背景
                     mMediaPath.remove(mMediaPath.size() - 1);
                 }
-                mMediaPath.add(musicPath);
+                mMediaPath.add(musicPath);//2 acc
                 if (dialog != null)
                     dialog.dismiss();
 //                if (musicUrl != null)
@@ -1656,8 +1657,8 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             @Override
             public void onEnd(int result) {
                 Log.e(TAG, "extractVideo ffmpeg end...");
-                Log.e("------------houvideo=", outVideo);
-                mMediaPath.add(outVideo);
+//                Log.e("------------houvideo=", outVideo);
+                mMediaPath.add(outVideo);//0  video.mp4
                 extractAudio();
             }
         });
@@ -1703,7 +1704,7 @@ public class TCVideoEditerActivity extends FragmentActivity implements
             @Override
             public void onEnd(int result) {
                 Log.e(TAG, "extractAudio ffmpeg end...");
-                mMediaPath.add(outVideo);
+                mMediaPath.add(outVideo);   //1   aac
 //                String path = mMediaPath.get(0);
 
 //                Log.e("--------------第一次音频",outVideo);
@@ -1742,9 +1743,11 @@ public class TCVideoEditerActivity extends FragmentActivity implements
 //        final int mMusicVol = mMusicSeekBar.getProgress();
         String musicUrl;
         if (audioUrl == null) {
-            musicUrl = mMediaPath.get(1);
+            musicUrl = mMediaPath.get(1);  //原声
+            Log.e("-----------","原声"+musicUrl);
         } else {
-            musicUrl = mMediaPath.get(2);
+            musicUrl = mMediaPath.get(2);  //
+            Log.e("-----------","选择的音乐"+musicUrl);
         }
         final String musicOutUrl = mTargetPath + "/tempMusic.aac";
         final String[] common = FFmpegCommands.changeAudioOrMusicVol(musicUrl, 100, musicOutUrl);
@@ -1752,13 +1755,13 @@ public class TCVideoEditerActivity extends FragmentActivity implements
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
-                Log.e(TAG, "changeMusicVol ffmpeg start...");
+//                Log.e(TAG, "changeMusicVol ffmpeg start...");
                 handler.sendEmptyMessage(0);
             }
 
             @Override
             public void onEnd(int result) {
-                Log.e(TAG, "changeMusicVol ffmpeg end...");
+//                Log.e(TAG, "changeMusicVol ffmpeg end...");
                 composeAudioAndMusic(audioUrl, musicOutUrl);
             }
         });

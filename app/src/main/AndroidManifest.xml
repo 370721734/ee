@@ -76,6 +76,9 @@
         <activity
             android:name=".message.souye.PlayVideoTwo_TwoActivity"
             android:screenOrientation="portrait" />
+        <activity android:name=".message.souye.PlayVideoMine_ZanActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name="com.mabeijianxi.jianxiffmpegcmd.MainActivity"/>
         <activity
             android:name=".message.souye.PlayVideoThreeActivity"
             android:screenOrientation="portrait" />

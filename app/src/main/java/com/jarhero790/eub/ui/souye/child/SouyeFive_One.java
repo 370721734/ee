@@ -27,6 +27,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
@@ -36,6 +37,8 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.adapter.GlideCacheUtil;
+import com.jarhero790.eub.message.adapter.GlideLoadUtils;
 import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.bean.attentionchange;
 import com.jarhero790.eub.message.bean.souyelookone;
@@ -80,10 +83,13 @@ import butterknife.Unbinder;
 import de.hdodenhof.circleimageview.CircleImageView;
 import fr.castorflex.android.verticalviewpager.VerticalViewPager;
 import okhttp3.ResponseBody;
+import okhttp3.internal.cache.CacheStrategy;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+//播放快，但是有内存溢出  第1个，视频
 public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePresenter> implements SouyeContract.ISouyeView {
 
     private static final String TAG = "--------";
@@ -278,6 +284,7 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
             mCurrentPosition=sizelent;
             Log.e("----------souyefive","mCurrentPosition="+mCurrentPosition);
             mPagerAdapter.setlist(lists);
+
 //            initViews();
 //            mTXVodPlayer.startPlay()
 //            mPagerAdapter.notifyDataSetChanged();
@@ -310,8 +317,7 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 TXLog.e(TAG, "mVerticalViewPager, onPageScrolled position = " + position);
 
-//                Glide.get(getActivity()).clearDiskCache();
-                Glide.get(getActivity()).clearMemory();
+//
 
 //                mCurrentPosition = position;
 
@@ -329,10 +335,16 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
                         flag.set(false);
                         if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
                             mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+                            if (dialog!=null)
+                                dialog.dismiss();
                         } else {
                             mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()), SharePreferenceUtil.getToken(AppUtils.getContext()));
+                            if (dialog!=null)
+                                dialog.dismiss();
                         }
                     } else {
+                        if (dialog!=null)
+                            dialog.dismiss();
                         wangluoyichang.setVisibility(View.VISIBLE);
                         nodingdan.setVisibility(View.GONE);
                         mVerticalViewPager.setVisibility(View.GONE);
@@ -342,7 +354,7 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
             @Override
             public void onPageSelected(int position) {
-                TXLog.i(TAG, "mVerticalViewPager, onPageSelected position = " + position);
+                TXLog.e(TAG, "mVerticalViewPager, onPageSelected position = " + position);
                 mCurrentPosition = position;
                 // 滑动界面，首先让之前的播放器暂停，并seek到0
                 TXLog.e(TAG, "滑动后，让之前的播放器暂停，mTXVodPlayer = " + mTXVodPlayer);
@@ -403,7 +415,7 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
 
         protected PlayerInfo instantiatePlayerInfo(int position) {
-            TXCLog.d(TAG, "instantiatePlayerInfo " + position);
+            TXCLog.e(TAG, "instantiatePlayerInfo " + position);
 
             PlayerInfo playerInfo = new PlayerInfo();
             TXVodPlayer vodPlayer = new TXVodPlayer(getActivity());
@@ -434,7 +446,7 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
                 playerInfo.txVodPlayer.stopPlay(true);
                 playerInfoList.remove(playerInfo);
 
-                TXCLog.d(TAG, "destroyPlayerInfo " + position);
+                TXCLog.e(TAG, "destroyPlayerInfo " + position);
             }
         }
 
@@ -471,31 +483,71 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
         }
 
         @Override
+        public int getItemPosition(@NonNull Object object) {
+            return POSITION_NONE;
+        }
+
+
+        @Override
         public boolean isViewFromObject(View view, Object object) {
             return view == object;
         }
 
         @Override
         public Object instantiateItem(ViewGroup container, int position) {
-            TXCLog.i(TAG, "MyPagerAdapter instantiateItem, position = " + position);
+            TXCLog.e(TAG, "MyPagerAdapter instantiateItem, position = " + position);
             Video tcLiveInfo = lists.get(position);
+
 
             View view = LayoutInflater.from(container.getContext()).inflate(R.layout.view_player_content_two, null);
             view.setId(position);
+
+//            Glide.get(getActivity()).clearMemory();
+            GlideCacheUtil glideCacheUtil=GlideCacheUtil.getInstance();
+            glideCacheUtil.clearImageAllCache(getActivity());
+            glideCacheUtil.clearImageDiskCache(getActivity());
+
             // 封面
             ImageView coverImageView = (ImageView) view.findViewById(R.id.player_iv_cover);
             ImageView coverImageView_heng = (ImageView) view.findViewById(R.id.player_iv_cover_heng);
+            // 获取此player
+            TXCloudVideoView playView = (TXCloudVideoView) view.findViewById(R.id.player_cloud_view);
+            PlayerInfo playerInfo = instantiatePlayerInfo(position);
 
+            playerInfo.playerView = playView;
+            playerInfo.txVodPlayer.setPlayerView(playView);
+
+            if (lists.get(position).getAnyhow().equals("1")) {
+
+                coverImageView.setVisibility(View.VISIBLE);
+                coverImageView_heng.setVisibility(View.GONE);
+                Glide.with(getActivity()).load(tcLiveInfo.getUrl())
+                        .thumbnail(0.1f)
+                        .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor)
+                                .skipMemoryCache(true)          )
+                        .into(coverImageView);  //不支持 glide 4.9版本
+
+            }else {
+                coverImageView.setVisibility(View.GONE);
+                coverImageView_heng.setVisibility(View.VISIBLE);
+                playView.setRotation(270);
+                Glide.with(getActivity()).load(tcLiveInfo.getUrl())
+                        .thumbnail(0.1f)
+                        .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor)
+                                .skipMemoryCache(true)          )
+                        .into(coverImageView_heng);  //不支持 glide 4.9版本  .diskCacheStrategy(DiskCacheStrategy.RESOURCE).skipMemoryCache(true)
+
+            }
 
 
             //tou
             CircleImageView userimage = (CircleImageView) view.findViewById(R.id.souye_logo);
-            Glide.with(getActivity()).load(tcLiveInfo.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
-                    .error(R.mipmap.zuanshi_logo)).into(userimage);
+            Glide.with(getActivity()).load(tcLiveInfo.getHeadimgurl()).thumbnail(0.1f).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(userimage);
             //旋转图
             CircleImageView guanpan = (CircleImageView) view.findViewById(R.id.circleImageView);
-            Glide.with(getActivity()).load(tcLiveInfo.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
-                    .error(R.mipmap.zuanshi_logo)).into(guanpan);
+            Glide.with(getActivity()).load(tcLiveInfo.getHeadimgurl()) .thumbnail(0.1f).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
+                    .error(R.mipmap.zuanshi_logo).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(guanpan);
             rotateAnimation = new RotateAnimation(0, 360, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);
             rotateAnimation.setInterpolator(new LinearInterpolator());
             rotateAnimation.setDuration(4000);
@@ -718,28 +770,7 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
             });
 
 
-            // 获取此player
-            TXCloudVideoView playView = (TXCloudVideoView) view.findViewById(R.id.player_cloud_view);
-            PlayerInfo playerInfo = instantiatePlayerInfo(position);
-            playerInfo.playerView = playView;
-            playerInfo.txVodPlayer.setPlayerView(playView);
-            if (lists.get(position).getAnyhow().equals("1")) {
 
-                coverImageView.setVisibility(View.VISIBLE);
-                coverImageView_heng.setVisibility(View.GONE);
-                Glide.with(getActivity()).load(tcLiveInfo.getUrl())
-                        .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
-                        .into(coverImageView);  //不支持 glide 4.9版本
-
-            }else {
-                coverImageView.setVisibility(View.GONE);
-                coverImageView_heng.setVisibility(View.VISIBLE);
-                playView.setRotation(270);
-                Glide.with(getActivity()).load(tcLiveInfo.getUrl())
-                        .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
-                        .into(coverImageView_heng);  //不支持 glide 4.9版本
-
-            }
             playerInfo.txVodPlayer.startPlay(playerInfo.playURL);
 
 
@@ -749,11 +780,16 @@ public class SouyeFive_One extends BaseMVPCompatFragment<SouyeContract.SouyePres
 
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
-            TXCLog.i(TAG, "MyPagerAdapter destroyItem, position = " + position);
+            TXCLog.e(TAG, "MyPagerAdapter destroyItem, position = " + position);
 
             destroyPlayerInfo(position);
 
             container.removeView((View) object);
+
+//            Glide.get(getActivity()).clearDiskCache();  You must call this method on a background thread
+            GlideCacheUtil glideCacheUtil=GlideCacheUtil.getInstance();
+            glideCacheUtil.clearImageAllCache(getActivity());
+            glideCacheUtil.clearImageDiskCache(getActivity());
 
 
         }

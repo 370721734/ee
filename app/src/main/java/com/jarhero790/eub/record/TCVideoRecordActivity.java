@@ -1473,9 +1473,12 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 File files = CommonUtil.uriToFile(imageUri, TCVideoRecordActivity.this);
 //                Bitmap bitmaps=CommonUtil.getVideoThumbnail(files.getAbsolutePath());
 
-                if (imageUri != null) {
-                    if (imageUri.toString().endsWith(".mp4") || imageUri.toString().endsWith(".avi") || imageUri.toString().endsWith(".mov") || imageUri.toString().endsWith(".rmvb") || imageUri.toString().endsWith(".rm") || imageUri.toString().endsWith(".flv") || imageUri.toString().endsWith(".3gp") || imageUri.toString().endsWith(".asf") || imageUri.toString().endsWith(".asx")) {
-                        //到编辑页面
+                if (imageUri != null && files!=null) {
+
+                     if (imageUri.toString().endsWith(".jpg") || imageUri.toString().endsWith(".gif")){
+                         Toast.makeText(TCVideoRecordActivity.this, "请选择视频格式文件", Toast.LENGTH_SHORT).show();
+                     }else {
+                         //到编辑页面
 //                        Intent intent = new Intent(this, TCVideoEditerActivity.class);
 //                        // 如果是从录制过来的话，需要传递一个分辨率参数下去。
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mRecommendQuality);
@@ -1491,9 +1494,9 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 //                        startActivity(intent);
 
 
-                        videotime = CommonUtil.getLocalVideoDuration(files.getAbsolutePath());
+                         videotime = CommonUtil.getLocalVideoDuration(files.getAbsolutePath());
 //                        Log.e("---videotime=", videotime + "");
-                        mTXRecordResult.videoPath = files.getAbsolutePath();
+                         mTXRecordResult.videoPath = files.getAbsolutePath();
 
 //                        String width=CommonUtil.getPlayWidth(files.getAbsolutePath());
 //                        String height=CommonUtil.getPlayHeight(files.getAbsolutePath());
@@ -1509,25 +1512,39 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
 
 
-                        Bitmap bitmap = TXVideoInfoReader.getInstance().getSampleImage(0, files.getAbsolutePath());//第二种获取缩略图
-                        int width1 = bitmap.getWidth();
-                        int height1 = bitmap.getHeight();
-                        Log.e("-----------", "宽度" + width1 + "    高度" + height1);
+                         Bitmap bitmap = TXVideoInfoReader.getInstance().getSampleImage(0, files.getAbsolutePath());//第二种获取缩略图
+                         int width1 = bitmap.getWidth();
+                         int height1 = bitmap.getHeight();
+                         Log.e("-----------", "宽度" + width1 + "    高度" + height1);
 //                        mIvBigShow.setImageBitmap(bitmap);//对应的ImageView赋值图片
-                        EventBus.getDefault().post(new BitmapBean(bitmap));
+                         EventBus.getDefault().post(new BitmapBean(bitmap));
 
-                        if (width1 > height1) {
-                            //模
-                            istransverse = TXLiveConstants.RENDER_ROTATION_90;
-                        } else {
-                            istransverse = TXLiveConstants.RENDER_ROTATION_0;
-                        }
+                         if (width1 > height1) {
+                             //模
+                             istransverse = TXLiveConstants.RENDER_ROTATION_90;
+                         } else {
+                             istransverse = TXLiveConstants.RENDER_ROTATION_0;
+                         }
 
 
-                        startEditVideo();
-                    } else {
-                        Toast.makeText(TCVideoRecordActivity.this, "请选择视频格式文件", Toast.LENGTH_SHORT).show();
-                    }
+                         startEditVideo();
+
+                     }
+
+
+
+//                    if (imageUri.toString().endsWith(".mp4") || imageUri.toString().endsWith(".avi")
+//                            || imageUri.toString().endsWith(".mov") || imageUri.toString().endsWith(".rmvb")
+//                            || imageUri.toString().endsWith(".rm") || imageUri.toString().endsWith(".flv")
+//                            || imageUri.toString().endsWith(".3gp") || imageUri.toString().endsWith(".asf")
+//                            || imageUri.toString().endsWith(".asx")) {
+//
+//
+//                    } else {
+//                        Toast.makeText(TCVideoRecordActivity.this, "请选择视频格式文件", Toast.LENGTH_SHORT).show();
+//                    }
+                }else {
+                    Toast.makeText(TCVideoRecordActivity.this, "文件不存在", Toast.LENGTH_SHORT).show();
                 }
 
 

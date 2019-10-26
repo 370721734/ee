@@ -1,5 +1,6 @@
 package com.jarhero790.eub.ui.mine;
 
+import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,28 +17,19 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.jarhero790.eub.R;
-import com.jarhero790.eub.message.adapter.LikeAdapter;
+import com.jarhero790.eub.message.adapter.GlideCacheUtil;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
-import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
+import com.jarhero790.eub.message.souye.PlayVideoMine_ZanActivity;
 import com.jarhero790.eub.utils.AppUtils;
-import com.jarhero790.eub.utils.CommonUtil;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
@@ -54,6 +46,7 @@ public class FragmentZuoping extends SupportFragment {
     RelativeLayout nodingdan;
     RelativeLayout wangluoyichang, rl_rlv;
     private View view;
+
     private static FragmentZuoping instance = null;
 //    SmartRefreshLayout mSwipeLayout;
 
@@ -61,10 +54,16 @@ public class FragmentZuoping extends SupportFragment {
     ArrayList<MyFaBuBean.DataBean> list = new ArrayList<>();
     ArrayList<MyFaBuBean.DataBean> itemlist = new ArrayList<>();
     private int page = 1;
+    private static final Object lock = "lock";
 
     public static FragmentZuoping newInstance() {
+
         if (instance == null) {
-            instance = new FragmentZuoping();
+            synchronized (lock) {
+                if (instance == null) {
+                    instance = new FragmentZuoping();
+                }
+            }
         }
         return instance;
     }
@@ -95,7 +94,10 @@ public class FragmentZuoping extends SupportFragment {
 //            page = 1;
 //            initDate();
 //            Log.e("----------zuoping","onHiddenChanged");
+        }else {
+            instance=null;
         }
+
     }
 
     @Override
@@ -109,6 +111,7 @@ public class FragmentZuoping extends SupportFragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        instance=this;
         GridLayoutManager manager = new GridLayoutManager(getActivity(), 3);
         rlv.setLayoutManager(manager);
         LinearItemDecoration linearItemDecoration = new LinearItemDecoration();
@@ -145,8 +148,8 @@ public class FragmentZuoping extends SupportFragment {
     private void initDate() {
         dialog = new Dialog(getActivity(), R.style.progress_dialog);
         dialog.setCancelable(true);
-        if (dialog.getWindow()!=null)
-        dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        if (dialog.getWindow() != null)
+            dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
         dialog.setContentView(R.layout.dialog);
         dialog.show();
         RetrofitManager.getInstance().getDataServer().myfabu(SharePreferenceUtil.getToken(AppUtils.getContext()), page)
@@ -269,10 +272,11 @@ public class FragmentZuoping extends SupportFragment {
         @Override
         public void myclick(int position, View view) {
 //            Log.e("-------2", "" + position+","+list.get(position).getUrl());
-            Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+//            Intent intent = new Intent(getActivity(), PlayVideoActivity.class);
+            Intent intent = new Intent(getActivity(), PlayVideoMine_ZanActivity.class);
             intent.putExtra("position", position);
             intent.putExtra("vidlist", list);
-            intent.putExtra("videotype", "mine");
+            intent.putExtra("type", "mine");
             startActivity(intent);
 
         }
@@ -297,6 +301,9 @@ public class FragmentZuoping extends SupportFragment {
         if (calls != null) {
             calls.cancel();
         }
+//        GlideCacheUtil.getInstance().clearImageDiskCache(getActivity());
+//        GlideCacheUtil.getInstance().clearImageMemoryCache(getActivity());
+        instance=null;
     }
 }
 

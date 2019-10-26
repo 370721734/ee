@@ -135,9 +135,10 @@ public class SearchActivity extends AppCompatActivity {
 
 
         dialog = new Dialog(this, R.style.progress_dialog);
-        dialog.setContentView(R.layout.dialog);
         dialog.setCancelable(true);
+        if (dialog.getWindow()!=null)
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setContentView(R.layout.dialog);
         dialog.show();
         RetrofitManager.getInstance().getDataServer().search(page, SharePreferenceUtil.getToken(AppUtils.getContext()))
                 .enqueue(new Callback<SearchBean>() {

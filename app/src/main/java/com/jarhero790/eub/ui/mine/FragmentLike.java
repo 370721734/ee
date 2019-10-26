@@ -18,17 +18,12 @@ import com.jarhero790.eub.message.adapter.LikeAdapter;
 import com.jarhero790.eub.message.bean.LikeBean;
 import com.jarhero790.eub.message.bean.MyFaBuBean;
 import com.jarhero790.eub.message.bean.Zanchange;
-import com.jarhero790.eub.message.message.PinLenActivity;
-import com.jarhero790.eub.message.my.PlayVideoActivity;
 import com.jarhero790.eub.message.net.LinearItemDecoration;
 import com.jarhero790.eub.message.net.RetrofitManager;
 
+import com.jarhero790.eub.message.souye.PlayVideoMine_ZanActivity;
 import com.jarhero790.eub.utils.AppUtils;
 import com.jarhero790.eub.utils.SharePreferenceUtil;
-import com.scwang.smartrefresh.layout.SmartRefreshLayout;
-import com.scwang.smartrefresh.layout.api.RefreshLayout;
-import com.scwang.smartrefresh.layout.listener.OnLoadMoreListener;
-import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -64,9 +59,12 @@ public class FragmentLike extends SupportFragment {
     LikeAdapter adapter;
     private int page = 1;
 
+    private static final Object lock = "like";
     public static FragmentLike newInstance() {
         if (instance == null) {
-            instance = new FragmentLike();
+            synchronized (lock){
+                instance = new FragmentLike();
+            }
         }
         return instance;
     }
@@ -86,9 +84,8 @@ public class FragmentLike extends SupportFragment {
     public void onHiddenChanged(boolean hidden) {
         super.onHiddenChanged(hidden);
         if (hidden) {
-            Toast.makeText(getContext(), "可见", Toast.LENGTH_LONG).show();
-        } else {
-            Toast.makeText(getContext(), "不可见", Toast.LENGTH_LONG).show();
+            instance=null;
+//            Toast.makeText(getContext(), "可见", Toast.LENGTH_LONG).show();
         }
     }
 
@@ -242,10 +239,11 @@ private Dialog dialog;
         @Override
         public void myclick(int position, View view) {
 //            Log.e("-------2", "" + position);
-            Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
+//            Intent intent=new Intent(getActivity(), PlayVideoActivity.class);
+            Intent intent = new Intent(getActivity(), PlayVideoMine_ZanActivity.class);
             intent.putExtra("position",position);
             intent.putExtra("vidlist",list);
-            intent.putExtra("videotype","mine");
+            intent.putExtra("type","mine");
             startActivity(intent);
         }
     };
@@ -277,5 +275,6 @@ private Dialog dialog;
         if (!EventBus.getDefault().isRegistered(this)) {
             EventBus.getDefault().unregister(this);
         }
+        instance=null;
     }
 }

@@ -21,6 +21,7 @@ import com.jarhero790.eub.message.message.MyPrivateConversationProvider;
 import com.jarhero790.eub.message.message.MyTextMessageItemProvider;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.message.souye.MyFileNameGenerator;
+import com.squareup.leakcanary.LeakCanary;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.tencent.ugc.TXUGCBase;
@@ -127,6 +128,11 @@ public class GlobalApplication extends Application {
 
         api = WXAPIFactory.createWXAPI(this, APP_ID_Wei, true);
         api.registerApp(APP_ID_Wei);
+
+//        if (LeakCanary.isInAnalyzerProcess(this)){
+//            return;
+//        }
+//        LeakCanary.install(this);
 
 //        SharePreferenceUtil.setToken("0442062541812d7dfe98bc77155ba5b4",context);
 

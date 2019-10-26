@@ -249,21 +249,19 @@ public class FensiActivity extends Activity {
 //            Log.e("--------3", "" + position + "  " + arrayList.get(position).getUser_id() + "  " + arrayList.get(position).getNickname());
 //            --------3: 0  5032  5032
             //1.判断是否互关
-            if (arrayList.get(position).getIs_likeEach() == 1) {
-                if (RongIM.getInstance() != null) {
-                    RongIM.getInstance().startPrivateChat(FensiActivity.this, arrayList.get(position).getRong_id() + "", arrayList.get(position).getNickname());
-
-
-                    //不用了
-//                EventBus.getDefault().post(new Conver(arrayList.get(position).getNickname()));
-//                    if (nameContract!=null){
-//                        nameContract.getNickName(arrayList.get(position).getNickname());
-//
-//                    }
-                }
-            } else {
-                Toast.makeText(FensiActivity.this, "要互相关注后才能聊天", Toast.LENGTH_SHORT).show();
-            }
+//            if (arrayList.get(position).getIs_likeEach() == 1) {
+//                if (RongIM.getInstance() != null) {
+//                    RongIM.getInstance().startPrivateChat(FensiActivity.this, arrayList.get(position).getRong_id() + "", arrayList.get(position).getNickname());
+//                    //不用了
+////                EventBus.getDefault().post(new Conver(arrayList.get(position).getNickname()));
+////                    if (nameContract!=null){
+////                        nameContract.getNickName(arrayList.get(position).getNickname());
+////
+////                    }
+//                }
+//            } else {
+//                Toast.makeText(FensiActivity.this, "要互相关注后才能聊天", Toast.LENGTH_SHORT).show();
+//            }
 
 
         }

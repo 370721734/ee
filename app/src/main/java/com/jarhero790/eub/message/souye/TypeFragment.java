@@ -30,6 +30,9 @@ import com.jarhero790.eub.ui.souye.child.SouyeFive;
 import com.jarhero790.eub.ui.souye.child.SouyeFive_One;
 import com.jarhero790.eub.ui.souye.child.SouyeFourFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeFragment;
+import com.jarhero790.eub.ui.souye.child.SouyeFragment_AAA;
+import com.jarhero790.eub.ui.souye.child.SouyeFragment_BBB;
+import com.jarhero790.eub.ui.souye.child.SouyeFragment_CCC;
 import com.jarhero790.eub.ui.souye.child.SouyeOFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeThreeFragment;
 import com.jarhero790.eub.ui.souye.child.SouyeTwoFragment;
@@ -68,11 +71,19 @@ public class TypeFragment extends SupportFragment {
     private Fragment tempFragment;
 //    public SouyeFragment listFragment;
 //    public SouyeOFragment listFragment;
-    public SouyeFive_One listFragment;
-    public SouyeTwoFragment tagFragment;
+//    public SouyeFive_One listFragment;
+    public SouyeFragment_AAA listFragment; //recy+tx
+
+
+//    public SouyeTwoFragment tagFragment;
+    public SouyeFragment_BBB tagFragment;
+
 //    public SouyeThreeFragment fbcFragment;//ok
 //    public SouyeFourFragment fbcFragment;
-    public SouyeFive fbcFragment;
+//    public SouyeFive fbcFragment;//快，有内存问题
+
+    public SouyeFragment_CCC fbcFragment;
+
 
 //    @Override
 //    public boolean onBackPressed() {
@@ -190,9 +201,9 @@ public class TypeFragment extends SupportFragment {
 
     private void initFragment() {
         fragmentList = new ArrayList<>();
-        listFragment = SouyeFive_One.newInstance();
-        tagFragment = SouyeTwoFragment.newInstance();
-        fbcFragment = SouyeFive.newInstance();
+        listFragment = SouyeFragment_AAA.newInstance();
+        tagFragment = SouyeFragment_BBB.newInstance();
+        fbcFragment = SouyeFragment_CCC.newInstance();
 //        fbcFragment = SouyeFourFragment.newInstance();
         fragmentList.add(listFragment);
         fragmentList.add(tagFragment);

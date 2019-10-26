@@ -85,7 +85,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         holder.videoPlayer.setLooping(true);
 
         //非常重要
-        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//SCREEN_SCALE_MATCH_PARENT   SCREEN_SCALE_CENTER_CROP
+//        holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//SCREEN_SCALE_MATCH_PARENT   SCREEN_SCALE_CENTER_CROP
 
         if (attentionVideo.getAnyhow().equals("1")) {
 //           thumb.setVisibility(View.VISIBLE);
@@ -97,7 +97,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 //            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);//
 //            thumb.setLayoutParams(params);
 //            params.gravity = Gravity.CENTER_VERTICAL;
-//            thumb.setScaleType(ImageView.ScaleType.CENTER_CROP);
+//            thumb.setScaleType(ImageView.ScaleType.FIT_XY);
 //            thumb.setAdjustViewBounds(true);
 
             Glide.with(thumb.getContext())
@@ -106,7 +106,12 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
                     .into(thumb);
 
 
-            holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);//SCREEN_SCALE_MATCH_PARENT   SCREEN_SCALE_CENTER_CROP
+//            holder.ivdeault_shu.setVisibility(View.VISIBLE);
+//            holder.ivdeault_head.setVisibility(View.GONE);
+//            Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+//                    .into(holder.ivdeault_shu);
+
+            holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);//SCREEN_SCALE_MATCH_PARENT   SCREEN_SCALE_CENTER_CROP
         }else {
 
 
@@ -136,6 +141,11 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
                     .load(videoImg)
                     .apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
                     .into(thumb);
+
+//            holder.ivdeault_shu.setVisibility(View.GONE);
+//            holder.ivdeault_head.setVisibility(View.VISIBLE);
+//            Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
+//                    .into(holder.ivdeault_head);
             holder.videoPlayer.setScreenScale(VideoView.SCREEN_SCALE_DEFAULT);//默认1：1
         }
 
@@ -158,8 +168,9 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
 //        }
 
 
-        Glide.with(mcontext).load(videoImg).apply(new RequestOptions().placeholder(R.mipmap.xiangfen).error(R.mipmap.xiangfen))
-                .into(holder.ivdeault);
+
+
+
 //        if (videoImg.startsWith("http")) {
 //
 //        } else {
@@ -334,7 +345,7 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
         private ImageView videolike;
 
         CircleImageView userimage;
-        ImageView ivdeault;
+        ImageView ivdeault_head,ivdeault_shu;
 
         ImageView ivplay;
 
@@ -351,7 +362,8 @@ public class VideoRecyclerViewAdapter extends RecyclerView.Adapter<VideoRecycler
             date = itemView.findViewById(R.id.date);
             attentionsUserName = itemView.findViewById(R.id.attentionsUserName);
             userimage = itemView.findViewById(R.id.attentionsUserIcon);
-            ivdeault = itemView.findViewById(R.id.iv_deault);
+            ivdeault_head = itemView.findViewById(R.id.iv_deault_head);
+            ivdeault_shu = itemView.findViewById(R.id.iv_deault_shu);
             zan = itemView.findViewById(R.id.zanshu);
             ivplay = itemView.findViewById(R.id.iv_play);
             title = itemView.findViewById(R.id.tv_text);

@@ -85,6 +85,8 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
+
+//播放快，但是有内存溢出  第三个，长视频
 public class SouyeFive extends BaseMVPCompatFragment<SouyeContract.SouyePresenter> implements SouyeContract.ISouyeView {
 
     private static final String TAG = "--------";

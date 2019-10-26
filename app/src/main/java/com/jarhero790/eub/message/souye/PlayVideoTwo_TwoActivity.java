@@ -28,11 +28,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
 import com.dueeeke.videoplayer.player.VideoView;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.adapter.GlideCacheUtil;
 import com.jarhero790.eub.message.bean.SearchBean;
 import com.jarhero790.eub.message.net.RetrofitManager;
 import com.jarhero790.eub.ui.souye.BottomGiftDialog;
@@ -97,7 +99,8 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
             int width = param.getInt(TXLiveConstants.EVT_PARAM1);
             int height = param.getInt(TXLiveConstants.EVT_PARAM2);
             if (width > height) {
-                player.setRenderRotation(TXLiveConstants.RENDER_ROTATION_LANDSCAPE);
+//                player.setRenderRotation(TXLiveConstants.RENDER_ROTATION_LANDSCAPE);
+                player.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
             } else {
                 player.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
             }
@@ -110,7 +113,7 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
                 playerInfo.isBegin = true;
             }
             if (mTXVodPlayer == player) {
-                TXLog.i(TAG, "onPlayEvent, event I FRAME, player = " + player);
+//                TXLog.i(TAG, "onPlayEvent, event I FRAME, player = " + player);
                 mIvCover.setVisibility(View.GONE);
 //                TCUserMgr.getInstance().uploadLogs(TCConstants.ELK_ACTION_VOD_PLAY, TCUserMgr.getInstance().getUserId(), event, "点播播放成功", new Callback() {
 //                    @Override
@@ -312,7 +315,7 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
         ArrayList<PlayerInfo> playerInfoList = new ArrayList<>();
 
         protected PlayerInfo instantiatePlayerInfo(int position) {
-            TXCLog.d(TAG, "instantiatePlayerInfo " + position);
+            TXCLog.e(TAG, "instantiatePlayerInfo " + position);
             PlayerInfo playerInfo = new PlayerInfo();
             TXVodPlayer vodPlayer = new TXVodPlayer(PlayVideoTwo_TwoActivity.this);
             vodPlayer.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
@@ -412,20 +415,31 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
                 //tou
                 CircleImageView userimage = (CircleImageView) view.findViewById(R.id.souye_logo);
                 Glide.with(PlayVideoTwo_TwoActivity.this).load(videoinfo.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
-                        .error(R.mipmap.zuanshi_logo)).into(userimage);
+                        .error(R.mipmap.zuanshi_logo).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(userimage);
                 //旋转图
                 CircleImageView guanpan = (CircleImageView) view.findViewById(R.id.circleImageView);
                 Glide.with(PlayVideoTwo_TwoActivity.this).load(videoinfo.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
-                        .error(R.mipmap.zuanshi_logo)).into(guanpan);
+                        .error(R.mipmap.zuanshi_logo).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(guanpan);
                 guanpan.setAnimation(rotateAnimation);
 
                 //zan
                 ImageView iv_like = view.findViewById(R.id.iv_like);
+                TextView tv_like=view.findViewById(R.id.tv_like);
+                tv_like.setText(String.valueOf(videoinfo.getZan()));
                 if (videoinfo.getIs_zan() == 1) {
                     iv_like.setSelected(true);
                 } else {
                     iv_like.setSelected(false);
                 }
+
+                //评论
+                ImageView iv_commit=view.findViewById(R.id.iv_commit);
+                TextView tv_pinglun=view.findViewById(R.id.tv_pinglun);
+                tv_pinglun.setText(String.valueOf(videoinfo.getCommentNum()));
+
+                //财富
+                TextView caifu=view.findViewById(R.id.tv_gold_coin);
+                caifu.setText(String.valueOf(videoinfo.getCaifu()));
 
                 //            关注
                 Button btn_attention = view.findViewById(R.id.btn_attention);
@@ -469,20 +483,32 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
                 //tou
                 CircleImageView userimage = (CircleImageView) view.findViewById(R.id.souye_logo);
                 Glide.with(PlayVideoTwo_TwoActivity.this).load(videoinfo.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
-                        .error(R.mipmap.zuanshi_logo)).into(userimage);
+                        .error(R.mipmap.zuanshi_logo).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(userimage);
                 //旋转图
                 CircleImageView guanpan = (CircleImageView) view.findViewById(R.id.circleImageView);
                 Glide.with(PlayVideoTwo_TwoActivity.this).load(videoinfo.getHeadimgurl()).apply(new RequestOptions().placeholder(R.mipmap.zuanshi_logo)
-                        .error(R.mipmap.zuanshi_logo)).into(guanpan);
+                        .error(R.mipmap.zuanshi_logo).diskCacheStrategy(DiskCacheStrategy.NONE).skipMemoryCache(true)).into(guanpan);
                 guanpan.setAnimation(rotateAnimation);
 
                 //zan
                 ImageView iv_like = view.findViewById(R.id.iv_like);
+                TextView tv_like=view.findViewById(R.id.tv_like);
+                tv_like.setText(String.valueOf(videoinfo.getZan()));
                 if (videoinfo.getIs_zan() == 1) {
                     iv_like.setSelected(true);
                 } else {
                     iv_like.setSelected(false);
                 }
+
+
+                //评论
+                ImageView iv_commit=view.findViewById(R.id.iv_commit);
+                TextView tv_pinglun=view.findViewById(R.id.tv_pinglun);
+                tv_pinglun.setText(String.valueOf(videoinfo.getCommentNum()));
+
+                //财富
+                TextView caifu=view.findViewById(R.id.tv_gold_coin);
+                caifu.setText(String.valueOf(videoinfo.getCaifu()));
 
                 //            关注
                 Button btn_attention = view.findViewById(R.id.btn_attention);
@@ -778,6 +804,12 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
         }
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        GlideCacheUtil.getInstance().clearImageDiskCache(this);
+//        GlideCacheUtil.getInstance().clearImageMemoryCache(this);
+    }
 
     @Override
     protected void onDestroy() {

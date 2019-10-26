@@ -112,6 +112,7 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
         super.onViewRecycled(holder);
         //注释一下试
         ImageView imageView1 = holder.video_thumb;
+        ImageView imageView1_head = holder.video_thumb_head;
         ImageView imageView2 = holder.iv_like;
         ImageView imageView3 = holder.iv_commit;
         ImageView imageView4 = holder.iv_share;
@@ -119,6 +120,9 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 
         if (imageView1 != null) {
             Glide.with(context).clear(imageView1);
+        }
+        if (imageView1_head != null) {
+            Glide.with(context).clear(imageView1_head);
         }
         if (imageView2 != null) {
             Glide.with(context).clear(imageView2);
@@ -143,35 +147,45 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 
 //        Log.e("------------------", "??????" + position);
         Video video = videos.get(position);
+
         /** Fresco方式加载
          Uri uri = Uri.parse(video.getVideo_img());
          holder.video_thumb.setImageURI(uri);
          **/
-        Log.e("---------tu",video.getHeadimgurl()+"   "+video.getId());//没有图片
+//        Log.e("---------tu",video.getHeadimgurl()+"没有图片"+video.getId()+"  "+video.getUrl()+" lise="+videos.size());//
         /**Glide方式*/
 //        Glide.with(context).load(video.getVideo_img())
 //                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
 //                .into(holder.video_thumb);
 
         if (video.getAnyhow().equals("1")) {
-            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-            holder.video_thumb.setLayoutParams(params);
-            params.addRule(RelativeLayout.CENTER_VERTICAL);
+            holder.video_thumb.setVisibility(View.VISIBLE);
+            holder.video_thumb_head.setVisibility(View.GONE);
+
+//            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//            holder.video_thumb.setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
             Glide.with(context).load(video.getVideo_img())
-                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+                    .thumbnail(0.1f)
                     .into(holder.video_thumb);
 //            Log.e("---------","竖");
 
         }else {
 //            holder.video_thumb.setMaxHeight(400);
-            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            holder.video_thumb.setLayoutParams(params);
-            params.addRule(RelativeLayout.CENTER_VERTICAL);
-            holder.video_thumb.setScaleType(ImageView.ScaleType.FIT_XY);
-            holder.video_thumb.setAdjustViewBounds(true);
+
+            holder.video_thumb_head.setVisibility(View.VISIBLE);
+            holder.video_thumb.setVisibility(View.GONE);
+
+//            RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+//            holder.video_thumb_head.setLayoutParams(params);
+//            params.addRule(RelativeLayout.CENTER_VERTICAL);
+//            holder.video_thumb_head.setScaleType(ImageView.ScaleType.FIT_XY);
+//            holder.video_thumb_head.setAdjustViewBounds(true);
             Glide.with(context).load(video.getVideo_img())
-                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
-                    .into(holder.video_thumb);
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+                    .thumbnail(0.1f)
+                    .into(holder.video_thumb_head);
 //            Log.e("---------","横");
         }
 
@@ -412,7 +426,7 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 
 
     public class VideoHolder extends RecyclerView.ViewHolder {
-        ImageView video_thumb;
+        ImageView video_thumb,video_thumb_head;
         RelativeLayout relativeLayout;
         ImageView iv_like;
         ImageView iv_commit;
@@ -441,6 +455,7 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
         VideoHolder(View itemView) {
             super(itemView);
             video_thumb = itemView.findViewById(R.id.player_iv_cover);
+            video_thumb_head = itemView.findViewById(R.id.player_iv_cover_heng);
             videoView = itemView.findViewById(R.id.player_cloud_view);
             relativeLayout = itemView.findViewById(R.id.rl_all);
 
