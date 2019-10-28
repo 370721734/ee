@@ -118,10 +118,10 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
     private static int mCurrentPosition;//当前播放的第几个视频 ，
     private List<Video> lists = new ArrayList<>();
     private TikTokController mTikTokController;
-//    private TikTokAdapter tikTokAdapter;//
+    //    private TikTokAdapter tikTokAdapter;//
     private TikTokTengAdapter tikTokAdapter;//
 
-//    private VideoView mVideoView;//
+    //    private VideoView mVideoView;//
     private TXVodPlayer mVideoView;//
     private TXCloudVideoView mTXCloudVideoView;
     private ImageView mIvCover;
@@ -394,18 +394,18 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
             if (mVideoView != null) {
                 if (!mVideoView.isPlaying()) {
                     mVideoView.resume();
-                    if (lists.size()>0)
-                    mVideoView.startPlay(lists.get(mCurrentPosition).getUrl());
+                    if (lists.size() > 0)
+                        mVideoView.startPlay(lists.get(mCurrentPosition).getUrl());
                 }
-                if (viewplaypause!=null)
+                if (viewplaypause != null)
                     viewplaypause.setVisibility(View.INVISIBLE);
             }
         } else {
             Log.e("-------souye", "ee1");
-              if (mVideoView != null) {
+            if (mVideoView != null) {
                 mVideoView.pause();
             }
-              app.setIslooktwo(false);
+            app.setIslooktwo(false);
 //              onHiddenChanged(true);
         }
     }
@@ -541,7 +541,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //        mVideoView.setVideoController(mTikTokController);////???
 
 
-        Log.e("-------------lists","="+lists.size());
+        Log.e("-------------lists", "=" + lists.size());
 //        listso= DataUtil.getTikTokVideoList();
 //        TikTokOAdapter tikTokAdapter = new TikTokOAdapter(listso, getActivity());
 //         tikTokAdapter = new TikTokAdapter(lists, getActivity());
@@ -864,7 +864,6 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
                     viewplaypause.findViewById(R.id.iv_play_pause).setVisibility(View.INVISIBLE);
 //                    viewplaypause.findViewById(R.id.circleImageView).startAnimation(rotateAnimation);
                 }
-
 
 
                 if (mVideoView != null) {
@@ -1223,8 +1222,6 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
     }
 
 
-
-
     //ok
     public void showPingLun() {
         if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
@@ -1326,12 +1323,14 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //        mVideoView.start();
 //    }
 
-//    RelativeLayout.LayoutParams params;
+    //    RelativeLayout.LayoutParams params;
     private void startPlay(int position) {
-        if (lists==null || lists.size()==0) return;
+        if (lists == null || lists.size() == 0) return;
 
-        Log.e("-----------tu7",lists.get(position).getVideo_img());
-        Log.e("-----------url",lists.get(position).getUrl());
+        Glide.with(getActivity()).load(lists.get(position).getVideo_img()).preload();
+
+//        Log.e("-----------tu7",lists.get(position).getVideo_img());
+//        Log.e("-----------url",lists.get(position).getUrl());
 
         //如果滑动到了最后一页 就要加载新的数据了
         if (position == lists.size() - 1) {
@@ -1340,8 +1339,8 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
                 dialog = new Dialog(getActivity(), R.style.progress_dialog);
                 dialog.setContentView(R.layout.dialog);
                 dialog.setCancelable(false);
-                if (dialog.getWindow()!=null)
-                dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+                if (dialog.getWindow() != null)
+                    dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
                 dialog.show();
                 flag.set(false);
                 if (SharePreferenceUtil.getToken(AppUtils.getContext()).equals("")) {
@@ -1358,10 +1357,10 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 
         View itemView = recyclerView.getChildAt(0);
         if (itemView == null) return;
-        mIvCover=itemView.findViewById(R.id.player_iv_cover);
-        mIvCover_heng=itemView.findViewById(R.id.player_iv_cover_heng);
+        mIvCover = itemView.findViewById(R.id.player_iv_cover);
+        mIvCover_heng = itemView.findViewById(R.id.player_iv_cover_heng);
         itemView.findViewById(R.id.back).setVisibility(View.GONE);
-        viewplaypause= itemView.findViewById(R.id.iv_play_pause);
+        viewplaypause = itemView.findViewById(R.id.iv_play_pause);
         viewplaypause.setVisibility(View.INVISIBLE);
 //        View bb=View.inflate(this,R.layout.item_tik_tok,null);不行这句
 
@@ -1400,7 +1399,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 ////            mTikTokController.getThumb().setAdjustViewBounds(true);
             Glide.with(getActivity())
                     .load(lists.get(position).getVideo_img())
-                .thumbnail(0.1f)
+                    .thumbnail(0.1f)
                     .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
                     .into(mIvCover);//mTikTokController.getThumb()
 //            mVideoView.setScreenScale(VideoView.SCREEN_SCALE_CENTER_CROP);
@@ -1425,7 +1424,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //            mTikTokController.getThumb().setAdjustViewBounds(true);
             Glide.with(getActivity())
                     .load(lists.get(position).getVideo_img())
-                .thumbnail(0.1f)
+                    .thumbnail(0.1f)
                     .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
                     .into(mIvCover_heng);//mTikTokController.getThumbHeng()
 //            Log.e("---------------","横屏来了");
@@ -1444,8 +1443,8 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //            view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
 
 //        mVideoView.start();
-        Log.e("-----------tu7",lists.get(position).getVideo_img());
-        Log.e("-----------url",lists.get(position).getUrl());
+//        Log.e("-----------tu7",lists.get(position).getVideo_img());
+//        Log.e("-----------url",lists.get(position).getUrl());
 
 
 //        viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
@@ -1456,8 +1455,6 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 
 //            mVideoView.setPlayerView(mTXCloudVideoView);
 //            Log.e("-----------url",lists.get(position).getUrl());
-
-
 
 
 //        }
@@ -1473,7 +1470,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //        playerInfo.txVodPlayer.startPlay(lists.get(position).getUrl());
 
 //        if (lists==null || lists.size()==0) return;
-        String mVideoPath=lists.get(position).getUrl();
+        String mVideoPath = lists.get(position).getUrl();
         mVideoView.setPlayerView(playView);//mTXCloudVideoView
         mVideoView.enableHardwareDecode(false);
         mVideoView.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
@@ -1481,11 +1478,11 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
         mVideoView.setConfig(new TXVodPlayConfig());
         mVideoView.setVodListener(this);
         mVideoView.setLoop(true);
-        mVideoView.startPlay(mVideoPath);
+//        mVideoView.startPlay(mVideoPath);
 
 
-//        mVideoView.startPlay(proxyUrl);
-        Log.e("-----------urlx",lists.get(position).getUrl()+"  "+mVideoPath);
+        mVideoView.startPlay(proxyUrl);
+        Log.e("-----------urlx", lists.get(position).getUrl() + "  " + mVideoPath);
 
 
     }
@@ -1963,8 +1960,8 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
     }
 
     private void startPlay3(int position) {
-        if (lists==null || lists.size()==0) return;
-        String mVideoPath=lists.get(position).getUrl();
+        if (lists == null || lists.size() == 0) return;
+        String mVideoPath = lists.get(position).getUrl();
         mVideoView.setPlayerView(mTXCloudVideoView);
         mVideoView.enableHardwareDecode(false);
         mVideoView.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
@@ -1991,14 +1988,13 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //            stopPlay(true);
             mVideoView.pause();
             mVideoView.startPlay("");
-            Log.e("-------------","onpageReleasexx"+position);
+            Log.e("-------------", "onpageReleasexx" + position);
             mVideoView.pause();
-            if (mVideoView.isPlaying()){
-                Log.e("-------------","onpageRelease"+position);
+            if (mVideoView.isPlaying()) {
+                Log.e("-------------", "onpageRelease" + position);
             }
 
 //            destroyPlayerInfo(position);
-
 
 
 //            if (mVideoView != null) {
@@ -2015,7 +2011,6 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //                .load(lists.get(position).getVideo_img())
 //                .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor).diskCacheStrategy(DiskCacheStrategy.ALL))
 //                .into(mTikTokController.getThumb());
-
 
 
 //        if (lists.get(position).getAnyhow().equals("1")) {
@@ -2048,15 +2043,12 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //        }
 
 
-
-
-
 //        if (mVideoView!=null)
 //            mVideoView=new TXVodPlayer(getActivity());
 //        mVideoView.resume();
         startPlay(position);
         mCurrentPosition = position;
-                Log.e("-----------","onPageSelected"+position);
+        Log.e("-----------", "onPageSelected" + position);
         //ok
 //        viewplaypause = layoutManager.findViewByPosition(position);    //为recyclerView中item位置          删除了有没有问题
         if (viewplaypause != null) {
@@ -2086,7 +2078,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
             }
             if (mVideoView == player) {
 //                TXLog.i(TAG, "onPlayEvent, event I FRAME, player = " + player);
-                if (mIvCover!=null && mIvCover_heng!=null){
+                if (mIvCover != null && mIvCover_heng != null) {
                     mIvCover.setVisibility(View.GONE);
                     mIvCover_heng.setVisibility(View.GONE);
                 }
@@ -2107,9 +2099,9 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
                 mVideoView.resume();
             }
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
-           PlayerInfo playerInfo = findPlayerInfo(player);
+            PlayerInfo playerInfo = findPlayerInfo(player);
             if (playerInfo != null && playerInfo.isBegin) {
-                if (mIvCover!=null && mIvCover_heng!=null) {
+                if (mIvCover != null && mIvCover_heng != null) {
                     mIvCover.setVisibility(View.GONE);
                     mIvCover_heng.setVisibility(View.GONE);
                 }
@@ -2185,6 +2177,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
         public int pos;
         public int reviewstatus;
     }
+
     protected void destroyPlayerInfo(int position) {
         while (true) {
             PlayerInfo playerInfo = findPlayerInfo(position);
@@ -2216,7 +2209,6 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
         playerInfo.playURL = TextUtils.isEmpty(tcLiveInfo.getUrl()) ? tcLiveInfo.getUrl() : tcLiveInfo.getUrl();
 
 
-
         playerInfo.txVodPlayer = vodPlayer;
 
         playerInfo.pos = position;
@@ -2224,15 +2216,17 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 
         return playerInfo;
     }
+
     public PlayerInfo findPlayerInfo(int position) {
         for (int i = 0; i < playerInfoList.size(); i++) {
-             PlayerInfo playerInfo = playerInfoList.get(i);
+            PlayerInfo playerInfo = playerInfoList.get(i);
             if (playerInfo.pos == position) {
                 return playerInfo;
             }
         }
         return null;
     }
+
     public PlayerInfo findPlayerInfo(TXVodPlayer player) {
         for (int i = 0; i < playerInfoList.size(); i++) {
             PlayerInfo playerInfo = playerInfoList.get(i);
@@ -2249,9 +2243,10 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
         }
     }
 
-    public interface Tuaddurl{
+    public interface Tuaddurl {
         void onClickear(boolean isheng, String url);
     }
+
     private Tuaddurl tuaddurl;
 
     public void setTuaddurl(Tuaddurl tuaddurl) {

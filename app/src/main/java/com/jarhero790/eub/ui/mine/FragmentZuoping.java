@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.message.adapter.GlideCacheUtil;
 import com.jarhero790.eub.message.adapter.ZuoPingAdapter;

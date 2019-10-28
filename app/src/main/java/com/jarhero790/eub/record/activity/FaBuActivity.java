@@ -594,11 +594,11 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
 //        mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);
         if (istransverse == TXLiveConstants.RENDER_ROTATION_90) {
 //            mTXVodPlayer.setRate(90f);//没有用
-            Log.e("-------------", "旋转了90");
+//            Log.e("-------------", "旋转了90");
             mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_ADJUST_RESOLUTION);
             anyhow = "0";
         } else {
-            Log.e("-------------", "旋转了0");
+//            Log.e("-------------", "旋转了0");
             mTXVodPlayer.setRenderMode(TXLiveConstants.RENDER_MODE_FULL_FILL_SCREEN);//RENDER_MODE_ADJUST_RESOLUTION
             anyhow = "1";
 
@@ -790,6 +790,11 @@ public class FaBuActivity extends AppCompatActivity implements ITXVodPlayListene
                     startActivity(new Intent(FaBuActivity.this, MainActivity.class));
                     if (outputvideo != null)
                         FileUtils.deleteFile(outputvideo);
+
+                    Log.e("----------------","有没"+mVideoPath);
+
+                    if (mVideoPath!=null)
+                    FileUtils.deleteFile(mVideoPath);
                     finish();
                     break;
                 case 2:

@@ -127,18 +127,18 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
             }
         } else if (event == TXLiveConstants.PLAY_EVT_VOD_PLAY_PREPARED) {
             if (mTXVodPlayer == player) {
-                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
+//                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
                 mTXVodPlayer.resume();
             }
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
             PlayerInfo playerInfo = mPagerAdapter.findPlayerInfo(player);
             if (playerInfo != null && playerInfo.isBegin) {
                 mIvCover.setVisibility(View.GONE);
-                TXCLog.i(TAG, "onPlayEvent, event begin, cover remove");
+//                TXCLog.i(TAG, "onPlayEvent, event begin, cover remove");
             }
         } else if (event < 0) {
             if (mTXVodPlayer == player) {
-                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
+//                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
 
                 String desc = null;
                 switch (event) {
@@ -170,7 +170,7 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
 //                    }
 //                });
             }
-            Toast.makeText(this, "event:" + event, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "event:" + event, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -240,16 +240,16 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
         mVerticalViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                TXLog.e(TAG, "mVerticalViewPager, onPageScrolled position = " + position);
+//                TXLog.e(TAG, "mVerticalViewPager, onPageScrolled position = " + position);
 //                mCurrentPosition = position;
             }
 
             @Override
             public void onPageSelected(int position) {
-                TXLog.i(TAG, "mVerticalViewPager, onPageSelected position = " + position);
+//                TXLog.i(TAG, "mVerticalViewPager, onPageSelected position = " + position);
                 mCurrentPosition = position;
                 // 滑动界面，首先让之前的播放器暂停，并seek到0
-                TXLog.e(TAG, "滑动后，让之前的播放器暂停，mTXVodPlayer = " + mTXVodPlayer);
+//                TXLog.e(TAG, "滑动后，让之前的播放器暂停，mTXVodPlayer = " + mTXVodPlayer);
                 if (mTXVodPlayer != null) {
                     mTXVodPlayer.seek(0);
                     mTXVodPlayer.pause();
@@ -261,11 +261,11 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
             }
         });
 
-        Log.e(TAG, "这个页面来了没有3");
+//        Log.e(TAG, "这个页面来了没有3");
         mVerticalViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View page, float position) {
-                TXLog.e(TAG, "mVerticalViewPager, transformPage pisition = " + position + " mCurrentPosition" + mCurrentPosition);
+//                TXLog.e(TAG, "mVerticalViewPager, transformPage pisition = " + position + " mCurrentPosition" + mCurrentPosition);
                 if (position != 0) {
                     return;
                 }
@@ -283,10 +283,10 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
             }
         });
 
-        Log.e(TAG, "这个页面来了没有4");
+//        Log.e(TAG, "这个页面来了没有4");
         mPagerAdapter = new MyPagerAdapter();
         mVerticalViewPager.setAdapter(mPagerAdapter);
-        Log.e(TAG, "这个页面来了没有5");
+//        Log.e(TAG, "这个页面来了没有5");
     }
 
 
@@ -315,7 +315,7 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
         ArrayList<PlayerInfo> playerInfoList = new ArrayList<>();
 
         protected PlayerInfo instantiatePlayerInfo(int position) {
-            TXCLog.e(TAG, "instantiatePlayerInfo " + position);
+//            TXCLog.e(TAG, "instantiatePlayerInfo " + position);
             PlayerInfo playerInfo = new PlayerInfo();
             TXVodPlayer vodPlayer = new TXVodPlayer(PlayVideoTwo_TwoActivity.this);
             vodPlayer.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
@@ -354,7 +354,7 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
                 playerInfo.txVodPlayer.stopPlay(true);
                 playerInfoList.remove(playerInfo);
 
-                TXCLog.d(TAG, "destroyPlayerInfo " + position);
+//                TXCLog.d(TAG, "destroyPlayerInfo " + position);
             }
         }
 
@@ -928,14 +928,14 @@ public class PlayVideoTwo_TwoActivity extends AppCompatActivity implements ITXVo
             @Override
             public void Clicklinear(View view, String type) {
                 if (type.equals("下载")) {
-                    Log.e("-------", "下载");
+//                    Log.e("-------", "下载");
 
 
                     bottomShareDialog.dismiss();
                 } else if (type.equals("分享")) {
-                    Log.e("-------", "分享");
+//                    Log.e("-------", "分享");
                     WXWebpageObject webpage = new WXWebpageObject();
-                    webpage.webpageUrl = "http://www.qq.com";
+                    webpage.webpageUrl = "http://www.51ayhd.com/web/Shopping/share.html";
                     WXMediaMessage msg = new WXMediaMessage(webpage);
                     msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
                     msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";

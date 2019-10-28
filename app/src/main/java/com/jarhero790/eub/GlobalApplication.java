@@ -92,6 +92,7 @@ public class GlobalApplication extends Application {
     public void onCreate() {
         super.onCreate();
         context = getApplicationContext();
+        mApp=this;
         handler = new Handler();
         mainThreadId = android.os.Process.myTid();
         RetrofitManager.getInstance().init(context);

@@ -1330,8 +1330,9 @@ public class SouyeFragment_CCC extends BaseMVPCompatFragment<SouyeContract.Souye
     private void startPlay(int position) {
         if (lists==null || lists.size()==0) return;
 
-        Log.e("-----------tu7",lists.get(position).getVideo_img());
-        Log.e("-----------url",lists.get(position).getUrl());
+        Glide.with(getActivity()).load(lists.get(position).getVideo_img()).preload();
+//        Log.e("-----------tu7",lists.get(position).getVideo_img());
+//        Log.e("-----------url",lists.get(position).getUrl());
 
         //如果滑动到了最后一页 就要加载新的数据了
         if (position == lists.size() - 1) {
@@ -1444,8 +1445,8 @@ public class SouyeFragment_CCC extends BaseMVPCompatFragment<SouyeContract.Souye
 //            view.findViewById(R.id.souye_page_video_thumb).setVisibility(View.VISIBLE);
 
 //        mVideoView.start();
-        Log.e("-----------tu7",lists.get(position).getVideo_img());
-        Log.e("-----------url",lists.get(position).getUrl());
+//        Log.e("-----------tu7",lists.get(position).getVideo_img());
+//        Log.e("-----------url",lists.get(position).getUrl());
 
 
 //        viewplaypause = layoutManager.findViewByPosition(mCurrentPosition);
@@ -1481,10 +1482,10 @@ public class SouyeFragment_CCC extends BaseMVPCompatFragment<SouyeContract.Souye
         mVideoView.setConfig(new TXVodPlayConfig());
         mVideoView.setVodListener(this);
         mVideoView.setLoop(true);
-        mVideoView.startPlay(mVideoPath);
+//        mVideoView.startPlay(mVideoPath);
 
 
-//        mVideoView.startPlay(proxyUrl);
+        mVideoView.startPlay(proxyUrl);
         Log.e("-----------urlx",lists.get(position).getUrl()+"  "+mVideoPath);
 
 

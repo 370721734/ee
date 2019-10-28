@@ -147,6 +147,7 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 
 //        Log.e("------------------", "??????" + position);
         Video video = videos.get(position);
+        Glide.with(context).load(videos.get(position).getVideo_img()).preload();
 
         /** Fresco方式加载
          Uri uri = Uri.parse(video.getVideo_img());
@@ -166,12 +167,13 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 //            holder.video_thumb.setLayoutParams(params);
 //            params.addRule(RelativeLayout.CENTER_VERTICAL);
             Glide.with(context).load(video.getVideo_img())
-                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
                     .thumbnail(0.1f)
                     .into(holder.video_thumb);
 //            Log.e("---------","竖");
 
-        }else {
+        } else {
 //            holder.video_thumb.setMaxHeight(400);
 
             holder.video_thumb_head.setVisibility(View.VISIBLE);
@@ -183,7 +185,8 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 //            holder.video_thumb_head.setScaleType(ImageView.ScaleType.FIT_XY);
 //            holder.video_thumb_head.setAdjustViewBounds(true);
             Glide.with(context).load(video.getVideo_img())
-                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor))
+                    .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL).skipMemoryCache(false))
                     .thumbnail(0.1f)
                     .into(holder.video_thumb_head);
 //            Log.e("---------","横");
@@ -208,9 +211,9 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 //        holder.tv_content.setText("钻视tv迭代开发火热进行中，请耐心等待下一个    版本的到来 ");
         holder.tv_uname.setText("@" + video.getNickname());
         //点赞数量
-        holder.tv_like.setText(video.getZan()+"");
+        holder.tv_like.setText(video.getZan() + "");
         //评论数量
-        holder.tv_pinglun.setText(video.getCommentNum()+"");
+        holder.tv_pinglun.setText(video.getCommentNum() + "");
 //        Log.e("-----------ping=",video.getCommentNum());//????
         //财富`
         holder.caifu.setText(video.getCaifu());
@@ -237,14 +240,14 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 //        }
 
 
-        if (video.getUid().equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))){
+        if (video.getUid().equals(SharePreferenceUtil.getUserid(AppUtils.getContext()))) {
             holder.btn_attention.setVisibility(View.INVISIBLE);
-        }else {
+        } else {
             holder.btn_attention.setVisibility(View.VISIBLE);
             //关注
-            if (video.getIs_like().equals("1")){
+            if (video.getIs_like().equals("1")) {
                 holder.btn_attention.setText("已关注");
-            }else {
+            } else {
                 holder.btn_attention.setText("+关注");
             }
         }
@@ -255,8 +258,6 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 //        }else {
 //            holder.bussiness.setVisibility(View.VISIBLE);
 //        }
-
-
 
 
 //        Log.e("--------",Api.GIFT+video.getHeadimgurl());
@@ -344,7 +345,7 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
         holder.love.setLoveTrue(new Love.LoveTrue() {
             @Override
             public void Onclick(boolean love) {
-                if (love){
+                if (love) {
 //                    Log.e("-----","hehe");
                     mOnItemClickListerer.onItemClick(position, "红红", holder.love, holder.iv_like, holder.tv_like);
                 }
@@ -426,7 +427,7 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
 
 
     public class VideoHolder extends RecyclerView.ViewHolder {
-        ImageView video_thumb,video_thumb_head;
+        ImageView video_thumb, video_thumb_head;
         RelativeLayout relativeLayout;
         ImageView iv_like;
         ImageView iv_commit;
@@ -446,7 +447,7 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
         RelativeLayout rlhead;
         ImageView play_pause;
 
-        TextView caifu,tvgoodsnum;
+        TextView caifu, tvgoodsnum;
         Love love;
         RelativeLayout bussiness;
         RelativeLayout tongkuang;
@@ -480,9 +481,9 @@ public class TikTokTengAdapter extends RecyclerView.Adapter<TikTokTengAdapter.Vi
             play_pause = itemView.findViewById(R.id.iv_play_pause);
             caifu = itemView.findViewById(R.id.tv_gold_coin);
             love = itemView.findViewById(R.id.love);
-            bussiness=itemView.findViewById(R.id.bussiness);
-            tongkuang=itemView.findViewById(R.id.tongkuang);
-            tvgoodsnum=itemView.findViewById(R.id.tvgoodsnum);
+            bussiness = itemView.findViewById(R.id.bussiness);
+            tongkuang = itemView.findViewById(R.id.tongkuang);
+            tvgoodsnum = itemView.findViewById(R.id.tvgoodsnum);
         }
     }
 

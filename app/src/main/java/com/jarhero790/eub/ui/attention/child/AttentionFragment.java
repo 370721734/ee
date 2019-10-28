@@ -84,7 +84,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 
     //关注的用户所发布的视频
     LinearLayoutManager linearLayoutManager;
-    View viewplaypause;//
+    ImageView viewplaypause;//
     View viewivdeault;
     View viewvideo;
     @BindView(R.id.attentionuser_recyclerview)
@@ -738,6 +738,7 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
 //                iv_play.setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
 //                ivdeault.setVisibility(View.VISIBLE);
                 VideoView videoView = view.findViewById(R.id.video_player);
+                viewplaypause=view.findViewById(R.id.iv_play);
 
 //                videoView.setScreenScale(VideoView.SCREEN_SCALE_MATCH_PARENT);
                 videoView.start();
@@ -869,7 +870,10 @@ public class AttentionFragment extends BaseMVPCompatFragment<AttentionContract.A
             if (mVideoView != null) {
                 mVideoView.resume();
 //                Log.e("----------b1", "是不是这里" + mCurrentPosition);
-                startPlay(mCurrentPosition);
+//                startPlay(0);// mCurrentPosition
+                mPresenter.requestMyAttentionUsersAndUsersVideos();
+                if (viewplaypause!=null)
+                    viewplaypause.setImageDrawable(getResources().getDrawable(R.mipmap.play_pause_icon));
 
             }
 //            else {

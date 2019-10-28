@@ -27,6 +27,8 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.bumptech.glide.request.RequestOptions;
+import com.danikula.videocache.HttpProxyCacheServer;
+import com.jarhero790.eub.GlobalApplication;
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.ShipinDianZanBean;
 import com.jarhero790.eub.message.LoginNewActivity;
@@ -113,7 +115,7 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
                 playerInfo.isBegin = true;
             }
             if (mTXVodPlayer == player) {
-                TXLog.i(TAG, "onPlayEvent, event I FRAME, player = " + player);
+//                TXLog.i(TAG, "onPlayEvent, event I FRAME, player = " + player);
                 mIvCover.setVisibility(View.GONE);
                 mIvCover_heng.setVisibility(View.GONE);
 //                TCUserMgr.getInstance().uploadLogs(TCConstants.ELK_ACTION_VOD_PLAY, TCUserMgr.getInstance().getUserId(), event, "点播播放成功", new Callback() {
@@ -128,7 +130,7 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
             }
         } else if (event == TXLiveConstants.PLAY_EVT_VOD_PLAY_PREPARED) {
             if (mTXVodPlayer == player) {
-                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
+//                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
                 mTXVodPlayer.resume();
             }
         } else if (event == TXLiveConstants.PLAY_EVT_PLAY_BEGIN) {
@@ -136,11 +138,11 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
             if (playerInfo != null && playerInfo.isBegin) {
                 mIvCover.setVisibility(View.GONE);
                 mIvCover_heng.setVisibility(View.GONE);
-                TXCLog.i(TAG, "onPlayEvent, event begin, cover remove");
+//                TXCLog.i(TAG, "onPlayEvent, event begin, cover remove");
             }
         } else if (event < 0) {
             if (mTXVodPlayer == player) {
-                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
+//                TXLog.i(TAG, "onPlayEvent, event prepared, player = " + player);
 
                 String desc = null;
                 switch (event) {
@@ -172,7 +174,7 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
 //                    }
 //                });
             }
-            Toast.makeText(this, "event:" + event, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this, "event:" + event, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -244,16 +246,16 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
         mVerticalViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-                TXLog.e(TAG, "mVerticalViewPager, onPageScrolled position = " + position);
+//                TXLog.e(TAG, "mVerticalViewPager, onPageScrolled position = " + position);
 //                mCurrentPosition = position;
             }
 
             @Override
             public void onPageSelected(int position) {
-                TXLog.i(TAG, "mVerticalViewPager, onPageSelected position = " + position);
+//                TXLog.i(TAG, "mVerticalViewPager, onPageSelected position = " + position);
                 mCurrentPosition = position;
                 // 滑动界面，首先让之前的播放器暂停，并seek到0
-                TXLog.e(TAG, "滑动后，让之前的播放器暂停，mTXVodPlayer = " + mTXVodPlayer);
+//                TXLog.e(TAG, "滑动后，让之前的播放器暂停，mTXVodPlayer = " + mTXVodPlayer);
                 if (mTXVodPlayer != null) {
                     mTXVodPlayer.seek(0);
                     mTXVodPlayer.pause();
@@ -265,11 +267,11 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
             }
         });
 
-        Log.e(TAG, "这个页面来了没有3");
+//        Log.e(TAG, "这个页面来了没有3");
         mVerticalViewPager.setPageTransformer(false, new ViewPager.PageTransformer() {
             @Override
             public void transformPage(View page, float position) {
-                TXLog.e(TAG, "mVerticalViewPager, transformPage pisition = " + position + " mCurrentPosition" + mCurrentPosition);
+//                TXLog.e(TAG, "mVerticalViewPager, transformPage pisition = " + position + " mCurrentPosition" + mCurrentPosition);
                 if (position != 0) {
                     return;
                 }
@@ -288,10 +290,10 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
             }
         });
 
-        Log.e(TAG, "这个页面来了没有4");
+//        Log.e(TAG, "这个页面来了没有4");
         mPagerAdapter = new MyPagerAdapter();
         mVerticalViewPager.setAdapter(mPagerAdapter);
-        Log.e(TAG, "这个页面来了没有5");
+//        Log.e(TAG, "这个页面来了没有5");
     }
 
 
@@ -320,7 +322,7 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
         ArrayList<PlayerInfo> playerInfoList = new ArrayList<>();
 
         protected PlayerInfo instantiatePlayerInfo(int position) {
-            TXCLog.e(TAG, "instantiatePlayerInfo " + position);
+//            TXCLog.e(TAG, "instantiatePlayerInfo " + position);
             PlayerInfo playerInfo = new PlayerInfo();
             TXVodPlayer vodPlayer = new TXVodPlayer(PlayVideoMine_ZanActivity.this);
             vodPlayer.setRenderRotation(TXLiveConstants.RENDER_ROTATION_PORTRAIT);
@@ -359,7 +361,7 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
                 playerInfo.txVodPlayer.stopPlay(true);
                 playerInfoList.remove(playerInfo);
 
-                TXCLog.e(TAG, "destroyPlayerInfo" + position);
+//                TXCLog.e(TAG, "destroyPlayerInfo" + position);
             }
         }
 
@@ -499,8 +501,9 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
                     bussiness.setVisibility(View.VISIBLE);
                 }
 
-
-                playerInfo.txVodPlayer.startPlay(playerInfo.playURL);
+                HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoMine_ZanActivity.this);
+                String proxyUrl = proxy.getProxyUrl(playerInfo.playURL);
+                playerInfo.txVodPlayer.startPlay(proxyUrl);
                 onClick(view, position, "like");
                 container.addView(view);
                 return view;
@@ -531,7 +534,7 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
                 }else {
                     coverImageView.setVisibility(View.GONE);
                     coverImageView_heng.setVisibility(View.VISIBLE);
-                    playView.setRotation(270);
+//                    playView.setRotation(270);
                     Glide.with(PlayVideoMine_ZanActivity.this).load(videoinfo.getVideo_img())
                             .thumbnail(0.1f)
                             .apply(new RequestOptions().placeholder(R.color.backgroudcolor).error(R.color.backgroudcolor)
@@ -598,7 +601,11 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
 //                PlayerInfo playerInfo = instantiatePlayerInfo(position);
 //                playerInfo.playerView = playView;
 //                playerInfo.txVodPlayer.setPlayerView(playView);
-                playerInfo.txVodPlayer.startPlay(playerInfo.playURL);
+
+                HttpProxyCacheServer proxy = GlobalApplication.getProxy(PlayVideoMine_ZanActivity.this);
+                String proxyUrl = proxy.getProxyUrl(playerInfo.playURL);
+
+                playerInfo.txVodPlayer.startPlay(proxyUrl);
                 onClick(view, position, "visit");
                 container.addView(view);
                 return view;
@@ -990,14 +997,14 @@ public class PlayVideoMine_ZanActivity extends AppCompatActivity implements ITXV
             @Override
             public void Clicklinear(View view, String type) {
                 if (type.equals("下载")) {
-                    Log.e("-------", "下载");
+//                    Log.e("-------", "下载");
 
 
                     bottomShareDialog.dismiss();
                 } else if (type.equals("分享")) {
-                    Log.e("-------", "分享");
+//                    Log.e("-------", "分享");
                     WXWebpageObject webpage = new WXWebpageObject();
-                    webpage.webpageUrl = "http://www.qq.com";
+                    webpage.webpageUrl = "http://www.51ayhd.com/web/Shopping/share.html";
                     WXMediaMessage msg = new WXMediaMessage(webpage);
                     msg.title = "WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title WebPage Title Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long Very Long";
                     msg.description = "WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description WebPage Description Very Long Very Long Very Long Very Long Very Long Very Long Very Long";

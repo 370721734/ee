@@ -288,7 +288,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     private void getData() {
         Intent intent = getIntent();
         if (intent == null) {
-            TXCLog.e(TAG, "intent is null");
+//            TXCLog.e(TAG, "intent is null");
             return;
         }
 //        mMinDuration = intent.getIntExtra(TCConstants.RECORD_CONFIG_MIN_DURATION, 5 * 1000);  //5秒
@@ -324,8 +324,8 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 //        mGop = intent.getIntExtra(TCConstants.RECORD_CONFIG_GOP, 3);
         mGop=3;
 
-        TXCLog.d(TAG, "mMinDuration = " + mMinDuration + ", mMaxDuration = " + mMaxDuration + ", mAspectRatio = " + mAspectRatio +
-                ", mRecommendQuality = " + mRecommendQuality + ", mRecordResolution = " + mRecordResolution + ", mBiteRate = " + mBiteRate + ", mFps = " + mFps + ", mGop = " + mGop);
+//        TXCLog.d(TAG, "mMinDuration = " + mMinDuration + ", mMaxDuration = " + mMaxDuration + ", mAspectRatio = " + mAspectRatio +
+//                ", mRecommendQuality = " + mRecommendQuality + ", mRecordResolution = " + mRecordResolution + ", mBiteRate = " + mBiteRate + ", mFps = " + mFps + ", mGop = " + mGop);
     }
 
     private void startCameraPreview() {
@@ -605,7 +605,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     @Override
     protected void onPause() {
         super.onPause();
-        TXCLog.i(TAG, "onPause");
+//        TXCLog.i(TAG, "onPause");
         mScreenOrientationListener.disable();
         if (mTXCameraRecord != null) {
             mTXCameraRecord.setVideoProcessListener(null); // 这里要取消监听，否则在上面的回调中又会重新开启预览
@@ -634,7 +634,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     @Override
     protected void onResume() {
         super.onResume();
-        TXCLog.i(TAG, "onResume");
+//        TXCLog.i(TAG, "onResume");
         mScreenOrientationListener.enable();
         setSelectAspect();
 
@@ -648,7 +648,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     @Override
     protected void onStop() {
         super.onStop();
-        TXCLog.i(TAG, "onStop");
+//        TXCLog.i(TAG, "onStop");
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -659,7 +659,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        TXCLog.i(TAG, "onDestroy");
+//        TXCLog.i(TAG, "onDestroy");
         EventBus.getDefault().unregister(this);
     }
 
@@ -796,7 +796,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 mIvTorch.setEnabled(true);
             }
             if (mTXCameraRecord != null) {
-                TXCLog.e(TAG, "switchCamera = " + mFront);
+//                TXCLog.e(TAG, "switchCamera = " + mFront);
                 mTXCameraRecord.switchCamera(mFront);
             }
 
@@ -1162,7 +1162,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         }
         int startResult = mTXCameraRecord.resumeRecord();
         if (startResult != TXRecordCommon.START_RECORD_OK) {
-            TXCLog.i(TAG, "resumeRecord, startResult = " + startResult);
+//            TXCLog.i(TAG, "resumeRecord, startResult = " + startResult);
             if (startResult == TXRecordCommon.START_RECORD_ERR_NOT_INIT) {
                 Toast.makeText(TCVideoRecordActivity.this.getApplicationContext(), "别着急，画面还没出来", Toast.LENGTH_SHORT).show();
             } else if (startResult == TXRecordCommon.START_RECORD_ERR_IS_IN_RECORDING) {
@@ -1279,7 +1279,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
             mBGMDuration = mTXCameraRecord.setBGM(mBGMPath);
             mTXCameraRecord.playBGMFromTime(0, mBGMDuration);
             mBGMPlayingPath = mBGMPath;
-            TXCLog.i(TAG, "music duration = " + mTXCameraRecord.getMusicDuration(mBGMPath));
+//            TXCLog.i(TAG, "music duration = " + mTXCameraRecord.getMusicDuration(mBGMPath));
         }
 
         mRecording = true;
@@ -1417,7 +1417,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onRecordEvent(int event, Bundle param) {
-        TXCLog.d(TAG, "onRecordEvent event id = " + event);
+//        TXCLog.d(TAG, "onRecordEvent event id = " + event);
         if (event == TXRecordCommon.EVT_ID_PAUSE) {
             mRecordProgressView.clipComplete();
         } else if (event == TXRecordCommon.EVT_CAMERA_CANNOT_USE) {
@@ -1431,7 +1431,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
 
     @Override
     public void onRecordProgress(long milliSecond) {
-        TXCLog.i(TAG, "onRecordProgress, mRecordProgressView = " + mRecordProgressView);
+//        TXCLog.i(TAG, "onRecordProgress, mRecordProgressView = " + mRecordProgressView);
         if (mRecordProgressView == null) {
             return;
         }
@@ -1457,25 +1457,25 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
         if (resultCode == RESULT_OK) {//是否选择，没选择就不会继续
             if (requestCode == mAudioCtrl.REQUESTCODE) {
                 if (data == null) {
-                    TXCLog.e(TAG, "null data");
+//                    TXCLog.e(TAG, "null data");
                 } else {
                     Uri uri = data.getData();//得到uri，后面就是将uri转化成file的过程。
                     if (mAudioCtrl != null) {
                         mAudioCtrl.processActivityResult(uri);
                     } else {
-                        TXCLog.e(TAG, "NULL Pointer! Get Music Failed");
+//                        TXCLog.e(TAG, "NULL Pointer! Get Music Failed");
                     }
                 }
             } else if (requestCode == IMAGE_REQUEST_CODE) {
 
                 Uri imageUri = data.getData();
-//                Log.e("----------------", "视频地址"+imageUri);
+                Log.e("----------------", "上传的视频地址"+imageUri);
                 File files = CommonUtil.uriToFile(imageUri, TCVideoRecordActivity.this);
 //                Bitmap bitmaps=CommonUtil.getVideoThumbnail(files.getAbsolutePath());
-
+                Log.e("----------------", "上传的视频地址2"+files.getAbsolutePath());
                 if (imageUri != null && files!=null) {
 
-                     if (imageUri.toString().endsWith(".jpg") || imageUri.toString().endsWith(".gif")){
+                     if (imageUri.toString().endsWith(".jpg") || imageUri.toString().endsWith(".gif") || imageUri.toString().endsWith(".png")){
                          Toast.makeText(TCVideoRecordActivity.this, "请选择视频格式文件", Toast.LENGTH_SHORT).show();
                      }else {
                          //到编辑页面
@@ -1644,7 +1644,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
                 @Override
                 public void onAudioFocusChange(int focusChange) {
                     try {
-                        TXCLog.i(TAG, "requestAudioFocus, onAudioFocusChange focusChange = " + focusChange);
+//                        TXCLog.i(TAG, "requestAudioFocus, onAudioFocusChange focusChange = " + focusChange);
 
                         if (focusChange == AudioManager.AUDIOFOCUS_LOSS) {
                             pauseRecord();
@@ -2008,7 +2008,7 @@ public class TCVideoRecordActivity extends Activity implements View.OnClickListe
     public boolean onScale(ScaleGestureDetector scaleGestureDetector) {
         int maxZoom = mTXCameraRecord.getMaxZoom();
         if (maxZoom == 0) {
-            TXCLog.i(TAG, "camera not support zoom");
+//            TXCLog.i(TAG, "camera not support zoom");
             return false;
         }
 
