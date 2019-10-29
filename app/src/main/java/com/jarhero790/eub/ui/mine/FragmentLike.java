@@ -140,9 +140,10 @@ public class FragmentLike extends SupportFragment {
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void eee(Zanchange zanchange){
+    public void zanle(Zanchange zanchange){
+//        Log.e("------------------","点2赞的来了没有");
         if (zanchange!=null && zanchange.getName().equals("zan")){
-//            Log.e("------------------","来了");
+            Log.e("------------------","点2赞的来了没有");
             initDate();
         }
     }
@@ -155,9 +156,10 @@ private Dialog dialog;
 //        dialog.show();
 //        Log.e("------------------page=",""+page);
         dialog = new Dialog(getActivity(), R.style.progress_dialog);
-        dialog.setContentView(R.layout.dialog);
         dialog.setCancelable(true);
+        if (dialog.getWindow()!=null)
         dialog.getWindow().setBackgroundDrawableResource(android.R.color.transparent);
+        dialog.setContentView(R.layout.dialog);
         dialog.show();
         RetrofitManager.getInstance().getDataServer().zanvideo(SharePreferenceUtil.getToken(AppUtils.getContext()),page)
                 .enqueue(new Callback<MyFaBuBean>() {
@@ -175,9 +177,6 @@ private Dialog dialog;
                                     nodingdan.setVisibility(View.GONE);
                                     wangluoyichang.setVisibility(View.GONE);
                                     itemlist = response.body().getData();
-
-
-
                                     if (page==1){
                                         list.clear();
                                         list.addAll(itemlist);

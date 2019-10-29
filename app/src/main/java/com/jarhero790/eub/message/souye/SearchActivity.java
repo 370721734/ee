@@ -259,11 +259,9 @@ public class SearchActivity extends AppCompatActivity {
                     Toast.makeText(this, "内容不能为空", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 Intent intent = new Intent(this, SearchResultActivity.class);
                 intent.putExtra("word", sear);
                 startActivity(intent);
-
                 break;
         }
     }
@@ -305,14 +303,12 @@ public class SearchActivity extends AppCompatActivity {
             View v = getCurrentFocus();
             //当isShouldHideInput(v, ev)为true时，表示的是点击输入框区域，则需要显示键盘，同时显示光标，反之，需要隐藏键盘、光标
             if (isShouldHideInput(v, ev)) {
-
                 InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                 if (imm != null) {
                     imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
                     //处理Editext的光标隐藏、显示逻辑
 //                    mEdtFind.clearFocus();
                     etSearch.clearFocus();
-
                 }
             }
             return super.dispatchTouchEvent(ev);

@@ -34,7 +34,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginRight="30dp"
-            android:text="隐私协议"/>
+            android:text="隐私政策"/>
 
 
     </LinearLayout>

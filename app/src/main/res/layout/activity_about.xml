@@ -111,7 +111,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:text="隐私协议"
+            android:text="隐私政策"
             android:layout_marginTop="36dp"
             android:layout_above="@id/tv_user_xiyi"
             android:textColor="#ff838181"

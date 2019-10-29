@@ -70,7 +70,7 @@ public class LoginNewActivity extends AppCompatActivity {
                 if (checkbox.isChecked()) {
                     startActivity(new Intent(this, LoginPhoneActivity.class));
                 } else {
-                    Toast.makeText(this, "请先确认用户协议和隐私协议", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "请先确认用户协议和隐私政策", Toast.LENGTH_SHORT).show();
                 }
 
                 break;
@@ -88,7 +88,7 @@ public class LoginNewActivity extends AppCompatActivity {
                         Toast.makeText(this, "用户未安装微信", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(this, "请先确认用户协议和隐私协议", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, "请先确认用户协议和隐私政策", Toast.LENGTH_SHORT).show();
                 }
 
 
@@ -116,7 +116,7 @@ public class LoginNewActivity extends AppCompatActivity {
                 break;
             case R.id.tv_yisi_xiyi:
                 startActivity(new Intent(this, XieYiActivity.class)
-                        .putExtra("name", "隐私协议")
+                        .putExtra("name", "隐私政策")
                         .putExtra("url","http://www.51ayhd.com/user/index/privacy.html"));
                 overridePendingTransition(R.anim.fade_in, R.anim.fade_out);
 

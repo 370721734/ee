@@ -107,7 +107,7 @@ public class PlayVideoActivity extends AppCompatActivity {
     private boolean isfirst = true;
 
     @Subscribe(threadMode = ThreadMode.MAIN)
-    public void eeee(Zanchange zanchange) {
+    public void zanle(Zanchange zanchange) {
 
     }
 

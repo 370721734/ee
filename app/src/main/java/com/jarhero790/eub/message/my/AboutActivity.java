@@ -44,7 +44,7 @@ public class AboutActivity extends AppCompatActivity {
                 break;
             case R.id.tv_yisi_xiyi:
                 startActivity(new Intent(this, XieYiActivity.class)
-                        .putExtra("name", "隐私协议")
+                        .putExtra("name", "隐私政策")
                         .putExtra("url","http://www.51ayhd.com/user/index/privacy.html"));
                 break;
         }

@@ -46,6 +46,7 @@ import com.jarhero790.eub.bean.ShipinDianZan;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.contract.home.SouyeContract;
 import com.jarhero790.eub.message.LoginNewActivity;
+import com.jarhero790.eub.message.bean.Conver;
 import com.jarhero790.eub.message.bean.HiddBean;
 import com.jarhero790.eub.message.bean.Zanchange;
 import com.jarhero790.eub.message.bean.attentionchange;
@@ -428,6 +429,18 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
 //        }
 //    }
 
+    private String islogin = "ddd";
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void event(Conver bean) {
+        Log.e("--------kskskaaa=>", bean.getName());
+        islogin = bean.getName();
+        if (islogin.equals("400")){
+            mPresenter.getVideos(String.valueOf(cate.get()), String.valueOf(page.get()));
+            Log.e("-----------", "无tokenbbb————initdata");
+        }
+
+    }
 
     @Override
     public void initData() {
@@ -529,6 +542,13 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
         EventBus.getDefault().post(new Zanchange("zan"));
     }
 
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void zanle(Zanchange zanchange){
+        if (zanchange!=null && zanchange.getName().equals("zan")){
+            Log.e("------------------","点赞的来了没有youye_bbb");
+
+        }
+    }
 
     @Override
     public void updateVideos(ArrayList<Video> videos) {
@@ -798,6 +818,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
             EventBus.getDefault().unregister(this);
         }
         Log.e("--------", "souye-ondestroy");
+        islogin="ddd";
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -916,7 +937,7 @@ public class SouyeFragment_BBB extends BaseMVPCompatFragment<SouyeContract.Souye
                             likeVideo();
                             String string = tv2.getText().toString();
                             int text = (Integer.parseInt(string) - 1);
-                            tv2.setText("" + text);
+                            tv2.setText(String.valueOf(text<0?0:text));
 //                            if (list!=null && list.size()>0){
 //                                zanother(list.get(mCurrentPosition).getVideo_id()+"");
 //
