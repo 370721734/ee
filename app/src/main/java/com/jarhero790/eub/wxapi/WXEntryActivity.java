@@ -167,7 +167,8 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
                         String country=object.optString("country");
                         String headimgurl=object.optString("headimgurl");
 
-                        initRetrofit(openid,nickname,(sex.equals("1")?"男":"女"),city,province,country,headimgurl);
+//                        Log.e("-----str=",openid+" "+nickname+"  "+sex+" "+city+"  "+province+"  "+country+"  "+headimgurl);
+                        initRetrofit(openid,nickname,sex,city,province,country,headimgurl);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -215,36 +216,48 @@ public class WXEntryActivity extends Activity implements IWXAPIEventHandler {
             public void onResponse(Call<UserBean> call, Response<UserBean> response) {
                 if (response.isSuccessful()) {
                     try {
-//                        String json = response.body().string();
-//                        Log.e("------result==", json);//result=: {"code":200,"data":null,"msg":"\u6210\u529f"}
+                        UserBean data = response.body();
+//                        Log.e("------result==", data.getData().getCity());//result=: {"code":200,"data":null,"msg":"\u6210\u529f"}
 //                        JSONObject object = new JSONObject(json);
 //                        int code = object.optInt("code");
 //                        String msg = object.optString("msg");
 //                        String data = object.optString("data");
-                        if (response.body()!=null){
-                            String code = response.body().getCode();
-                            String msg=response.body().getMsg();
-                            UserBean data = response.body();
-                            if (code.equals("200")){
-                                if (data==null){
-                                    Intent intent = new Intent(WXEntryActivity.this, BindPhoneActivity.class);
-                                    intent.putExtra("openid",openid);
-                                    startActivity(intent);
-                                }else {
-                                    //把token保存在SharePreference
-                                    SharePreferenceUtil.setToken(data.getData().getToken(), AppUtils.getContext());
-                                    SharePreferenceUtil.setuserid(data.getData().getId(),AppUtils.getContext());
-                                    //注意 登录成功之后  一定要写上这句代码
-                                    SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, true, AppUtils.getContext());
-                                    app.setUserbean(data);
-                                    //发送  在MineFragment中接收
-                                    EventBus.getDefault().post(new MessageEventUser(data));
-                                    startActivity(new Intent(WXEntryActivity.this, MainActivity.class));
-                                }
-                            }else {
-                                Toast.makeText(WXEntryActivity.this,msg,Toast.LENGTH_SHORT).show();
-                            }
+                        String username = data.getData().getUsername();
+//                        Log.e("--------------username",username);
+                        if (username==null || username.equals("")){
+                            Intent intent = new Intent(WXEntryActivity.this, BindPhoneActivity.class);
+                            intent.putExtra("openid",openid);
+                            startActivity(intent);
+                        }else {
+                            //把token保存在SharePreference
+                            SharePreferenceUtil.setToken(data.getData().getToken(), AppUtils.getContext());
+                            SharePreferenceUtil.setuserid(data.getData().getId(),AppUtils.getContext());
+                            //注意 登录成功之后  一定要写上这句代码
+                            SharePreferenceUtil.setBooleanSp(SharePreferenceUtil.IS_LOGIN, true, AppUtils.getContext());
+                            app.setUserbean(data);
+                            //发送  在MineFragment中接收
+                            EventBus.getDefault().post(new MessageEventUser(data));
+                            startActivity(new Intent(WXEntryActivity.this, MainActivity.class));
                         }
+
+
+//                        if (response.body()!=null){
+//                            String code = response.body().getCode();
+//                            String msg=response.body().getMsg();
+////                            UserBean data = response.body();
+//                            Log.e("------result==","a");
+////                            if (code.equals("200")){
+////                                if (data==null){
+////
+////                                }else {
+////
+////                                }
+////                            }else {
+////                                Toast.makeText(WXEntryActivity.this,msg,Toast.LENGTH_SHORT).show();
+////                            }
+//                        }else {
+//                            Log.e("------result==","b");
+//                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

@@ -1,186 +1,212 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tl="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/coordinator_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     android:focusable="true"
+    android:orientation="vertical"
     android:background="@color/backgroudcolor">
 
-    <android.support.design.widget.AppBarLayout
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/backgroudcolor"
-        android:fitsSystemWindows="true">
-        <!--app:layout_scrollFlags="scroll|enterAlways"-->
-        <LinearLayout
-            android:id="@+id/rel"
-            android:layout_width="match_parent"
-            android:layout_height="310dp"
-            android:orientation="vertical"
-            android:background="@color/backgroudcolor"
-            app:layout_scrollFlags="scroll">
+        android:layout_height="40dp"
+        android:layout_marginTop="25dp"
+        android:orientation="horizontal">
 
-            <LinearLayout
+        <ImageView
+            android:id="@+id/back"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginLeft="@dimen/rc_dimen_size_5"
+            android:layout_weight="1"
+            android:padding="@dimen/dp_10"
+            android:src="@mipmap/back" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginRight="30dp"
+            android:layout_weight="8"
+            android:gravity="center"
+            android:text="选择音乐"
+            android:textColor="#EFEDED"
+            android:textSize="18sp" />
+
+    </LinearLayout>
+    <com.scwang.smartrefresh.layout.SmartRefreshLayout
+        android:id="@+id/m_swipe_layout"
+        android:visibility="visible"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+    <com.scwang.smartrefresh.layout.header.ClassicsHeader
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+        <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            xmlns:tl="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/coordinator_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusableInTouchMode="true"
+            android:focusable="true"
+            android:background="@color/backgroudcolor">
+
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/backgroudcolor"
-                android:orientation="vertical">
-
+                android:fitsSystemWindows="true">
+                <!--app:layout_scrollFlags="scroll|enterAlways"-->
                 <LinearLayout
+                    android:id="@+id/rel"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_marginTop="25dp"
-                    android:orientation="horizontal">
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:background="@color/backgroudcolor"
+                    app:layout_scrollFlags="scroll">
 
-                    <ImageView
-                        android:id="@+id/back"
-                        android:layout_width="0dp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="@dimen/rc_dimen_size_5"
-                        android:layout_weight="1"
-                        android:padding="@dimen/dp_10"
-                        android:src="@mipmap/back" />
+                        android:background="@color/backgroudcolor"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginRight="30dp"
-                        android:layout_weight="8"
-                        android:gravity="center"
-                        android:text="选择音乐"
-                        android:textColor="#EFEDED"
-                        android:textSize="18sp" />
+
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="0.5dp"
+                            android:layout_marginTop="15dp"
+                            android:background="#3A3A44" />
+
+
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="140dp"
+                            android:layout_marginLeft="10dp"
+                            android:layout_marginTop="16dp"
+                            android:layout_marginRight="10dp">
+
+                            <com.jarhero790.eub.message.souye.AdViewPager
+                                android:id="@+id/m_ad_pager"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent">
+
+                            </com.jarhero790.eub.message.souye.AdViewPager>
+
+                            <LinearLayout
+                                android:id="@+id/layout_ad_indicator"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="120dp"
+                                android:layout_marginBottom="3dp"
+                                android:gravity="center_horizontal"
+                                android:orientation="horizontal"></LinearLayout>
+
+
+                        </FrameLayout>
+
+
+
+
+                    </LinearLayout>
+
 
                 </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:gravity="center_horizontal"
+                    android:orientation="horizontal">
 
+                    <LinearLayout
+                        android:id="@+id/ll1"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="15dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_1"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:text="音乐专辑"
+                            android:textColor="#EFEDED"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:id="@+id/iv_bot1"
+                            android:layout_width="60dp"
+                            android:layout_height="3dp"
+                            android:layout_marginTop="5dp"
+                            android:background="#353BFD" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="0.5dp"
+                        android:layout_height="16dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="#3A3A44" />
+
+                    <LinearLayout
+                        android:id="@+id/ll2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="15dp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/tv_2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="25dp"
+                            android:text="音乐单曲"
+                            android:textColor="#EFEDED"
+                            android:textSize="15sp" />
+
+                        <View
+                            android:id="@+id/iv_bot2"
+                            android:layout_width="60dp"
+                            android:layout_height="3dp"
+                            android:layout_marginTop="5dp"
+                            android:background="#353BFD"
+                            android:visibility="invisible" />
+                    </LinearLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_marginTop="15dp"
                     android:background="#3A3A44" />
 
 
-                <FrameLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginRight="10dp">
 
-                    <com.jarhero790.eub.message.souye.AdViewPager
-                        android:id="@+id/m_ad_pager"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
+            </android.support.design.widget.AppBarLayout>
+            <com.jarhero790.eub.record.view.NoScrollViewPager
+                android:id="@+id/vp"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
 
-                    </com.jarhero790.eub.message.souye.AdViewPager>
+                />
+        </android.support.design.widget.CoordinatorLayout>
 
-                    <LinearLayout
-                        android:id="@+id/layout_ad_indicator"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:layout_marginTop="120dp"
-                        android:layout_marginBottom="3dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal"></LinearLayout>
+    </com.scwang.smartrefresh.layout.SmartRefreshLayout>
 
+</LinearLayout>
 
-                </FrameLayout>
-
-
-
-
-            </LinearLayout>
-
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:gravity="center_horizontal"
-            android:orientation="horizontal">
-
-            <LinearLayout
-                android:id="@+id/ll1"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:text="音乐专辑"
-                    android:textColor="#EFEDED"
-                    android:textSize="15sp" />
-
-                <View
-                    android:id="@+id/iv_bot1"
-                    android:layout_width="60dp"
-                    android:layout_height="3dp"
-                    android:layout_marginTop="5dp"
-                    android:background="#353BFD" />
-            </LinearLayout>
-
-            <View
-                android:layout_width="0.5dp"
-                android:layout_height="16dp"
-                android:layout_gravity="center_vertical"
-                android:background="#3A3A44" />
-
-            <LinearLayout
-                android:id="@+id/ll2"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="1"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/tv_2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="25dp"
-                    android:text="音乐单曲"
-                    android:textColor="#EFEDED"
-                    android:textSize="15sp" />
-
-                <View
-                    android:id="@+id/iv_bot2"
-                    android:layout_width="60dp"
-                    android:layout_height="3dp"
-                    android:layout_marginTop="5dp"
-                    android:background="#353BFD"
-                    android:visibility="invisible" />
-            </LinearLayout>
-        </LinearLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="#3A3A44" />
-
-
-
-    </android.support.design.widget.AppBarLayout>
-    <com.jarhero790.eub.record.view.NoScrollViewPager
-        android:id="@+id/vp"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-
-        />
-</android.support.design.widget.CoordinatorLayout>
 
 

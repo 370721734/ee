@@ -2,10 +2,9 @@ package com.jarhero790.eub.record.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Point;
-import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
@@ -20,35 +19,32 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.jarhero790.eub.R;
 import com.jarhero790.eub.bean.Video;
 import com.jarhero790.eub.message.souye.AdViewPager;
-import com.jarhero790.eub.record.FileUtils;
-import com.jarhero790.eub.record.PlayState;
 import com.jarhero790.eub.record.TCConstants;
 import com.jarhero790.eub.record.TCEditerUtil;
-import com.jarhero790.eub.record.TCVideoEditerActivity;
-import com.jarhero790.eub.record.TCVideoEditerWrapper;
-import com.jarhero790.eub.record.VideoProgressController;
-import com.jarhero790.eub.record.VideoProgressView;
 import com.jarhero790.eub.record.ffem.FileUtilss;
 import com.jarhero790.eub.record.fragment.MusicSingFragment;
 import com.jarhero790.eub.record.fragment.MusicZuangFragment;
 import com.jarhero790.eub.record.view.NoScrollViewPager;
 import com.jarhero790.eub.utils.CommonUtil;
+import com.scwang.smartrefresh.layout.SmartRefreshLayout;
+import com.scwang.smartrefresh.layout.api.RefreshLayout;
+import com.scwang.smartrefresh.layout.listener.OnRefreshListener;
 import com.tangyx.video.ffmpeg.FFmpegCommands;
 import com.tangyx.video.ffmpeg.FFmpegRun;
 import com.tencent.rtmp.TXLiveConstants;
-import com.tencent.ugc.TXRecordCommon;
 import com.tencent.ugc.TXVideoEditConstants;
-import com.tencent.ugc.TXVideoEditer;
 import com.tencent.ugc.TXVideoInfoReader;
 
 import java.io.ByteArrayOutputStream;
@@ -68,7 +64,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class SelectMusicActivity extends AppCompatActivity  {
+public class SelectMusicActivity extends AppCompatActivity {
 
     @BindView(R.id.m_ad_pager)
     AdViewPager mAdPager;
@@ -80,6 +76,8 @@ public class SelectMusicActivity extends AppCompatActivity  {
     View ivBot2;
     @BindView(R.id.vp)
     NoScrollViewPager vp;
+    @BindView(R.id.m_swipe_layout)
+    SmartRefreshLayout mSwipeLayout;
 
     //广告的上一个显示下标
     private int lastShowIndex;
@@ -101,7 +99,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
     private String mTargetPath;
     private FileUtilss mFileUtils;
     private String mVideoOutputPath;                        // 视频输出路径
-//    private TCVideoEditerWrapper mEditerWrapper;
+    //    private TCVideoEditerWrapper mEditerWrapper;
     // 短视频SDK获取到的视频信息
 //    private TXVideoEditer mTXVideoEditer;                   // SDK接口类
 //    private long mVideoDuration;                            // 视频的总时长
@@ -112,14 +110,16 @@ public class SelectMusicActivity extends AppCompatActivity  {
     private int mVideoFrom;
     public boolean isPreviewFinish;
 
-//    private TXVideoEditConstants.TXGenerateResult mresult;
+    //    private TXVideoEditConstants.TXGenerateResult mresult;
 //    private String ms;
     private String mRecordProcessedPath;
 
     private String mCoverImagePath;
 
     private String mVideoPath;
-    private int istransverse= TXLiveConstants.RENDER_ROTATION_0;
+    private int istransverse = TXLiveConstants.RENDER_ROTATION_0;
+
+    private int fragposition=0;  //不见效
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,13 +134,12 @@ public class SelectMusicActivity extends AppCompatActivity  {
         vp.setScroll(false);
 
 
-
         Intent intent = getIntent();
 //        videotime = intent.getIntExtra("videotime", 0);
 //        mVideoDuration=videotime;
 //        istransverse=getIntent().getIntExtra(TCConstants.TRANSVERSE,0);
         videotype = intent.getStringExtra("typefabu");
-        if (videotype.equals("fabu")){
+        if (videotype.equals("fabu")) {
             //发布
             mFileUtils = new FileUtilss(SelectMusicActivity.this);
             mTargetPath = mFileUtils.getStorageDirectory();
@@ -155,24 +154,10 @@ public class SelectMusicActivity extends AppCompatActivity  {
             mCoverImagePath = getIntent().getStringExtra(TCConstants.VIDEO_RECORD_COVERPATH);
             mVideoPath = getIntent().getStringExtra(TCConstants.VIDEO_RECORD_VIDEPATH);
             extractVideo();
-        }else {
+        } else {
             //编辑
 
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //        mTXVideoEditer = new TXVideoEditer(this);
@@ -193,13 +178,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
 //        mEditerWrapper.setCutterStartTime(0, mVideoDuration);
 
 
-
-
-
-
-
-
-
         //轮播图
         initAd();
 
@@ -216,9 +194,47 @@ public class SelectMusicActivity extends AppCompatActivity  {
 //        });
 
 
+        vp.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int i, float v, int i1) {
+
+            }
+
+            @Override
+            public void onPageSelected(int i) {
+//                Log.e("--------------","changebb="+i);
+                fragposition=i;
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int i) {
+
+            }
+        });
+
+
+        mSwipeLayout.setOnRefreshListener(new OnRefreshListener() {
+            @Override
+            public void onRefresh(RefreshLayout refreshLayout) {
+
+                FragmentPagerAdapter f = (FragmentPagerAdapter) vp.getAdapter();
+//                    Log.e("------------","fragposition="+fragposition);
+
+                if (fragposition==0){
+                    MusicZuangFragment mz = (MusicZuangFragment) f.instantiateItem(vp, 0);
+                    mz.initDate();
+                }else {
+                    MusicSingFragment ms= (MusicSingFragment) f.instantiateItem(vp,1);
+                    ms.initDate();
+                }
+                mSwipeLayout.finishRefresh(100);
+
+            }
+        });
+
     }
 
-//    private void initPlayerLayout() {
+    //    private void initPlayerLayout() {
 //        TXVideoEditConstants.TXPreviewParam param = new TXVideoEditConstants.TXPreviewParam();
 ////        param.videoView = mVideoPlayerLayout;
 //        param.renderMode = TXVideoEditConstants.PREVIEW_RENDER_MODE_FILL_SCREEN;//PREVIEW_RENDER_MODE_FILL_EDGE
@@ -305,6 +321,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
 
         @Override
         public Fragment getItem(int position) {
+
             switch (position) {
                 case 0:
                     if (musicZuangFragment == null) {
@@ -315,8 +332,8 @@ public class SelectMusicActivity extends AppCompatActivity  {
                             @Override
                             public void Clicklinener(int position, String url, String mid) {
 //                                Log.e("-------------1", "selectmusic" + position + "  " + url);
-                                music=url;
-                                middd=mid;
+                                music = url;
+                                middd = mid;
 
 
                                 Intent intent = getIntent();
@@ -341,7 +358,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
                                     }).start();
 
 
-
                                 } else {
                                     intent.putExtra("music", url);
                                     intent.putExtra("mid", mid);
@@ -364,8 +380,8 @@ public class SelectMusicActivity extends AppCompatActivity  {
                             @Override
                             public void Clicklinener(int position, String url, String mid) {
 //                                Log.e("-------------1","selectmusic"+position+"  "+url);
-                                music=url;
-                                middd=mid;
+                                music = url;
+                                middd = mid;
                                 Intent intent = getIntent();
                                 if (videotype.equals("fabu")) {
                                     dialog = new Dialog(SelectMusicActivity.this, R.style.progress_dialog);
@@ -386,7 +402,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
                                             }
                                         }
                                     }).start();
-
 
 
                                 } else {
@@ -427,9 +442,9 @@ public class SelectMusicActivity extends AppCompatActivity  {
 
     @Override
     protected void onStop() {
-        if (dialog!=null)
+        if (dialog != null)
             dialog.dismiss();
-        if (handler!=null)
+        if (handler != null)
             handler.removeMessages(1);
         super.onStop();
 
@@ -547,15 +562,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
     }
 
 
-
-
-
-
-
-
-
-
-
     File filemusic;
 
     public void downLoadFromUrl(String urlStr, String fileName, String savePath) throws IOException {
@@ -593,6 +599,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
         }
         System.out.println("info:" + url + " download success");
     }
+
     public byte[] readInputStream(InputStream inputStream) throws IOException {
         byte[] buffer = new byte[1024];
         int len = 0;
@@ -603,6 +610,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
         bos.close();
         return bos.toByteArray();
     }
+
     private List<String> mMediaPath = new ArrayList<>();
 
     private void cutSelectMusic(String musicUrl) {
@@ -637,7 +645,9 @@ public class SelectMusicActivity extends AppCompatActivity  {
             }
         });
     }
+
     private static final String OUTPUT_DIR_NAME = "TXUGC";
+
     private String getCustomVideoOutputPath() {
         long currentTime = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmssSSS");
@@ -667,7 +677,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
 
             @Override
             public void onEnd(int result) {
-                Log.e("------------houvideo=", outVideo);
+//                Log.e("------------houvideo=", outVideo);
                 mMediaPath.add(outVideo);
                 extractAudio();
             }
@@ -722,7 +732,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
     }
 
 
-
     private void startGenerate() {
 //        stopPlay(); // 停止播放
 //        mTXVideoEditer.cancel(); // 注意：生成时，停止输出缩略图
@@ -750,8 +759,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
 //        });
 //        normalDialog.show();
     }
-
-
 
 
     private void startGenerateVideo() {
@@ -800,8 +807,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
 //    private long getCutterEndTime() {
 //        return mEditerWrapper.getCutterEndTime();
 //    }
-
-
 
 
     /**
@@ -870,7 +875,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
                     intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, result.retCode);
                     intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, result.descMsg);
                     intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, mVideoOutputPath);
-                    intent.putExtra(TCConstants.TRANSVERSE,istransverse);
+                    intent.putExtra(TCConstants.TRANSVERSE, istransverse);
                     intent.putExtra("videotime", videotime);
 //                    Log.e("---------mVideoOutputPath11=","  "+mVideoOutputPath);
                     intent.putExtra("mid", middd);
@@ -938,7 +943,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
             public void onEnd(int result) {
 //                composeMusicAndAudio(audioOutUrl);
                 composeVideoMusic(audioOutUrl);
-                Log.e("---------","3"+audioOutUrl);
+//                Log.e("---------", "3" + audioOutUrl);
 //                if (mMediaPath.size() == 3) {
 //                    composeVideoMusic(audioOutUrl);
 //                    Log.e("---------","3"+audioOutUrl);
@@ -949,7 +954,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
             }
         });
     }
-
 
 
     /**
@@ -975,7 +979,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
 
             @Override
             public void onEnd(int result) {
-                Log.e("---------vol3=",common[3]);
+//                Log.e("---------vol3=", common[3]);
 //                composeAudioAndMusic(audioUrl, musicOutUrl);
 
                 composeMusicAndAudio(musicOutUrl);
@@ -1012,7 +1016,7 @@ public class SelectMusicActivity extends AppCompatActivity  {
         final String videoUrl = mMediaPath.get(0);   //是视频地址
 //        final int time = getIntent().getIntExtra("time", 0) - 1;
         String[] common = FFmpegCommands.composeVideo(videoUrl, bgMusicAndAudio, videoAudioPath, videotime);
-        Log.e("--------------",videoAudioPath+"    "+videotime);
+//        Log.e("--------------", videoAudioPath + "    " + videotime);
         FFmpegRun.execute(common, new FFmpegRun.FFmpegRunListener() {
             @Override
             public void onStart() {
@@ -1025,11 +1029,6 @@ public class SelectMusicActivity extends AppCompatActivity  {
             }
         });
     }
-
-
-
-
-
 
 
     /**
@@ -1062,25 +1061,23 @@ public class SelectMusicActivity extends AppCompatActivity  {
 //                    finish();
 
 
-
-                        Intent intent = new Intent(SelectMusicActivity.this, FaBuActivity.class);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
+                    Intent intent = new Intent(SelectMusicActivity.this, FaBuActivity.class);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_UGC_RECORD);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_TYPE, TCConstants.VIDEO_RECORD_TYPE_EDIT);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_RESULT, mresult.retCode);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_DESCMSG, mresult.descMsg);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, videoPath);
-                        intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION,mVideoResolution);
-                        intent.putExtra("videotime", videotime);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_VIDEPATH, videoPath);
+                    intent.putExtra(TCConstants.VIDEO_RECORD_RESOLUTION, mVideoResolution);
+                    intent.putExtra("videotime", videotime);
 //                        Log.e("--mVideoOutputPath11=",videoPath+"  "+mVideoOutputPath);
-                        intent.putExtra("mid", middd);
-                        if (mCoverImagePath != null)
-                            intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mCoverImagePath);
+                    intent.putExtra("mid", middd);
+                    if (mCoverImagePath != null)
+                        intent.putExtra(TCConstants.VIDEO_RECORD_COVERPATH, mCoverImagePath);
 //                        intent.putExtra(TCConstants.VIDEO_RECORD_DURATION, getCutterEndTime() - getCutterStartTime());
-                        startActivity(intent);
-                        finish();
-
+                    startActivity(intent);
+                    finish();
 
 
                     break;
@@ -1097,4 +1094,89 @@ public class SelectMusicActivity extends AppCompatActivity  {
             }
         }
     };
+
+
+//    public interface OnHideKeyboardListener{
+//        public boolean hideKeyboard();
+//    }
+//    private OnHideKeyboardListener onHideKeyboardListener;
+//    public void setOnHideKeyboardListener(OnHideKeyboardListener onHideKeyboardListener){
+//        this.onHideKeyboardListener = onHideKeyboardListener;
+//    }
+
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_DOWN) {
+            View v = getCurrentFocus();
+            //当isShouldHideInput(v, ev)为true时，表示的是点击输入框区域，则需要显示键盘，同时显示光标，反之，需要隐藏键盘、光标
+            if (isShouldHideInput(v, ev)) {
+                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                if (imm != null) {
+                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                    //处理Editext的光标隐藏、显示逻辑
+//                    mEdtFind.clearFocus();
+                    FragmentPagerAdapter f = (FragmentPagerAdapter) vp.getAdapter();
+//                    Log.e("------------","fragposition="+fragposition);
+                    MusicZuangFragment mz = (MusicZuangFragment) f.instantiateItem(vp, 0);
+                    mz.setZuang(new MusicZuangFragment.Zuang() {
+                        @Override
+                        public void Clickenear(EditText etSearch) {
+                            etSearch.clearFocus();
+//                            imm.hideSoftInputFromWindow(etSearch.getWindowToken(), 0);
+                        }
+                    });
+
+//                    if (fragposition==0){
+//                        MusicZuangFragment mz= (MusicZuangFragment) f.instantiateItem(vp,fragposition);
+//                        mz.setZuang(new MusicZuangFragment.Zuang() {
+//                            @Override
+//                            public void Clickenear(EditText etSearch) {
+//                                etSearch.clearFocus();
+//                            }
+//                        });
+//
+//                    }else {
+//                         MusicSingFragment ms= (MusicSingFragment) f.instantiateItem(vp,fragposition);
+//                         ms.setZuang(new MusicSingFragment.Zuang() {
+//                             @Override
+//                             public void Clickenear(EditText etSearch) {
+//                                 etSearch.clearFocus();
+//                             }
+//                         });
+//                    }
+
+
+                }
+            }
+            return super.dispatchTouchEvent(ev);
+        }
+        // 必不可少，否则所有的组件都不会有TouchEvent了
+        if (getWindow().superDispatchTouchEvent(ev)) {
+            return true;
+        }
+        return onTouchEvent(ev);
+    }
+
+    public boolean isShouldHideInput(View v, MotionEvent event) {
+        if (v != null && (v instanceof EditText)) {
+            int[] leftTop = {0, 0};
+            //获取输入框当前的location位置
+            v.getLocationInWindow(leftTop);
+            int left = leftTop[0];
+            int top = leftTop[1];
+            int bottom = top + v.getHeight();
+            int right = left + v.getWidth();
+            if (event.getX() > left && event.getX() < right
+                    && event.getY() > top && event.getY() < bottom) {
+                // 点击的是输入框区域，保留点击EditText的事件
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

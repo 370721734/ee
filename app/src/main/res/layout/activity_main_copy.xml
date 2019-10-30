@@ -133,7 +133,7 @@
                 android:id="@+id/souye_my"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我"
+                android:text="个人"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
                 android:textStyle="normal" />

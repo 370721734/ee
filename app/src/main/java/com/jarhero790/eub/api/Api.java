@@ -24,6 +24,7 @@ import com.jarhero790.eub.message.bean.SysMessageBean;
 import com.jarhero790.eub.message.bean.TongKuanBean;
 import com.jarhero790.eub.message.bean.ZanBean;
 import com.jarhero790.eub.record.bean.MusicBean;
+import com.jarhero790.eub.record.bean.SearchMusicBean;
 import com.jarhero790.eub.widget.Music;
 
 import java.util.List;
@@ -438,6 +439,10 @@ public interface Api {
 
 
 
+    //搜索音乐
+    @FormUrlEncoded
+    @POST("web/index/searchMusic")
+    Call<SearchMusicBean> searchMusic(@Field("token") String token, @Field("keywords") String keywords);
 
 
 }

@@ -57,9 +57,9 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
         holder.rll.setTag(position);
         holder.rll.setOnClickListener(myclick_tu);
 
-        if (!SharePreferenceUtil.getUserid(context).equals(bean.getUid()+"")){
+        if (!SharePreferenceUtil.getUserid(context).equals(String.valueOf(bean.getUid()))) {
             holder.rldelete.setVisibility(View.GONE);
-        }else {
+        } else {
             holder.rldelete.setVisibility(View.VISIBLE);
         }
 
@@ -68,11 +68,9 @@ public class ZuoPingAdapter extends RecyclerView.Adapter<ZuoPingAdapter.MyHolder
     }
 
 
-
-
     @Override
     public int getItemCount() {
-        return list==null?0:list.size();
+        return list == null ? 0 : list.size();
     }
 
 

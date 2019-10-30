@@ -32,6 +32,8 @@
             android:layout_toRightOf="@id/ivsearch"
             android:background="@null"
             android:hint="搜索歌曲名称"
+            android:imeOptions="actionSearch"
+            android:singleLine="true"
             android:textColor="#7C7C86"
             android:textColorHint="#7C7C86"
             android:textSize="15sp" />

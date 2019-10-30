@@ -161,16 +161,16 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
         String signtime = intent.getStringExtra("signtime");
         if (signtime == null || signtime.length() == 0 || signtime.equals("null")) {
             tvQiandao.setText("签到");
-            Log.e("----------11", "time null");
+//            Log.e("----------11", "time null");
         } else {
             //判断是否是今天才行
             if (signtime.length() > 9) {
                 if (signtime.substring(8, 10).equals(day + "")) {
                     tvQiandao.setText("已签到");//如何保存状态
-                    Log.e("----------22", signtime);
+//                    Log.e("----------22", signtime);
                 } else {
                     tvQiandao.setText("签到");
-                    Log.e("----------33", signtime);
+//                    Log.e("----------33", signtime);
                 }
             }
 
@@ -201,7 +201,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 
 
         int currentMonthLastDay = getCurrentMonthLastDay();
-        Log.e("----------m", "" + currentMonthLastDay);
+//        Log.e("----------m", "" + currentMonthLastDay);
 
         for (int i = 0; i < 9 - (currentMonthLastDay - 27); i++) {
             list.add(0);
@@ -266,7 +266,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                                 String msg = obj.optString("msg");
                                 String data = obj.optString("data");
                                 if (code == 200) {
-                                    Log.e("---------data=>", data);
+//                                    Log.e("---------data=>", data);
                                     if (type_id == type_id1) {
                                         tvLin.setText("已领取");
                                         view.setSelected(true);
@@ -320,9 +320,9 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 //
 //                                    }
                                     if (data == null || data.length() == 0 || data.equals("") || data.equals("null")) {
-                                        Log.e("-----------", "kou");
+//                                        Log.e("-----------", "kou");
                                     } else {
-                                        Log.e("-----------", "yes");
+//                                        Log.e("-----------", "yes");
                                         tvJin.setText("我的金币:" + data);
                                     }
 
@@ -332,21 +332,21 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
 
                                     //set image
                                     calendarAdapter.setNumber(day);
-                                    Log.e("-----------1", "" + day);
+//                                    Log.e("-----------1", "" + day);
                                     calendarAdapter.notifyDataSetChanged();
-                                    Toast.makeText(QianDaoActivity.this, msg, Toast.LENGTH_SHORT).show();
+//                                    Toast.makeText(QianDaoActivity.this, msg, Toast.LENGTH_SHORT).show();
                                 } else {
                                     tvQiandao.setText("已签到");
                                     if (data == null || data.length() == 0 || data.equals("") || data.equals("null")) {
-                                        Log.e("-----------", "kou");
+//                                        Log.e("-----------", "kou");
                                     } else {
-                                        Log.e("-----------", "yes");
+//                                        Log.e("-----------", "yes");
                                         tvJin.setText("我的金币:" + data);
                                     }
 
                                     //set image
                                     calendarAdapter.setNumber(day);
-                                    Log.e("-----------1", "" + day);
+//                                    Log.e("-----------1", "" + day);
                                     calendarAdapter.notifyDataSetChanged();
                                     Toast.makeText(QianDaoActivity.this, msg, Toast.LENGTH_SHORT).show();
                                 }
@@ -495,7 +495,7 @@ public class QianDaoActivity extends AppCompatActivity implements QianDaoContrac
                             type_id2 = bean.getData().getTask_type().get(1).getType_id();
                             type_id3 = bean.getData().getTask_type().get(2).getType_id();
                             type_id4 = bean.getData().getTask_type().get(3).getType_id();
-                            Log.e("--------ty-", type_id1 + "  " + type_id4);
+//                            Log.e("--------ty-", type_id1 + "  " + type_id4);
 
 
                             runOnUiThread(new Runnable() {

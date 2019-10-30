@@ -59,6 +59,15 @@ public class MusicBean {
         private String singer;
         private String url;
 
+        public DataBean(int id,String name,String singer,String url,String music_img){
+            this.id=id;
+            this.name=name;
+            this.singer=singer;
+            this.url=url;
+            this.music_img=music_img;
+        }
+        public DataBean(){}
+
         public String getNickname() {
             return nickname;
         }
